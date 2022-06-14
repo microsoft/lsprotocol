@@ -38,49 +38,49 @@ def _register_required_structure_hooks(
     converter: cattrs.Converter,
 ) -> cattrs.Converter:
     def _optional_union_int_str(
-        o: typing.Optional[typing.Union[int, str]], t: typing.Any
+        object_: typing.Optional[typing.Union[int, str]], type_: typing.Any
     ) -> typing.Optional[typing.Union[int, str]]:
-        return _union_int_str(o, t) if o else None
+        return _union_int_str(object_, type_) if object_ else None
 
     def _union_int_str(
-        o: typing.Union[int, str], _t: typing.Any
+        object_: typing.Union[int, str], type_: typing.Any
     ) -> typing.Union[int, str]:
-        return str(o) if isinstance(o, str) else int(o)
+        return str(object_) if isinstance(object_, str) else int(object_)
 
     def _lsp_object_hook(
-        o: typing.Union[types.LSPObject, types.LSPArray, str, int, float, bool, None],
-        _t: typing.Any,
+        object_: typing.Union[types.LSPObject, types.LSPArray, str, int, float, bool, None],
+        type_: typing.Any,
     ) -> typing.Union[types.LSPObject, types.LSPArray, str, int, float, bool, None]:
-        if not o:
-            return o
-        if isinstance(o, str):
-            return str(o)
-        if isinstance(o, bool):
-            return bool(o)
-        if isinstance(o, int):
-            return int(o)
-        if isinstance(o, float):
-            return float(o)
-        if isinstance(o, list):
-            return list(o)
-        return o
+        if not object_:
+            return object_
+        if isinstance(object_, str):
+            return str(object_)
+        if isinstance(object_, bool):
+            return bool(object_)
+        if isinstance(object_, int):
+            return int(object_)
+        if isinstance(object_, float):
+            return float(object_)
+        if isinstance(object_, list):
+            return list(object_)
+        return object_
 
     def _optional_union_str_bool(
-        o: typing.Optional[typing.Union[str, bool]], _t: typing.Any
+        object_: typing.Optional[typing.Union[str, bool]], type_: typing.Any
     ) -> typing.Optional[typing.Union[str, bool]]:
-        if o:
-            return str(o) if isinstance(o, str) else bool(o)
+        if object_:
+            return str(object_) if isinstance(object_, str) else bool(object_)
         return None
 
     def _text_document_filter_hook(
-        o: typing.Union[
+        object_: typing.Union[
             str,
             types.TextDocumentFilter_Type1,
             types.TextDocumentFilter_Type2,
             types.TextDocumentFilter_Type3,
             types.NotebookCellTextDocumentFilter,
         ],
-        _t: typing.Any,
+        type_: typing.Any,
     ) -> typing.Union[
         str,
         types.TextDocumentFilter_Type1,
@@ -88,40 +88,40 @@ def _register_required_structure_hooks(
         types.TextDocumentFilter_Type3,
         types.NotebookCellTextDocumentFilter,
     ]:
-        if isinstance(o, str):
-            return str(o)
-        if "notebook" in o:
-            return converter.structure(o, types.NotebookCellTextDocumentFilter)
-        if "language" in o:
-            return converter.structure(o, types.TextDocumentFilter_Type1)
-        if "scheme" in o:
-            return converter.structure(o, types.TextDocumentFilter_Type2)
-        return converter.structure(o, types.TextDocumentFilter_Type3)
+        if isinstance(object_, str):
+            return str(object_)
+        if "notebook" in object_:
+            return converter.structure(object_, types.NotebookCellTextDocumentFilter)
+        if "language" in object_:
+            return converter.structure(object_, types.TextDocumentFilter_Type1)
+        if "scheme" in object_:
+            return converter.structure(object_, types.TextDocumentFilter_Type2)
+        return converter.structure(object_, types.TextDocumentFilter_Type3)
 
     def _notebook_filter_hook(
-        o: typing.Union[
+        object_: typing.Union[
             str,
             types.NotebookDocumentFilter_Type1,
             types.NotebookDocumentFilter_Type2,
             types.NotebookDocumentFilter_Type3,
         ],
-        _t: typing.Any,
+        type_: typing.Any,
     ) -> typing.Union[
         str,
         types.NotebookDocumentFilter_Type1,
         types.NotebookDocumentFilter_Type2,
         types.NotebookDocumentFilter_Type3,
     ]:
-        if isinstance(o, str):
-            return str(o)
-        if "notebookType" in o:
-            return converter.structure(o, types.NotebookDocumentFilter_Type1)
-        if "scheme" in o:
-            return converter.structure(o, types.NotebookDocumentFilter_Type2)
-        return converter.structure(o, types.NotebookDocumentFilter_Type3)
+        if isinstance(object_, str):
+            return str(object_)
+        if "notebookType" in object_:
+            return converter.structure(object_, types.NotebookDocumentFilter_Type1)
+        if "scheme" in object_:
+            return converter.structure(object_, types.NotebookDocumentFilter_Type2)
+        return converter.structure(object_, types.NotebookDocumentFilter_Type3)
 
     STRUCTURE_HOOKS = [
-        (NoneType, lambda _x, _y: None),
+        (NoneType, lambda _object, _type: None),
         (typing.Optional[typing.Union[int, str]], _optional_union_int_str),
         (typing.Union[int, str], _union_int_str),
         (

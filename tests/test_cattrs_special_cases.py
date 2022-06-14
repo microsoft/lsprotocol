@@ -1,0 +1,191 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
+import hamcrest
+import pytest
+from cattrs.errors import ClassValidationError
+
+from lsprotocol import converters as cv
+from lsprotocol import types as lsp
+
+
+def test_simple():
+    """Ensure that simple LSP types are serializable."""
+    data = {
+        "range": {
+            "start": {"line": 0, "character": 0},
+            "end": {"line": 0, "character": 0},
+        },
+        "message": "Missing module docstring",
+        "severity": 3,
+        "code": "C0114:missing-module-docstring",
+        "source": "my_lint",
+    }
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.Diagnostic)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.Diagnostic))
+
+
+def test_numeric_validation():
+    """Ensure that simple LSP types are serializable."""
+    data = {"line": -1, "character": 0}
+    converter = cv.get_converter()
+    with pytest.raises((ClassValidationError, ValueError)):
+        converter.structure(data, lsp.Position)
+
+
+def test_forward_refs():
+    data = {
+        "uri": "something.py",
+        "diagnostics": [
+            {
+                "range": {
+                    "start": {"line": 0, "character": 0},
+                    "end": {"line": 0, "character": 0},
+                },
+                "message": "Missing module docstring",
+                "severity": 3,
+                "code": "C0114:missing-module-docstring",
+                "source": "my_lint",
+            },
+            {
+                "range": {
+                    "start": {"line": 2, "character": 6},
+                    "end": {
+                        "line": 2,
+                        "character": 7,
+                    },
+                },
+                "message": "Undefined variable 'x'",
+                "severity": 1,
+                "code": "E0602:undefined-variable",
+                "source": "my_lint",
+            },
+            {
+                "range": {
+                    "start": {"line": 0, "character": 0},
+                    "end": {
+                        "line": 0,
+                        "character": 10,
+                    },
+                },
+                "message": "Unused import sys",
+                "severity": 2,
+                "code": "W0611:unused-import",
+                "source": "my_lint",
+            },
+        ],
+    }
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.PublishDiagnosticsParams)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.PublishDiagnosticsParams))
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        {},  # No properties provided
+        {"documentSelector": None},
+        {"documentSelector": ["something"]},
+        {"documentSelector": [{"pattern": "something/**"}]},
+        {"documentSelector": [{"language": "python"}]},
+        {"documentSelector": [{"scheme": "file"}]},
+        {"documentSelector": [{"notebook": "jupyter"}]},
+        {"documentSelector": ["something", {"language": "python"}]},
+        {"documentSelector": [{"notebook": {"notebookType": "jupyter-notebook"}}]},
+        {"documentSelector": [{"notebook": {"scheme": "file"}}]},
+        {"documentSelector": [{"notebook": {"pattern": "something/**"}}]},
+        {
+            "documentSelector": [
+                "something",
+                {"pattern": "something/**"},
+                {"language": "python"},
+                {"scheme": "file"},
+                {"scheme": "untitled", "language": "python"},
+                {"notebook": {"pattern": "something/**"}},
+                {"notebook": {"scheme": "untitled"}},
+                {"notebook": {"notebookType": "jupyter-notebook"}},
+                {
+                    "notebook": {"notebookType": "jupyter-notebook"},
+                    "language": "jupyter",
+                },
+            ]
+        },
+    ],
+)
+def test_union_with_complex_type(data):
+    converter = cv.get_converter()
+    try:
+        obj = converter.structure(data, lsp.TextDocumentRegistrationOptions)
+    except Exception as ex:
+        pass
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.TextDocumentRegistrationOptions))
+
+
+def test_keyword_field():
+    data = {
+        "from": {
+            "name": "something",
+            "kind": 5,
+            "uri": "something.py",
+            "range": {
+                "start": {"line": 0, "character": 0},
+                "end": {
+                    "line": 0,
+                    "character": 10,
+                },
+            },
+            "selectionRange": {
+                "start": {"line": 0, "character": 2},
+                "end": {
+                    "line": 0,
+                    "character": 8,
+                },
+            },
+            "data": {"something": "some other"},
+        },
+        "fromRanges": [
+            {
+                "start": {"line": 0, "character": 0},
+                "end": {
+                    "line": 0,
+                    "character": 10,
+                },
+            },
+            {
+                "start": {"line": 12, "character": 0},
+                "end": {
+                    "line": 13,
+                    "character": 0,
+                },
+            },
+        ],
+    }
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.CallHierarchyIncomingCall)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.CallHierarchyIncomingCall))
+    rev = converter.unstructure(obj, lsp.CallHierarchyIncomingCall)
+    hamcrest.assert_that(rev, hamcrest.is_(data))
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"settings": None},
+        {"settings": 100000},
+        {"settings": 1.23456},
+        {"settings": True},
+        {"settings": "something"},
+        {"settings": {"something": "something"}},
+        {"settings": []},
+        {"settings": [None, None]},
+        {"settings": [None, 1, 1.23, True]},
+    ],
+)
+def test_LSPAny(data):
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.DidChangeConfigurationParams)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.DidChangeConfigurationParams))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.DidChangeConfigurationParams), hamcrest.is_(data)
+    )

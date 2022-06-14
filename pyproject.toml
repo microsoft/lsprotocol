@@ -26,9 +26,9 @@ dependencies = ["attrs","cattrs"]
 dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/unknown/lsprotocol#readme"
-Issues = "https://github.com/unknown/lsprotocol/issues"
-Source = "https://github.com/unknown/lsprotocol"
+Documentation = "https://github.com/microsoft/lsprotocol#readme"
+Issues = "https://github.com/microsoft/lsprotocol/issues"
+Source = "https://github.com/microsoft/lsprotocol"
 
 [tool.hatch.version]
 path = "lsprotocol/__about__.py"
@@ -50,6 +50,7 @@ dependencies = [
   "pytest",
   "pytest-cov",
 ]
+
 [tool.hatch.envs.default.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=lsprotocol ./tests"
 no-cov = "cov --no-cov"

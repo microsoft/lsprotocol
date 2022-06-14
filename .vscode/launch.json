@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Generator",
+            "type": "python",
+            "request": "launch",
+            "program": "generator",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["generator/lsp.json", "lsprotocol/_types.py"]
+        },
+        {
+            "name": "DON'T SELECT (test debug config)",
+            "type": "python",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "purpose": ["debug-test"]
+        }
+    ]
+}

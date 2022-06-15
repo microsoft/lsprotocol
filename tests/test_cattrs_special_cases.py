@@ -27,7 +27,7 @@ def test_simple():
 
 
 def test_numeric_validation():
-    """Ensure that simple LSP types are serializable."""
+    """Ensure that out of range numbers raise exception."""
     data = {"line": -1, "character": 0}
     converter = cv.get_converter()
     with pytest.raises((ClassValidationError, ValueError)):
@@ -35,6 +35,7 @@ def test_numeric_validation():
 
 
 def test_forward_refs():
+    """Test that forward references are handled correctly by cattrs converter."""
     data = {
         "uri": "something.py",
         "diagnostics": [
@@ -114,6 +115,7 @@ def test_forward_refs():
     ],
 )
 def test_union_with_complex_type(data):
+    """Ensure types with multiple possible resolutions are handled correctly."""
     converter = cv.get_converter()
     try:
         obj = converter.structure(data, lsp.TextDocumentRegistrationOptions)
@@ -123,6 +125,7 @@ def test_union_with_complex_type(data):
 
 
 def test_keyword_field():
+    """Ensure that fields same names as keywords are handled correctly."""
     data = {
         "from": {
             "name": "something",
@@ -183,6 +186,7 @@ def test_keyword_field():
     ],
 )
 def test_LSPAny(data):
+    """Ensure that broad primitive and custom type alias is handled correctly."""
     converter = cv.get_converter()
     obj = converter.structure(data, lsp.DidChangeConfigurationParams)
     hamcrest.assert_that(obj, hamcrest.instance_of(lsp.DidChangeConfigurationParams))

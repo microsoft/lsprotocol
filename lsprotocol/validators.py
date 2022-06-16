@@ -6,8 +6,8 @@ import typing
 
 import attrs
 
-INTEGER_MIN_VALUE = -2147483648
-INTEGER_MAX_VALUE = 2147483647
+INTEGER_MIN_VALUE = -(2**31)
+INTEGER_MAX_VALUE = 2**31 - 1
 
 
 def integer_validator(
@@ -18,13 +18,13 @@ def integer_validator(
         INTEGER_MIN_VALUE <= value <= INTEGER_MAX_VALUE
     ):
         raise ValueError(
-            f"{instance.__class__.__name__}.{attribute.name} should be in range [{INTEGER_MIN_VALUE}:{INTEGER_MAX_VALUE}] but was: {value}."
+            f"{instance.__class__.__qualname__}.{attribute.name} should be in range [{INTEGER_MIN_VALUE}:{INTEGER_MAX_VALUE}], but was {value}."
         )
     return True
 
 
 UINTEGER_MIN_VALUE = 0
-UINTEGER_MAX_VALUE = 2147483647
+UINTEGER_MAX_VALUE = 2**31 - 1
 
 
 def uinteger_validator(
@@ -36,6 +36,6 @@ def uinteger_validator(
         UINTEGER_MIN_VALUE <= value <= UINTEGER_MAX_VALUE
     ):
         raise ValueError(
-            f"{instance.__class__.__name__}.{attribute.name} should be in range [{UINTEGER_MIN_VALUE}:{UINTEGER_MAX_VALUE}] but was: {value}."
+            f"{instance.__class__.__qualname__}.{attribute.name} should be in range [{UINTEGER_MIN_VALUE}:{UINTEGER_MAX_VALUE}], but was {value}."
         )
     return True

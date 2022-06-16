@@ -5,12 +5,17 @@ build-backend = "hatchling.build"
 [project]
 name = "lsprotocol"
 description = 'Python implementation of the Language Server Protocol.'
-readme = "README.md"
+version = "3.17.0a0"
+readme = {"file" = "README.md", "content-type" = "text/markdown"}
 requires-python = ">=3.7"
 license = "MIT"
-keywords = []
+keywords = ["language server protocol", "LSP"]
 authors = [
   { name = "Microsoft Corporation", email = "ptvshelp@microsoft.com" },
+]
+maintainers = [
+  { name = "Brett Cannon", email = "brcan@microsoft.com" },
+  { name = "Karthik Nadig", email = "kanadig@microsoft.com" },
 ]
 classifiers = [
   "Development Status :: 5 - Alpha",
@@ -23,15 +28,10 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = ["attrs","cattrs"]
-dynamic = ["version"]
 
 [project.urls]
-Documentation = "https://github.com/microsoft/lsprotocol#readme"
 Issues = "https://github.com/microsoft/lsprotocol/issues"
 Source = "https://github.com/microsoft/lsprotocol"
-
-[tool.hatch.version]
-path = "lsprotocol/__about__.py"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
@@ -40,12 +40,11 @@ exclude = [
   "/.generator",
   "/.test",
 ]
-packages = ["lsprotocol"]
 
 [tool.hatch.build.targets.wheel]
-packages = ["lsprotocol"]
 
 [tool.hatch.envs.default]
+[tool.hatch.envs.testing]
 dependencies = [
   "pytest",
   "pytest-cov",

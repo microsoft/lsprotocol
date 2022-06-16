@@ -5,11 +5,11 @@ import copy
 import itertools
 import keyword
 import re
-from typing import Callable, Dict, List, Optional, Tuple, TypeAlias
+from typing import Callable, Dict, List, Optional, Tuple
 
-import model
+from . import model
 
-ClassGenCallback: TypeAlias = Callable[[str, bool, List[str]], None]
+ClassGenCallback = Callable[[str, bool, List[str]], None]
 
 
 def _generate_field_validator(
@@ -19,80 +19,79 @@ def _generate_field_validator(
     code = []
 
     if type_def.kind == "base":
-        match (type_def.name):
-            case "integer":
-                # Example of a integer type optional value
-                # attrs.field(
-                #     validator=attrs.validators.optional(validators.integer_validator))
-                #     default=None,
-                # )
-                code = [
-                    "attrs.field(",  # Parenthesis open field
-                    "validator=attrs.validators.optional(validators.integer_validator),"
-                    if optional
-                    else "validator=validators.integer_validator",
-                    "default=None," if optional else "",
-                    ")",  # Parenthesis close field
-                ]
-            case "uinteger":
-                # Example of a uinteger type optional value
-                # attrs.field(
-                #     validator=attrs.validators.optional(validators.uinteger_validator))
-                #     default=None,
-                # )
-                code = [
-                    "attrs.field(",  # Parenthesis open field
-                    "validator=attrs.validators.optional(validators.uinteger_validator),"
-                    if optional
-                    else "validator=validators.uinteger_validator",
-                    "default=None," if optional else "",
-                    ")",  # Parenthesis close field
-                ]
-            case "string" | "DocumentUri" | "Uri":
-                # Example of a string type optional value
-                # attrs.field(
-                #     validator=attrs.validators.optional(attrs.validators.instance_of(str)))
-                #     default=None,
-                # )
-                code = [
-                    "attrs.field(",  # Parenthesis open field
-                    "validator=attrs.validators.optional(attrs.validators.instance_of(str)),"
-                    if optional
-                    else "validator=attrs.validators.instance_of(str)",
-                    "default=None," if optional else "",
-                    ")",  # Parenthesis close field
-                ]
-            case "boolean":
-                # Example of a boolean type optional value
-                # attrs.field(
-                #     validator=attrs.validators.optional(attrs.validators.instance_of(bool)))
-                #     default=None,
-                # )
-                code = [
-                    "attrs.field(",  # Parenthesis open field
-                    "validator=attrs.validators.optional(attrs.validators.instance_of(bool)),"
-                    if optional
-                    else "validator=attrs.validators.instance_of(bool)",
-                    "default=None," if optional else "",
-                    ")",  # Parenthesis close field
-                ]
-            case "decimal":
-                # Example of a decimal type optional value
-                # attrs.field(
-                #     validator=attrs.validators.optional(attrs.validators.instance_of(float)))
-                #     default=None,
-                # )
-                code = [
-                    "attrs.field(",  # Parenthesis open field.
-                    "validator=attrs.validators.optional(attrs.validators.instance_of(float)),"
-                    if optional
-                    else "validator=attrs.validators.instance_of(float)",
-                    "default=None," if optional else "",
-                    ")",  # Parenthesis close field.
-                ]
-            case _:
-                # For all other 'base' type fields that don't require validation use these.
-                code = ["attrs.field(default=None)"] if optional else ["attrs.field()"]
+        if type_def.name == "integer":
+            # Example of a integer type optional value
+            # attrs.field(
+            #     validator=attrs.validators.optional(validators.integer_validator))
+            #     default=None,
+            # )
+            code = [
+                "attrs.field(",  # Parenthesis open field
+                "validator=attrs.validators.optional(validators.integer_validator),"
+                if optional
+                else "validator=validators.integer_validator",
+                "default=None," if optional else "",
+                ")",  # Parenthesis close field
+            ]
+        elif type_def.name == "uinteger":
+            # Example of a uinteger type optional value
+            # attrs.field(
+            #     validator=attrs.validators.optional(validators.uinteger_validator))
+            #     default=None,
+            # )
+            code = [
+                "attrs.field(",  # Parenthesis open field
+                "validator=attrs.validators.optional(validators.uinteger_validator),"
+                if optional
+                else "validator=validators.uinteger_validator",
+                "default=None," if optional else "",
+                ")",  # Parenthesis close field
+            ]
+        elif type_def.name in ["string", "DocumentUri", "Uri"]:
+            # Example of a string type optional value
+            # attrs.field(
+            #     validator=attrs.validators.optional(attrs.validators.instance_of(str)))
+            #     default=None,
+            # )
+            code = [
+                "attrs.field(",  # Parenthesis open field
+                "validator=attrs.validators.optional(attrs.validators.instance_of(str)),"
+                if optional
+                else "validator=attrs.validators.instance_of(str)",
+                "default=None," if optional else "",
+                ")",  # Parenthesis close field
+            ]
+        elif type_def.name == "boolean":
+            # Example of a boolean type optional value
+            # attrs.field(
+            #     validator=attrs.validators.optional(attrs.validators.instance_of(bool)))
+            #     default=None,
+            # )
+            code = [
+                "attrs.field(",  # Parenthesis open field
+                "validator=attrs.validators.optional(attrs.validators.instance_of(bool)),"
+                if optional
+                else "validator=attrs.validators.instance_of(bool)",
+                "default=None," if optional else "",
+                ")",  # Parenthesis close field
+            ]
+        elif type_def.name == "decimal":
+            # Example of a decimal type optional value
+            # attrs.field(
+            #     validator=attrs.validators.optional(attrs.validators.instance_of(float)))
+            #     default=None,
+            # )
+            code = [
+                "attrs.field(",  # Parenthesis open field.
+                "validator=attrs.validators.optional(attrs.validators.instance_of(float)),"
+                if optional
+                else "validator=attrs.validators.instance_of(float)",
+                "default=None," if optional else "",
+                ")",  # Parenthesis close field.
+            ]
+        else:
+            # For all other 'base' type fields that don't require validation use these.
+            code = ["attrs.field(default=None)"] if optional else ["attrs.field()"]
     else:
         # For all other non 'base' type fields that don't require validation use these.
         code = ["attrs.field(default=None)"] if optional else ["attrs.field()"]
@@ -107,7 +106,9 @@ def _generate_type_name(
 
     if type_def.kind == "stringLiteral":
         # These are string constants used in some LSP types.
-        return f"typing.Literal['{type_def.value}']"
+        # TODO: Use this with python >= 3.8
+        # return f"Literal['{type_def.value}']"
+        return "str"
 
     if type_def.kind == "reference" or type_def.kind == "literal":
         # The reference kind is a named type which is part of LSP.
@@ -118,21 +119,21 @@ def _generate_type_name(
 
     if type_def.kind == "array":
         # This is a linear collection type, LSP does not specify if
-        # this needs to be ordered. Also, using typing.List here because
-        # cattrs does not work well with typing.Iterable for some reason.
-        return f"typing.List[{_generate_type_name(type_def.element)}]"
+        # this needs to be ordered. Also, usingList here because
+        # cattrs does not work well withIterable for some reason.
+        return f"List[{_generate_type_name(type_def.element)}]"
 
     if type_def.kind == "or":
         # This type means that you can have either of the types under `items`
         # as the value. So, from typing point of view this is a union. The `or`
         # type means it is going to be one of the types, never both (see `and`)
         # Example:
-        # id : typing.Union[str, int]
+        # id :Union[str, int]
         #     * This means that id can either be string or integer, cannot be both.
         types = []
         for item in type_def.items:
             types.append(_generate_type_name(item))
-        return f"typing.Union[{','.join(types)}]"
+        return f"Union[{','.join(types)}]"
 
     if type_def.kind == "and":
         # This type means that the value has properties of all the types under
@@ -145,31 +146,30 @@ def _generate_type_name(
 
     if type_def.kind == "base":
         # The `base` kind is used for primitive data types.
-        match type_def.name:
-            case "decimal":
-                return "float"
-            case "boolean":
-                return "bool"
-            case "integer" | "uinteger":
-                return "int"
-            case "string" | "DocumentUri" | "Uri":
-                return "str"
-            case "null":
-                return "None"
-            case _:
-                # Unknown base kind.
-                raise ValueError(str(type_def))
+        if type_def.name == "decimal":
+            return "float"
+        elif type_def.name == "boolean":
+            return "bool"
+        elif type_def.name in ["integer", "uinteger"]:
+            return "int"
+        elif type_def.name in ["string", "DocumentUri", "Uri"]:
+            return "str"
+        elif type_def.name == "null":
+            return "None"
+        else:
+            # Unknown base kind.
+            raise ValueError(str(type_def))
 
     if type_def.kind == "map":
         # This kind defines a dictionary like object.
-        return f"typing.Dict[{_generate_type_name(type_def.key)}, {_generate_type_name(type_def.value)}]"
+        return f"Dict[{_generate_type_name(type_def.key)}, {_generate_type_name(type_def.value)}]"
 
     if type_def.kind == "tuple":
         # This kind defined a tuple like object.
         types = []
         for item in type_def.items:
             types.append(_generate_type_name(item))
-        return f"typing.Tuple[{','.join(types)}]"
+        return f"Tuple[{','.join(types)}]"
 
     raise ValueError(str(type_def))
 
@@ -184,7 +184,7 @@ def _generate_and_type(
         raise ValueError("Only `and` type code generation is supported.")
 
     indent = "    "
-    import_lines = ["import typing", "import attrs"]
+    import_lines = ["import attrs"]
     code_lines = [
         "@attrs.define",
         f"class {class_name}:",
@@ -239,7 +239,7 @@ def _generate_literal_dynamic_classes(
     calling this function.
     """
     # We use typing and attrs while defining the class and fields.
-    import_lines = ["import typing", "import attrs"]
+    import_lines = ["import attrs"]
     # These are needed for integer and uinteger types.
     import_lines += ["from . import validators"]
 
@@ -285,8 +285,8 @@ def _generate_type_aliases(
     type_alias: model.TypeAlias,
     on_class: ClassGenCallback,
 ) -> Tuple[List[str], List[str]]:
-    """Generate typing.TypeAlias based on type alias definition in LSP."""
-    import_lines = ["import typing"]
+    """GenerateTypeAlias based on type alias definition in LSP."""
+    import_lines = []
     code_lines = []
 
     try:
@@ -316,7 +316,7 @@ def _generate_type_aliases(
     doc = _get_indented_documentation(type_alias.documentation)
 
     code_lines += [
-        f"{type_alias.name}: typing.TypeAlias = {_generate_type_name(type_alias.type)}",
+        f"{type_alias.name} = {_generate_type_name(type_alias.type)}",
         f'"""{doc}"""' if type_alias.documentation else "",
         f"# Since: {_sanitize_comment(type_alias.since)}" if type_alias.since else "",
         f"# Proposed: {_sanitize_comment(type_alias.proposed)}"
@@ -428,7 +428,7 @@ def _generate_properties(
 
         type_name = _generate_type_name(property_def.type)
         if property_def.optional:
-            type_name = f"typing.Optional[{type_name}]"
+            type_name = f"Optional[{type_name}]"
 
         # make sure that property name is not a python keyword.
         name = property_def.name
@@ -487,7 +487,7 @@ def _generate_struct(
 
     indent = "    "
     doc = _get_indented_documentation(struct_def.documentation, indent)
-    import_lines += ["import typing", "import attrs"]
+    import_lines += ["import attrs"]
     class_name = struct_def.name
 
     # if len(types) > 0:
@@ -564,15 +564,15 @@ def _generate_requests(
         f"{indent}message: str = attrs.field(validator=attrs.validators.instance_of(str))",
         f'{indent}"""A string providing a short description of the error."""',
         "",
-        f"{indent}data: typing.Optional[LSPAny] = attrs.field(default=None)",
+        f"{indent}data:Optional[LSPAny] = attrs.field(default=None)",
         f'{indent}"""A primitive or structured value that contains additional information',
         f'{indent}about the error. Can be omitted."""',
         "",
         "@attrs.define",
         f"class ResponseErrorMessage:",
-        f"{indent}id: typing.Optional[typing.Union[int, str]] = attrs.field(default=None)",
+        f"{indent}id:Optional[Union[int, str]] = attrs.field(default=None)",
         f'{indent}"""The request id where the error occurred."""',
-        f"{indent}error: typing.Optional[ResponseError] = attrs.field(default=None)",
+        f"{indent}error:Optional[ResponseError] = attrs.field(default=None)",
         f'{indent}"""The error object in case a request fails."""',
         f'{indent}jsonrpc: str = attrs.field(default="2.0")',
         "",
@@ -587,7 +587,7 @@ def _generate_requests(
             params_type = _generate_type_name(request.params, f"{class_name}Params")
             params_field = "attrs.field()"
         else:
-            params_type = "typing.Optional[None]"
+            params_type = "Optional[None]"
             params_field = "attrs.field(default=None)"
 
         result_type = None
@@ -595,23 +595,23 @@ def _generate_requests(
             result_type = _generate_type_name(request.result)
             result_field = "attrs.field(default=None)"
         else:
-            result_type = "typing.Optional[None]"
+            result_type = "Optional[None]"
             result_field = "attrs.field(default=None)"
 
         class_lines = [
             "@attrs.define",
             f"class {class_name}Request:",
             f'{indent}"""{doc}"""' if request.documentation else "",
-            f"{indent}id: typing.Union[int, str] = attrs.field()",
+            f"{indent}id:Union[int, str] = attrs.field()",
             f'{indent}"""The request id."""',
             f"{indent}params: {params_type} ={params_field}",
-            f'{indent}method: typing.Literal["{request.method}"] = "{request.method}"',
+            f'{indent}method: str = "{request.method}"',
             f'{indent}"""The method to be invoked."""',
             f'{indent}jsonrpc: str = attrs.field(default="2.0")',
             "",
             "@attrs.define",
             f"class {class_name}Response:",
-            f"{indent}id: typing.Optional[typing.Union[int, str]] = attrs.field()",
+            f"{indent}id:Optional[Union[int, str]] = attrs.field()",
             f'{indent}"""The request id."""',
             f"{indent}result: {result_type} = {result_field}",
             f'{indent}jsonrpc: str = attrs.field(default="2.0")',
@@ -641,7 +641,7 @@ def _generate_notifications(
             params_type = _generate_type_name(notification.params)
             params_field = "attrs.field()"
         else:
-            params_type = "typing.Optional[None]"
+            params_type = "Optional[None]"
             params_field = "attrs.field(default=None)"
 
         class_lines = [
@@ -649,7 +649,7 @@ def _generate_notifications(
             f"class {class_name}Notification:",
             f'{indent}"""{doc}"""' if notification.documentation else "",
             f"{indent}params: {params_type} = {params_field}",
-            f'{indent}method: typing.Literal["{notification.method}"] =  attrs.field(',
+            f"{indent}method:str =  attrs.field(",
             f'validator=attrs.validators.in_(["{notification.method}"]),',
             f'default="{notification.method}",',
             ")",
@@ -837,10 +837,10 @@ def generate_message_objects(
     code_lines += ["}", ""]
 
     code_lines += [
-        f"REQUESTS: typing.TypeAlias = typing.Union[{', '.join(request_classes)}]",
-        f"RESPONSES: typing.TypeAlias = typing.Union[{', '.join(response_classes)}]",
-        f"NOTIFICATIONS: typing.TypeAlias = typing.Union[{', '.join(notification_classes)}]",
-        f"MESSAGE_TYPES: typing.TypeAlias = typing.Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]",
+        f"REQUESTS =Union[{', '.join(request_classes)}]",
+        f"RESPONSES =Union[{', '.join(response_classes)}]",
+        f"NOTIFICATIONS =Union[{', '.join(notification_classes)}]",
+        f"MESSAGE_TYPES =Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]",
         "",
     ]
 
@@ -852,6 +852,7 @@ def generate_model_types(model: model.LSPModel) -> str:
         "# Copyright (c) Microsoft Corporation. All rights reserved.",
         "# Licensed under the MIT License.",
         "",
+        "from typing import Dict, List, Optional, Tuple, Union",
     ]
     all_imports: List[str] = []
     all_code: List[str] = []

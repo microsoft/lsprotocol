@@ -8,8 +8,8 @@ import sys
 from typing import Sequence
 
 import jsonschema
-import model
-import utils
+
+from . import model, utils
 
 
 def main(argv: Sequence[str]) -> None:

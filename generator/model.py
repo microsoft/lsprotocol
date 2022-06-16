@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import json
-from typing import Any, Dict, Iterable, Literal, Optional, Union
+from typing import Any, Dict, Iterable, Optional, Union
 
 import attrs
 
@@ -90,7 +90,7 @@ class EnumItem:
 @attrs.define
 class EnumValueType:
     kind: str = attrs.field(validator=attrs.validators.in_(["base"]))
-    name: Literal["string", "integer", "uinteger"] = attrs.field(
+    name: str = attrs.field(
         validator=attrs.validators.in_(["string", "integer", "uinteger"])
     )
 

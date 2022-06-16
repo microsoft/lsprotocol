@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 import enum
-import typing
+from typing import Dict, List, Optional, Tuple, Union
 
 import attrs
 
@@ -667,7 +667,7 @@ class TokenFormat(enum.Enum):
     RELATIVE = "relative"
 
 
-Definition: typing.TypeAlias = typing.Union["Location", typing.List["Location"]]
+Definition = Union["Location", List["Location"]]
 """The definition of a symbol represented as one or many locations.
 For most programming languages there is only one location at which a symbol is
 defined.
@@ -675,20 +675,18 @@ defined.
 Servers should prefer returning `DefinitionLink` over `Definition` if supported
 by the client."""
 
-DefinitionLink: typing.TypeAlias = "LocationLink"
+DefinitionLink = "LocationLink"
 """Information about where a symbol is defined.
 
 Provides additional metadata over normal location definitions, including the range of
 the defining symbol"""
 
-LSPArray: typing.TypeAlias = typing.List["LSPAny"]
+LSPArray = List["LSPAny"]
 """LSP arrays.
 @since 3.17.0"""
 # Since: 3.17.0
 
-LSPAny: typing.TypeAlias = typing.Union[
-    "LSPObject", "LSPArray", str, int, int, float, bool, None
-]
+LSPAny = Union["LSPObject", "LSPArray", str, int, int, float, bool, None]
 """The LSP any type.
 Please note that strictly speaking a property with the value `undefined`
 can't be converted into JSON preserving the property name. However for
@@ -697,10 +695,10 @@ optional as well.
 @since 3.17.0"""
 # Since: 3.17.0
 
-Declaration: typing.TypeAlias = typing.Union["Location", typing.List["Location"]]
+Declaration = Union["Location", List["Location"]]
 """The declaration of a symbol representation as one or many locations."""
 
-DeclarationLink: typing.TypeAlias = "LocationLink"
+DeclarationLink = "LocationLink"
 """Information about where a symbol is declared.
 
 Provides additional metadata over normal location declarations, including the range of
@@ -709,7 +707,7 @@ the declaring symbol.
 Servers should prefer returning `DeclarationLink` over `Declaration` if supported
 by the client."""
 
-InlineValue: typing.TypeAlias = typing.Union[
+InlineValue = Union[
     "InlineValueText", "InlineValueVariableLookup", "InlineValueEvaluatableExpression"
 ]
 """Inline value information can be provided by different means:
@@ -721,7 +719,7 @@ The InlineValue types combines all inline value types into one type.
 @since 3.17.0"""
 # Since: 3.17.0
 
-DocumentDiagnosticReport: typing.TypeAlias = typing.Union[
+DocumentDiagnosticReport = Union[
     "RelatedFullDocumentDiagnosticReport", "RelatedUnchangedDocumentDiagnosticReport"
 ]
 """The result of a document diagnostic pull request. A report can
@@ -745,19 +743,19 @@ class PrepareRenameResult_Type2:
     defaultBehavior: bool = attrs.field(validator=attrs.validators.instance_of(bool))
 
 
-PrepareRenameResult: typing.TypeAlias = typing.Union[
+PrepareRenameResult = Union[
     "Range", "PrepareRenameResult_Type1", "PrepareRenameResult_Type2"
 ]
 
-URI: typing.TypeAlias = str
+URI = str
 """A tagging type for string properties that are actually URIs
 
 @since 3.16.0"""
 # Since: 3.16.0
 
-ProgressToken: typing.TypeAlias = typing.Union[int, str]
+ProgressToken = Union[int, str]
 
-DocumentSelector: typing.TypeAlias = typing.List[typing.Union[str, "DocumentFilter"]]
+DocumentSelector = List[Union[str, "DocumentFilter"]]
 """A document selector is the combination of one or many document filters.
 
 @sample `let sel:DocumentSelector = [{ language: 'typescript' }, { language: 'json', pattern: '**/tsconfig.json' }]`;
@@ -765,10 +763,10 @@ DocumentSelector: typing.TypeAlias = typing.List[typing.Union[str, "DocumentFilt
 The use of a string as a document filter is deprecated @since 3.16.0."""
 # Since: 3.16.0.
 
-ChangeAnnotationIdentifier: typing.TypeAlias = str
+ChangeAnnotationIdentifier = str
 """An identifier to refer to a change annotation stored with a workspace edit."""
 
-WorkspaceDocumentDiagnosticReport: typing.TypeAlias = typing.Union[
+WorkspaceDocumentDiagnosticReport = Union[
     "WorkspaceFullDocumentDiagnosticReport",
     "WorkspaceUnchangedDocumentDiagnosticReport",
 ]
@@ -784,7 +782,7 @@ class TextDocumentContentChangeEvent_Type1:
     """The range of the document that changed."""
     text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The new text for the provided range."""
-    rangeLength: typing.Optional[int] = attrs.field(
+    rangeLength: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -799,7 +797,7 @@ class TextDocumentContentChangeEvent_Type2:
     """The new text of the whole document."""
 
 
-TextDocumentContentChangeEvent: typing.TypeAlias = typing.Union[
+TextDocumentContentChangeEvent = Union[
     "TextDocumentContentChangeEvent_Type1", "TextDocumentContentChangeEvent_Type2"
 ]
 """An event describing a change to a text document. If only a text is provided
@@ -812,7 +810,7 @@ class MarkedString_Type1:
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
 
 
-MarkedString: typing.TypeAlias = typing.Union[str, "MarkedString_Type1"]
+MarkedString = Union[str, "MarkedString_Type1"]
 """MarkedString can be used to render human readable text. It is either a markdown string
 or a code-block that provides a language and a code snippet. The language identifier
 is semantically equal to the optional language identifier in fenced code blocks in GitHub
@@ -826,16 +824,14 @@ ${value}
 Note that markdown strings will be sanitized - that means html will be escaped.
 @deprecated use MarkupContent instead."""
 
-DocumentFilter: typing.TypeAlias = typing.Union[
-    "TextDocumentFilter", "NotebookCellTextDocumentFilter"
-]
+DocumentFilter = Union["TextDocumentFilter", "NotebookCellTextDocumentFilter"]
 """A document filter describes a top level text document or
 a notebook cell document.
 
 @since 3.17.0 - proposed support for NotebookCellTextDocumentFilter."""
 # Since: 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
 
-GlobPattern: typing.TypeAlias = typing.Union["Pattern", "RelativePattern"]
+GlobPattern = Union["Pattern", "RelativePattern"]
 """The glob pattern. Either a string pattern or a relative pattern.
 
 @since 3.17.0"""
@@ -846,12 +842,12 @@ GlobPattern: typing.TypeAlias = typing.Union["Pattern", "RelativePattern"]
 class TextDocumentFilter_Type1:
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A language id, like `typescript`."""
-    scheme: typing.Optional[str] = attrs.field(
+    scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A Uri scheme, like `file` or `untitled`."""
-    pattern: typing.Optional[str] = attrs.field(
+    pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -862,12 +858,12 @@ class TextDocumentFilter_Type1:
 class TextDocumentFilter_Type2:
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A Uri scheme, like `file` or `untitled`."""
-    language: typing.Optional[str] = attrs.field(
+    language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A language id, like `typescript`."""
-    pattern: typing.Optional[str] = attrs.field(
+    pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -878,19 +874,19 @@ class TextDocumentFilter_Type2:
 class TextDocumentFilter_Type3:
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A glob pattern, like `*.{ts,js}`."""
-    language: typing.Optional[str] = attrs.field(
+    language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A language id, like `typescript`."""
-    scheme: typing.Optional[str] = attrs.field(
+    scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A Uri scheme, like `file` or `untitled`."""
 
 
-TextDocumentFilter: typing.TypeAlias = typing.Union[
+TextDocumentFilter = Union[
     "TextDocumentFilter_Type1", "TextDocumentFilter_Type2", "TextDocumentFilter_Type3"
 ]
 """A document filter denotes a document by different properties like
@@ -916,12 +912,12 @@ Glob patterns can have the following syntax:
 class NotebookDocumentFilter_Type1:
     notebookType: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The type of the enclosing notebook."""
-    scheme: typing.Optional[str] = attrs.field(
+    scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A Uri scheme, like `file` or `untitled`."""
-    pattern: typing.Optional[str] = attrs.field(
+    pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -932,12 +928,12 @@ class NotebookDocumentFilter_Type1:
 class NotebookDocumentFilter_Type2:
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A Uri scheme, like `file` or `untitled`."""
-    notebookType: typing.Optional[str] = attrs.field(
+    notebookType: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The type of the enclosing notebook."""
-    pattern: typing.Optional[str] = attrs.field(
+    pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -948,19 +944,19 @@ class NotebookDocumentFilter_Type2:
 class NotebookDocumentFilter_Type3:
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A glob pattern."""
-    notebookType: typing.Optional[str] = attrs.field(
+    notebookType: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The type of the enclosing notebook."""
-    scheme: typing.Optional[str] = attrs.field(
+    scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A Uri scheme, like `file` or `untitled`."""
 
 
-NotebookDocumentFilter: typing.TypeAlias = typing.Union[
+NotebookDocumentFilter = Union[
     "NotebookDocumentFilter_Type1",
     "NotebookDocumentFilter_Type2",
     "NotebookDocumentFilter_Type3",
@@ -972,7 +968,7 @@ against the notebook's URI (same as with documents)
 @since 3.17.0"""
 # Since: 3.17.0
 
-Pattern: typing.TypeAlias = str
+Pattern = str
 """The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
 - `*` to match one or more characters in a path segment
 - `?` to match on one character in a path segment
@@ -1000,14 +996,14 @@ class TextDocumentPositionParams:
 @attrs.define
 class WorkDoneProgressParams:
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
 @attrs.define
 class PartialResultParams:
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1021,10 +1017,10 @@ class ImplementationParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1043,9 +1039,9 @@ class Location:
 class TextDocumentRegistrationOptions:
     """General text document registration options."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -1053,7 +1049,7 @@ class TextDocumentRegistrationOptions:
 @attrs.define
 class WorkDoneProgressOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1062,7 +1058,7 @@ class WorkDoneProgressOptions:
 @attrs.define
 class ImplementationOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1072,7 +1068,7 @@ class ImplementationOptions:
 class StaticRegistrationOptions:
     """Static registration options to be returned in the initialize request."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1083,13 +1079,13 @@ class StaticRegistrationOptions:
 @attrs.define
 class ImplementationRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1106,10 +1102,10 @@ class TypeDefinitionParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1117,7 +1113,7 @@ class TypeDefinitionParams:
 @attrs.define
 class TypeDefinitionOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1126,13 +1122,13 @@ class TypeDefinitionOptions:
 @attrs.define
 class TypeDefinitionRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1165,7 +1161,7 @@ class DidChangeWorkspaceFoldersParams:
 class ConfigurationParams:
     """The parameters of a configuration request."""
 
-    items: typing.List["ConfigurationItem"] = attrs.field()
+    items: List["ConfigurationItem"] = attrs.field()
 
 
 @attrs.define
@@ -1175,10 +1171,10 @@ class DocumentColorParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1197,7 +1193,7 @@ class ColorInformation:
 @attrs.define
 class DocumentColorOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1206,13 +1202,13 @@ class DocumentColorOptions:
 @attrs.define
 class DocumentColorRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1233,10 +1229,10 @@ class ColorPresentationParams:
     range: "Range" = attrs.field()
     """The range where the color would be inserted. Serves as a context."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1249,14 +1245,12 @@ class ColorPresentation:
     picker header. By default this is also the text that is inserted when selecting
     this color presentation."""
 
-    textEdit: typing.Optional["TextEdit"] = attrs.field(default=None)
+    textEdit: Optional["TextEdit"] = attrs.field(default=None)
     """An edit which is applied to a document when selecting
     this presentation for the color.  When `falsy` the label
     is used."""
 
-    additionalTextEdits: typing.Optional[typing.List["TextEdit"]] = attrs.field(
-        default=None
-    )
+    additionalTextEdits: Optional[List["TextEdit"]] = attrs.field(default=None)
     """An optional array of additional text edits that are applied when
     selecting this color presentation. Edits must not overlap with the main edit nor with themselves."""
 
@@ -1268,10 +1262,10 @@ class FoldingRangeParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1293,24 +1287,24 @@ class FoldingRange:
     """The zero-based end line of the range to fold. The folded area ends with the line's last character.
     To be valid, the end must be zero or larger and smaller than the number of lines in the document."""
 
-    startCharacter: typing.Optional[int] = attrs.field(
+    startCharacter: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
     """The zero-based character offset from where the folded range starts. If not defined, defaults to the length of the start line."""
 
-    endCharacter: typing.Optional[int] = attrs.field(
+    endCharacter: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
     """The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line."""
 
-    kind: typing.Optional["FoldingRangeKind"] = attrs.field(default=None)
+    kind: Optional["FoldingRangeKind"] = attrs.field(default=None)
     """Describes the kind of the folding range such as `comment' or 'region'. The kind
     is used to categorize folding ranges and used by commands like 'Fold all comments'.
     See FoldingRangeKind for an enumeration of standardized kinds."""
 
-    collapsedText: typing.Optional[str] = attrs.field(
+    collapsedText: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1325,7 +1319,7 @@ class FoldingRange:
 @attrs.define
 class FoldingRangeOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1334,13 +1328,13 @@ class FoldingRangeOptions:
 @attrs.define
 class FoldingRangeRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1357,10 +1351,10 @@ class DeclarationParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1368,7 +1362,7 @@ class DeclarationParams:
 @attrs.define
 class DeclarationOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1377,13 +1371,13 @@ class DeclarationOptions:
 @attrs.define
 class DeclarationRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1398,13 +1392,13 @@ class SelectionRangeParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    positions: typing.List["Position"] = attrs.field()
+    positions: List["Position"] = attrs.field()
     """The positions inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1420,14 +1414,14 @@ class SelectionRange:
     range: "Range" = attrs.field()
     """The range of this selection range."""
 
-    parent: typing.Optional["SelectionRange"] = attrs.field(default=None)
+    parent: Optional["SelectionRange"] = attrs.field(default=None)
     """The parent selection range containing this range. Therefore `parent.range` must contain `this.range`."""
 
 
 @attrs.define
 class SelectionRangeOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1436,13 +1430,13 @@ class SelectionRangeOptions:
 @attrs.define
 class SelectionRangeRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1479,7 +1473,7 @@ class CallHierarchyPrepareParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -1509,16 +1503,16 @@ class CallHierarchyItem:
     """The range that should be selected and revealed when this symbol is being picked, e.g. the name of a function.
     Must be contained by the [`range`](#CallHierarchyItem.range)."""
 
-    tags: typing.Optional[typing.List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
     """Tags for this item."""
 
-    detail: typing.Optional[str] = attrs.field(
+    detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """More detail for this item, e.g. the signature of a function."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved between a call hierarchy prepare and
     incoming calls or outgoing calls requests."""
 
@@ -1532,7 +1526,7 @@ class CallHierarchyOptions:
 
     # Since: 3.16.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1547,13 +1541,13 @@ class CallHierarchyRegistrationOptions:
 
     # Since: 3.16.0
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1572,10 +1566,10 @@ class CallHierarchyIncomingCallsParams:
 
     item: "CallHierarchyItem" = attrs.field()
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1592,7 +1586,7 @@ class CallHierarchyIncomingCall:
     from_: "CallHierarchyItem" = attrs.field()
     """The item that makes the call."""
 
-    fromRanges: typing.List["Range"] = attrs.field()
+    fromRanges: List["Range"] = attrs.field()
     """The ranges at which the calls appear. This is relative to the caller
     denoted by [`this.from`](#CallHierarchyIncomingCall.from)."""
 
@@ -1608,10 +1602,10 @@ class CallHierarchyOutgoingCallsParams:
 
     item: "CallHierarchyItem" = attrs.field()
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1629,7 +1623,7 @@ class CallHierarchyOutgoingCall:
     to: "CallHierarchyItem" = attrs.field()
     """The item that is called."""
 
-    fromRanges: typing.List["Range"] = attrs.field()
+    fromRanges: List["Range"] = attrs.field()
     """The range at which this item is called. This is the range relative to the caller, e.g the item
     passed to [`provideCallHierarchyOutgoingCalls`](#CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls)
     and not [`this.to`](#CallHierarchyOutgoingCall.to)."""
@@ -1644,10 +1638,10 @@ class SemanticTokensParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1658,10 +1652,10 @@ class SemanticTokens:
 
     # Since: 3.16.0
 
-    data: typing.List[int] = attrs.field()
+    data: List[int] = attrs.field()
     """The actual tokens."""
 
-    resultId: typing.Optional[str] = attrs.field(
+    resultId: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1677,7 +1671,7 @@ class SemanticTokensPartialResult:
 
     # Since: 3.16.0
 
-    data: typing.List[int] = attrs.field()
+    data: List[int] = attrs.field()
 
 
 @attrs.define
@@ -1689,14 +1683,14 @@ class SemanticTokensOptions:
     legend: "SemanticTokensLegend" = attrs.field()
     """The legend used by the server"""
 
-    range: typing.Optional[typing.Union[bool, "None"]] = attrs.field(default=None)
+    range: Optional[Union[bool, "None"]] = attrs.field(default=None)
     """Server supports providing semantic tokens for a specific range
     of a document."""
 
-    full: typing.Optional[typing.Union[bool, "None"]] = attrs.field(default=None)
+    full: Optional[Union[bool, "None"]] = attrs.field(default=None)
     """Server supports providing semantic tokens for a full document."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1711,20 +1705,20 @@ class SemanticTokensRegistrationOptions:
     legend: "SemanticTokensLegend" = attrs.field()
     """The legend used by the server"""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    range: typing.Optional[typing.Union[bool, "None"]] = attrs.field(default=None)
+    range: Optional[Union[bool, "None"]] = attrs.field(default=None)
     """Server supports providing semantic tokens for a specific range
     of a document."""
 
-    full: typing.Optional[typing.Union[bool, "None"]] = attrs.field(default=None)
+    full: Optional[Union[bool, "None"]] = attrs.field(default=None)
     """Server supports providing semantic tokens for a full document."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1745,10 +1739,10 @@ class SemanticTokensDeltaParams:
     """The result id of a previous response. The result Id can either point to a full response
     or a delta response depending on what was received last."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1759,10 +1753,10 @@ class SemanticTokensDelta:
 
     # Since: 3.16.0
 
-    edits: typing.List["SemanticTokensEdit"] = attrs.field()
+    edits: List["SemanticTokensEdit"] = attrs.field()
     """The semantic token edits to transform a previous result into a new result."""
 
-    resultId: typing.Optional[str] = attrs.field(
+    resultId: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1774,7 +1768,7 @@ class SemanticTokensDeltaPartialResult:
 
     # Since: 3.16.0
 
-    edits: typing.List["SemanticTokensEdit"] = attrs.field()
+    edits: List["SemanticTokensEdit"] = attrs.field()
 
 
 @attrs.define
@@ -1789,10 +1783,10 @@ class SemanticTokensRangeParams:
     range: "Range" = attrs.field()
     """The range the semantic tokens are requested for."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1809,7 +1803,7 @@ class ShowDocumentParams:
     uri: "URI" = attrs.field()
     """The document uri to show."""
 
-    external: typing.Optional[bool] = attrs.field(
+    external: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1817,7 +1811,7 @@ class ShowDocumentParams:
     To show for example `https://code.visualstudio.com/`
     in the default WEB browser set `external` to `true`."""
 
-    takeFocus: typing.Optional[bool] = attrs.field(
+    takeFocus: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1826,7 +1820,7 @@ class ShowDocumentParams:
     Clients might ignore this property if an external
     program is started."""
 
-    selection: typing.Optional["Range"] = attrs.field(default=None)
+    selection: Optional["Range"] = attrs.field(default=None)
     """An optional selection range if the document is a text
     document. Clients might ignore the property if an
     external program is started or the file is not a text
@@ -1855,7 +1849,7 @@ class LinkedEditingRangeParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -1868,11 +1862,11 @@ class LinkedEditingRanges:
 
     # Since: 3.16.0
 
-    ranges: typing.List["Range"] = attrs.field()
+    ranges: List["Range"] = attrs.field()
     """A list of ranges that can be edited together. The ranges must have
     identical length and contain identical text content. The ranges cannot overlap."""
 
-    wordPattern: typing.Optional[str] = attrs.field(
+    wordPattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1884,7 +1878,7 @@ class LinkedEditingRanges:
 @attrs.define
 class LinkedEditingRangeOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -1893,13 +1887,13 @@ class LinkedEditingRangeOptions:
 @attrs.define
 class LinkedEditingRangeRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -1917,7 +1911,7 @@ class CreateFilesParams:
 
     # Since: 3.16.0
 
-    files: typing.List["FileCreate"] = attrs.field()
+    files: List["FileCreate"] = attrs.field()
     """An array of all files/folders created in this operation."""
 
 
@@ -1938,15 +1932,11 @@ class WorkspaceEdit:
     the client capability: `workspace.workspaceEdit.failureHandling`
     """
 
-    changes: typing.Optional[typing.Dict[str, typing.List["TextEdit"]]] = attrs.field(
-        default=None
-    )
+    changes: Optional[Dict[str, List["TextEdit"]]] = attrs.field(default=None)
     """Holds changes to existing resources."""
 
-    documentChanges: typing.Optional[
-        typing.List[
-            typing.Union["TextDocumentEdit", "CreateFile", "RenameFile", "DeleteFile"]
-        ]
+    documentChanges: Optional[
+        List[Union["TextDocumentEdit", "CreateFile", "RenameFile", "DeleteFile"]]
     ] = attrs.field(default=None)
     """Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes
     are either an array of `TextDocumentEdit`s to express changes to n different text documents
@@ -1959,8 +1949,8 @@ class WorkspaceEdit:
     If a client neither supports `documentChanges` nor `workspace.workspaceEdit.resourceOperations` then
     only plain `TextEdit`s using the `changes` property are supported."""
 
-    changeAnnotations: typing.Optional[
-        typing.Dict["ChangeAnnotationIdentifier", "ChangeAnnotation"]
+    changeAnnotations: Optional[
+        Dict["ChangeAnnotationIdentifier", "ChangeAnnotation"]
     ] = attrs.field(default=None)
     """A map of change annotations that can be referenced in `AnnotatedTextEdit`s or create, rename and
     delete file / folder operations.
@@ -1980,7 +1970,7 @@ class FileOperationRegistrationOptions:
 
     # Since: 3.16.0
 
-    filters: typing.List["FileOperationFilter"] = attrs.field()
+    filters: List["FileOperationFilter"] = attrs.field()
     """The actual filters."""
 
 
@@ -1994,7 +1984,7 @@ class RenameFilesParams:
 
     # Since: 3.16.0
 
-    files: typing.List["FileRename"] = attrs.field()
+    files: List["FileRename"] = attrs.field()
     """An array of all files/folders renamed in this operation. When a folder is renamed, only
     the folder will be included, and not its children."""
 
@@ -2009,7 +1999,7 @@ class DeleteFilesParams:
 
     # Since: 3.16.0
 
-    files: typing.List["FileDelete"] = attrs.field()
+    files: List["FileDelete"] = attrs.field()
     """An array of all files/folders deleted in this operation."""
 
 
@@ -2022,10 +2012,10 @@ class MonikerParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2049,14 +2039,14 @@ class Moniker:
     unique: "UniquenessLevel" = attrs.field()
     """The scope in which the moniker is unique"""
 
-    kind: typing.Optional["MonikerKind"] = attrs.field(default=None)
+    kind: Optional["MonikerKind"] = attrs.field(default=None)
     """The moniker kind if known."""
 
 
 @attrs.define
 class MonikerOptions:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2065,9 +2055,9 @@ class MonikerOptions:
 @attrs.define
 class MonikerRegistrationOptions:
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -2087,7 +2077,7 @@ class TypeHierarchyPrepareParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -2115,16 +2105,16 @@ class TypeHierarchyItem:
     picked, e.g. the name of a function. Must be contained by the
     [`range`](#TypeHierarchyItem.range)."""
 
-    tags: typing.Optional[typing.List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
     """Tags for this item."""
 
-    detail: typing.Optional[str] = attrs.field(
+    detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """More detail for this item, e.g. the signature of a function."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved between a type hierarchy prepare and
     supertypes or subtypes requests. It could also be used to identify the
     type hierarchy in the server, helping improve the performance on
@@ -2140,7 +2130,7 @@ class TypeHierarchyOptions:
 
     # Since: 3.17.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2155,13 +2145,13 @@ class TypeHierarchyRegistrationOptions:
 
     # Since: 3.17.0
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2180,10 +2170,10 @@ class TypeHierarchySupertypesParams:
 
     item: "TypeHierarchyItem" = attrs.field()
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2199,10 +2189,10 @@ class TypeHierarchySubtypesParams:
 
     item: "TypeHierarchyItem" = attrs.field()
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2226,7 +2216,7 @@ class InlineValueParams:
     """Additional information about the context in which inline values were
     requested."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -2239,7 +2229,7 @@ class InlineValueOptions:
 
     # Since: 3.17.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2254,13 +2244,13 @@ class InlineValueRegistrationOptions:
 
     # Since: 3.17.0
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2283,7 +2273,7 @@ class InlayHintParams:
     range: "Range" = attrs.field()
     """The document range for which inlay hints should be computed."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -2299,29 +2289,27 @@ class InlayHint:
     position: "Position" = attrs.field()
     """The position of this hint."""
 
-    label: typing.Union[str, typing.List["InlayHintLabelPart"]] = attrs.field()
+    label: Union[str, List["InlayHintLabelPart"]] = attrs.field()
     """The label of this hint. A human readable string or an array of
     InlayHintLabelPart label parts.
     
     *Note* that neither the string nor the label part can be empty."""
 
-    kind: typing.Optional["InlayHintKind"] = attrs.field(default=None)
+    kind: Optional["InlayHintKind"] = attrs.field(default=None)
     """The kind of this hint. Can be omitted in which case the client
     should fall back to a reasonable default."""
 
-    textEdits: typing.Optional[typing.List["TextEdit"]] = attrs.field(default=None)
+    textEdits: Optional[List["TextEdit"]] = attrs.field(default=None)
     """Optional text edits that are performed when accepting this inlay hint.
     
     *Note* that edits are expected to change the document so that the inlay
     hint (or its nearest variant) is now part of the document and the inlay
     hint itself is now obsolete."""
 
-    tooltip: typing.Optional[typing.Union[str, "MarkupContent"]] = attrs.field(
-        default=None
-    )
+    tooltip: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """The tooltip text when you hover over this item."""
 
-    paddingLeft: typing.Optional[bool] = attrs.field(
+    paddingLeft: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2331,7 +2319,7 @@ class InlayHint:
     background color of the hint itself. That means padding can be used
     to visually align/separate an inlay hint."""
 
-    paddingRight: typing.Optional[bool] = attrs.field(
+    paddingRight: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2341,7 +2329,7 @@ class InlayHint:
     background color of the hint itself. That means padding can be used
     to visually align/separate an inlay hint."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved on an inlay hint between
     a `textDocument/inlayHint` and a `inlayHint/resolve` request."""
 
@@ -2355,14 +2343,14 @@ class InlayHintOptions:
 
     # Since: 3.17.0
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The server provides support to resolve additional
     information for an inlay hint item."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2377,20 +2365,20 @@ class InlayHintRegistrationOptions:
 
     # Since: 3.17.0
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The server provides support to resolve additional
     information for an inlay hint item."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2410,22 +2398,22 @@ class DocumentDiagnosticParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    identifier: typing.Optional[str] = attrs.field(
+    identifier: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The additional identifier  provided during registration."""
 
-    previousResultId: typing.Optional[str] = attrs.field(
+    previousResultId: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The result id of a previous response if provided."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2439,11 +2427,8 @@ class DocumentDiagnosticReportPartialResult:
 
     # Since: 3.17.0
 
-    relatedDocuments: typing.Dict[
-        str,
-        typing.Union[
-            "FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"
-        ],
+    relatedDocuments: Dict[
+        str, Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"]
     ] = attrs.field()
 
 
@@ -2481,14 +2466,14 @@ class DiagnosticOptions:
     )
     """The server provides support for workspace diagnostics as well."""
 
-    identifier: typing.Optional[str] = attrs.field(
+    identifier: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """An optional identifier under which the diagnostics are
     managed by the client."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -2516,20 +2501,20 @@ class DiagnosticRegistrationOptions:
     )
     """The server provides support for workspace diagnostics as well."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    identifier: typing.Optional[str] = attrs.field(
+    identifier: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """An optional identifier under which the diagnostics are
     managed by the client."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2546,20 +2531,20 @@ class WorkspaceDiagnosticParams:
 
     # Since: 3.17.0
 
-    previousResultIds: typing.List["PreviousResultId"] = attrs.field()
+    previousResultIds: List["PreviousResultId"] = attrs.field()
     """The currently known diagnostic reports with their
     previous result ids."""
 
-    identifier: typing.Optional[str] = attrs.field(
+    identifier: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The additional identifier provided during registration."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2573,7 +2558,7 @@ class WorkspaceDiagnosticReport:
 
     # Since: 3.17.0
 
-    items: typing.List["WorkspaceDocumentDiagnosticReport"] = attrs.field()
+    items: List["WorkspaceDocumentDiagnosticReport"] = attrs.field()
 
 
 @attrs.define
@@ -2585,7 +2570,7 @@ class WorkspaceDiagnosticReportPartialResult:
 
     # Since: 3.17.0
 
-    items: typing.List["WorkspaceDocumentDiagnosticReport"] = attrs.field()
+    items: List["WorkspaceDocumentDiagnosticReport"] = attrs.field()
 
 
 @attrs.define
@@ -2600,7 +2585,7 @@ class DidOpenNotebookDocumentParams:
     notebookDocument: "NotebookDocument" = attrs.field()
     """The notebook document that got opened."""
 
-    cellTextDocuments: typing.List["TextDocumentItem"] = attrs.field()
+    cellTextDocuments: List["TextDocumentItem"] = attrs.field()
     """The text documents that represent the content
     of a notebook cell."""
 
@@ -2661,7 +2646,7 @@ class DidCloseNotebookDocumentParams:
     notebookDocument: "NotebookDocumentIdentifier" = attrs.field()
     """The notebook document that got closed."""
 
-    cellTextDocuments: typing.List["TextDocumentIdentifier"] = attrs.field()
+    cellTextDocuments: List["TextDocumentIdentifier"] = attrs.field()
     """The text documents that represent the content
     of a notebook cell that got closed."""
 
@@ -2669,13 +2654,13 @@ class DidCloseNotebookDocumentParams:
 @attrs.define
 class RegistrationParams:
 
-    registrations: typing.List["Registration"] = attrs.field()
+    registrations: List["Registration"] = attrs.field()
 
 
 @attrs.define
 class UnregistrationParams:
 
-    unregisterations: typing.List["Unregistration"] = attrs.field()
+    unregisterations: List["Unregistration"] = attrs.field()
 
 
 @attrs.define
@@ -2685,20 +2670,20 @@ class _InitializeParams:
     capabilities: "ClientCapabilities" = attrs.field()
     """The capabilities provided by the client (editor or tool)"""
 
-    processId: typing.Optional[typing.Union[int, None]] = attrs.field(default=None)
+    processId: Optional[Union[int, None]] = attrs.field(default=None)
     """The process Id of the parent process that started
     the server.
     
     Is `null` if the process has not been started by another process.
     If the parent process is not alive then the server should exit."""
 
-    clientInfo: typing.Optional["None"] = attrs.field(default=None)
+    clientInfo: Optional["None"] = attrs.field(default=None)
     """Information about the client
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    locale: typing.Optional[str] = attrs.field(
+    locale: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2712,42 +2697,35 @@ class _InitializeParams:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    rootPath: typing.Optional[typing.Union[str, None]] = attrs.field(default=None)
+    rootPath: Optional[Union[str, None]] = attrs.field(default=None)
     """The rootPath of the workspace. Is null
     if no folder is open.
     
     @deprecated in favour of rootUri."""
 
-    rootUri: typing.Optional[typing.Union[str, None]] = attrs.field(default=None)
+    rootUri: Optional[Union[str, None]] = attrs.field(default=None)
     """The rootUri of the workspace. Is null if no
     folder is open. If both `rootPath` and `rootUri` are set
     `rootUri` wins.
     
     @deprecated in favour of workspaceFolders."""
 
-    initializationOptions: typing.Optional["LSPAny"] = attrs.field(default=None)
+    initializationOptions: Optional["LSPAny"] = attrs.field(default=None)
     """User provided initialization options."""
 
-    trace: typing.Optional[
-        typing.Union[
-            typing.Literal["off"],
-            typing.Literal["messages"],
-            typing.Literal["compact"],
-            typing.Literal["verbose"],
-        ]
-    ] = attrs.field(default=None)
+    trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
 @attrs.define
 class WorkspaceFoldersInitializeParams:
 
-    workspaceFolders: typing.Optional[
-        typing.Union[typing.List["WorkspaceFolder"], None]
-    ] = attrs.field(default=None)
+    workspaceFolders: Optional[Union[List["WorkspaceFolder"], None]] = attrs.field(
+        default=None
+    )
     """The workspace folders configured in the client when the server starts.
     
     This property is only available if the client supports workspace folders.
@@ -2764,20 +2742,20 @@ class InitializeParams:
     capabilities: "ClientCapabilities" = attrs.field()
     """The capabilities provided by the client (editor or tool)"""
 
-    processId: typing.Optional[typing.Union[int, None]] = attrs.field(default=None)
+    processId: Optional[Union[int, None]] = attrs.field(default=None)
     """The process Id of the parent process that started
     the server.
     
     Is `null` if the process has not been started by another process.
     If the parent process is not alive then the server should exit."""
 
-    clientInfo: typing.Optional["None"] = attrs.field(default=None)
+    clientInfo: Optional["None"] = attrs.field(default=None)
     """Information about the client
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    locale: typing.Optional[str] = attrs.field(
+    locale: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2791,35 +2769,28 @@ class InitializeParams:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    rootPath: typing.Optional[typing.Union[str, None]] = attrs.field(default=None)
+    rootPath: Optional[Union[str, None]] = attrs.field(default=None)
     """The rootPath of the workspace. Is null
     if no folder is open.
     
     @deprecated in favour of rootUri."""
 
-    rootUri: typing.Optional[typing.Union[str, None]] = attrs.field(default=None)
+    rootUri: Optional[Union[str, None]] = attrs.field(default=None)
     """The rootUri of the workspace. Is null if no
     folder is open. If both `rootPath` and `rootUri` are set
     `rootUri` wins.
     
     @deprecated in favour of workspaceFolders."""
 
-    initializationOptions: typing.Optional["LSPAny"] = attrs.field(default=None)
+    initializationOptions: Optional["LSPAny"] = attrs.field(default=None)
     """User provided initialization options."""
 
-    trace: typing.Optional[
-        typing.Union[
-            typing.Literal["off"],
-            typing.Literal["messages"],
-            typing.Literal["compact"],
-            typing.Literal["verbose"],
-        ]
-    ] = attrs.field(default=None)
+    trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
 
-    workspaceFolders: typing.Optional[
-        typing.Union[typing.List["WorkspaceFolder"], None]
-    ] = attrs.field(default=None)
+    workspaceFolders: Optional[Union[List["WorkspaceFolder"], None]] = attrs.field(
+        default=None
+    )
     """The workspace folders configured in the client when the server starts.
     
     This property is only available if the client supports workspace folders.
@@ -2837,7 +2808,7 @@ class InitializeResult:
     capabilities: "ServerCapabilities" = attrs.field()
     """The capabilities the language server provides."""
 
-    serverInfo: typing.Optional["None"] = attrs.field(default=None)
+    serverInfo: Optional["None"] = attrs.field(default=None)
     """Information about the server.
     
     @since 3.15.0"""
@@ -2872,9 +2843,7 @@ class DidChangeConfigurationParams:
 @attrs.define
 class DidChangeConfigurationRegistrationOptions:
 
-    section: typing.Optional[typing.Union[str, typing.List[str]]] = attrs.field(
-        default=None
-    )
+    section: Optional[Union[str, List[str]]] = attrs.field(default=None)
 
 
 @attrs.define
@@ -2897,9 +2866,7 @@ class ShowMessageRequestParams:
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The actual message."""
 
-    actions: typing.Optional[typing.List["MessageActionItem"]] = attrs.field(
-        default=None
-    )
+    actions: Optional[List["MessageActionItem"]] = attrs.field(default=None)
     """The message action items to present."""
 
 
@@ -2938,7 +2905,7 @@ class DidChangeTextDocumentParams:
     to the version after all provided content changes have
     been applied."""
 
-    contentChanges: typing.List["TextDocumentContentChangeEvent"] = attrs.field()
+    contentChanges: List["TextDocumentContentChangeEvent"] = attrs.field()
     """The actual content changes. The content changes describe single state changes
     to the document. So if there are two content changes c1 (at array index 0) and
     c2 (at array index 1) for a document in state S then c1 moves the document from
@@ -2960,9 +2927,9 @@ class TextDocumentChangeRegistrationOptions:
     syncKind: "TextDocumentSyncKind" = attrs.field()
     """How documents are synced to the server."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -2982,7 +2949,7 @@ class DidSaveTextDocumentParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The document that was saved."""
 
-    text: typing.Optional[str] = attrs.field(
+    text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -2994,7 +2961,7 @@ class DidSaveTextDocumentParams:
 class SaveOptions:
     """Save options."""
 
-    includeText: typing.Optional[bool] = attrs.field(
+    includeText: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3005,13 +2972,13 @@ class SaveOptions:
 class TextDocumentSaveRegistrationOptions:
     """Save registration options."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    includeText: typing.Optional[bool] = attrs.field(
+    includeText: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3046,7 +3013,7 @@ class TextEdit:
 class DidChangeWatchedFilesParams:
     """The watched files change notification's parameters."""
 
-    changes: typing.List["FileEvent"] = attrs.field()
+    changes: List["FileEvent"] = attrs.field()
     """The actual file events."""
 
 
@@ -3055,7 +3022,7 @@ class DidChangeWatchedFilesRegistrationOptions:
     """Describe options to be used when registered for text document change
     events."""
 
-    watchers: typing.List["FileSystemWatcher"] = attrs.field()
+    watchers: List["FileSystemWatcher"] = attrs.field()
     """The watchers to register."""
 
 
@@ -3066,10 +3033,10 @@ class PublishDiagnosticsParams:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    diagnostics: typing.List["Diagnostic"] = attrs.field()
+    diagnostics: List["Diagnostic"] = attrs.field()
     """An array of diagnostic information items."""
 
-    version: typing.Optional[int] = attrs.field(
+    version: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.integer_validator),
         default=None,
     )
@@ -3089,14 +3056,14 @@ class CompletionParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    context: typing.Optional["CompletionContext"] = attrs.field(default=None)
+    context: Optional["CompletionContext"] = attrs.field(default=None)
     """The completion context. This is only available it the client specifies
     to send this using the client capability `textDocument.completion.contextSupport === true`"""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3115,44 +3082,40 @@ class CompletionItem:
     If label details are provided the label itself should
     be an unqualified name of the completion item."""
 
-    labelDetails: typing.Optional["CompletionItemLabelDetails"] = attrs.field(
-        default=None
-    )
+    labelDetails: Optional["CompletionItemLabelDetails"] = attrs.field(default=None)
     """Additional details for the label
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    kind: typing.Optional["CompletionItemKind"] = attrs.field(default=None)
+    kind: Optional["CompletionItemKind"] = attrs.field(default=None)
     """The kind of this completion item. Based of the kind
     an icon is chosen by the editor."""
 
-    tags: typing.Optional[typing.List["CompletionItemTag"]] = attrs.field(default=None)
+    tags: Optional[List["CompletionItemTag"]] = attrs.field(default=None)
     """Tags for this completion item.
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    detail: typing.Optional[str] = attrs.field(
+    detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A human-readable string with additional information
     about this item, like type or symbol information."""
 
-    documentation: typing.Optional[typing.Union[str, "MarkupContent"]] = attrs.field(
-        default=None
-    )
+    documentation: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """A human-readable string that represents a doc-comment."""
 
-    deprecated: typing.Optional[bool] = attrs.field(
+    deprecated: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Indicates if this item is deprecated.
     @deprecated Use `tags` instead."""
 
-    preselect: typing.Optional[bool] = attrs.field(
+    preselect: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3162,7 +3125,7 @@ class CompletionItem:
     tool / client decides which item that is. The rule is that the *first*
     item of those that match best is selected."""
 
-    sortText: typing.Optional[str] = attrs.field(
+    sortText: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3170,7 +3133,7 @@ class CompletionItem:
     with other items. When `falsy` the label
     is used."""
 
-    filterText: typing.Optional[str] = attrs.field(
+    filterText: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3178,7 +3141,7 @@ class CompletionItem:
     completion items. When `falsy` the label
     is used."""
 
-    insertText: typing.Optional[str] = attrs.field(
+    insertText: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3194,7 +3157,7 @@ class CompletionItem:
     recommended to use `textEdit` instead since it avoids additional client
     side interpretation."""
 
-    insertTextFormat: typing.Optional["InsertTextFormat"] = attrs.field(default=None)
+    insertTextFormat: Optional["InsertTextFormat"] = attrs.field(default=None)
     """The format of the insert text. The format applies to both the
     `insertText` property and the `newText` property of a provided
     `textEdit`. If omitted defaults to `InsertTextFormat.PlainText`.
@@ -3202,7 +3165,7 @@ class CompletionItem:
     Please note that the insertTextFormat doesn't apply to
     `additionalTextEdits`."""
 
-    insertTextMode: typing.Optional["InsertTextMode"] = attrs.field(default=None)
+    insertTextMode: Optional["InsertTextMode"] = attrs.field(default=None)
     """How whitespace and indentation is handled during completion
     item insertion. If not provided the clients default value depends on
     the `textDocument.completion.insertTextMode` client capability.
@@ -3210,9 +3173,9 @@ class CompletionItem:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    textEdit: typing.Optional[
-        typing.Union["TextEdit", "InsertReplaceEdit"]
-    ] = attrs.field(default=None)
+    textEdit: Optional[Union["TextEdit", "InsertReplaceEdit"]] = attrs.field(
+        default=None
+    )
     """An edit which is applied to a document when selecting
     this completion. When an edit is provided the value of
     insertText is ignored.
@@ -3235,7 +3198,7 @@ class CompletionItem:
     @since 3.16.0 additional type `InsertReplaceEdit`"""
     # Since: 3.16.0 additional type `InsertReplaceEdit`
 
-    textEditText: typing.Optional[str] = attrs.field(
+    textEditText: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3251,9 +3214,7 @@ class CompletionItem:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    additionalTextEdits: typing.Optional[typing.List["TextEdit"]] = attrs.field(
-        default=None
-    )
+    additionalTextEdits: Optional[List["TextEdit"]] = attrs.field(default=None)
     """An optional array of additional text edits that are applied when
     selecting this completion. Edits must not overlap (including the same insert position)
     with the main edit nor with themselves.
@@ -3262,17 +3223,17 @@ class CompletionItem:
     (for example adding an import statement at the top of the file if the completion item will
     insert an unqualified type)."""
 
-    commitCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    commitCharacters: Optional[List[str]] = attrs.field(default=None)
     """An optional set of characters that when pressed while this completion is active will accept it first and
     then type that character. *Note* that all commit characters should have `length=1` and that superfluous
     characters will be ignored."""
 
-    command: typing.Optional["Command"] = attrs.field(default=None)
+    command: Optional["Command"] = attrs.field(default=None)
     """An optional command that is executed *after* inserting this completion. *Note* that
     additional modifications to the current document should be described with the
     additionalTextEdits-property."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved on a completion item between a
     CompletionRequest and a CompletionResolveRequest."""
 
@@ -3288,10 +3249,10 @@ class CompletionList:
     Recomputed lists have all their items replaced (not appended) in the
     incomplete completion sessions."""
 
-    items: typing.List["CompletionItem"] = attrs.field()
+    items: List["CompletionItem"] = attrs.field()
     """The completion items."""
 
-    itemDefaults: typing.Optional["None"] = attrs.field(default=None)
+    itemDefaults: Optional["None"] = attrs.field(default=None)
     """In many cases the items of an actual completion result share the same
     value for properties like `commitCharacters` or the range of a text
     edit. A completion list can therefore define item defaults which will
@@ -3312,7 +3273,7 @@ class CompletionList:
 class CompletionOptions:
     """Completion options."""
 
-    triggerCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    triggerCharacters: Optional[List[str]] = attrs.field(default=None)
     """Most tools trigger completion request automatically without explicitly requesting
     it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
     starts to type an identifier. For example if the user types `c` in a JavaScript file
@@ -3322,7 +3283,7 @@ class CompletionOptions:
     If code complete should automatically be trigger on characters not being valid inside
     an identifier (for example `.` in JavaScript) list them in `triggerCharacters`."""
 
-    allCommitCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    allCommitCharacters: Optional[List[str]] = attrs.field(default=None)
     """The list of all possible characters that commit a completion. This field can be used
     if clients don't support individual commit characters per completion item. See
     `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
@@ -3333,21 +3294,21 @@ class CompletionOptions:
     @since 3.2.0"""
     # Since: 3.2.0
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The server provides support to resolve additional
     information for a completion item."""
 
-    completionItem: typing.Optional["None"] = attrs.field(default=None)
+    completionItem: Optional["None"] = attrs.field(default=None)
     """The server supports the following `CompletionItem` specific
     capabilities.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3357,13 +3318,13 @@ class CompletionOptions:
 class CompletionRegistrationOptions:
     """Registration options for a CompletionRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    triggerCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    triggerCharacters: Optional[List[str]] = attrs.field(default=None)
     """Most tools trigger completion request automatically without explicitly requesting
     it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
     starts to type an identifier. For example if the user types `c` in a JavaScript file
@@ -3373,7 +3334,7 @@ class CompletionRegistrationOptions:
     If code complete should automatically be trigger on characters not being valid inside
     an identifier (for example `.` in JavaScript) list them in `triggerCharacters`."""
 
-    allCommitCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    allCommitCharacters: Optional[List[str]] = attrs.field(default=None)
     """The list of all possible characters that commit a completion. This field can be used
     if clients don't support individual commit characters per completion item. See
     `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
@@ -3384,14 +3345,14 @@ class CompletionRegistrationOptions:
     @since 3.2.0"""
     # Since: 3.2.0
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The server provides support to resolve additional
     information for a completion item."""
 
-    completionItem: typing.Optional["None"] = attrs.field(default=None)
+    completionItem: Optional["None"] = attrs.field(default=None)
     """The server supports the following `CompletionItem` specific
     capabilities.
     
@@ -3409,7 +3370,7 @@ class HoverParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -3417,12 +3378,12 @@ class HoverParams:
 class Hover:
     """The result of a hover request."""
 
-    contents: typing.Union[
-        "MarkupContent", "MarkedString", typing.List["MarkedString"]
+    contents: Union[
+        "MarkupContent", "MarkedString", List["MarkedString"]
     ] = attrs.field()
     """The hover's content"""
 
-    range: typing.Optional["Range"] = attrs.field(default=None)
+    range: Optional["Range"] = attrs.field(default=None)
     """An optional range inside the text document that is used to
     visualize the hover, e.g. by changing the background color."""
 
@@ -3431,7 +3392,7 @@ class Hover:
 class HoverOptions:
     """Hover options."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3441,9 +3402,9 @@ class HoverOptions:
 class HoverRegistrationOptions:
     """Registration options for a HoverRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -3458,14 +3419,14 @@ class SignatureHelpParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    context: typing.Optional["SignatureHelpContext"] = attrs.field(default=None)
+    context: Optional["SignatureHelpContext"] = attrs.field(default=None)
     """The signature help context. This is only available if the client specifies
     to send this using the client capability `textDocument.signatureHelp.contextSupport === true`
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -3477,10 +3438,10 @@ class SignatureHelp:
     active parameter.
     """
 
-    signatures: typing.List["SignatureInformation"] = attrs.field()
+    signatures: List["SignatureInformation"] = attrs.field()
     """One or more signatures."""
 
-    activeSignature: typing.Optional[int] = attrs.field(
+    activeSignature: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -3494,7 +3455,7 @@ class SignatureHelp:
     In future version of the protocol this property might become
     mandatory to better express this."""
 
-    activeParameter: typing.Optional[int] = attrs.field(
+    activeParameter: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -3511,10 +3472,10 @@ class SignatureHelp:
 class SignatureHelpOptions:
     """Server Capabilities for a SignatureHelpRequest."""
 
-    triggerCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    triggerCharacters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that trigger signature help automatically."""
 
-    retriggerCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    retriggerCharacters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that re-trigger signature help.
     
     These trigger characters are only active when signature help is already showing. All trigger characters
@@ -3523,7 +3484,7 @@ class SignatureHelpOptions:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3533,16 +3494,16 @@ class SignatureHelpOptions:
 class SignatureHelpRegistrationOptions:
     """Registration options for a SignatureHelpRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    triggerCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    triggerCharacters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that trigger signature help automatically."""
 
-    retriggerCharacters: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    retriggerCharacters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that re-trigger signature help.
     
     These trigger characters are only active when signature help is already showing. All trigger characters
@@ -3562,10 +3523,10 @@ class DefinitionParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3574,7 +3535,7 @@ class DefinitionParams:
 class DefinitionOptions:
     """Server Capabilities for a DefinitionRequest."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3584,9 +3545,9 @@ class DefinitionOptions:
 class DefinitionRegistrationOptions:
     """Registration options for a DefinitionRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -3603,10 +3564,10 @@ class ReferenceParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3615,7 +3576,7 @@ class ReferenceParams:
 class ReferenceOptions:
     """Reference options."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3625,9 +3586,9 @@ class ReferenceOptions:
 class ReferenceRegistrationOptions:
     """Registration options for a ReferencesRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -3642,10 +3603,10 @@ class DocumentHighlightParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3662,7 +3623,7 @@ class DocumentHighlight:
     range: "Range" = attrs.field()
     """The range this highlight applies to."""
 
-    kind: typing.Optional["DocumentHighlightKind"] = attrs.field(default=None)
+    kind: Optional["DocumentHighlightKind"] = attrs.field(default=None)
     """The highlight kind, default is text."""
 
 
@@ -3670,7 +3631,7 @@ class DocumentHighlight:
 class DocumentHighlightOptions:
     """Provider options for a DocumentHighlightRequest."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3680,9 +3641,9 @@ class DocumentHighlightOptions:
 class DocumentHighlightRegistrationOptions:
     """Registration options for a DocumentHighlightRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -3694,10 +3655,10 @@ class DocumentSymbolParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3712,13 +3673,13 @@ class BaseSymbolInformation:
     kind: "SymbolKind" = attrs.field()
     """The kind of this symbol."""
 
-    tags: typing.Optional[typing.List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    containerName: typing.Optional[str] = attrs.field(
+    containerName: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3750,7 +3711,7 @@ class SymbolInformation:
     kind: "SymbolKind" = attrs.field()
     """The kind of this symbol."""
 
-    deprecated: typing.Optional[bool] = attrs.field(
+    deprecated: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3758,13 +3719,13 @@ class SymbolInformation:
     
     @deprecated Use tags instead"""
 
-    tags: typing.Optional[typing.List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    containerName: typing.Optional[str] = attrs.field(
+    containerName: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3801,19 +3762,19 @@ class DocumentSymbol:
     """The range that should be selected and revealed when this symbol is being picked, e.g the name of a function.
     Must be contained by the `range`."""
 
-    detail: typing.Optional[str] = attrs.field(
+    detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """More detail for this symbol, e.g the signature of a function."""
 
-    tags: typing.Optional[typing.List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
     """Tags for this document symbol.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    deprecated: typing.Optional[bool] = attrs.field(
+    deprecated: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3821,7 +3782,7 @@ class DocumentSymbol:
     
     @deprecated Use tags instead"""
 
-    children: typing.Optional[typing.List["DocumentSymbol"]] = attrs.field(default=None)
+    children: Optional[List["DocumentSymbol"]] = attrs.field(default=None)
     """Children of this symbol, e.g. properties of a class."""
 
 
@@ -3829,7 +3790,7 @@ class DocumentSymbol:
 class DocumentSymbolOptions:
     """Provider options for a DocumentSymbolRequest."""
 
-    label: typing.Optional[str] = attrs.field(
+    label: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3839,7 +3800,7 @@ class DocumentSymbolOptions:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3849,13 +3810,13 @@ class DocumentSymbolOptions:
 class DocumentSymbolRegistrationOptions:
     """Registration options for a DocumentSymbolRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    label: typing.Optional[str] = attrs.field(
+    label: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -3879,10 +3840,10 @@ class CodeActionParams:
     context: "CodeActionContext" = attrs.field()
     """Context carrying additional information."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3902,7 +3863,7 @@ class Command:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
-    arguments: typing.Optional[typing.List["LSPAny"]] = attrs.field(default=None)
+    arguments: Optional[List["LSPAny"]] = attrs.field(default=None)
     """Arguments that the command handler should be
     invoked with."""
 
@@ -3920,15 +3881,15 @@ class CodeAction:
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A short, human-readable, title for this code action."""
 
-    kind: typing.Optional["CodeActionKind"] = attrs.field(default=None)
+    kind: Optional["CodeActionKind"] = attrs.field(default=None)
     """The kind of the code action.
     
     Used to filter code actions."""
 
-    diagnostics: typing.Optional[typing.List["Diagnostic"]] = attrs.field(default=None)
+    diagnostics: Optional[List["Diagnostic"]] = attrs.field(default=None)
     """The diagnostics that this code action resolves."""
 
-    isPreferred: typing.Optional[bool] = attrs.field(
+    isPreferred: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3941,7 +3902,7 @@ class CodeAction:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    disabled: typing.Optional["None"] = attrs.field(default=None)
+    disabled: Optional["None"] = attrs.field(default=None)
     """Marks that the code action cannot currently be applied.
     
     Clients should follow the following guidelines regarding disabled code actions:
@@ -3959,15 +3920,15 @@ class CodeAction:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    edit: typing.Optional["WorkspaceEdit"] = attrs.field(default=None)
+    edit: Optional["WorkspaceEdit"] = attrs.field(default=None)
     """The workspace edit this code action performs."""
 
-    command: typing.Optional["Command"] = attrs.field(default=None)
+    command: Optional["Command"] = attrs.field(default=None)
     """A command this code action executes. If a code action
     provides an edit and a command, first the edit is
     executed and then the command."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved on a code action between
     a `textDocument/codeAction` and a `codeAction/resolve` request.
     
@@ -3979,15 +3940,13 @@ class CodeAction:
 class CodeActionOptions:
     """Provider options for a CodeActionRequest."""
 
-    codeActionKinds: typing.Optional[typing.List["CodeActionKind"]] = attrs.field(
-        default=None
-    )
+    codeActionKinds: Optional[List["CodeActionKind"]] = attrs.field(default=None)
     """CodeActionKinds that this server may return.
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
     may list out every specific kind they provide."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -3997,7 +3956,7 @@ class CodeActionOptions:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4007,21 +3966,19 @@ class CodeActionOptions:
 class CodeActionRegistrationOptions:
     """Registration options for a CodeActionRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    codeActionKinds: typing.Optional[typing.List["CodeActionKind"]] = attrs.field(
-        default=None
-    )
+    codeActionKinds: Optional[List["CodeActionKind"]] = attrs.field(default=None)
     """CodeActionKinds that this server may return.
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
     may list out every specific kind they provide."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4040,10 +3997,10 @@ class WorkspaceSymbolParams:
     """A query string to filter symbols by. Clients may send an empty
     string here to request all symbols."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -4059,7 +4016,7 @@ class WorkspaceSymbol:
 
     # Since: 3.17.0
 
-    location: typing.Union["Location", "None"] = attrs.field()
+    location: Union["Location", "None"] = attrs.field()
     """The location of the symbol. Whether a server is allowed to
     return a location without a range depends on the client
     capability `workspace.symbol.resolveSupport`.
@@ -4072,17 +4029,17 @@ class WorkspaceSymbol:
     kind: "SymbolKind" = attrs.field()
     """The kind of this symbol."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved on a workspace symbol between a
     workspace symbol request and a workspace symbol resolve request."""
 
-    tags: typing.Optional[typing.List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    containerName: typing.Optional[str] = attrs.field(
+    containerName: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4096,7 +4053,7 @@ class WorkspaceSymbol:
 class WorkspaceSymbolOptions:
     """Server capabilities for a WorkspaceSymbolRequest."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4106,7 +4063,7 @@ class WorkspaceSymbolOptions:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4116,7 +4073,7 @@ class WorkspaceSymbolOptions:
 class WorkspaceSymbolRegistrationOptions:
     """Registration options for a WorkspaceSymbolRequest."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4134,10 +4091,10 @@ class CodeLensParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The document to request code lens for."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -4155,10 +4112,10 @@ class CodeLens:
     range: "Range" = attrs.field()
     """The range in which this code lens is valid. Should only span a single line."""
 
-    command: typing.Optional["Command"] = attrs.field(default=None)
+    command: Optional["Command"] = attrs.field(default=None)
     """The command this code lens represents."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved on a code lens item between
     a CodeLensRequest and a [CodeLensResolveRequest]
     (#CodeLensResolveRequest)"""
@@ -4168,13 +4125,13 @@ class CodeLens:
 class CodeLensOptions:
     """Code Lens provider options of a CodeLensRequest."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Code lens has a resolve provider as well."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4184,13 +4141,13 @@ class CodeLensOptions:
 class CodeLensRegistrationOptions:
     """Registration options for a CodeLensRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4204,10 +4161,10 @@ class DocumentLinkParams:
     textDocument: "TextDocumentIdentifier" = attrs.field()
     """The document to provide document links for."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -4220,13 +4177,13 @@ class DocumentLink:
     range: "Range" = attrs.field()
     """The range this link applies to."""
 
-    target: typing.Optional[str] = attrs.field(
+    target: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The uri this link points to. If missing a resolve request is sent later."""
 
-    tooltip: typing.Optional[str] = attrs.field(
+    tooltip: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4239,7 +4196,7 @@ class DocumentLink:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved on a document link between a
     DocumentLinkRequest and a DocumentLinkResolveRequest."""
 
@@ -4248,13 +4205,13 @@ class DocumentLink:
 class DocumentLinkOptions:
     """Provider options for a DocumentLinkRequest."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Document links have a resolve provider as well."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4264,13 +4221,13 @@ class DocumentLinkOptions:
 class DocumentLinkRegistrationOptions:
     """Registration options for a DocumentLinkRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    resolveProvider: typing.Optional[bool] = attrs.field(
+    resolveProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4287,7 +4244,7 @@ class DocumentFormattingParams:
     options: "FormattingOptions" = attrs.field()
     """The format options."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4295,7 +4252,7 @@ class DocumentFormattingParams:
 class DocumentFormattingOptions:
     """Provider options for a DocumentFormattingRequest."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4305,9 +4262,9 @@ class DocumentFormattingOptions:
 class DocumentFormattingRegistrationOptions:
     """Registration options for a DocumentFormattingRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -4325,7 +4282,7 @@ class DocumentRangeFormattingParams:
     options: "FormattingOptions" = attrs.field()
     """The format options"""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4333,7 +4290,7 @@ class DocumentRangeFormattingParams:
 class DocumentRangeFormattingOptions:
     """Provider options for a DocumentRangeFormattingRequest."""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4343,9 +4300,9 @@ class DocumentRangeFormattingOptions:
 class DocumentRangeFormattingRegistrationOptions:
     """Registration options for a DocumentRangeFormattingRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -4381,7 +4338,7 @@ class DocumentOnTypeFormattingOptions:
     )
     """A character on which formatting should be triggered, like `{`."""
 
-    moreTriggerCharacter: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    moreTriggerCharacter: Optional[List[str]] = attrs.field(default=None)
     """More trigger characters."""
 
 
@@ -4394,13 +4351,13 @@ class DocumentOnTypeFormattingRegistrationOptions:
     )
     """A character on which formatting should be triggered, like `{`."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    moreTriggerCharacter: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    moreTriggerCharacter: Optional[List[str]] = attrs.field(default=None)
     """More trigger characters."""
 
 
@@ -4419,7 +4376,7 @@ class RenameParams:
     request must return a ResponseError with an
     appropriate message set."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4427,7 +4384,7 @@ class RenameParams:
 class RenameOptions:
     """Provider options for a RenameRequest."""
 
-    prepareProvider: typing.Optional[bool] = attrs.field(
+    prepareProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4436,7 +4393,7 @@ class RenameOptions:
     @since version 3.12.0"""
     # Since: version 3.12.0
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4446,13 +4403,13 @@ class RenameOptions:
 class RenameRegistrationOptions:
     """Registration options for a RenameRequest."""
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    prepareProvider: typing.Optional[bool] = attrs.field(
+    prepareProvider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4471,7 +4428,7 @@ class PrepareRenameParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4482,10 +4439,10 @@ class ExecuteCommandParams:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
-    arguments: typing.Optional[typing.List["LSPAny"]] = attrs.field(default=None)
+    arguments: Optional[List["LSPAny"]] = attrs.field(default=None)
     """Arguments that the command should be invoked with."""
 
-    workDoneToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    workDoneToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4493,10 +4450,10 @@ class ExecuteCommandParams:
 class ExecuteCommandOptions:
     """The server capabilities of a ExecuteCommandRequest."""
 
-    commands: typing.List[str] = attrs.field()
+    commands: List[str] = attrs.field()
     """The commands to be executed on the server"""
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4506,7 +4463,7 @@ class ExecuteCommandOptions:
 class ExecuteCommandRegistrationOptions:
     """Registration options for a ExecuteCommandRequest."""
 
-    commands: typing.List[str] = attrs.field()
+    commands: List[str] = attrs.field()
     """The commands to be executed on the server"""
 
 
@@ -4517,7 +4474,7 @@ class ApplyWorkspaceEditParams:
     edit: "WorkspaceEdit" = attrs.field()
     """The edits to apply."""
 
-    label: typing.Optional[str] = attrs.field(
+    label: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4538,7 +4495,7 @@ class ApplyWorkspaceEditResult:
     applied: bool = attrs.field(validator=attrs.validators.instance_of(bool))
     """Indicates whether the edit was applied or not."""
 
-    failureReason: typing.Optional[str] = attrs.field(
+    failureReason: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4546,7 +4503,7 @@ class ApplyWorkspaceEditResult:
     This may be used by the server for diagnostic logging or to provide
     a suitable error for a request that triggered the edit."""
 
-    failedChange: typing.Optional[int] = attrs.field(
+    failedChange: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -4558,7 +4515,7 @@ class ApplyWorkspaceEditResult:
 @attrs.define
 class WorkDoneProgressBegin:
 
-    kind: typing.Literal["begin"] = attrs.field()
+    kind: str = attrs.field()
 
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """Mandatory title of the progress operation. Used to briefly inform about
@@ -4566,7 +4523,7 @@ class WorkDoneProgressBegin:
     
     Examples: "Indexing" or "Linking dependencies"."""
 
-    cancellable: typing.Optional[bool] = attrs.field(
+    cancellable: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4574,7 +4531,7 @@ class WorkDoneProgressBegin:
     long running operation. Clients that don't support cancellation are allowed
     to ignore the setting."""
 
-    message: typing.Optional[str] = attrs.field(
+    message: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4584,7 +4541,7 @@ class WorkDoneProgressBegin:
     Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
     If unset, the previous progress message (if any) is still valid."""
 
-    percentage: typing.Optional[int] = attrs.field(
+    percentage: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -4599,9 +4556,9 @@ class WorkDoneProgressBegin:
 @attrs.define
 class WorkDoneProgressReport:
 
-    kind: typing.Literal["report"] = attrs.field()
+    kind: str = attrs.field()
 
-    cancellable: typing.Optional[bool] = attrs.field(
+    cancellable: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -4610,7 +4567,7 @@ class WorkDoneProgressReport:
     Clients that don't support cancellation or don't support controlling the button's
     enablement state are allowed to ignore the property."""
 
-    message: typing.Optional[str] = attrs.field(
+    message: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4620,7 +4577,7 @@ class WorkDoneProgressReport:
     Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
     If unset, the previous progress message (if any) is still valid."""
 
-    percentage: typing.Optional[int] = attrs.field(
+    percentage: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -4635,9 +4592,9 @@ class WorkDoneProgressReport:
 @attrs.define
 class WorkDoneProgressEnd:
 
-    kind: typing.Literal["end"] = attrs.field()
+    kind: str = attrs.field()
 
-    message: typing.Optional[str] = attrs.field(
+    message: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4656,7 +4613,7 @@ class LogTraceParams:
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
 
-    verbose: typing.Optional[str] = attrs.field(
+    verbose: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4665,7 +4622,7 @@ class LogTraceParams:
 @attrs.define
 class CancelParams:
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id to cancel."""
 
 
@@ -4699,7 +4656,7 @@ class LocationLink:
     """The range that should be selected and revealed when this link is being followed, e.g the name of a function.
     Must be contained by the `targetRange`. See also `DocumentSymbol#range`"""
 
-    originSelectionRange: typing.Optional["Range"] = attrs.field(default=None)
+    originSelectionRange: Optional["Range"] = attrs.field(default=None)
     """Span of the origin of this link.
     
     Used as the underlined span for mouse interaction. Defaults to the word range at
@@ -4733,23 +4690,23 @@ class Range:
 class WorkspaceFoldersChangeEvent:
     """The workspace folder change event."""
 
-    added: typing.List["WorkspaceFolder"] = attrs.field()
+    added: List["WorkspaceFolder"] = attrs.field()
     """The array of added workspace folders"""
 
-    removed: typing.List["WorkspaceFolder"] = attrs.field()
+    removed: List["WorkspaceFolder"] = attrs.field()
     """The array of the removed workspace folders"""
 
 
 @attrs.define
 class ConfigurationItem:
 
-    scopeUri: typing.Optional[str] = attrs.field(
+    scopeUri: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The scope to get the configuration section for."""
 
-    section: typing.Optional[str] = attrs.field(
+    section: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -4844,7 +4801,7 @@ class SemanticTokensEdit:
     deleteCount: int = attrs.field(validator=validators.uinteger_validator)
     """The count of elements to remove."""
 
-    data: typing.Optional[typing.List[int]] = attrs.field(default=None)
+    data: Optional[List[int]] = attrs.field(default=None)
     """The elements to insert."""
 
 
@@ -4875,7 +4832,7 @@ class TextDocumentEdit:
     textDocument: "OptionalVersionedTextDocumentIdentifier" = attrs.field()
     """The text document to change."""
 
-    edits: typing.List[typing.Union["TextEdit", "AnnotatedTextEdit"]] = attrs.field()
+    edits: List[Union["TextEdit", "AnnotatedTextEdit"]] = attrs.field()
     """The edits to be applied.
     
     @since 3.16.0 - support for AnnotatedTextEdit. This is guarded using a
@@ -4890,9 +4847,7 @@ class ResourceOperation:
     kind: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The resource operation kind."""
 
-    annotationId: typing.Optional["ChangeAnnotationIdentifier"] = attrs.field(
-        default=None
-    )
+    annotationId: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -4903,7 +4858,7 @@ class ResourceOperation:
 class CreateFile:
     """Create file operation."""
 
-    kind: typing.Literal["create"] = attrs.field()
+    kind: str = attrs.field()
     """A create"""
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -4912,12 +4867,10 @@ class CreateFile:
     kind: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The resource operation kind."""
 
-    options: typing.Optional["CreateFileOptions"] = attrs.field(default=None)
+    options: Optional["CreateFileOptions"] = attrs.field(default=None)
     """Additional options"""
 
-    annotationId: typing.Optional["ChangeAnnotationIdentifier"] = attrs.field(
-        default=None
-    )
+    annotationId: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -4928,7 +4881,7 @@ class CreateFile:
 class RenameFile:
     """Rename file operation."""
 
-    kind: typing.Literal["rename"] = attrs.field()
+    kind: str = attrs.field()
     """A rename"""
 
     oldUri: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -4940,12 +4893,10 @@ class RenameFile:
     kind: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The resource operation kind."""
 
-    options: typing.Optional["RenameFileOptions"] = attrs.field(default=None)
+    options: Optional["RenameFileOptions"] = attrs.field(default=None)
     """Rename options."""
 
-    annotationId: typing.Optional["ChangeAnnotationIdentifier"] = attrs.field(
-        default=None
-    )
+    annotationId: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -4956,7 +4907,7 @@ class RenameFile:
 class DeleteFile:
     """Delete file operation."""
 
-    kind: typing.Literal["delete"] = attrs.field()
+    kind: str = attrs.field()
     """A delete"""
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -4965,12 +4916,10 @@ class DeleteFile:
     kind: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The resource operation kind."""
 
-    options: typing.Optional["DeleteFileOptions"] = attrs.field(default=None)
+    options: Optional["DeleteFileOptions"] = attrs.field(default=None)
     """Delete options."""
 
-    annotationId: typing.Optional["ChangeAnnotationIdentifier"] = attrs.field(
-        default=None
-    )
+    annotationId: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -4990,14 +4939,14 @@ class ChangeAnnotation:
     """A human-readable string describing the actual change. The string
     is rendered prominent in the user interface."""
 
-    needsConfirmation: typing.Optional[bool] = attrs.field(
+    needsConfirmation: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """A flag which indicates that user confirmation is needed
     before applying the change."""
 
-    description: typing.Optional[str] = attrs.field(
+    description: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5018,7 +4967,7 @@ class FileOperationFilter:
     pattern: "FileOperationPattern" = attrs.field()
     """The actual file operation pattern."""
 
-    scheme: typing.Optional[str] = attrs.field(
+    scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5105,7 +5054,7 @@ class InlineValueVariableLookup:
     )
     """How to perform the lookup."""
 
-    variableName: typing.Optional[str] = attrs.field(
+    variableName: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5128,7 +5077,7 @@ class InlineValueEvaluatableExpression:
     """The document range for which the inline value applies.
     The range is used to extract the evaluatable expression from the underlying document."""
 
-    expression: typing.Optional[str] = attrs.field(
+    expression: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5148,14 +5097,12 @@ class InlayHintLabelPart:
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The value of this label part."""
 
-    tooltip: typing.Optional[typing.Union[str, "MarkupContent"]] = attrs.field(
-        default=None
-    )
+    tooltip: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """The tooltip text when you hover over this label part. Depending on
     the client capability `inlayHint.resolveSupport` clients might resolve
     this property late using the resolve request."""
 
-    location: typing.Optional["Location"] = attrs.field(default=None)
+    location: Optional["Location"] = attrs.field(default=None)
     """An optional source code location that represents this
     label part.
     
@@ -5168,7 +5115,7 @@ class InlayHintLabelPart:
     Depending on the client capability `inlayHint.resolveSupport` clients
     might resolve this property late using the resolve request."""
 
-    command: typing.Optional["Command"] = attrs.field(default=None)
+    command: Optional["Command"] = attrs.field(default=None)
     """An optional command for this label part.
     
     Depending on the client capability `inlayHint.resolveSupport` clients
@@ -5218,13 +5165,13 @@ class FullDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: typing.Literal["full"] = attrs.field()
+    kind: str = attrs.field()
     """A full document diagnostic report."""
 
-    items: typing.List["Diagnostic"] = attrs.field()
+    items: List["Diagnostic"] = attrs.field()
     """The actual items."""
 
-    resultId: typing.Optional[str] = attrs.field(
+    resultId: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5242,18 +5189,16 @@ class RelatedFullDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: typing.Literal["full"] = attrs.field()
+    kind: str = attrs.field()
     """A full document diagnostic report."""
 
-    items: typing.List["Diagnostic"] = attrs.field()
+    items: List["Diagnostic"] = attrs.field()
     """The actual items."""
 
-    relatedDocuments: typing.Optional[
-        typing.Dict[
+    relatedDocuments: Optional[
+        Dict[
             str,
-            typing.Union[
-                "FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"
-            ],
+            Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"],
         ]
     ] = attrs.field(default=None)
     """Diagnostics of related documents. This information is useful
@@ -5265,7 +5210,7 @@ class RelatedFullDocumentDiagnosticReport:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    resultId: typing.Optional[str] = attrs.field(
+    resultId: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5284,7 +5229,7 @@ class UnchangedDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: typing.Literal["unchanged"] = attrs.field()
+    kind: str = attrs.field()
     """A document diagnostic report indicating
     no changes to the last result. A server can
     only return `unchanged` if result ids are
@@ -5304,7 +5249,7 @@ class RelatedUnchangedDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: typing.Literal["unchanged"] = attrs.field()
+    kind: str = attrs.field()
     """A document diagnostic report indicating
     no changes to the last result. A server can
     only return `unchanged` if result ids are
@@ -5314,12 +5259,10 @@ class RelatedUnchangedDocumentDiagnosticReport:
     """A result id which will be sent on the next
     diagnostic request for the same document."""
 
-    relatedDocuments: typing.Optional[
-        typing.Dict[
+    relatedDocuments: Optional[
+        Dict[
             str,
-            typing.Union[
-                "FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"
-            ],
+            Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"],
         ]
     ] = attrs.field(default=None)
     """Diagnostics of related documents. This information is useful
@@ -5368,10 +5311,10 @@ class NotebookDocument:
     """The version number of this document (it will increase after each
     change, including undo/redo)."""
 
-    cells: typing.List["NotebookCell"] = attrs.field()
+    cells: List["NotebookCell"] = attrs.field()
     """The cells of a notebook."""
 
-    metadata: typing.Optional["LSPObject"] = attrs.field(default=None)
+    metadata: Optional["LSPObject"] = attrs.field(default=None)
     """Additional metadata stored with the notebook
     document.
     
@@ -5421,12 +5364,12 @@ class NotebookDocumentChangeEvent:
 
     # Since: 3.17.0
 
-    metadata: typing.Optional["LSPObject"] = attrs.field(default=None)
+    metadata: Optional["LSPObject"] = attrs.field(default=None)
     """The changed meta data if any.
     
     Note: should always be an object literal (e.g. LSPObject)"""
 
-    cells: typing.Optional["None"] = attrs.field(default=None)
+    cells: Optional["None"] = attrs.field(default=None)
     """Changes to cells"""
 
 
@@ -5455,7 +5398,7 @@ class Registration:
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The method / capability to register for."""
 
-    registerOptions: typing.Optional["LSPAny"] = attrs.field(default=None)
+    registerOptions: Optional["LSPAny"] = attrs.field(default=None)
     """Options necessary for the registration."""
 
 
@@ -5475,9 +5418,7 @@ class Unregistration:
 class ServerCapabilities:
     """Defines the capabilities provided by a language server."""
 
-    positionEncoding: typing.Optional["PositionEncodingKind"] = attrs.field(
-        default=None
-    )
+    positionEncoding: Optional["PositionEncodingKind"] = attrs.field(default=None)
     """The position encoding the server picked from the encodings offered
     by the client via the client capability `general.positionEncodings`.
     
@@ -5489,143 +5430,133 @@ class ServerCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    textDocumentSync: typing.Optional[
-        typing.Union["TextDocumentSyncOptions", "TextDocumentSyncKind"]
+    textDocumentSync: Optional[
+        Union["TextDocumentSyncOptions", "TextDocumentSyncKind"]
     ] = attrs.field(default=None)
     """Defines how text documents are synced. Is either a detailed structure
     defining each notification or for backwards compatibility the
     TextDocumentSyncKind number."""
 
-    notebookDocumentSync: typing.Optional[
-        typing.Union[
-            "NotebookDocumentSyncOptions", "NotebookDocumentSyncRegistrationOptions"
-        ]
+    notebookDocumentSync: Optional[
+        Union["NotebookDocumentSyncOptions", "NotebookDocumentSyncRegistrationOptions"]
     ] = attrs.field(default=None)
     """Defines how notebook documents are synced.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    completionProvider: typing.Optional["CompletionOptions"] = attrs.field(default=None)
+    completionProvider: Optional["CompletionOptions"] = attrs.field(default=None)
     """The server provides completion support."""
 
-    hoverProvider: typing.Optional[typing.Union[bool, "HoverOptions"]] = attrs.field(
-        default=None
-    )
+    hoverProvider: Optional[Union[bool, "HoverOptions"]] = attrs.field(default=None)
     """The server provides hover support."""
 
-    signatureHelpProvider: typing.Optional["SignatureHelpOptions"] = attrs.field(
-        default=None
-    )
+    signatureHelpProvider: Optional["SignatureHelpOptions"] = attrs.field(default=None)
     """The server provides signature help support."""
 
-    declarationProvider: typing.Optional[
-        typing.Union[bool, "DeclarationOptions", "DeclarationRegistrationOptions"]
+    declarationProvider: Optional[
+        Union[bool, "DeclarationOptions", "DeclarationRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides Goto Declaration support."""
 
-    definitionProvider: typing.Optional[
-        typing.Union[bool, "DefinitionOptions"]
-    ] = attrs.field(default=None)
+    definitionProvider: Optional[Union[bool, "DefinitionOptions"]] = attrs.field(
+        default=None
+    )
     """The server provides goto definition support."""
 
-    typeDefinitionProvider: typing.Optional[
-        typing.Union[bool, "TypeDefinitionOptions", "TypeDefinitionRegistrationOptions"]
+    typeDefinitionProvider: Optional[
+        Union[bool, "TypeDefinitionOptions", "TypeDefinitionRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides Goto Type Definition support."""
 
-    implementationProvider: typing.Optional[
-        typing.Union[bool, "ImplementationOptions", "ImplementationRegistrationOptions"]
+    implementationProvider: Optional[
+        Union[bool, "ImplementationOptions", "ImplementationRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides Goto Implementation support."""
 
-    referencesProvider: typing.Optional[
-        typing.Union[bool, "ReferenceOptions"]
-    ] = attrs.field(default=None)
+    referencesProvider: Optional[Union[bool, "ReferenceOptions"]] = attrs.field(
+        default=None
+    )
     """The server provides find references support."""
 
-    documentHighlightProvider: typing.Optional[
-        typing.Union[bool, "DocumentHighlightOptions"]
+    documentHighlightProvider: Optional[
+        Union[bool, "DocumentHighlightOptions"]
     ] = attrs.field(default=None)
     """The server provides document highlight support."""
 
-    documentSymbolProvider: typing.Optional[
-        typing.Union[bool, "DocumentSymbolOptions"]
+    documentSymbolProvider: Optional[
+        Union[bool, "DocumentSymbolOptions"]
     ] = attrs.field(default=None)
     """The server provides document symbol support."""
 
-    codeActionProvider: typing.Optional[
-        typing.Union[bool, "CodeActionOptions"]
-    ] = attrs.field(default=None)
+    codeActionProvider: Optional[Union[bool, "CodeActionOptions"]] = attrs.field(
+        default=None
+    )
     """The server provides code actions. CodeActionOptions may only be
     specified if the client states that it supports
     `codeActionLiteralSupport` in its initial `initialize` request."""
 
-    codeLensProvider: typing.Optional["CodeLensOptions"] = attrs.field(default=None)
+    codeLensProvider: Optional["CodeLensOptions"] = attrs.field(default=None)
     """The server provides code lens."""
 
-    documentLinkProvider: typing.Optional["DocumentLinkOptions"] = attrs.field(
-        default=None
-    )
+    documentLinkProvider: Optional["DocumentLinkOptions"] = attrs.field(default=None)
     """The server provides document link support."""
 
-    colorProvider: typing.Optional[
-        typing.Union[bool, "DocumentColorOptions", "DocumentColorRegistrationOptions"]
+    colorProvider: Optional[
+        Union[bool, "DocumentColorOptions", "DocumentColorRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides color provider support."""
 
-    workspaceSymbolProvider: typing.Optional[
-        typing.Union[bool, "WorkspaceSymbolOptions"]
+    workspaceSymbolProvider: Optional[
+        Union[bool, "WorkspaceSymbolOptions"]
     ] = attrs.field(default=None)
     """The server provides workspace symbol support."""
 
-    documentFormattingProvider: typing.Optional[
-        typing.Union[bool, "DocumentFormattingOptions"]
+    documentFormattingProvider: Optional[
+        Union[bool, "DocumentFormattingOptions"]
     ] = attrs.field(default=None)
     """The server provides document formatting."""
 
-    documentRangeFormattingProvider: typing.Optional[
-        typing.Union[bool, "DocumentRangeFormattingOptions"]
+    documentRangeFormattingProvider: Optional[
+        Union[bool, "DocumentRangeFormattingOptions"]
     ] = attrs.field(default=None)
     """The server provides document range formatting."""
 
-    documentOnTypeFormattingProvider: typing.Optional[
+    documentOnTypeFormattingProvider: Optional[
         "DocumentOnTypeFormattingOptions"
     ] = attrs.field(default=None)
     """The server provides document formatting on typing."""
 
-    renameProvider: typing.Optional[typing.Union[bool, "RenameOptions"]] = attrs.field(
-        default=None
-    )
+    renameProvider: Optional[Union[bool, "RenameOptions"]] = attrs.field(default=None)
     """The server provides rename support. RenameOptions may only be
     specified if the client states that it supports
     `prepareSupport` in its initial `initialize` request."""
 
-    foldingRangeProvider: typing.Optional[
-        typing.Union[bool, "FoldingRangeOptions", "FoldingRangeRegistrationOptions"]
+    foldingRangeProvider: Optional[
+        Union[bool, "FoldingRangeOptions", "FoldingRangeRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides folding provider support."""
 
-    selectionRangeProvider: typing.Optional[
-        typing.Union[bool, "SelectionRangeOptions", "SelectionRangeRegistrationOptions"]
+    selectionRangeProvider: Optional[
+        Union[bool, "SelectionRangeOptions", "SelectionRangeRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides selection range support."""
 
-    executeCommandProvider: typing.Optional["ExecuteCommandOptions"] = attrs.field(
+    executeCommandProvider: Optional["ExecuteCommandOptions"] = attrs.field(
         default=None
     )
     """The server provides execute command support."""
 
-    callHierarchyProvider: typing.Optional[
-        typing.Union[bool, "CallHierarchyOptions", "CallHierarchyRegistrationOptions"]
+    callHierarchyProvider: Optional[
+        Union[bool, "CallHierarchyOptions", "CallHierarchyRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides call hierarchy support.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    linkedEditingRangeProvider: typing.Optional[
-        typing.Union[
+    linkedEditingRangeProvider: Optional[
+        Union[
             bool, "LinkedEditingRangeOptions", "LinkedEditingRangeRegistrationOptions"
         ]
     ] = attrs.field(default=None)
@@ -5634,58 +5565,58 @@ class ServerCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    semanticTokensProvider: typing.Optional[
-        typing.Union["SemanticTokensOptions", "SemanticTokensRegistrationOptions"]
+    semanticTokensProvider: Optional[
+        Union["SemanticTokensOptions", "SemanticTokensRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides semantic tokens support.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    monikerProvider: typing.Optional[
-        typing.Union[bool, "MonikerOptions", "MonikerRegistrationOptions"]
+    monikerProvider: Optional[
+        Union[bool, "MonikerOptions", "MonikerRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides moniker support.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    typeHierarchyProvider: typing.Optional[
-        typing.Union[bool, "TypeHierarchyOptions", "TypeHierarchyRegistrationOptions"]
+    typeHierarchyProvider: Optional[
+        Union[bool, "TypeHierarchyOptions", "TypeHierarchyRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides type hierarchy support.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    inlineValueProvider: typing.Optional[
-        typing.Union[bool, "InlineValueOptions", "InlineValueRegistrationOptions"]
+    inlineValueProvider: Optional[
+        Union[bool, "InlineValueOptions", "InlineValueRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides inline values.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    inlayHintProvider: typing.Optional[
-        typing.Union[bool, "InlayHintOptions", "InlayHintRegistrationOptions"]
+    inlayHintProvider: Optional[
+        Union[bool, "InlayHintOptions", "InlayHintRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server provides inlay hints.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    diagnosticProvider: typing.Optional[
-        typing.Union["DiagnosticOptions", "DiagnosticRegistrationOptions"]
+    diagnosticProvider: Optional[
+        Union["DiagnosticOptions", "DiagnosticRegistrationOptions"]
     ] = attrs.field(default=None)
     """The server has support for pull model diagnostics.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    workspace: typing.Optional["None"] = attrs.field(default=None)
+    workspace: Optional["None"] = attrs.field(default=None)
     """Workspace specific server capabilities."""
 
-    experimental: typing.Optional["LSPAny"] = attrs.field(default=None)
+    experimental: Optional["LSPAny"] = attrs.field(default=None)
     """Experimental server capabilities."""
 
 
@@ -5721,7 +5652,7 @@ class FileSystemWatcher:
     @since 3.17.0 support for relative patterns."""
     # Since: 3.17.0 support for relative patterns.
 
-    kind: typing.Optional["WatchKind"] = attrs.field(default=None)
+    kind: Optional["WatchKind"] = attrs.field(default=None)
     """The kind of events of interest. If omitted it defaults
     to WatchKind.Create | WatchKind.Change | WatchKind.Delete
     which is 7."""
@@ -5740,21 +5671,21 @@ class Diagnostic:
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The diagnostic's message. It usually appears in the user interface"""
 
-    severity: typing.Optional["DiagnosticSeverity"] = attrs.field(default=None)
+    severity: Optional["DiagnosticSeverity"] = attrs.field(default=None)
     """The diagnostic's severity. Can be omitted. If omitted it is up to the
     client to interpret diagnostics as error, warning, info or hint."""
 
-    code: typing.Optional[typing.Union[int, str]] = attrs.field(default=None)
+    code: Optional[Union[int, str]] = attrs.field(default=None)
     """The diagnostic's code, which usually appear in the user interface."""
 
-    codeDescription: typing.Optional["CodeDescription"] = attrs.field(default=None)
+    codeDescription: Optional["CodeDescription"] = attrs.field(default=None)
     """An optional property to describe the error code.
     Requires the code field (above) to be present/not null.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    source: typing.Optional[str] = attrs.field(
+    source: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5762,19 +5693,19 @@ class Diagnostic:
     diagnostic, e.g. 'typescript' or 'super lint'. It usually
     appears in the user interface."""
 
-    tags: typing.Optional[typing.List["DiagnosticTag"]] = attrs.field(default=None)
+    tags: Optional[List["DiagnosticTag"]] = attrs.field(default=None)
     """Additional metadata about the diagnostic.
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    relatedInformation: typing.Optional[
-        typing.List["DiagnosticRelatedInformation"]
-    ] = attrs.field(default=None)
+    relatedInformation: Optional[List["DiagnosticRelatedInformation"]] = attrs.field(
+        default=None
+    )
     """An array of related diagnostic information, e.g. when symbol-names within
     a scope collide all definitions can be marked via this property."""
 
-    data: typing.Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional["LSPAny"] = attrs.field(default=None)
     """A data entry field that is preserved between a `textDocument/publishDiagnostics`
     notification and `textDocument/codeAction` request.
     
@@ -5790,7 +5721,7 @@ class CompletionContext:
     triggerKind: "CompletionTriggerKind" = attrs.field()
     """How the completion was triggered."""
 
-    triggerCharacter: typing.Optional[str] = attrs.field(
+    triggerCharacter: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5807,14 +5738,14 @@ class CompletionItemLabelDetails:
 
     # Since: 3.17.0
 
-    detail: typing.Optional[str] = attrs.field(
+    detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """An optional string which is rendered less prominently directly after {@link CompletionItem.label label},
     without any spacing. Should be used for function signatures and type annotations."""
 
-    description: typing.Optional[str] = attrs.field(
+    description: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5860,7 +5791,7 @@ class SignatureHelpContext:
     Retriggers occurs when the signature help is already active and can be caused by actions such as
     typing a trigger character, a cursor move, or document content changes."""
 
-    triggerCharacter: typing.Optional[str] = attrs.field(
+    triggerCharacter: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -5868,7 +5799,7 @@ class SignatureHelpContext:
     
     This is undefined when `triggerKind !== SignatureHelpTriggerKind.TriggerCharacter`"""
 
-    activeSignatureHelp: typing.Optional["SignatureHelp"] = attrs.field(default=None)
+    activeSignatureHelp: Optional["SignatureHelp"] = attrs.field(default=None)
     """The currently active `SignatureHelp`.
     
     The `activeSignatureHelp` has its `SignatureHelp.activeSignature` field updated based on
@@ -5887,18 +5818,14 @@ class SignatureInformation:
     """The label of this signature. Will be shown in
     the UI."""
 
-    documentation: typing.Optional[typing.Union[str, "MarkupContent"]] = attrs.field(
-        default=None
-    )
+    documentation: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """The human-readable doc-comment of this signature. Will be shown
     in the UI but can be omitted."""
 
-    parameters: typing.Optional[typing.List["ParameterInformation"]] = attrs.field(
-        default=None
-    )
+    parameters: Optional[List["ParameterInformation"]] = attrs.field(default=None)
     """The parameters of this signature."""
 
-    activeParameter: typing.Optional[int] = attrs.field(
+    activeParameter: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -5924,20 +5851,20 @@ class CodeActionContext:
     """Contains additional diagnostic information about the context in which a
     code action is run."""
 
-    diagnostics: typing.List["Diagnostic"] = attrs.field()
+    diagnostics: List["Diagnostic"] = attrs.field()
     """An array of diagnostics known on the client side overlapping the range provided to the
     `textDocument/codeAction` request. They are provided so that the server knows which
     errors are currently presented to the user for the given range. There is no guarantee
     that these accurately reflect the error state of the resource. The primary parameter
     to compute code actions is the provided range."""
 
-    only: typing.Optional[typing.List["CodeActionKind"]] = attrs.field(default=None)
+    only: Optional[List["CodeActionKind"]] = attrs.field(default=None)
     """Requested kind of actions to return.
     
     Actions not of this kind are filtered out by the client before being shown. So servers
     can omit computing them."""
 
-    triggerKind: typing.Optional["CodeActionTriggerKind"] = attrs.field(default=None)
+    triggerKind: Optional["CodeActionTriggerKind"] = attrs.field(default=None)
     """The reason why code actions were requested.
     
     @since 3.17.0"""
@@ -5954,7 +5881,7 @@ class FormattingOptions:
     insertSpaces: bool = attrs.field(validator=attrs.validators.instance_of(bool))
     """Prefer spaces over tabs."""
 
-    trimTrailingWhitespace: typing.Optional[bool] = attrs.field(
+    trimTrailingWhitespace: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -5963,7 +5890,7 @@ class FormattingOptions:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    insertFinalNewline: typing.Optional[bool] = attrs.field(
+    insertFinalNewline: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -5972,7 +5899,7 @@ class FormattingOptions:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    trimFinalNewlines: typing.Optional[bool] = attrs.field(
+    trimFinalNewlines: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -5988,10 +5915,10 @@ class SemanticTokensLegend:
 
     # Since: 3.16.0
 
-    tokenTypes: typing.List[str] = attrs.field()
+    tokenTypes: List[str] = attrs.field()
     """The token types a server uses."""
 
-    tokenModifiers: typing.List[str] = attrs.field()
+    tokenModifiers: List[str] = attrs.field()
     """The token modifiers a server uses."""
 
 
@@ -6003,7 +5930,7 @@ class OptionalVersionedTextDocumentIdentifier:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The text document's uri."""
 
-    version: typing.Optional[typing.Union[int, None]] = attrs.field(default=None)
+    version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number of this document. If a versioned text document identifier
     is sent from the server to the client and the file is not open in the editor
     (the server has not received an open notification before) the server can send
@@ -6036,13 +5963,13 @@ class AnnotatedTextEdit:
 class CreateFileOptions:
     """Options to create a file."""
 
-    overwrite: typing.Optional[bool] = attrs.field(
+    overwrite: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Overwrite existing file. Overwrite wins over `ignoreIfExists`"""
 
-    ignoreIfExists: typing.Optional[bool] = attrs.field(
+    ignoreIfExists: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6053,13 +5980,13 @@ class CreateFileOptions:
 class RenameFileOptions:
     """Rename file options."""
 
-    overwrite: typing.Optional[bool] = attrs.field(
+    overwrite: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Overwrite target if existing. Overwrite wins over `ignoreIfExists`"""
 
-    ignoreIfExists: typing.Optional[bool] = attrs.field(
+    ignoreIfExists: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6070,13 +5997,13 @@ class RenameFileOptions:
 class DeleteFileOptions:
     """Delete file options."""
 
-    recursive: typing.Optional[bool] = attrs.field(
+    recursive: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Delete the content recursively if a folder is denoted."""
 
-    ignoreIfNotExists: typing.Optional[bool] = attrs.field(
+    ignoreIfNotExists: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6102,12 +6029,12 @@ class FileOperationPattern:
     - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
     - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)"""
 
-    matches: typing.Optional["FileOperationPatternKind"] = attrs.field(default=None)
+    matches: Optional["FileOperationPatternKind"] = attrs.field(default=None)
     """Whether to match files or folders with this pattern.
     
     Matches both if undefined."""
 
-    options: typing.Optional["FileOperationPatternOptions"] = attrs.field(default=None)
+    options: Optional["FileOperationPatternOptions"] = attrs.field(default=None)
     """Additional options used during matching."""
 
 
@@ -6123,17 +6050,17 @@ class WorkspaceFullDocumentDiagnosticReport:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    kind: typing.Literal["full"] = attrs.field()
+    kind: str = attrs.field()
     """A full document diagnostic report."""
 
-    items: typing.List["Diagnostic"] = attrs.field()
+    items: List["Diagnostic"] = attrs.field()
     """The actual items."""
 
-    version: typing.Optional[typing.Union[int, None]] = attrs.field(default=None)
+    version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number for which the diagnostics are reported.
     If the document is not marked as open `null` can be provided."""
 
-    resultId: typing.Optional[str] = attrs.field(
+    resultId: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -6155,7 +6082,7 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    kind: typing.Literal["unchanged"] = attrs.field()
+    kind: str = attrs.field()
     """A document diagnostic report indicating
     no changes to the last result. A server can
     only return `unchanged` if result ids are
@@ -6165,7 +6092,7 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     """A result id which will be sent on the next
     diagnostic request for the same document."""
 
-    version: typing.Optional[typing.Union[int, None]] = attrs.field(default=None)
+    version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number for which the diagnostics are reported.
     If the document is not marked as open `null` can be provided."""
 
@@ -6201,12 +6128,12 @@ class NotebookCell:
     """The URI of the cell's text document
     content."""
 
-    metadata: typing.Optional["LSPObject"] = attrs.field(default=None)
+    metadata: Optional["LSPObject"] = attrs.field(default=None)
     """Additional metadata stored with the cell.
     
     Note: should always be an object literal (e.g. LSPObject)"""
 
-    executionSummary: typing.Optional["ExecutionSummary"] = attrs.field(default=None)
+    executionSummary: Optional["ExecutionSummary"] = attrs.field(default=None)
     """Additional execution summary information
     if supported by the client."""
 
@@ -6227,7 +6154,7 @@ class NotebookCellArrayChange:
     deleteCount: int = attrs.field(validator=validators.uinteger_validator)
     """The deleted cells"""
 
-    cells: typing.Optional[typing.List["NotebookCell"]] = attrs.field(default=None)
+    cells: Optional[List["NotebookCell"]] = attrs.field(default=None)
     """The new cells, if any"""
 
 
@@ -6235,66 +6162,62 @@ class NotebookCellArrayChange:
 class ClientCapabilities:
     """Defines the capabilities provided by the client."""
 
-    workspace: typing.Optional["WorkspaceClientCapabilities"] = attrs.field(
-        default=None
-    )
+    workspace: Optional["WorkspaceClientCapabilities"] = attrs.field(default=None)
     """Workspace specific client capabilities."""
 
-    textDocument: typing.Optional["TextDocumentClientCapabilities"] = attrs.field(
-        default=None
-    )
+    textDocument: Optional["TextDocumentClientCapabilities"] = attrs.field(default=None)
     """Text document specific client capabilities."""
 
-    notebookDocument: typing.Optional[
-        "NotebookDocumentClientCapabilities"
-    ] = attrs.field(default=None)
+    notebookDocument: Optional["NotebookDocumentClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Capabilities specific to the notebook document support.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    window: typing.Optional["WindowClientCapabilities"] = attrs.field(default=None)
+    window: Optional["WindowClientCapabilities"] = attrs.field(default=None)
     """Window specific client capabilities."""
 
-    general: typing.Optional["GeneralClientCapabilities"] = attrs.field(default=None)
+    general: Optional["GeneralClientCapabilities"] = attrs.field(default=None)
     """General client capabilities.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    experimental: typing.Optional["LSPAny"] = attrs.field(default=None)
+    experimental: Optional["LSPAny"] = attrs.field(default=None)
     """Experimental client capabilities."""
 
 
 @attrs.define
 class TextDocumentSyncOptions:
 
-    openClose: typing.Optional[bool] = attrs.field(
+    openClose: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Open and close notifications are sent to the server. If omitted open close notification should not
     be sent."""
 
-    change: typing.Optional["TextDocumentSyncKind"] = attrs.field(default=None)
+    change: Optional["TextDocumentSyncKind"] = attrs.field(default=None)
     """Change notifications are sent to the server. See TextDocumentSyncKind.None, TextDocumentSyncKind.Full
     and TextDocumentSyncKind.Incremental. If omitted it defaults to TextDocumentSyncKind.None."""
 
-    willSave: typing.Optional[bool] = attrs.field(
+    willSave: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """If present will save notifications are sent to the server. If omitted the notification should not be
     sent."""
 
-    willSaveWaitUntil: typing.Optional[bool] = attrs.field(
+    willSaveWaitUntil: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """If present will save wait until requests are sent to the server. If omitted the request should not be
     sent."""
 
-    save: typing.Optional[typing.Union[bool, "SaveOptions"]] = attrs.field(default=None)
+    save: Optional[Union[bool, "SaveOptions"]] = attrs.field(default=None)
     """If present save notifications are sent to the server. If omitted the notification should not be
     sent."""
 
@@ -6318,10 +6241,10 @@ class NotebookDocumentSyncOptions:
 
     # Since: 3.17.0
 
-    notebookSelector: typing.List[typing.Union["None", "None"]] = attrs.field()
+    notebookSelector: List[Union["None", "None"]] = attrs.field()
     """The notebooks to be synced"""
 
-    save: typing.Optional[bool] = attrs.field(
+    save: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6338,17 +6261,17 @@ class NotebookDocumentSyncRegistrationOptions:
 
     # Since: 3.17.0
 
-    notebookSelector: typing.List[typing.Union["None", "None"]] = attrs.field()
+    notebookSelector: List[Union["None", "None"]] = attrs.field()
     """The notebooks to be synced"""
 
-    save: typing.Optional[bool] = attrs.field(
+    save: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether save notification should be forwarded to
     the server. Will only be honored if mode === `notebook`."""
 
-    id: typing.Optional[str] = attrs.field(
+    id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -6359,15 +6282,13 @@ class NotebookDocumentSyncRegistrationOptions:
 @attrs.define
 class WorkspaceFoldersServerCapabilities:
 
-    supported: typing.Optional[bool] = attrs.field(
+    supported: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The server has support for workspace folders"""
 
-    changeNotifications: typing.Optional[typing.Union[str, bool]] = attrs.field(
-        default=None
-    )
+    changeNotifications: Optional[Union[str, bool]] = attrs.field(default=None)
     """Whether the server wants to receive workspace folder
     change notifications.
     
@@ -6386,34 +6307,22 @@ class FileOperationOptions:
 
     # Since: 3.16.0
 
-    didCreate: typing.Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    didCreate: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
     """The server is interested in receiving didCreateFiles notifications."""
 
-    willCreate: typing.Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    willCreate: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
     """The server is interested in receiving willCreateFiles requests."""
 
-    didRename: typing.Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    didRename: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
     """The server is interested in receiving didRenameFiles notifications."""
 
-    willRename: typing.Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    willRename: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
     """The server is interested in receiving willRenameFiles requests."""
 
-    didDelete: typing.Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    didDelete: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
     """The server is interested in receiving didDeleteFiles file notifications."""
 
-    willDelete: typing.Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    willDelete: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
     """The server is interested in receiving willDeleteFiles file requests."""
 
 
@@ -6452,7 +6361,7 @@ class ParameterInformation:
     A parameter can have a label and a doc-comment.
     """
 
-    label: typing.Union[str, typing.Tuple[int, int]] = attrs.field()
+    label: Union[str, Tuple[int, int]] = attrs.field()
     """The label of this parameter information.
     
     Either a string or an inclusive start and exclusive end offsets within its containing
@@ -6462,9 +6371,7 @@ class ParameterInformation:
     *Note*: a label of type string should be a substring of its containing signature label.
     Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`."""
 
-    documentation: typing.Optional[typing.Union[str, "MarkupContent"]] = attrs.field(
-        default=None
-    )
+    documentation: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """The human-readable doc-comment of this parameter. Will be shown
     in the UI but can be omitted."""
 
@@ -6479,13 +6386,13 @@ class NotebookCellTextDocumentFilter:
 
     # Since: 3.17.0
 
-    notebook: typing.Union[str, "NotebookDocumentFilter"] = attrs.field()
+    notebook: Union[str, "NotebookDocumentFilter"] = attrs.field()
     """A filter that matches against the notebook
     containing the notebook cell. If a string
     value is provided it matches against the
     notebook type. '*' matches every notebook."""
 
-    language: typing.Optional[str] = attrs.field(
+    language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -6504,7 +6411,7 @@ class FileOperationPatternOptions:
 
     # Since: 3.16.0
 
-    ignoreCase: typing.Optional[bool] = attrs.field(
+    ignoreCase: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6519,7 +6426,7 @@ class ExecutionSummary:
     indicating the execution order of a cell
     inside a notebook."""
 
-    success: typing.Optional[bool] = attrs.field(
+    success: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6531,7 +6438,7 @@ class ExecutionSummary:
 class WorkspaceClientCapabilities:
     """Workspace specific client capabilities."""
 
-    applyEdit: typing.Optional[bool] = attrs.field(
+    applyEdit: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6539,32 +6446,30 @@ class WorkspaceClientCapabilities:
     to the workspace by supporting the request
     'workspace/applyEdit'"""
 
-    workspaceEdit: typing.Optional["WorkspaceEditClientCapabilities"] = attrs.field(
+    workspaceEdit: Optional["WorkspaceEditClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to `WorkspaceEdit`s."""
 
-    didChangeConfiguration: typing.Optional[
+    didChangeConfiguration: Optional[
         "DidChangeConfigurationClientCapabilities"
     ] = attrs.field(default=None)
     """Capabilities specific to the `workspace/didChangeConfiguration` notification."""
 
-    didChangeWatchedFiles: typing.Optional[
+    didChangeWatchedFiles: Optional[
         "DidChangeWatchedFilesClientCapabilities"
     ] = attrs.field(default=None)
     """Capabilities specific to the `workspace/didChangeWatchedFiles` notification."""
 
-    symbol: typing.Optional["WorkspaceSymbolClientCapabilities"] = attrs.field(
-        default=None
-    )
+    symbol: Optional["WorkspaceSymbolClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `workspace/symbol` request."""
 
-    executeCommand: typing.Optional["ExecuteCommandClientCapabilities"] = attrs.field(
+    executeCommand: Optional["ExecuteCommandClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `workspace/executeCommand` request."""
 
-    workspaceFolders: typing.Optional[bool] = attrs.field(
+    workspaceFolders: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6573,7 +6478,7 @@ class WorkspaceClientCapabilities:
     @since 3.6.0"""
     # Since: 3.6.0
 
-    configuration: typing.Optional[bool] = attrs.field(
+    configuration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6582,16 +6487,16 @@ class WorkspaceClientCapabilities:
     @since 3.6.0"""
     # Since: 3.6.0
 
-    semanticTokens: typing.Optional[
-        "SemanticTokensWorkspaceClientCapabilities"
-    ] = attrs.field(default=None)
+    semanticTokens: Optional["SemanticTokensWorkspaceClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Capabilities specific to the semantic token requests scoped to the
     workspace.
     
     @since 3.16.0."""
     # Since: 3.16.0.
 
-    codeLens: typing.Optional["CodeLensWorkspaceClientCapabilities"] = attrs.field(
+    codeLens: Optional["CodeLensWorkspaceClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the code lens requests scoped to the
@@ -6600,23 +6505,23 @@ class WorkspaceClientCapabilities:
     @since 3.16.0."""
     # Since: 3.16.0.
 
-    fileOperations: typing.Optional["FileOperationClientCapabilities"] = attrs.field(
+    fileOperations: Optional["FileOperationClientCapabilities"] = attrs.field(
         default=None
     )
     """The client has support for file notifications/requests for user operations on files.
     
     Since 3.16.0"""
 
-    inlineValue: typing.Optional[
-        "InlineValueWorkspaceClientCapabilities"
-    ] = attrs.field(default=None)
+    inlineValue: Optional["InlineValueWorkspaceClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Capabilities specific to the inline values requests scoped to the
     workspace.
     
     @since 3.17.0."""
     # Since: 3.17.0.
 
-    inlayHint: typing.Optional["InlayHintWorkspaceClientCapabilities"] = attrs.field(
+    inlayHint: Optional["InlayHintWorkspaceClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the inlay hint requests scoped to the
@@ -6625,7 +6530,7 @@ class WorkspaceClientCapabilities:
     @since 3.17.0."""
     # Since: 3.17.0.
 
-    diagnostics: typing.Optional["DiagnosticWorkspaceClientCapabilities"] = attrs.field(
+    diagnostics: Optional["DiagnosticWorkspaceClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the diagnostic requests scoped to the
@@ -6639,38 +6544,32 @@ class WorkspaceClientCapabilities:
 class TextDocumentClientCapabilities:
     """Text document specific client capabilities."""
 
-    synchronization: typing.Optional[
-        "TextDocumentSyncClientCapabilities"
-    ] = attrs.field(default=None)
-    """Defines which synchronization capabilities the client supports."""
-
-    completion: typing.Optional["CompletionClientCapabilities"] = attrs.field(
+    synchronization: Optional["TextDocumentSyncClientCapabilities"] = attrs.field(
         default=None
     )
+    """Defines which synchronization capabilities the client supports."""
+
+    completion: Optional["CompletionClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/completion` request."""
 
-    hover: typing.Optional["HoverClientCapabilities"] = attrs.field(default=None)
+    hover: Optional["HoverClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/hover` request."""
 
-    signatureHelp: typing.Optional["SignatureHelpClientCapabilities"] = attrs.field(
+    signatureHelp: Optional["SignatureHelpClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/signatureHelp` request."""
 
-    declaration: typing.Optional["DeclarationClientCapabilities"] = attrs.field(
-        default=None
-    )
+    declaration: Optional["DeclarationClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/declaration` request.
     
     @since 3.14.0"""
     # Since: 3.14.0
 
-    definition: typing.Optional["DefinitionClientCapabilities"] = attrs.field(
-        default=None
-    )
+    definition: Optional["DefinitionClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/definition` request."""
 
-    typeDefinition: typing.Optional["TypeDefinitionClientCapabilities"] = attrs.field(
+    typeDefinition: Optional["TypeDefinitionClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/typeDefinition` request.
@@ -6678,7 +6577,7 @@ class TextDocumentClientCapabilities:
     @since 3.6.0"""
     # Since: 3.6.0
 
-    implementation: typing.Optional["ImplementationClientCapabilities"] = attrs.field(
+    implementation: Optional["ImplementationClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/implementation` request.
@@ -6686,35 +6585,29 @@ class TextDocumentClientCapabilities:
     @since 3.6.0"""
     # Since: 3.6.0
 
-    references: typing.Optional["ReferenceClientCapabilities"] = attrs.field(
-        default=None
-    )
+    references: Optional["ReferenceClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/references` request."""
 
-    documentHighlight: typing.Optional[
-        "DocumentHighlightClientCapabilities"
-    ] = attrs.field(default=None)
+    documentHighlight: Optional["DocumentHighlightClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Capabilities specific to the `textDocument/documentHighlight` request."""
 
-    documentSymbol: typing.Optional["DocumentSymbolClientCapabilities"] = attrs.field(
+    documentSymbol: Optional["DocumentSymbolClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/documentSymbol` request."""
 
-    codeAction: typing.Optional["CodeActionClientCapabilities"] = attrs.field(
-        default=None
-    )
+    codeAction: Optional["CodeActionClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/codeAction` request."""
 
-    codeLens: typing.Optional["CodeLensClientCapabilities"] = attrs.field(default=None)
+    codeLens: Optional["CodeLensClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/codeLens` request."""
 
-    documentLink: typing.Optional["DocumentLinkClientCapabilities"] = attrs.field(
-        default=None
-    )
+    documentLink: Optional["DocumentLinkClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/documentLink` request."""
 
-    colorProvider: typing.Optional["DocumentColorClientCapabilities"] = attrs.field(
+    colorProvider: Optional["DocumentColorClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/documentColor` and the
@@ -6723,33 +6616,31 @@ class TextDocumentClientCapabilities:
     @since 3.6.0"""
     # Since: 3.6.0
 
-    formatting: typing.Optional["DocumentFormattingClientCapabilities"] = attrs.field(
+    formatting: Optional["DocumentFormattingClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/formatting` request."""
 
-    rangeFormatting: typing.Optional[
+    rangeFormatting: Optional[
         "DocumentRangeFormattingClientCapabilities"
     ] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/rangeFormatting` request."""
 
-    onTypeFormatting: typing.Optional[
+    onTypeFormatting: Optional[
         "DocumentOnTypeFormattingClientCapabilities"
     ] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/onTypeFormatting` request."""
 
-    rename: typing.Optional["RenameClientCapabilities"] = attrs.field(default=None)
+    rename: Optional["RenameClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/rename` request."""
 
-    foldingRange: typing.Optional["FoldingRangeClientCapabilities"] = attrs.field(
-        default=None
-    )
+    foldingRange: Optional["FoldingRangeClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/foldingRange` request.
     
     @since 3.10.0"""
     # Since: 3.10.0
 
-    selectionRange: typing.Optional["SelectionRangeClientCapabilities"] = attrs.field(
+    selectionRange: Optional["SelectionRangeClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/selectionRange` request.
@@ -6757,12 +6648,12 @@ class TextDocumentClientCapabilities:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    publishDiagnostics: typing.Optional[
-        "PublishDiagnosticsClientCapabilities"
-    ] = attrs.field(default=None)
+    publishDiagnostics: Optional["PublishDiagnosticsClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Capabilities specific to the `textDocument/publishDiagnostics` notification."""
 
-    callHierarchy: typing.Optional["CallHierarchyClientCapabilities"] = attrs.field(
+    callHierarchy: Optional["CallHierarchyClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the various call hierarchy requests.
@@ -6770,7 +6661,7 @@ class TextDocumentClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    semanticTokens: typing.Optional["SemanticTokensClientCapabilities"] = attrs.field(
+    semanticTokens: Optional["SemanticTokensClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the various semantic token request.
@@ -6778,21 +6669,21 @@ class TextDocumentClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    linkedEditingRange: typing.Optional[
-        "LinkedEditingRangeClientCapabilities"
-    ] = attrs.field(default=None)
+    linkedEditingRange: Optional["LinkedEditingRangeClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Capabilities specific to the `textDocument/linkedEditingRange` request.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    moniker: typing.Optional["MonikerClientCapabilities"] = attrs.field(default=None)
+    moniker: Optional["MonikerClientCapabilities"] = attrs.field(default=None)
     """Client capabilities specific to the `textDocument/moniker` request.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    typeHierarchy: typing.Optional["TypeHierarchyClientCapabilities"] = attrs.field(
+    typeHierarchy: Optional["TypeHierarchyClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the various type hierarchy requests.
@@ -6800,25 +6691,19 @@ class TextDocumentClientCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    inlineValue: typing.Optional["InlineValueClientCapabilities"] = attrs.field(
-        default=None
-    )
+    inlineValue: Optional["InlineValueClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/inlineValue` request.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    inlayHint: typing.Optional["InlayHintClientCapabilities"] = attrs.field(
-        default=None
-    )
+    inlayHint: Optional["InlayHintClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/inlayHint` request.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    diagnostic: typing.Optional["DiagnosticClientCapabilities"] = attrs.field(
-        default=None
-    )
+    diagnostic: Optional["DiagnosticClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the diagnostic pull model.
     
     @since 3.17.0"""
@@ -6844,7 +6729,7 @@ class NotebookDocumentClientCapabilities:
 @attrs.define
 class WindowClientCapabilities:
 
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6859,7 +6744,7 @@ class WindowClientCapabilities:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    showMessage: typing.Optional["ShowMessageRequestClientCapabilities"] = attrs.field(
+    showMessage: Optional["ShowMessageRequestClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the showMessage request.
@@ -6867,9 +6752,7 @@ class WindowClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    showDocument: typing.Optional["ShowDocumentClientCapabilities"] = attrs.field(
-        default=None
-    )
+    showDocument: Optional["ShowDocumentClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the showDocument request.
     
     @since 3.16.0"""
@@ -6885,7 +6768,7 @@ class GeneralClientCapabilities:
 
     # Since: 3.16.0
 
-    staleRequestSupport: typing.Optional["None"] = attrs.field(default=None)
+    staleRequestSupport: Optional["None"] = attrs.field(default=None)
     """Client capability that signals how the client
     handles stale requests (e.g. a request
     for which the client will not process the response
@@ -6894,23 +6777,23 @@ class GeneralClientCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    regularExpressions: typing.Optional[
-        "RegularExpressionsClientCapabilities"
-    ] = attrs.field(default=None)
+    regularExpressions: Optional["RegularExpressionsClientCapabilities"] = attrs.field(
+        default=None
+    )
     """Client capabilities specific to regular expressions.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    markdown: typing.Optional["MarkdownClientCapabilities"] = attrs.field(default=None)
+    markdown: Optional["MarkdownClientCapabilities"] = attrs.field(default=None)
     """Client capabilities specific to the client's markdown parser.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    positionEncodings: typing.Optional[
-        typing.List["PositionEncodingKind"]
-    ] = attrs.field(default=None)
+    positionEncodings: Optional[List["PositionEncodingKind"]] = attrs.field(
+        default=None
+    )
     """The position encodings supported by the client. Client and server
     have to agree on the same position encoding to ensure that offsets
     (e.g. character position in a line) are interpreted the same on both
@@ -6943,7 +6826,7 @@ class RelativePattern:
 
     # Since: 3.17.0
 
-    baseUri: typing.Union["WorkspaceFolder", "URI"] = attrs.field()
+    baseUri: Union["WorkspaceFolder", "URI"] = attrs.field()
     """A workspace folder or a base URI to which this pattern will be matched
     against relatively."""
 
@@ -6954,29 +6837,29 @@ class RelativePattern:
 @attrs.define
 class WorkspaceEditClientCapabilities:
 
-    documentChanges: typing.Optional[bool] = attrs.field(
+    documentChanges: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client supports versioned document changes in `WorkspaceEdit`s"""
 
-    resourceOperations: typing.Optional[
-        typing.List["ResourceOperationKind"]
-    ] = attrs.field(default=None)
+    resourceOperations: Optional[List["ResourceOperationKind"]] = attrs.field(
+        default=None
+    )
     """The resource operations the client supports. Clients should at least
     support 'create', 'rename' and 'delete' files and folders.
     
     @since 3.13.0"""
     # Since: 3.13.0
 
-    failureHandling: typing.Optional["FailureHandlingKind"] = attrs.field(default=None)
+    failureHandling: Optional["FailureHandlingKind"] = attrs.field(default=None)
     """The failure handling strategy of a client if applying the workspace edit
     fails.
     
     @since 3.13.0"""
     # Since: 3.13.0
 
-    normalizesLineEndings: typing.Optional[bool] = attrs.field(
+    normalizesLineEndings: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -6989,7 +6872,7 @@ class WorkspaceEditClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    changeAnnotationSupport: typing.Optional["None"] = attrs.field(default=None)
+    changeAnnotationSupport: Optional["None"] = attrs.field(default=None)
     """Whether the client in general supports change annotations on text edits,
     create file, rename file and delete file changes.
     
@@ -7000,7 +6883,7 @@ class WorkspaceEditClientCapabilities:
 @attrs.define
 class DidChangeConfigurationClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7010,7 +6893,7 @@ class DidChangeConfigurationClientCapabilities:
 @attrs.define
 class DidChangeWatchedFilesClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7018,7 +6901,7 @@ class DidChangeWatchedFilesClientCapabilities:
     that the current protocol doesn't support static configuration for file changes
     from the server side."""
 
-    relativePatternSupport: typing.Optional[bool] = attrs.field(
+    relativePatternSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7033,23 +6916,23 @@ class DidChangeWatchedFilesClientCapabilities:
 class WorkspaceSymbolClientCapabilities:
     """Client capabilities for a WorkspaceSymbolRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Symbol request supports dynamic registration."""
 
-    symbolKind: typing.Optional["None"] = attrs.field(default=None)
+    symbolKind: Optional["None"] = attrs.field(default=None)
     """Specific capabilities for the `SymbolKind` in the `workspace/symbol` request."""
 
-    tagSupport: typing.Optional["None"] = attrs.field(default=None)
+    tagSupport: Optional["None"] = attrs.field(default=None)
     """The client supports tags on `SymbolInformation`.
     Clients supporting tags have to handle unknown tags gracefully.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    resolveSupport: typing.Optional["None"] = attrs.field(default=None)
+    resolveSupport: Optional["None"] = attrs.field(default=None)
     """The client support partial workspace symbols. The client will send the
     request `workspaceSymbol/resolve` to the server to resolve additional
     properties.
@@ -7062,7 +6945,7 @@ class WorkspaceSymbolClientCapabilities:
 class ExecuteCommandClientCapabilities:
     """The client capabilities of a ExecuteCommandRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7075,7 +6958,7 @@ class SemanticTokensWorkspaceClientCapabilities:
 
     # Since: 3.16.0
 
-    refreshSupport: typing.Optional[bool] = attrs.field(
+    refreshSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7094,7 +6977,7 @@ class CodeLensWorkspaceClientCapabilities:
 
     # Since: 3.16.0
 
-    refreshSupport: typing.Optional[bool] = attrs.field(
+    refreshSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7120,43 +7003,43 @@ class FileOperationClientCapabilities:
 
     # Since: 3.16.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether the client supports dynamic registration for file requests/notifications."""
 
-    didCreate: typing.Optional[bool] = attrs.field(
+    didCreate: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client has support for sending didCreateFiles notifications."""
 
-    willCreate: typing.Optional[bool] = attrs.field(
+    willCreate: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client has support for sending willCreateFiles requests."""
 
-    didRename: typing.Optional[bool] = attrs.field(
+    didRename: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client has support for sending didRenameFiles notifications."""
 
-    willRename: typing.Optional[bool] = attrs.field(
+    willRename: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client has support for sending willRenameFiles requests."""
 
-    didDelete: typing.Optional[bool] = attrs.field(
+    didDelete: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client has support for sending didDeleteFiles notifications."""
 
-    willDelete: typing.Optional[bool] = attrs.field(
+    willDelete: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7172,7 +7055,7 @@ class InlineValueWorkspaceClientCapabilities:
 
     # Since: 3.17.0
 
-    refreshSupport: typing.Optional[bool] = attrs.field(
+    refreshSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7194,7 +7077,7 @@ class InlayHintWorkspaceClientCapabilities:
 
     # Since: 3.17.0
 
-    refreshSupport: typing.Optional[bool] = attrs.field(
+    refreshSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7216,7 +7099,7 @@ class DiagnosticWorkspaceClientCapabilities:
 
     # Since: 3.17.0
 
-    refreshSupport: typing.Optional[bool] = attrs.field(
+    refreshSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7232,19 +7115,19 @@ class DiagnosticWorkspaceClientCapabilities:
 @attrs.define
 class TextDocumentSyncClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether text document synchronization supports dynamic registration."""
 
-    willSave: typing.Optional[bool] = attrs.field(
+    willSave: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client supports sending will save notifications."""
 
-    willSaveWaitUntil: typing.Optional[bool] = attrs.field(
+    willSaveWaitUntil: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7252,7 +7135,7 @@ class TextDocumentSyncClientCapabilities:
     waits for a response providing text edits which will
     be applied to the document before it is saved."""
 
-    didSave: typing.Optional[bool] = attrs.field(
+    didSave: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7263,19 +7146,19 @@ class TextDocumentSyncClientCapabilities:
 class CompletionClientCapabilities:
     """Completion client capabilities."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether completion supports dynamic registration."""
 
-    completionItem: typing.Optional["None"] = attrs.field(default=None)
+    completionItem: Optional["None"] = attrs.field(default=None)
     """The client supports the following `CompletionItem` specific
     capabilities."""
 
-    completionItemKind: typing.Optional["None"] = attrs.field(default=None)
+    completionItemKind: Optional["None"] = attrs.field(default=None)
 
-    insertTextMode: typing.Optional["InsertTextMode"] = attrs.field(default=None)
+    insertTextMode: Optional["InsertTextMode"] = attrs.field(default=None)
     """Defines how the client handles whitespace and indentation
     when accepting a completion item that uses multi line
     text in either `insertText` or `textEdit`.
@@ -7283,14 +7166,14 @@ class CompletionClientCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    contextSupport: typing.Optional[bool] = attrs.field(
+    contextSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client supports to send additional context information for a
     `textDocument/completion` request."""
 
-    completionList: typing.Optional["None"] = attrs.field(default=None)
+    completionList: Optional["None"] = attrs.field(default=None)
     """The client supports the following `CompletionList` specific
     capabilities.
     
@@ -7301,15 +7184,13 @@ class CompletionClientCapabilities:
 @attrs.define
 class HoverClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether hover supports dynamic registration."""
 
-    contentFormat: typing.Optional[typing.List["MarkupKind"]] = attrs.field(
-        default=None
-    )
+    contentFormat: Optional[List["MarkupKind"]] = attrs.field(default=None)
     """Client supports the following content formats for the content
     property. The order describes the preferred format of the client."""
 
@@ -7318,17 +7199,17 @@ class HoverClientCapabilities:
 class SignatureHelpClientCapabilities:
     """Client Capabilities for a SignatureHelpRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether signature help supports dynamic registration."""
 
-    signatureInformation: typing.Optional["None"] = attrs.field(default=None)
+    signatureInformation: Optional["None"] = attrs.field(default=None)
     """The client supports the following `SignatureInformation`
     specific properties."""
 
-    contextSupport: typing.Optional[bool] = attrs.field(
+    contextSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7347,7 +7228,7 @@ class DeclarationClientCapabilities:
 
     # Since: 3.14.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7355,7 +7236,7 @@ class DeclarationClientCapabilities:
     the client supports the new `DeclarationRegistrationOptions` return value
     for the corresponding server capability as well."""
 
-    linkSupport: typing.Optional[bool] = attrs.field(
+    linkSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7366,13 +7247,13 @@ class DeclarationClientCapabilities:
 class DefinitionClientCapabilities:
     """Client Capabilities for a DefinitionRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether definition supports dynamic registration."""
 
-    linkSupport: typing.Optional[bool] = attrs.field(
+    linkSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7386,7 +7267,7 @@ class DefinitionClientCapabilities:
 class TypeDefinitionClientCapabilities:
     """Since 3.6.0."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7394,7 +7275,7 @@ class TypeDefinitionClientCapabilities:
     the client supports the new `TypeDefinitionRegistrationOptions` return value
     for the corresponding server capability as well."""
 
-    linkSupport: typing.Optional[bool] = attrs.field(
+    linkSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7409,7 +7290,7 @@ class ImplementationClientCapabilities:
 
     # Since: 3.6.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7417,7 +7298,7 @@ class ImplementationClientCapabilities:
     the client supports the new `ImplementationRegistrationOptions` return value
     for the corresponding server capability as well."""
 
-    linkSupport: typing.Optional[bool] = attrs.field(
+    linkSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7431,7 +7312,7 @@ class ImplementationClientCapabilities:
 class ReferenceClientCapabilities:
     """Client Capabilities for a ReferencesRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7442,7 +7323,7 @@ class ReferenceClientCapabilities:
 class DocumentHighlightClientCapabilities:
     """Client Capabilities for a DocumentHighlightRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7453,23 +7334,23 @@ class DocumentHighlightClientCapabilities:
 class DocumentSymbolClientCapabilities:
     """Client Capabilities for a DocumentSymbolRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether document symbol supports dynamic registration."""
 
-    symbolKind: typing.Optional["None"] = attrs.field(default=None)
+    symbolKind: Optional["None"] = attrs.field(default=None)
     """Specific capabilities for the `SymbolKind` in the
     `textDocument/documentSymbol` request."""
 
-    hierarchicalDocumentSymbolSupport: typing.Optional[bool] = attrs.field(
+    hierarchicalDocumentSymbolSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client supports hierarchical document symbols."""
 
-    tagSupport: typing.Optional["None"] = attrs.field(default=None)
+    tagSupport: Optional["None"] = attrs.field(default=None)
     """The client supports tags on `SymbolInformation`. Tags are supported on
     `DocumentSymbol` if `hierarchicalDocumentSymbolSupport` is set to true.
     Clients supporting tags have to handle unknown tags gracefully.
@@ -7477,7 +7358,7 @@ class DocumentSymbolClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    labelSupport: typing.Optional[bool] = attrs.field(
+    labelSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7492,13 +7373,13 @@ class DocumentSymbolClientCapabilities:
 class CodeActionClientCapabilities:
     """The Client Capabilities of a CodeActionRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether code action supports dynamic registration."""
 
-    codeActionLiteralSupport: typing.Optional["None"] = attrs.field(default=None)
+    codeActionLiteralSupport: Optional["None"] = attrs.field(default=None)
     """The client support code action literals of type `CodeAction` as a valid
     response of the `textDocument/codeAction` request. If the property is not
     set the request can only return `Command` literals.
@@ -7506,7 +7387,7 @@ class CodeActionClientCapabilities:
     @since 3.8.0"""
     # Since: 3.8.0
 
-    isPreferredSupport: typing.Optional[bool] = attrs.field(
+    isPreferredSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7515,7 +7396,7 @@ class CodeActionClientCapabilities:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    disabledSupport: typing.Optional[bool] = attrs.field(
+    disabledSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7524,7 +7405,7 @@ class CodeActionClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    dataSupport: typing.Optional[bool] = attrs.field(
+    dataSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7535,14 +7416,14 @@ class CodeActionClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    resolveSupport: typing.Optional["None"] = attrs.field(default=None)
+    resolveSupport: Optional["None"] = attrs.field(default=None)
     """Whether the client supports resolving additional code action
     properties via a separate `codeAction/resolve` request.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    honorsChangeAnnotations: typing.Optional[bool] = attrs.field(
+    honorsChangeAnnotations: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7560,7 +7441,7 @@ class CodeActionClientCapabilities:
 class CodeLensClientCapabilities:
     """The client capabilities  of a CodeLensRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7571,13 +7452,13 @@ class CodeLensClientCapabilities:
 class DocumentLinkClientCapabilities:
     """The client capabilities of a DocumentLinkRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether document link supports dynamic registration."""
 
-    tooltipSupport: typing.Optional[bool] = attrs.field(
+    tooltipSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7590,7 +7471,7 @@ class DocumentLinkClientCapabilities:
 @attrs.define
 class DocumentColorClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7603,7 +7484,7 @@ class DocumentColorClientCapabilities:
 class DocumentFormattingClientCapabilities:
     """Client capabilities of a DocumentFormattingRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7614,7 +7495,7 @@ class DocumentFormattingClientCapabilities:
 class DocumentRangeFormattingClientCapabilities:
     """Client capabilities of a DocumentRangeFormattingRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7625,7 +7506,7 @@ class DocumentRangeFormattingClientCapabilities:
 class DocumentOnTypeFormattingClientCapabilities:
     """Client capabilities of a DocumentOnTypeFormattingRequest."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7635,13 +7516,13 @@ class DocumentOnTypeFormattingClientCapabilities:
 @attrs.define
 class RenameClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether rename supports dynamic registration."""
 
-    prepareSupport: typing.Optional[bool] = attrs.field(
+    prepareSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7651,7 +7532,7 @@ class RenameClientCapabilities:
     @since 3.12.0"""
     # Since: 3.12.0
 
-    prepareSupportDefaultBehavior: typing.Optional[
+    prepareSupportDefaultBehavior: Optional[
         "PrepareSupportDefaultBehavior"
     ] = attrs.field(default=None)
     """Client supports the default behavior result.
@@ -7662,7 +7543,7 @@ class RenameClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    honorsChangeAnnotations: typing.Optional[bool] = attrs.field(
+    honorsChangeAnnotations: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7679,7 +7560,7 @@ class RenameClientCapabilities:
 @attrs.define
 class FoldingRangeClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7688,7 +7569,7 @@ class FoldingRangeClientCapabilities:
     `FoldingRangeRegistrationOptions` return value for the corresponding
     server capability as well."""
 
-    rangeLimit: typing.Optional[int] = attrs.field(
+    rangeLimit: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator),
         default=None,
     )
@@ -7696,7 +7577,7 @@ class FoldingRangeClientCapabilities:
     per document. The value serves as a hint, servers are free to follow the
     limit."""
 
-    lineFoldingOnly: typing.Optional[bool] = attrs.field(
+    lineFoldingOnly: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7704,13 +7585,13 @@ class FoldingRangeClientCapabilities:
     If set, client will ignore specified `startCharacter` and `endCharacter`
     properties in a FoldingRange."""
 
-    foldingRangeKind: typing.Optional["None"] = attrs.field(default=None)
+    foldingRangeKind: Optional["None"] = attrs.field(default=None)
     """Specific options for the folding range kind.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    foldingRange: typing.Optional["None"] = attrs.field(default=None)
+    foldingRange: Optional["None"] = attrs.field(default=None)
     """Specific options for the folding range.
     
     @since 3.17.0"""
@@ -7720,7 +7601,7 @@ class FoldingRangeClientCapabilities:
 @attrs.define
 class SelectionRangeClientCapabilities:
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7733,20 +7614,20 @@ class SelectionRangeClientCapabilities:
 class PublishDiagnosticsClientCapabilities:
     """The publish diagnostic client capabilities."""
 
-    relatedInformation: typing.Optional[bool] = attrs.field(
+    relatedInformation: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether the clients accepts diagnostics with related information."""
 
-    tagSupport: typing.Optional["None"] = attrs.field(default=None)
+    tagSupport: Optional["None"] = attrs.field(default=None)
     """Client supports the tag property to provide meta data about a diagnostic.
     Clients supporting tags have to handle unknown tags gracefully.
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    versionSupport: typing.Optional[bool] = attrs.field(
+    versionSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7756,7 +7637,7 @@ class PublishDiagnosticsClientCapabilities:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    codeDescriptionSupport: typing.Optional[bool] = attrs.field(
+    codeDescriptionSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7765,7 +7646,7 @@ class PublishDiagnosticsClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    dataSupport: typing.Optional[bool] = attrs.field(
+    dataSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7783,7 +7664,7 @@ class CallHierarchyClientCapabilities:
 
     # Since: 3.16.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7808,16 +7689,16 @@ class SemanticTokensClientCapabilities:
     range provider the client might not render a minimap correctly or might
     even decide to not show any semantic tokens at all."""
 
-    tokenTypes: typing.List[str] = attrs.field()
+    tokenTypes: List[str] = attrs.field()
     """The token types that the client supports."""
 
-    tokenModifiers: typing.List[str] = attrs.field()
+    tokenModifiers: List[str] = attrs.field()
     """The token modifiers that the client supports."""
 
-    formats: typing.List["TokenFormat"] = attrs.field()
+    formats: List["TokenFormat"] = attrs.field()
     """The token formats the clients supports."""
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7825,19 +7706,19 @@ class SemanticTokensClientCapabilities:
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     return value for the corresponding server capability as well."""
 
-    overlappingTokenSupport: typing.Optional[bool] = attrs.field(
+    overlappingTokenSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether the client supports tokens that can overlap each other."""
 
-    multilineTokenSupport: typing.Optional[bool] = attrs.field(
+    multilineTokenSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether the client supports tokens that can span multiple lines."""
 
-    serverCancelSupport: typing.Optional[bool] = attrs.field(
+    serverCancelSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7849,7 +7730,7 @@ class SemanticTokensClientCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    augmentsSyntaxTokens: typing.Optional[bool] = attrs.field(
+    augmentsSyntaxTokens: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7875,7 +7756,7 @@ class LinkedEditingRangeClientCapabilities:
 
     # Since: 3.16.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7893,7 +7774,7 @@ class MonikerClientCapabilities:
 
     # Since: 3.16.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7908,7 +7789,7 @@ class TypeHierarchyClientCapabilities:
 
     # Since: 3.17.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7926,7 +7807,7 @@ class InlineValueClientCapabilities:
 
     # Since: 3.17.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7942,13 +7823,13 @@ class InlayHintClientCapabilities:
 
     # Since: 3.17.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether inlay hints support dynamic registration."""
 
-    resolveSupport: typing.Optional["None"] = attrs.field(default=None)
+    resolveSupport: Optional["None"] = attrs.field(default=None)
     """Indicates which properties a client can resolve lazily on an inlay
     hint."""
 
@@ -7962,7 +7843,7 @@ class DiagnosticClientCapabilities:
 
     # Since: 3.17.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7970,7 +7851,7 @@ class DiagnosticClientCapabilities:
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     return value for the corresponding server capability as well."""
 
-    relatedDocumentSupport: typing.Optional[bool] = attrs.field(
+    relatedDocumentSupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7986,7 +7867,7 @@ class NotebookDocumentSyncClientCapabilities:
 
     # Since: 3.17.0
 
-    dynamicRegistration: typing.Optional[bool] = attrs.field(
+    dynamicRegistration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -7995,7 +7876,7 @@ class NotebookDocumentSyncClientCapabilities:
     `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     return value for the corresponding server capability as well."""
 
-    executionSummarySupport: typing.Optional[bool] = attrs.field(
+    executionSummarySupport: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
@@ -8006,7 +7887,7 @@ class NotebookDocumentSyncClientCapabilities:
 class ShowMessageRequestClientCapabilities:
     """Show message request client capabilities."""
 
-    messageActionItem: typing.Optional["None"] = attrs.field(default=None)
+    messageActionItem: Optional["None"] = attrs.field(default=None)
     """Capabilities specific to the `MessageActionItem` type."""
 
 
@@ -8036,7 +7917,7 @@ class RegularExpressionsClientCapabilities:
     engine: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The engine's name."""
 
-    version: typing.Optional[str] = attrs.field(
+    version: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -8055,13 +7936,13 @@ class MarkdownClientCapabilities:
     parser: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of the parser."""
 
-    version: typing.Optional[str] = attrs.field(
+    version: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The version of the parser."""
 
-    allowedTags: typing.Optional[typing.List[str]] = attrs.field(default=None)
+    allowedTags: Optional[List[str]] = attrs.field(default=None)
     """A list of HTML tags that the client allows / supports in
     Markdown.
     
@@ -8071,23 +7952,23 @@ class MarkdownClientCapabilities:
 
 @attrs.define
 class WorkspaceConfigurationParams:
-    items: typing.List["ConfigurationItem"] = attrs.field()
+    items: List["ConfigurationItem"] = attrs.field()
 
-    partialResultToken: typing.Optional["ProgressToken"] = attrs.field(default=None)
+    partialResultToken: Optional["ProgressToken"] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
 
 @attrs.define
 class TextDocumentColorPresentationOptions:
-    workDoneProgress: typing.Optional[bool] = attrs.field(
+    workDoneProgress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
 
-    documentSelector: typing.Optional[
-        typing.Union["DocumentSelector", None]
-    ] = attrs.field(default=None)
+    documentSelector: Optional[Union["DocumentSelector", None]] = attrs.field(
+        default=None
+    )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
@@ -8100,16 +7981,16 @@ class ResponseError:
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A string providing a short description of the error."""
 
-    data: typing.Optional[LSPAny] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A primitive or structured value that contains additional information
     about the error. Can be omitted."""
 
 
 @attrs.define
 class ResponseErrorMessage:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field(default=None)
+    id: Optional[Union[int, str]] = attrs.field(default=None)
     """The request id where the error occurred."""
-    error: typing.Optional[ResponseError] = attrs.field(default=None)
+    error: Optional[ResponseError] = attrs.field(default=None)
     """The error object in case a request fails."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -8124,23 +8005,21 @@ class TextDocumentImplementationRequest:
     a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ImplementationParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/implementation"
-    ] = "textDocument/implementation"
+    method: str = "textDocument/implementation"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentImplementationResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        "Definition", typing.List["DefinitionLink"], None
-    ] = attrs.field(default=None)
+    result: Union["Definition", List["DefinitionLink"], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8154,23 +8033,21 @@ class TextDocumentTypeDefinitionRequest:
     a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "TypeDefinitionParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/typeDefinition"
-    ] = "textDocument/typeDefinition"
+    method: str = "textDocument/typeDefinition"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentTypeDefinitionResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        "Definition", typing.List["DefinitionLink"], None
-    ] = attrs.field(default=None)
+    result: Union["Definition", List["DefinitionLink"], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8179,21 +8056,19 @@ class WorkspaceWorkspaceFoldersRequest:
     """The `workspace/workspaceFolders` is sent from the server to the client
     to fetch the open workspace folders."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal["workspace/workspaceFolders"] = "workspace/workspaceFolders"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/workspaceFolders"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceWorkspaceFoldersResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["WorkspaceFolder"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["WorkspaceFolder"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8210,19 +8085,19 @@ class WorkspaceConfigurationRequest:
     an event is received.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: WorkspaceConfigurationParams = attrs.field()
-    method: typing.Literal["workspace/configuration"] = "workspace/configuration"
+    method: str = "workspace/configuration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceConfigurationResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.List["LSPAny"] = attrs.field(default=None)
+    result: List["LSPAny"] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8234,19 +8109,19 @@ class TextDocumentDocumentColorRequest:
     is of type ColorInformation[] or a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentColorParams" = attrs.field()
-    method: typing.Literal["textDocument/documentColor"] = "textDocument/documentColor"
+    method: str = "textDocument/documentColor"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDocumentColorResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.List["ColorInformation"] = attrs.field(default=None)
+    result: List["ColorInformation"] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8259,21 +8134,19 @@ class TextDocumentColorPresentationRequest:
     to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ColorPresentationParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/colorPresentation"
-    ] = "textDocument/colorPresentation"
+    method: str = "textDocument/colorPresentation"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentColorPresentationResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.List["ColorPresentation"] = attrs.field(default=None)
+    result: List["ColorPresentation"] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8285,19 +8158,19 @@ class TextDocumentFoldingRangeRequest:
     is of type FoldingRangeList or a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "FoldingRangeParams" = attrs.field()
-    method: typing.Literal["textDocument/foldingRange"] = "textDocument/foldingRange"
+    method: str = "textDocument/foldingRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentFoldingRangeResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["FoldingRange"], None] = attrs.field(default=None)
+    result: Union[List["FoldingRange"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8312,21 +8185,21 @@ class TextDocumentDeclarationRequest:
     such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DeclarationParams" = attrs.field()
-    method: typing.Literal["textDocument/declaration"] = "textDocument/declaration"
+    method: str = "textDocument/declaration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDeclarationResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        "Declaration", typing.List["DeclarationLink"], None
-    ] = attrs.field(default=None)
+    result: Union["Declaration", List["DeclarationLink"], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8339,23 +8212,19 @@ class TextDocumentSelectionRangeRequest:
     Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "SelectionRangeParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/selectionRange"
-    ] = "textDocument/selectionRange"
+    method: str = "textDocument/selectionRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentSelectionRangeResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["SelectionRange"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["SelectionRange"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8364,19 +8233,17 @@ class WindowWorkDoneProgressCreateRequest:
     """The `window/workDoneProgress/create` request is sent from the server to
     the client to initiate progress reporting from the server."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "WorkDoneProgressCreateParams" = attrs.field()
-    method: typing.Literal[
-        "window/workDoneProgress/create"
-    ] = "window/workDoneProgress/create"
+    method: str = "window/workDoneProgress/create"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WindowWorkDoneProgressCreateResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8391,23 +8258,19 @@ class TextDocumentPrepareCallHierarchyRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CallHierarchyPrepareParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/prepareCallHierarchy"
-    ] = "textDocument/prepareCallHierarchy"
+    method: str = "textDocument/prepareCallHierarchy"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentPrepareCallHierarchyResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["CallHierarchyItem"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["CallHierarchyItem"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8418,23 +8281,19 @@ class CallHierarchyIncomingCallsRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CallHierarchyIncomingCallsParams" = attrs.field()
-    method: typing.Literal[
-        "callHierarchy/incomingCalls"
-    ] = "callHierarchy/incomingCalls"
+    method: str = "callHierarchy/incomingCalls"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class CallHierarchyIncomingCallsResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["CallHierarchyIncomingCall"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["CallHierarchyIncomingCall"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8445,23 +8304,19 @@ class CallHierarchyOutgoingCallsRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CallHierarchyOutgoingCallsParams" = attrs.field()
-    method: typing.Literal[
-        "callHierarchy/outgoingCalls"
-    ] = "callHierarchy/outgoingCalls"
+    method: str = "callHierarchy/outgoingCalls"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class CallHierarchyOutgoingCallsResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["CallHierarchyOutgoingCall"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["CallHierarchyOutgoingCall"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8469,21 +8324,19 @@ class CallHierarchyOutgoingCallsResponse:
 class TextDocumentSemanticTokensFullRequest:
     """@since 3.16.0"""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "SemanticTokensParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/semanticTokens/full"
-    ] = "textDocument/semanticTokens/full"
+    method: str = "textDocument/semanticTokens/full"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentSemanticTokensFullResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["SemanticTokens", None] = attrs.field(default=None)
+    result: Union["SemanticTokens", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8491,21 +8344,19 @@ class TextDocumentSemanticTokensFullResponse:
 class TextDocumentSemanticTokensFullDeltaRequest:
     """@since 3.16.0"""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "SemanticTokensDeltaParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/semanticTokens/full/delta"
-    ] = "textDocument/semanticTokens/full/delta"
+    method: str = "textDocument/semanticTokens/full/delta"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentSemanticTokensFullDeltaResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["SemanticTokens", "SemanticTokensDelta", None] = attrs.field(
+    result: Union["SemanticTokens", "SemanticTokensDelta", None] = attrs.field(
         default=None
     )
     jsonrpc: str = attrs.field(default="2.0")
@@ -8515,21 +8366,19 @@ class TextDocumentSemanticTokensFullDeltaResponse:
 class TextDocumentSemanticTokensRangeRequest:
     """@since 3.16.0"""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "SemanticTokensRangeParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/semanticTokens/range"
-    ] = "textDocument/semanticTokens/range"
+    method: str = "textDocument/semanticTokens/range"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentSemanticTokensRangeResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["SemanticTokens", None] = attrs.field(default=None)
+    result: Union["SemanticTokens", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8537,19 +8386,17 @@ class TextDocumentSemanticTokensRangeResponse:
 class WorkspaceSemanticTokensRefreshRequest:
     """@since 3.16.0"""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal[
-        "workspace/semanticTokens/refresh"
-    ] = "workspace/semanticTokens/refresh"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/semanticTokens/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceSemanticTokensRefreshResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8565,17 +8412,17 @@ class WindowShowDocumentRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ShowDocumentParams" = attrs.field()
-    method: typing.Literal["window/showDocument"] = "window/showDocument"
+    method: str = "window/showDocument"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WindowShowDocumentResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "ShowDocumentResult" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8588,21 +8435,19 @@ class TextDocumentLinkedEditingRangeRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "LinkedEditingRangeParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/linkedEditingRange"
-    ] = "textDocument/linkedEditingRange"
+    method: str = "textDocument/linkedEditingRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentLinkedEditingRangeResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["LinkedEditingRanges", None] = attrs.field(default=None)
+    result: Union["LinkedEditingRanges", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8615,19 +8460,19 @@ class WorkspaceWillCreateFilesRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CreateFilesParams" = attrs.field()
-    method: typing.Literal["workspace/willCreateFiles"] = "workspace/willCreateFiles"
+    method: str = "workspace/willCreateFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceWillCreateFilesResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8640,19 +8485,19 @@ class WorkspaceWillRenameFilesRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "RenameFilesParams" = attrs.field()
-    method: typing.Literal["workspace/willRenameFiles"] = "workspace/willRenameFiles"
+    method: str = "workspace/willRenameFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceWillRenameFilesResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8664,19 +8509,19 @@ class WorkspaceWillDeleteFilesRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DeleteFilesParams" = attrs.field()
-    method: typing.Literal["workspace/willDeleteFiles"] = "workspace/willDeleteFiles"
+    method: str = "workspace/willDeleteFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceWillDeleteFilesResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8689,19 +8534,19 @@ class TextDocumentMonikerRequest:
     response is of type [Moniker[]](#Moniker[]) or `null`.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "MonikerParams" = attrs.field()
-    method: typing.Literal["textDocument/moniker"] = "textDocument/moniker"
+    method: str = "textDocument/moniker"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentMonikerResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["Moniker"], None] = attrs.field(default=None)
+    result: Union[List["Moniker"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8714,23 +8559,19 @@ class TextDocumentPrepareTypeHierarchyRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "TypeHierarchyPrepareParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/prepareTypeHierarchy"
-    ] = "textDocument/prepareTypeHierarchy"
+    method: str = "textDocument/prepareTypeHierarchy"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentPrepareTypeHierarchyResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TypeHierarchyItem"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["TypeHierarchyItem"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8741,21 +8582,19 @@ class TypeHierarchySupertypesRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "TypeHierarchySupertypesParams" = attrs.field()
-    method: typing.Literal["typeHierarchy/supertypes"] = "typeHierarchy/supertypes"
+    method: str = "typeHierarchy/supertypes"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TypeHierarchySupertypesResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TypeHierarchyItem"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["TypeHierarchyItem"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8766,21 +8605,19 @@ class TypeHierarchySubtypesRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "TypeHierarchySubtypesParams" = attrs.field()
-    method: typing.Literal["typeHierarchy/subtypes"] = "typeHierarchy/subtypes"
+    method: str = "typeHierarchy/subtypes"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TypeHierarchySubtypesResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TypeHierarchyItem"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["TypeHierarchyItem"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8794,19 +8631,19 @@ class TextDocumentInlineValueRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "InlineValueParams" = attrs.field()
-    method: typing.Literal["textDocument/inlineValue"] = "textDocument/inlineValue"
+    method: str = "textDocument/inlineValue"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentInlineValueResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["InlineValue"], None] = attrs.field(default=None)
+    result: Union[List["InlineValue"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8814,19 +8651,17 @@ class TextDocumentInlineValueResponse:
 class WorkspaceInlineValueRefreshRequest:
     """@since 3.17.0"""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal[
-        "workspace/inlineValue/refresh"
-    ] = "workspace/inlineValue/refresh"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/inlineValue/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceInlineValueRefreshResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8842,19 +8677,19 @@ class TextDocumentInlayHintRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "InlayHintParams" = attrs.field()
-    method: typing.Literal["textDocument/inlayHint"] = "textDocument/inlayHint"
+    method: str = "textDocument/inlayHint"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentInlayHintResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["InlayHint"], None] = attrs.field(default=None)
+    result: Union[List["InlayHint"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8867,17 +8702,17 @@ class InlayHintResolveRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "InlayHint" = attrs.field()
-    method: typing.Literal["inlayHint/resolve"] = "inlayHint/resolve"
+    method: str = "inlayHint/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class InlayHintResolveResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "InlayHint" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8887,19 +8722,17 @@ class InlayHintResolveResponse:
 class WorkspaceInlayHintRefreshRequest:
     """@since 3.17.0"""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal[
-        "workspace/inlayHint/refresh"
-    ] = "workspace/inlayHint/refresh"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/inlayHint/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceInlayHintRefreshResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8912,17 +8745,17 @@ class TextDocumentDiagnosticRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentDiagnosticParams" = attrs.field()
-    method: typing.Literal["textDocument/diagnostic"] = "textDocument/diagnostic"
+    method: str = "textDocument/diagnostic"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDiagnosticResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "DocumentDiagnosticReport" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8935,17 +8768,17 @@ class WorkspaceDiagnosticRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "WorkspaceDiagnosticParams" = attrs.field()
-    method: typing.Literal["workspace/diagnostic"] = "workspace/diagnostic"
+    method: str = "workspace/diagnostic"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceDiagnosticResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "WorkspaceDiagnosticReport" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8958,19 +8791,17 @@ class WorkspaceDiagnosticRefreshRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal[
-        "workspace/diagnostic/refresh"
-    ] = "workspace/diagnostic/refresh"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/diagnostic/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceDiagnosticRefreshResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -8981,17 +8812,17 @@ class ClientRegisterCapabilityRequest:
     """The `client/registerCapability` request is sent from the server to the
     client to register a new capability handler on the client side."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "RegistrationParams" = attrs.field()
-    method: typing.Literal["client/registerCapability"] = "client/registerCapability"
+    method: str = "client/registerCapability"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class ClientRegisterCapabilityResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9003,19 +8834,17 @@ class ClientUnregisterCapabilityRequest:
     client to unregister a previously registered capability handler on the
     client side."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "UnregistrationParams" = attrs.field()
-    method: typing.Literal[
-        "client/unregisterCapability"
-    ] = "client/unregisterCapability"
+    method: str = "client/unregisterCapability"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class ClientUnregisterCapabilityResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9030,17 +8859,17 @@ class InitializeRequest:
     type InitializeResult of a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "InitializeParams" = attrs.field()
-    method: typing.Literal["initialize"] = "initialize"
+    method: str = "initialize"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class InitializeResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "InitializeResult" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9055,17 +8884,17 @@ class ShutdownRequest:
     event.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal["shutdown"] = "shutdown"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "shutdown"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class ShutdownResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9076,19 +8905,19 @@ class WindowShowMessageRequestRequest:
     """The show message request is sent from the server to the client to show a
     message and a set of options actions to the user."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ShowMessageRequestParams" = attrs.field()
-    method: typing.Literal["window/showMessageRequest"] = "window/showMessageRequest"
+    method: str = "window/showMessageRequest"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WindowShowMessageRequestResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["MessageActionItem", None] = attrs.field(default=None)
+    result: Union["MessageActionItem", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9104,21 +8933,19 @@ class TextDocumentWillSaveWaitUntilRequest:
     save fast and reliable.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "WillSaveTextDocumentParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/willSaveWaitUntil"
-    ] = "textDocument/willSaveWaitUntil"
+    method: str = "textDocument/willSaveWaitUntil"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentWillSaveWaitUntilResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List["TextEdit"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9137,21 +8964,21 @@ class TextDocumentCompletionRequest:
     during resolve.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CompletionParams" = attrs.field()
-    method: typing.Literal["textDocument/completion"] = "textDocument/completion"
+    method: str = "textDocument/completion"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentCompletionResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        typing.List["CompletionItem"], "CompletionList", None
-    ] = attrs.field(default=None)
+    result: Union[List["CompletionItem"], "CompletionList", None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9161,17 +8988,17 @@ class CompletionItemResolveRequest:
     item.The request's parameter is of type CompletionItem the response is of
     type CompletionItem or a Thenable that resolves to such."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CompletionItem" = attrs.field()
-    method: typing.Literal["completionItem/resolve"] = "completionItem/resolve"
+    method: str = "completionItem/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class CompletionItemResolveResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "CompletionItem" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9185,38 +9012,38 @@ class TextDocumentHoverRequest:
     is of type Hover or a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "HoverParams" = attrs.field()
-    method: typing.Literal["textDocument/hover"] = "textDocument/hover"
+    method: str = "textDocument/hover"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentHoverResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["Hover", None] = attrs.field(default=None)
+    result: Union["Hover", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentSignatureHelpRequest:
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "SignatureHelpParams" = attrs.field()
-    method: typing.Literal["textDocument/signatureHelp"] = "textDocument/signatureHelp"
+    method: str = "textDocument/signatureHelp"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentSignatureHelpResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["SignatureHelp", None] = attrs.field(default=None)
+    result: Union["SignatureHelp", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9230,21 +9057,21 @@ class TextDocumentDefinitionRequest:
     a typed array of DefinitionLink or a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DefinitionParams" = attrs.field()
-    method: typing.Literal["textDocument/definition"] = "textDocument/definition"
+    method: str = "textDocument/definition"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDefinitionResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        "Definition", typing.List["DefinitionLink"], None
-    ] = attrs.field(default=None)
+    result: Union["Definition", List["DefinitionLink"], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9257,19 +9084,19 @@ class TextDocumentReferencesRequest:
     of type Location[] or a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ReferenceParams" = attrs.field()
-    method: typing.Literal["textDocument/references"] = "textDocument/references"
+    method: str = "textDocument/references"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentReferencesResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["Location"], None] = attrs.field(default=None)
+    result: Union[List["Location"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9284,23 +9111,19 @@ class TextDocumentDocumentHighlightRequest:
     resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentHighlightParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/documentHighlight"
-    ] = "textDocument/documentHighlight"
+    method: str = "textDocument/documentHighlight"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDocumentHighlightResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["DocumentHighlight"], None] = attrs.field(
-        default=None
-    )
+    result: Union[List["DocumentHighlight"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9313,22 +9136,20 @@ class TextDocumentDocumentSymbolRequest:
     to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentSymbolParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/documentSymbol"
-    ] = "textDocument/documentSymbol"
+    method: str = "textDocument/documentSymbol"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDocumentSymbolResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        typing.List["SymbolInformation"], typing.List["DocumentSymbol"], None
+    result: Union[
+        List["SymbolInformation"], List["DocumentSymbol"], None
     ] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9337,21 +9158,21 @@ class TextDocumentDocumentSymbolResponse:
 class TextDocumentCodeActionRequest:
     """A request to provide commands for the given text document and range."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CodeActionParams" = attrs.field()
-    method: typing.Literal["textDocument/codeAction"] = "textDocument/codeAction"
+    method: str = "textDocument/codeAction"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentCodeActionResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        typing.List[typing.Union["Command", "CodeAction"]], None
-    ] = attrs.field(default=None)
+    result: Union[List[Union["Command", "CodeAction"]], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9361,17 +9182,17 @@ class CodeActionResolveRequest:
     request's parameter is of type CodeAction the response is of type
     CodeAction or a Thenable that resolves to such."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CodeAction" = attrs.field()
-    method: typing.Literal["codeAction/resolve"] = "codeAction/resolve"
+    method: str = "codeAction/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class CodeActionResolveResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "CodeAction" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9388,20 +9209,20 @@ class WorkspaceSymbolRequest:
      `workspace.symbol.resolveSupport`.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "WorkspaceSymbolParams" = attrs.field()
-    method: typing.Literal["workspace/symbol"] = "workspace/symbol"
+    method: str = "workspace/symbol"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceSymbolResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[
-        typing.List["SymbolInformation"], typing.List["WorkspaceSymbol"], None
+    result: Union[
+        List["SymbolInformation"], List["WorkspaceSymbol"], None
     ] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9413,17 +9234,17 @@ class WorkspaceSymbolResolveRequest:
     @since 3.17.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "WorkspaceSymbol" = attrs.field()
-    method: typing.Literal["workspaceSymbol/resolve"] = "workspaceSymbol/resolve"
+    method: str = "workspaceSymbol/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceSymbolResolveResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "WorkspaceSymbol" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9433,19 +9254,19 @@ class WorkspaceSymbolResolveResponse:
 class TextDocumentCodeLensRequest:
     """A request to provide code lens for the given text document."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CodeLensParams" = attrs.field()
-    method: typing.Literal["textDocument/codeLens"] = "textDocument/codeLens"
+    method: str = "textDocument/codeLens"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentCodeLensResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["CodeLens"], None] = attrs.field(default=None)
+    result: Union[List["CodeLens"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9453,17 +9274,17 @@ class TextDocumentCodeLensResponse:
 class CodeLensResolveRequest:
     """A request to resolve a command for a given code lens."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "CodeLens" = attrs.field()
-    method: typing.Literal["codeLens/resolve"] = "codeLens/resolve"
+    method: str = "codeLens/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class CodeLensResolveResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "CodeLens" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9476,17 +9297,17 @@ class WorkspaceCodeLensRefreshRequest:
     @since 3.16.0
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal["workspace/codeLens/refresh"] = "workspace/codeLens/refresh"
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/codeLens/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceCodeLensRefreshResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9496,19 +9317,19 @@ class WorkspaceCodeLensRefreshResponse:
 class TextDocumentDocumentLinkRequest:
     """A request to provide document links."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentLinkParams" = attrs.field()
-    method: typing.Literal["textDocument/documentLink"] = "textDocument/documentLink"
+    method: str = "textDocument/documentLink"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentDocumentLinkResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["DocumentLink"], None] = attrs.field(default=None)
+    result: Union[List["DocumentLink"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9520,17 +9341,17 @@ class DocumentLinkResolveRequest:
     type DocumentLink or a Thenable that resolves to such.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentLink" = attrs.field()
-    method: typing.Literal["documentLink/resolve"] = "documentLink/resolve"
+    method: str = "documentLink/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class DocumentLinkResolveResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "DocumentLink" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9540,19 +9361,19 @@ class DocumentLinkResolveResponse:
 class TextDocumentFormattingRequest:
     """A request to to format a whole document."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentFormattingParams" = attrs.field()
-    method: typing.Literal["textDocument/formatting"] = "textDocument/formatting"
+    method: str = "textDocument/formatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentFormattingResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List["TextEdit"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9560,21 +9381,19 @@ class TextDocumentFormattingResponse:
 class TextDocumentRangeFormattingRequest:
     """A request to to format a range in a document."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentRangeFormattingParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/rangeFormatting"
-    ] = "textDocument/rangeFormatting"
+    method: str = "textDocument/rangeFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentRangeFormattingResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List["TextEdit"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9582,21 +9401,19 @@ class TextDocumentRangeFormattingResponse:
 class TextDocumentOnTypeFormattingRequest:
     """A request to format a document on type."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "DocumentOnTypeFormattingParams" = attrs.field()
-    method: typing.Literal[
-        "textDocument/onTypeFormatting"
-    ] = "textDocument/onTypeFormatting"
+    method: str = "textDocument/onTypeFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentOnTypeFormattingResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union[typing.List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List["TextEdit"], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9604,19 +9421,19 @@ class TextDocumentOnTypeFormattingResponse:
 class TextDocumentRenameRequest:
     """A request to rename a symbol."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "RenameParams" = attrs.field()
-    method: typing.Literal["textDocument/rename"] = "textDocument/rename"
+    method: str = "textDocument/rename"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentRenameResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9627,19 +9444,19 @@ class TextDocumentPrepareRenameRequest:
     @since 3.16 - support for default behavior
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "PrepareRenameParams" = attrs.field()
-    method: typing.Literal["textDocument/prepareRename"] = "textDocument/prepareRename"
+    method: str = "textDocument/prepareRename"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class TextDocumentPrepareRenameResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["PrepareRenameResult", None] = attrs.field(default=None)
+    result: Union["PrepareRenameResult", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9651,19 +9468,19 @@ class WorkspaceExecuteCommandRequest:
     apply to the workspace.
     """
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ExecuteCommandParams" = attrs.field()
-    method: typing.Literal["workspace/executeCommand"] = "workspace/executeCommand"
+    method: str = "workspace/executeCommand"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceExecuteCommandResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: typing.Union["LSPAny", None] = attrs.field(default=None)
+    result: Union["LSPAny", None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9672,17 +9489,17 @@ class WorkspaceApplyEditRequest:
     """A request sent from the server to the client to modified certain
     resources."""
 
-    id: typing.Union[int, str] = attrs.field()
+    id: Union[int, str] = attrs.field()
     """The request id."""
     params: "ApplyWorkspaceEditParams" = attrs.field()
-    method: typing.Literal["workspace/applyEdit"] = "workspace/applyEdit"
+    method: str = "workspace/applyEdit"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
 
 @attrs.define
 class WorkspaceApplyEditResponse:
-    id: typing.Optional[typing.Union[int, str]] = attrs.field()
+    id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: "ApplyWorkspaceEditResult" = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
@@ -9694,7 +9511,7 @@ class WorkspaceDidChangeWorkspaceFoldersNotification:
     client to the server when the workspace folder configuration changes."""
 
     params: "DidChangeWorkspaceFoldersParams" = attrs.field()
-    method: typing.Literal["workspace/didChangeWorkspaceFolders"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeWorkspaceFolders"]),
         default="workspace/didChangeWorkspaceFolders",
     )
@@ -9708,7 +9525,7 @@ class WindowWorkDoneProgressCancelNotification:
     client to the server to cancel a progress initiated on the server side."""
 
     params: "WorkDoneProgressCancelParams" = attrs.field()
-    method: typing.Literal["window/workDoneProgress/cancel"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["window/workDoneProgress/cancel"]),
         default="window/workDoneProgress/cancel",
     )
@@ -9725,7 +9542,7 @@ class WorkspaceDidCreateFilesNotification:
     """
 
     params: "CreateFilesParams" = attrs.field()
-    method: typing.Literal["workspace/didCreateFiles"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didCreateFiles"]),
         default="workspace/didCreateFiles",
     )
@@ -9742,7 +9559,7 @@ class WorkspaceDidRenameFilesNotification:
     """
 
     params: "RenameFilesParams" = attrs.field()
-    method: typing.Literal["workspace/didRenameFiles"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didRenameFiles"]),
         default="workspace/didRenameFiles",
     )
@@ -9760,7 +9577,7 @@ class WorkspaceDidDeleteFilesNotification:
     """
 
     params: "DeleteFilesParams" = attrs.field()
-    method: typing.Literal["workspace/didDeleteFiles"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didDeleteFiles"]),
         default="workspace/didDeleteFiles",
     )
@@ -9776,7 +9593,7 @@ class NotebookDocumentDidOpenNotification:
     """
 
     params: "DidOpenNotebookDocumentParams" = attrs.field()
-    method: typing.Literal["notebookDocument/didOpen"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didOpen"]),
         default="notebookDocument/didOpen",
     )
@@ -9788,7 +9605,7 @@ class NotebookDocumentDidOpenNotification:
 class NotebookDocumentDidChangeNotification:
 
     params: "DidChangeNotebookDocumentParams" = attrs.field()
-    method: typing.Literal["notebookDocument/didChange"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didChange"]),
         default="notebookDocument/didChange",
     )
@@ -9804,7 +9621,7 @@ class NotebookDocumentDidSaveNotification:
     """
 
     params: "DidSaveNotebookDocumentParams" = attrs.field()
-    method: typing.Literal["notebookDocument/didSave"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didSave"]),
         default="notebookDocument/didSave",
     )
@@ -9820,7 +9637,7 @@ class NotebookDocumentDidCloseNotification:
     """
 
     params: "DidCloseNotebookDocumentParams" = attrs.field()
-    method: typing.Literal["notebookDocument/didClose"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didClose"]),
         default="notebookDocument/didClose",
     )
@@ -9835,7 +9652,7 @@ class InitializedNotification:
     from the server to the client."""
 
     params: "InitializedParams" = attrs.field()
-    method: typing.Literal["initialized"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["initialized"]),
         default="initialized",
     )
@@ -9848,8 +9665,8 @@ class ExitNotification:
     """The exit event is sent from the client to the server to ask the server
     to exit its process."""
 
-    params: typing.Optional[None] = attrs.field(default=None)
-    method: typing.Literal["exit"] = attrs.field(
+    params: Optional[None] = attrs.field(default=None)
+    method: str = attrs.field(
         validator=attrs.validators.in_(["exit"]),
         default="exit",
     )
@@ -9867,7 +9684,7 @@ class WorkspaceDidChangeConfigurationNotification:
     """
 
     params: "DidChangeConfigurationParams" = attrs.field()
-    method: typing.Literal["workspace/didChangeConfiguration"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeConfiguration"]),
         default="workspace/didChangeConfiguration",
     )
@@ -9881,7 +9698,7 @@ class WindowShowMessageNotification:
     the client to display a particular message in the user interface."""
 
     params: "ShowMessageParams" = attrs.field()
-    method: typing.Literal["window/showMessage"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["window/showMessage"]),
         default="window/showMessage",
     )
@@ -9895,7 +9712,7 @@ class WindowLogMessageNotification:
     ask the client to log a particular message."""
 
     params: "LogMessageParams" = attrs.field()
-    method: typing.Literal["window/logMessage"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["window/logMessage"]),
         default="window/logMessage",
     )
@@ -9909,7 +9726,7 @@ class TelemetryEventNotification:
     to ask the client to log telemetry data."""
 
     params: "LSPAny" = attrs.field()
-    method: typing.Literal["telemetry/event"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["telemetry/event"]),
         default="telemetry/event",
     )
@@ -9932,7 +9749,7 @@ class TextDocumentDidOpenNotification:
     """
 
     params: "DidOpenTextDocumentParams" = attrs.field()
-    method: typing.Literal["textDocument/didOpen"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didOpen"]),
         default="textDocument/didOpen",
     )
@@ -9946,7 +9763,7 @@ class TextDocumentDidChangeNotification:
     to signal changes to a text document."""
 
     params: "DidChangeTextDocumentParams" = attrs.field()
-    method: typing.Literal["textDocument/didChange"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didChange"]),
         default="textDocument/didChange",
     )
@@ -9968,7 +9785,7 @@ class TextDocumentDidCloseNotification:
     """
 
     params: "DidCloseTextDocumentParams" = attrs.field()
-    method: typing.Literal["textDocument/didClose"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didClose"]),
         default="textDocument/didClose",
     )
@@ -9982,7 +9799,7 @@ class TextDocumentDidSaveNotification:
     when the document got saved in the client."""
 
     params: "DidSaveTextDocumentParams" = attrs.field()
-    method: typing.Literal["textDocument/didSave"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didSave"]),
         default="textDocument/didSave",
     )
@@ -9996,7 +9813,7 @@ class TextDocumentWillSaveNotification:
     before the document is actually saved."""
 
     params: "WillSaveTextDocumentParams" = attrs.field()
-    method: typing.Literal["textDocument/willSave"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/willSave"]),
         default="textDocument/willSave",
     )
@@ -10010,7 +9827,7 @@ class WorkspaceDidChangeWatchedFilesNotification:
     when the client detects changes to file watched by the language client."""
 
     params: "DidChangeWatchedFilesParams" = attrs.field()
-    method: typing.Literal["workspace/didChangeWatchedFiles"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeWatchedFiles"]),
         default="workspace/didChangeWatchedFiles",
     )
@@ -10024,7 +9841,7 @@ class TextDocumentPublishDiagnosticsNotification:
     signal results of validation runs."""
 
     params: "PublishDiagnosticsParams" = attrs.field()
-    method: typing.Literal["textDocument/publishDiagnostics"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/publishDiagnostics"]),
         default="textDocument/publishDiagnostics",
     )
@@ -10036,7 +9853,7 @@ class TextDocumentPublishDiagnosticsNotification:
 class SetTraceNotification:
 
     params: "SetTraceParams" = attrs.field()
-    method: typing.Literal["$/setTrace"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["$/setTrace"]),
         default="$/setTrace",
     )
@@ -10048,7 +9865,7 @@ class SetTraceNotification:
 class LogTraceNotification:
 
     params: "LogTraceParams" = attrs.field()
-    method: typing.Literal["$/logTrace"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["$/logTrace"]),
         default="$/logTrace",
     )
@@ -10060,7 +9877,7 @@ class LogTraceNotification:
 class CancelRequestNotification:
 
     params: "CancelParams" = attrs.field()
-    method: typing.Literal["$/cancelRequest"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["$/cancelRequest"]),
         default="$/cancelRequest",
     )
@@ -10072,7 +9889,7 @@ class CancelRequestNotification:
 class ProgressNotification:
 
     params: "ProgressParams" = attrs.field()
-    method: typing.Literal["$/progress"] = attrs.field(
+    method: str = attrs.field(
         validator=attrs.validators.in_(["$/progress"]),
         default="$/progress",
     )
@@ -10573,7 +10390,7 @@ METHOD_TO_TYPES = {
     "$/progress": (ProgressNotification, None, ProgressParams, None),
 }
 
-REQUESTS: typing.TypeAlias = typing.Union[
+REQUESTS = Union[
     TextDocumentImplementationRequest,
     TextDocumentTypeDefinitionRequest,
     WorkspaceWorkspaceFoldersRequest,
@@ -10639,7 +10456,7 @@ REQUESTS: typing.TypeAlias = typing.Union[
     WorkspaceExecuteCommandRequest,
     WorkspaceApplyEditRequest,
 ]
-RESPONSES: typing.TypeAlias = typing.Union[
+RESPONSES = Union[
     TextDocumentImplementationResponse,
     TextDocumentTypeDefinitionResponse,
     WorkspaceWorkspaceFoldersResponse,
@@ -10705,7 +10522,7 @@ RESPONSES: typing.TypeAlias = typing.Union[
     WorkspaceExecuteCommandResponse,
     WorkspaceApplyEditResponse,
 ]
-NOTIFICATIONS: typing.TypeAlias = typing.Union[
+NOTIFICATIONS = Union[
     WorkspaceDidChangeWorkspaceFoldersNotification,
     WindowWorkDoneProgressCancelNotification,
     WorkspaceDidCreateFilesNotification,
@@ -10733,9 +10550,7 @@ NOTIFICATIONS: typing.TypeAlias = typing.Union[
     CancelRequestNotification,
     ProgressNotification,
 ]
-MESSAGE_TYPES: typing.TypeAlias = typing.Union[
-    REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage
-]
+MESSAGE_TYPES = Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]
 
 _KEYWORD_CLASSES = [CallHierarchyIncomingCall]
 

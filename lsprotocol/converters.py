@@ -36,19 +36,14 @@ def get_converter(
 def _register_required_structure_hooks(
     converter: cattrs.Converter,
 ) -> cattrs.Converter:
-    def _optional_union_int_str(
-        object_: Optional[Union[int, str]], type_: Any
-    ) -> Optional[Union[int, str]]:
+    def _optional_union_int_str(object_: Any, type_: type) -> Optional[Union[int, str]]:
         return _union_int_str(object_, type_) if object_ else None
 
-    def _union_int_str(object_: Union[int, str], type_: Any) -> Union[int, str]:
+    def _union_int_str(object_: Any, type_: type) -> Union[int, str]:
         return str(object_) if isinstance(object_, str) else int(object_)
 
     def _lsp_object_hook(
-        object_: Union[
-            lsp_types.LSPObject, lsp_types.LSPArray, str, int, float, bool, None
-        ],
-        type_: Any,
+        object_: Any, type_: type
     ) -> Union[lsp_types.LSPObject, lsp_types.LSPArray, str, int, float, bool, None]:
         if not object_:
             return object_
@@ -60,7 +55,7 @@ def _register_required_structure_hooks(
                 return object_
 
     def _optional_union_str_bool(
-        object_: Optional[Union[str, bool]], type_: Any
+        object_: Any, type_: type
     ) -> Optional[Union[str, bool]]:
         if object_:
             return str(object_) if isinstance(object_, str) else bool(object_)
@@ -68,14 +63,7 @@ def _register_required_structure_hooks(
             return None
 
     def _text_document_filter_hook(
-        object_: Union[
-            str,
-            lsp_types.TextDocumentFilter_Type1,
-            lsp_types.TextDocumentFilter_Type2,
-            lsp_types.TextDocumentFilter_Type3,
-            lsp_types.NotebookCellTextDocumentFilter,
-        ],
-        type_: Any,
+        object_: Any, type_: type
     ) -> Union[
         str,
         lsp_types.TextDocumentFilter_Type1,
@@ -97,13 +85,7 @@ def _register_required_structure_hooks(
             return converter.structure(object_, lsp_types.TextDocumentFilter_Type3)
 
     def _notebook_filter_hook(
-        object_: Union[
-            str,
-            lsp_types.NotebookDocumentFilter_Type1,
-            lsp_types.NotebookDocumentFilter_Type2,
-            lsp_types.NotebookDocumentFilter_Type3,
-        ],
-        type_: Any,
+        object_: Any, type_: type
     ) -> Union[
         str,
         lsp_types.NotebookDocumentFilter_Type1,
@@ -119,14 +101,15 @@ def _register_required_structure_hooks(
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentFilter_Type3)
 
+    DocumentSelectorItem = Union[str, "DocumentFilter"]
+    NotebookSelectorItem = attrs.fields(
+        lsp_types.NotebookCellTextDocumentFilter
+    ).notebook.type
     STRUCTURE_HOOKS = [
         (type(None), lambda _object, _type: None),
         (Optional[Union[int, str]], _optional_union_int_str),
         (Union[int, str], _union_int_str),
-        (
-            Union[lsp_types.LSPObject, lsp_types.LSPArray, str, int, float, bool, None],
-            _lsp_object_hook,
-        ),
+        (lsp_types.LSPAny, _lsp_object_hook),
         (Optional[Union[str, bool]], _optional_union_str_bool),
         (
             Union[
@@ -138,6 +121,7 @@ def _register_required_structure_hooks(
             ],
             _text_document_filter_hook,
         ),
+        (DocumentSelectorItem, _text_document_filter_hook),
         (
             Union[
                 str,
@@ -147,6 +131,7 @@ def _register_required_structure_hooks(
             ],
             _notebook_filter_hook,
         ),
+        (NotebookSelectorItem, _notebook_filter_hook),
     ]
 
     for type_, hook in STRUCTURE_HOOKS:

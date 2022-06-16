@@ -35,10 +35,13 @@ Source = "https://github.com/microsoft/lsprotocol"
 
 [tool.hatch.build.targets.sdist]
 exclude = [
-  "/.github",
-  "/.vscode",
-  "/.generator",
-  "/.test",
+  ".github",
+  ".vscode",
+  "generator",
+  "tests",
+  "conftest.py",
+  "noxfile.py",
+  "pyproject.toml",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -50,19 +53,17 @@ dependencies = [
   "pytest-cov",
 ]
 
-[tool.hatch.envs.default.scripts]
+[tool.hatch.envs.testing.scripts]
 cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=lsprotocol ./tests"
 no-cov = "cov --no-cov"
 
-[[tool.hatch.envs.test.matrix]]
+[[tool.hatch.envs.testing.matrix]]
 python = ["37", "38", "39", "310"]
 
 [tool.coverage.run]
 branch = true
 parallel = true
-omit = [
-  "lsprotocol/__about__.py",
-]
+omit = []
 
 [tool.coverage.report]
 exclude_lines = [

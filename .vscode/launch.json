@@ -8,10 +8,10 @@
             "name": "Run Generator",
             "type": "python",
             "request": "launch",
-            "program": "generator",
+            "module": "generator",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["generator/lsp.json", "lsprotocol/_types.py"]
+            "args": ["--output", "lsprotocol/_types.py"]
         },
         {
             "name": "DON'T SELECT (test debug config)",

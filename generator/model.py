@@ -1,8 +1,9 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import json
-from typing import Any, Dict, Iterable, Optional, Union
+from __future__ import annotations
+
+from typing import Any, Dict, Iterable, List, Optional, Union
 
 import attrs
 
@@ -19,18 +20,33 @@ LSP_TYPE_SPEC = Union[
 ]
 
 
-def enum_validator(instance: "Enum", attribute: Any, value: Any) -> bool:
+def partial_apply(callable):
+    def apply(x):
+        return callable(**x)
+
+    return apply
+
+
+def list_converter(callable):
+    def apply(x):
+        return callable(**x)
+
+    def converter(x: List[Any]) -> List[Any]:
+        return map(apply, x)
+
+    return converter
+
+
+def enum_validator(instance: Enum, attribute: Any, value: Any) -> None:
     test_type = str if instance.type.name == "string" else int
-    type_name = "str" if instance.type.name == "string" else "int"
     for e in value:
         if not isinstance(e.value, test_type):
             raise ValueError(
-                f"Value of {instance.name}.{e.name} is not of type {type_name}: {e.value}."
+                f"Value of {instance.name}.{e.name} is not of type {test_type}: {e.value}."
             )
-    return True
 
 
-def convert_to_lsp_type(type_info: Optional[Dict[str, Any]]) -> Optional[LSP_TYPE_SPEC]:
+def convert_to_lsp_type(**type_info) -> Optional[LSP_TYPE_SPEC]:
     if type_info is None:
         return None
     lut: Dict[str, LSP_TYPE_SPEC] = {
@@ -45,9 +61,10 @@ def convert_to_lsp_type(type_info: Optional[Dict[str, Any]]) -> Optional[LSP_TYP
         "tuple": TupleType,
     }
     callable = lut.get(type_info["kind"])
-    if not callable:
-        raise ValueError(str(type_info))
-    return callable(**type_info)
+    if callable:
+        return callable(**type_info)
+
+    raise ValueError(f"Unknown LSP type: {type_info}")
 
 
 def type_validator(instance: Any, attribute: str, value: Any) -> bool:
@@ -98,10 +115,10 @@ class EnumValueType:
 @attrs.define
 class Enum:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
-    type: EnumValueType = attrs.field(converter=lambda x: EnumValueType(**x))
+    type: EnumValueType = attrs.field(converter=partial_apply(EnumValueType))
     values: Iterable[EnumItem] = attrs.field(
         validator=enum_validator,
-        converter=lambda x: [EnumItem(**i) for i in x],
+        converter=list_converter(EnumItem),
     )
     proposed: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -157,7 +174,7 @@ class StringLiteralType:
 class OrType:
     kind: str = attrs.field(validator=attrs.validators.in_(["or"]))
     items: Iterable[LSP_TYPE_SPEC] = attrs.field(
-        converter=lambda x: [convert_to_lsp_type(t) for t in x]
+        converter=list_converter(convert_to_lsp_type)
     )
 
 
@@ -165,7 +182,7 @@ class OrType:
 class AndType:
     kind: str = attrs.field(validator=attrs.validators.in_(["and"]))
     items: Iterable[LSP_TYPE_SPEC] = attrs.field(
-        converter=lambda x: [convert_to_lsp_type(t) for t in x]
+        converter=list_converter(convert_to_lsp_type),
     )
 
 
@@ -173,7 +190,7 @@ class AndType:
 class ArrayType:
     kind: str = attrs.field(validator=attrs.validators.in_(["array"]))
     element: LSP_TYPE_SPEC = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type
+        validator=type_validator, converter=partial_apply(convert_to_lsp_type)
     )
 
 
@@ -181,7 +198,7 @@ class ArrayType:
 class TupleType:
     kind: str = attrs.field(validator=attrs.validators.in_(["tuple"]))
     items: Iterable[LSP_TYPE_SPEC] = attrs.field(
-        converter=lambda x: [convert_to_lsp_type(t) for t in x]
+        converter=list_converter(convert_to_lsp_type)
     )
 
 
@@ -221,7 +238,7 @@ class MapType:
         converter=convert_map_key
     )
     value: LSP_TYPE_SPEC = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type
+        validator=type_validator, converter=partial_apply(convert_to_lsp_type)
     )
 
 
@@ -230,7 +247,7 @@ class Property:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     type: LSP_TYPE_SPEC = attrs.field(
         validator=type_validator,
-        converter=convert_to_lsp_type,
+        converter=partial_apply(convert_to_lsp_type),
     )
     optional: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -253,7 +270,7 @@ class Property:
 @attrs.define
 class LiteralValue:
     properties: Iterable[Property] = attrs.field(
-        converter=lambda x: [Property(**t) for t in x],
+        converter=list_converter(Property),
     )
 
 
@@ -262,7 +279,7 @@ class LiteralType:
     kind: str = attrs.field(validator=attrs.validators.in_(["literal"]))
     value: LiteralValue = attrs.field(
         validator=attrs.validators.instance_of(LiteralValue),
-        converter=lambda x: LiteralValue(**x),
+        converter=partial_apply(LiteralValue),
     )
     name: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -287,7 +304,7 @@ class TypeAlias:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     type: LSP_TYPE_SPEC = attrs.field(
         validator=type_validator,
-        converter=convert_to_lsp_type,
+        converter=partial_apply(convert_to_lsp_type),
     )
     proposed: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -307,13 +324,13 @@ class TypeAlias:
 class Structure:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     properties: Iterable[Property] = attrs.field(
-        converter=lambda x: [Property(**p) for p in x],
+        converter=list_converter(Property),
     )
     extends: Optional[Iterable[LSP_TYPE_SPEC]] = attrs.field(
-        converter=lambda x: [convert_to_lsp_type(t) for t in x], default=[]
+        converter=list_converter(convert_to_lsp_type), default=[]
     )
     mixins: Optional[Iterable[LSP_TYPE_SPEC]] = attrs.field(
-        converter=lambda x: [convert_to_lsp_type(t) for t in x], default=[]
+        converter=list_converter(convert_to_lsp_type), default=[]
     )
     proposed: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -333,10 +350,14 @@ class Structure:
 class Notification:
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     params: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     registrationOptions: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     proposed: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -356,19 +377,29 @@ class Notification:
 class Request:
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     params: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     result: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     partialResult: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     errorData: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     registrationOptions: Optional[LSP_TYPE_SPEC] = attrs.field(
-        validator=type_validator, converter=convert_to_lsp_type, default=None
+        validator=type_validator,
+        converter=partial_apply(convert_to_lsp_type),
+        default=None,
     )
     proposed: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -386,22 +417,14 @@ class Request:
 
 @attrs.define
 class LSPModel:
-    requests: Iterable[Request] = attrs.field(
-        converter=lambda x: [Request(**r) for r in x]
-    )
+    requests: Iterable[Request] = attrs.field(converter=list_converter(Request))
     notifications: Iterable[Notification] = attrs.field(
-        converter=lambda x: [Notification(**n) for n in x]
+        converter=list_converter(Notification)
     )
-    structures: Iterable[Structure] = attrs.field(
-        converter=lambda x: [Structure(**s) for s in x]
-    )
-    enumerations: Iterable[Enum] = attrs.field(
-        converter=lambda x: [Enum(**e) for e in x]
-    )
-    typeAliases: Iterable[TypeAlias] = attrs.field(
-        converter=lambda x: [TypeAlias(**t) for t in x]
-    )
+    structures: Iterable[Structure] = attrs.field(converter=list_converter(Structure))
+    enumerations: Iterable[Enum] = attrs.field(converter=list_converter(Enum))
+    typeAliases: Iterable[TypeAlias] = attrs.field(converter=list_converter(TypeAlias))
 
 
-def create_lsp_model(text: str) -> LSPModel:
-    return LSPModel(**json.loads(text))
+def create_lsp_model(model: Dict[str, Any]) -> LSPModel:
+    return LSPModel(**model)

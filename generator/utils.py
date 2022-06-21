@@ -10,6 +10,8 @@ from typing import Callable, Dict, List, Optional, Tuple
 from . import model
 
 ClassGenCallback = Callable[[str, bool, List[str]], None]
+METHOD_NAME_RE_1 = re.compile(r"(.)([A-Z][a-z]+)")
+METHOD_NAME_RE_2 = re.compile(r"([a-z0-9])([A-Z])")
 
 
 def _generate_field_validator(
@@ -183,7 +185,7 @@ def _generate_and_type(
     if type_def.kind != "and":
         raise ValueError("Only `and` type code generation is supported.")
 
-    indent = "    "
+    indent = " " * 4
     import_lines = ["import attrs"]
     code_lines = [
         "@attrs.define",
@@ -213,7 +215,7 @@ def _generate_and_type(
 
     on_class(
         class_name,
-        any([keyword.iskeyword(p.name) for p in properties]),
+        any(keyword.iskeyword(p.name) for p in properties),
         [p.name for p in properties if _has_null_base_type(p)],
     )
 
@@ -225,8 +227,9 @@ def _has_null_base_type(prop: model.Property) -> bool:
     if prop.type.kind == "or":
         # If one of the types in the item list is a `null` then that means the
         # field can be None. So we can treat that field as optional.
-        return any([t.kind == "base" and t.name == "null" for t in prop.type.items])
-    return False
+        return any(t.kind == "base" and t.name == "null" for t in prop.type.items)
+    else:
+        return False
 
 
 def _generate_literal_dynamic_classes(
@@ -244,7 +247,7 @@ def _generate_literal_dynamic_classes(
     import_lines += ["from . import validators"]
 
     # indent level for use with fields, doc string, and comments.
-    indent = "    "
+    indent = " " * 4
 
     # clean up the docstring for the class itself.
     doc = _get_indented_documentation(literal_def.documentation, indent)
@@ -268,7 +271,7 @@ def _generate_literal_dynamic_classes(
     # Detect if the class has properties that might be keywords.
     on_class(
         literal_def.name,
-        any([keyword.iskeyword(p.name) for p in literal_def.value.properties]),
+        any(keyword.iskeyword(p.name) for p in literal_def.value.properties),
         [p.name for p in literal_def.value.properties if _has_null_base_type(p)],
     )
 
@@ -372,7 +375,7 @@ def _generate_enum(
         "" if "ErrorCodes" in enum_def.name else "@enum.unique",
         f"class {enum_def.name}(enum.Enum):",
     ]
-    indent = "    "
+    indent = " " * 4
     doc = _get_indented_documentation(enum_def.documentation, indent)
     code_lines += [
         f'{indent}"""{doc}"""' if enum_def.documentation else "",
@@ -469,9 +472,6 @@ def _generate_struct(
     extends = struct_def.extends or []
     mixins = struct_def.mixins or []
 
-    # `types` here is used to collect names this class is inheriting from.
-    types = [s.name for s in extends + mixins]
-
     definitions = [
         t
         for s in extends + mixins
@@ -485,13 +485,10 @@ def _generate_struct(
         # ensure there is an empty line between each class entry
         code_lines += [""]
 
-    indent = "    "
+    indent = " " * 4
     doc = _get_indented_documentation(struct_def.documentation, indent)
     import_lines += ["import attrs"]
     class_name = struct_def.name
-
-    # if len(types) > 0:
-    #     class_name = f'{class_name}({", ".join(types)})'
 
     class_lines = [
         "" if class_name == "LSPObject" else "@attrs.define",
@@ -531,7 +528,7 @@ def _generate_struct(
     # Detect if the class has properties that might be keywords.
     on_class(
         class_name,
-        any([keyword.iskeyword(p.name) for p in properties]),
+        any(keyword.iskeyword(p.name) for p in properties),
         [p.name for p in properties if _has_null_base_type(p)],
     )
 
@@ -544,16 +541,15 @@ def _to_class_name(lsp_method_name: str) -> str:
     class name (e.g., TextDocumentDidSave)"""
     name = lsp_method_name[2:] if lsp_method_name.startswith("$/") else lsp_method_name
     name = name.replace("/", "_")
-    name = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
-    name = re.sub("([a-z0-9])([A-Z])", r"\1_\2", name)
-    parts = [part.title() for part in name.split("_")]
-    return "".join(parts)
+    name = METHOD_NAME_RE_1.sub(r"\1_\2", name)
+    name = METHOD_NAME_RE_2.sub(r"\1_\2", name)
+    return "".join(part.title() for part in name.split("_"))
 
 
 def _generate_requests(
     requests: List[model.Request], on_class: ClassGenCallback
 ) -> Tuple[List[str], List[str]]:
-    indent = "    "
+    indent = " " * 4
     import_lines = ["import attrs"]
     code_lines = [
         "@attrs.define",
@@ -629,7 +625,7 @@ def _generate_requests(
 def _generate_notifications(
     notifications: List[model.Notification], on_class: ClassGenCallback
 ) -> Tuple[List[str], List[str]]:
-    indent = "    "
+    indent = " " * 4
     import_lines = ["import attrs"]
     code_lines = []
 
@@ -895,7 +891,7 @@ def generate_model_types(model: model.LSPModel) -> str:
     all_code += [
         "def is_keyword_class(cls) -> bool:",
         '    """Returns true if the class has a property that may be python keyword."""',
-        "    return any([cls is c for c in _KEYWORD_CLASSES])",
+        "    return any(cls is c for c in _KEYWORD_CLASSES)",
         "",
     ]
 
@@ -906,7 +902,7 @@ def generate_model_types(model: model.LSPModel) -> str:
     all_code += [
         "def is_special_class(cls) -> bool:",
         '    """Returns true if the class or its properties require special handling."""',
-        "    return any([cls is c for c in _SPECIAL_CLASSES])",
+        "    return any(cls is c for c in _SPECIAL_CLASSES)",
         "",
     ]
 

@@ -1,24 +1,22 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
 
 [project]
 name = "lsprotocol"
 description = 'Python implementation of the Language Server Protocol.'
 version = "3.17.0a0"
+authors = [{name = "Microsoft Corporation", email = "ptvshelp@microsoft.com"}]
+license = {file = "LICENSE"}
 readme = {"file" = "README.md", "content-type" = "text/markdown"}
 requires-python = ">=3.7"
-license = "MIT"
-keywords = ["language server protocol", "LSP"]
-authors = [
-  { name = "Microsoft Corporation", email = "ptvshelp@microsoft.com" },
-]
 maintainers = [
   { name = "Brett Cannon", email = "brcan@microsoft.com" },
   { name = "Karthik Nadig", email = "kanadig@microsoft.com" },
 ]
 classifiers = [
-  "Development Status :: 5 - Alpha",
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: MIT License",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
@@ -27,47 +25,28 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["attrs","cattrs"]
+dependencies = ["attrs", "cattrs"]
 
 [project.urls]
 Issues = "https://github.com/microsoft/lsprotocol/issues"
 Source = "https://github.com/microsoft/lsprotocol"
 
-[tool.hatch.build.targets.sdist]
+[tool.flit.sdist]
+include = ["lsprotocol/", "README.md", "LICENSE"]
 exclude = [
-  ".github",
-  ".vscode",
-  "generator",
-  "tests",
+  "lsprotocol/__pycache__/",
+  "generator/",
+  "tests/",
+  ".vscode/",
+  ".venv/",
+  ".gitignore",
+  "CODE_OF_CONDUCT.md",
   "conftest.py",
   "noxfile.py",
-  "pyproject.toml",
+  "requirements.in",
+  "requirements.txt",
+  "SECURITY.md",
+  "SUPPORT.md",
 ]
 
-[tool.hatch.build.targets.wheel]
 
-[tool.hatch.envs.default]
-[tool.hatch.envs.testing]
-dependencies = [
-  "pytest",
-  "pytest-cov",
-]
-
-[tool.hatch.envs.testing.scripts]
-cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=lsprotocol ./tests"
-no-cov = "cov --no-cov"
-
-[[tool.hatch.envs.testing.matrix]]
-python = ["37", "38", "39", "310"]
-
-[tool.coverage.run]
-branch = true
-parallel = true
-omit = []
-
-[tool.coverage.report]
-exclude_lines = [
-  "no cov",
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-]

@@ -1,16 +1,14 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-# THIS IS A GENERATED FILE, DO NOT EDIT.
-# Generator command:
-# python ./generator ./generator/lsp.json ./lsprotocol/_types.py
-
 import enum
 from typing import Dict, List, Optional, Tuple, Union
 
 import attrs
 
 from . import validators
+
+__lsp_version__ = "3.17.0"
 
 
 @enum.unique
@@ -10561,7 +10559,7 @@ _KEYWORD_CLASSES = [CallHierarchyIncomingCall]
 
 def is_keyword_class(cls) -> bool:
     """Returns true if the class has a property that may be python keyword."""
-    return any([cls is c for c in _KEYWORD_CLASSES])
+    return any(cls is c for c in _KEYWORD_CLASSES)
 
 
 _SPECIAL_CLASSES = [
@@ -10763,7 +10761,7 @@ _SPECIAL_CLASSES = [
 
 def is_special_class(cls) -> bool:
     """Returns true if the class or its properties require special handling."""
-    return any([cls is c for c in _SPECIAL_CLASSES])
+    return any(cls is c for c in _SPECIAL_CLASSES)
 
 
 _SPECIAL_PROPERTIES = [

@@ -847,6 +847,10 @@ def generate_model_types(model: model.LSPModel) -> str:
     header = [
         "# Copyright (c) Microsoft Corporation. All rights reserved.",
         "# Licensed under the MIT License.",
+        "# THIS IS A GENERATED FILE, DO NOT EDIT.",
+        "# Command to generate:",
+        "# nox --session build",
+        "",
         "",
         "from typing import Dict, List, Optional, Tuple, Union",
     ]

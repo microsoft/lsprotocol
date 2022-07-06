@@ -46,12 +46,14 @@ def main(argv: Sequence[str]) -> None:
     if args.schema:
         schema = json.load(pathlib.Path(args.schema).open("rb"))
     else:
-        schema = json.load(ir.open_binary("generator", "lsp.schema.json"))
+        schema_file = ir.files("generator") / "lsp.schema.json"
+        schema = json.load(schema_file.open("rb"))
 
     if args.model:
         json_model = json.load(pathlib.Path(args.model).open("rb"))
     else:
-        json_model = json.load(ir.open_binary("generator", "lsp.json"))
+        model_file = ir.files("generator") / "lsp.json"
+        json_model = json.load(model_file.open("rb"))
 
     jsonschema.validate(json_model, schema)
 

@@ -6,14 +6,15 @@ import urllib.request as url_lib
 import nox
 
 
-@nox.session()
-def run_test(session):
+@nox.session(python="3.7")
+def test(session):
     session.install("-r", "./requirements.txt")
+    session.install("-r", "./generator/requirements.txt")
     session.install("-r", "./tests/requirements.txt")
     session.run("pytest", "./tests")
 
 
-@nox.session()
+@nox.session(python="3.7")
 def lint(session):
     session.install("isort", "black", "docformatter")
     session.run("isort", "--profile", "black", "--check", ".")
@@ -22,19 +23,18 @@ def lint(session):
 
 
 def _build(session):
-    session.run(
-        "python", "-m", "generator", "./generator/lsp.json", "./lsprotocol/types.py"
-    )
-
+    session.install("-r", "./requirements.txt")
+    session.install("-r", "./generator/requirements.txt")
     session.install("isort", "black", "docformatter")
+
+    session.run("python", "-m", "generator", "--output", "./lsprotocol/types.py")
     session.run("isort", "--profile", "black", ".")
     session.run("docformatter", "--in-place", "--recursive", ".")
     session.run("black", ".")
 
 
-@nox.session()
+@nox.session(python="3.7")
 def build(session):
-    session.install("-r", "./requirements.txt")
     _build(session)
 
 
@@ -51,10 +51,8 @@ MODEL_SCHEMA = "https://raw.githubusercontent.com/microsoft/vscode-languageserve
 MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.json"
 
 
-@nox.session()
-def update(session):
-    session.install("-r", "./requirements.txt")
-
+@nox.session(python="3.7")
+def update_lsp(session):
     model_schema_text: str = _get_content(MODEL_SCHEMA)
     model_text: str = _get_content(MODEL)
 
@@ -64,3 +62,15 @@ def update(session):
     schema_path.write_text(model_schema_text.replace("\t", "    "), encoding="utf-8")
     model_path.write_text(model_text.replace("\t", "    "), encoding="utf-8")
     _build(session)
+
+
+@nox.session(python="3.7")
+def update_packages(session):
+    session.install("wheel", "pip-tools")
+    session.run(
+        "pip-compile", "--generate-hashes", "--upgrade", "./generator/requirements.in"
+    )
+    session.run("pip-compile", "--generate-hashes", "--upgrade", "./requirements.in")
+    session.run(
+        "pip-compile", "--generate-hashes", "--upgrade", "./tests/requirements.in"
+    )

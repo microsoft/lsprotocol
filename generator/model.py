@@ -22,7 +22,10 @@ LSP_TYPE_SPEC = Union[
 
 def partial_apply(callable):
     def apply(x):
-        return callable(**x)
+        if x:
+            return callable(**x)
+        else:
+            return x
 
     return apply
 
@@ -32,7 +35,7 @@ def list_converter(callable):
         return callable(**x)
 
     def converter(x: List[Any]) -> List[Any]:
-        return map(apply, x)
+        return list(map(apply, x))
 
     return converter
 
@@ -349,6 +352,9 @@ class Structure:
 @attrs.define
 class Notification:
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
+    messageDirection: str = attrs.field(
+        validator=attrs.validators.in_(["clientToServer", "serverToClient", "both"])
+    )
     params: Optional[LSP_TYPE_SPEC] = attrs.field(
         validator=type_validator,
         converter=partial_apply(convert_to_lsp_type),
@@ -371,11 +377,18 @@ class Notification:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    registrationMethod: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
 
 
 @attrs.define
 class Request:
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
+    messageDirection: str = attrs.field(
+        validator=attrs.validators.in_(["clientToServer", "serverToClient", "both"])
+    )
     params: Optional[LSP_TYPE_SPEC] = attrs.field(
         validator=type_validator,
         converter=partial_apply(convert_to_lsp_type),
@@ -410,6 +423,10 @@ class Request:
         default=None,
     )
     since: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    registrationMethod: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )

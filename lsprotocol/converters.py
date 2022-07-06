@@ -54,9 +54,7 @@ def _register_required_structure_hooks(
             else:
                 return object_
 
-    def _optional_union_str_bool(
-        object_: Any, _: type
-    ) -> Optional[Union[str, bool]]:
+    def _optional_union_str_bool(object_: Any, _: type) -> Optional[Union[str, bool]]:
         if object_:
             return str(object_) if isinstance(object_, str) else bool(object_)
         else:

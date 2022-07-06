@@ -1,0 +1,73 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lsprotocol"
+description = 'Python implementation of the Language Server Protocol.'
+version = "3.17.0a0"
+readme = {"file" = "README.md", "content-type" = "text/markdown"}
+requires-python = ">=3.7"
+license = "MIT"
+keywords = ["language server protocol", "LSP"]
+authors = [
+  { name = "Microsoft Corporation", email = "ptvshelp@microsoft.com" },
+]
+maintainers = [
+  { name = "Brett Cannon", email = "brcan@microsoft.com" },
+  { name = "Karthik Nadig", email = "kanadig@microsoft.com" },
+]
+classifiers = [
+  "Development Status :: 5 - Alpha",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = ["attrs","cattrs"]
+
+[project.urls]
+Issues = "https://github.com/microsoft/lsprotocol/issues"
+Source = "https://github.com/microsoft/lsprotocol"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+  ".github",
+  ".vscode",
+  "generator",
+  "tests",
+  "conftest.py",
+  "noxfile.py",
+  "pyproject.toml",
+]
+
+[tool.hatch.build.targets.wheel]
+
+[tool.hatch.envs.default]
+[tool.hatch.envs.testing]
+dependencies = [
+  "pytest",
+  "pytest-cov",
+]
+
+[tool.hatch.envs.testing.scripts]
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=lsprotocol ./tests"
+no-cov = "cov --no-cov"
+
+[[tool.hatch.envs.testing.matrix]]
+python = ["37", "38", "39", "310"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+omit = []
+
+[tool.coverage.report]
+exclude_lines = [
+  "no cov",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+]

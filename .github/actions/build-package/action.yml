@@ -31,12 +31,16 @@ runs:
           run: python -m pip install nox
           shell: bash
 
+        - name: Build sdist and wheels
+          run: python -m nox --session build
+          shell: bash
+
         - name: Upload Packages to Artifacts
           uses: actions/upload-artifact@v2
           with:
               name: pypi-packages
               path: |
-                  dist/*.zip
+                  dist/*.gz
                   dist/*.whl
               if-no-files-found: error
               retention-days: 7

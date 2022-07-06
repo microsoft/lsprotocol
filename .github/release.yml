@@ -1,0 +1,17 @@
+changelog:
+  exclude:
+    labels:
+      - 'skip news'
+
+  categories:
+    - title: Enhancements
+      labels:
+        - 'feature-request'
+
+    - title: Bug Fixes
+      labels:
+        - 'bug'
+
+    - title: Code Health
+      labels:
+        - 'debt'

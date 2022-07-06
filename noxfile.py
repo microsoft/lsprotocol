@@ -7,7 +7,7 @@ import nox
 
 
 @nox.session(python="3.7")
-def test(session):
+def tests(session):
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
     session.install("-r", "./tests/requirements.txt")
@@ -22,7 +22,7 @@ def lint(session):
     session.run("black", "--check", ".")
 
 
-def _build(session):
+def _generate_model(session):
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
     session.install("isort", "black", "docformatter")
@@ -35,7 +35,8 @@ def _build(session):
 
 @nox.session(python="3.7")
 def build(session):
-    _build(session)
+    session.install("flit")
+    session.run("flit", "build")
 
 
 def _get_content(uri) -> str:
@@ -61,7 +62,7 @@ def update_lsp(session):
 
     schema_path.write_text(model_schema_text.replace("\t", "    "), encoding="utf-8")
     model_path.write_text(model_text.replace("\t", "    "), encoding="utf-8")
-    _build(session)
+    _generate_model(session)
 
 
 @nox.session(python="3.7")

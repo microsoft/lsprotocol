@@ -851,7 +851,7 @@ def generate_model_types(model: model.LSPModel) -> str:
         "from typing import Dict, List, Optional, Tuple, Union",
     ]
     all_imports: List[str] = []
-    all_code: List[str] = []
+    all_code: List[str] = ['__lsp_version__ = "3.17.0"']
 
     keyword_classes: List[str] = []
     all_classes: List[str] = []

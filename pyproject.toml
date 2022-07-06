@@ -6,7 +6,7 @@ build-backend = "flit_core.buildapi"
 name = "lsprotocol"
 description = 'Python implementation of the Language Server Protocol.'
 version = "2022.7.0a0"
-authors = [{name = "Microsoft Corporation", email = "pvsc-release@microsoft.com"}]
+authors = [{name = "Microsoft Corporation", email = "ptvshelp@microsoft.com"}]
 license = {file = "LICENSE"}
 readme = {"file" = "README.md", "content-type" = "text/markdown"}
 requires-python = ">=3.7"

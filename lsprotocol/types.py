@@ -1,6 +1,10 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+# THIS IS A GENERATED FILE, DO NOT EDIT.
+# Generator command:
+# python ./generator ./generator/lsp.json ./lsprotocol/_types.py
+
 import enum
 from typing import Dict, List, Optional, Tuple, Union
 

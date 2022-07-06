@@ -39,7 +39,7 @@ def _register_required_structure_hooks(
     def _optional_union_int_str(object_: Any, type_: type) -> Optional[Union[int, str]]:
         return _union_int_str(object_, type_) if object_ else None
 
-    def _union_int_str(object_: Any, type_: type) -> Union[int, str]:
+    def _union_int_str(object_: Any, _: type) -> Union[int, str]:
         return str(object_) if isinstance(object_, str) else int(object_)
 
     def _lsp_object_hook(
@@ -55,7 +55,7 @@ def _register_required_structure_hooks(
                 return object_
 
     def _optional_union_str_bool(
-        object_: Any, type_: type
+        object_: Any, _: type
     ) -> Optional[Union[str, bool]]:
         if object_:
             return str(object_) if isinstance(object_, str) else bool(object_)
@@ -63,7 +63,7 @@ def _register_required_structure_hooks(
             return None
 
     def _text_document_filter_hook(
-        object_: Any, type_: type
+        object_: Any, _: type
     ) -> Union[
         str,
         lsp_types.TextDocumentFilter_Type1,
@@ -85,7 +85,7 @@ def _register_required_structure_hooks(
             return converter.structure(object_, lsp_types.TextDocumentFilter_Type3)
 
     def _notebook_filter_hook(
-        object_: Any, type_: type
+        object_: Any, _: type
     ) -> Union[
         str,
         lsp_types.NotebookDocumentFilter_Type1,
@@ -143,7 +143,7 @@ def _register_required_structure_hooks(
 def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Converter:
     def _keyword_rename(name: str):
         # TODO: when min Python becomes >= 3.9, then update this to:
-        # return name.removesuffix("_")
+        # `return name.removesuffix("_")`.
         return name[:-1] if name.endswith("_") else name
 
     def _omit(cls: type, prop: str) -> bool:

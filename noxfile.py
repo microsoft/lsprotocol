@@ -53,6 +53,11 @@ MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/
 
 
 @nox.session(python="3.7")
+def build_lsp(session):
+    _generate_model(session)
+
+
+@nox.session(python="3.7")
 def update_lsp(session):
     model_schema_text: str = _get_content(MODEL_SCHEMA)
     model_text: str = _get_content(MODEL)

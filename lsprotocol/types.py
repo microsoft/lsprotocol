@@ -1,6 +1,13 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+# ****** THIS IS A GENERATED FILE, DO NOT EDIT. ******
+# Steps to generate:
+# 1. Checkout https://github.com/microsoft/lsprotocol
+# 2. Install nox: `python -m pip install nox`
+# 3. Run command: `python -m nox --session build_lsp`
+
+
 import enum
 from typing import Dict, List, Optional, Tuple, Union
 

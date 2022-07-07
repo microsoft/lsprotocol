@@ -4,7 +4,7 @@
 
 ## Overview
 
-LSP is used by editors to communicate with various tools to enables services like code completion, hover, formatting, code analysis, etc. The intent of this library is to allow you to build on top of the types used by LSP. This repository wil be kept up to date with the latest version of LSP as it is updated.
+LSP is used by editors to communicate with various tools to enables services like code completion, documentation on hover, formatting, code analysis, etc. The intent of this library is to allow you to build on top of the types used by LSP. This repository will be kept up to date with the latest version of LSP as it is updated.
 
 ## Installation
 

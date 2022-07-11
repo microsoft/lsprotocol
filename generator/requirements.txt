@@ -18,9 +18,9 @@ importlib-resources==5.8.0 \
     # via
     #   -r ./generator/requirements.in
     #   jsonschema
-jsonschema==4.6.1 \
-    --hash=sha256:5eb781753403847fb320f05e9ab2191725b58c5e7f97f1bed63285ca423159bc \
-    --hash=sha256:ec2802e6a37517f09d47d9ba107947589ae1d25ff557b925d83a321fc2aa5d3b
+jsonschema==4.7.1 \
+    --hash=sha256:201b83d676351d51d0dc617be6f77c449feee32ca221b4a99a09d77661740643 \
+    --hash=sha256:25203dbebd62a1179f810f14339f7a638baaf279b5cc3b738a58c3744af56d65
     # via -r ./generator/requirements.in
 pyrsistent==0.18.1 \
     --hash=sha256:0e3e1fcc45199df76053026a51cc59ab2ea3fc7c094c6627e93b7b44cdae2c8c \

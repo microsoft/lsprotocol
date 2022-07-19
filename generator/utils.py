@@ -553,7 +553,7 @@ def _generate_requests(
     import_lines = ["import attrs"]
     code_lines = [
         "@attrs.define",
-        f"class ResponseError:",
+        "class ResponseError:",
         f"{indent}code: int = attrs.field(validator=validators.integer_validator)",
         f'{indent}"""A number indicating the error type that occurred."""',
         "",
@@ -565,7 +565,7 @@ def _generate_requests(
         f'{indent}about the error. Can be omitted."""',
         "",
         "@attrs.define",
-        f"class ResponseErrorMessage:",
+        "class ResponseErrorMessage:",
         f"{indent}id:Optional[Union[int, str]] = attrs.field(default=None)",
         f'{indent}"""The request id where the error occurred."""',
         f"{indent}error:Optional[ResponseError] = attrs.field(default=None)",
@@ -573,7 +573,7 @@ def _generate_requests(
         f'{indent}jsonrpc: str = attrs.field(default="2.0")',
         "",
     ]
-    on_class(f"ResponseErrorMessage", False, ["error", "jsonrpc"])
+    on_class("ResponseErrorMessage", False, ["error", "jsonrpc"])
 
     for request in requests:
         class_name = _to_class_name(request.method)
@@ -836,11 +836,96 @@ def generate_message_objects(
         f"REQUESTS =Union[{', '.join(request_classes)}]",
         f"RESPONSES =Union[{', '.join(response_classes)}]",
         f"NOTIFICATIONS =Union[{', '.join(notification_classes)}]",
-        f"MESSAGE_TYPES =Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]",
+        "MESSAGE_TYPES =Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]",
         "",
     ]
 
     return import_lines, code_lines
+
+
+class SpecialClasses:
+    keyword_classes: List[str] = []
+    all_classes: List[str] = []
+    special_classes: List[str] = []
+    special_properties: List[str] = []
+
+
+def generate_special_cases(special: SpecialClasses) -> List[str]:
+    # These classes have properties that may be python keywords.
+    all_code = [f"_KEYWORD_CLASSES = [{', '.join(set(special.keyword_classes))}]"]
+    all_code += [
+        "def is_keyword_class(cls) -> bool:",
+        '    """Returns true if the class has a property that may be python keyword."""',
+        "    return any(cls is c for c in _KEYWORD_CLASSES)",
+        "",
+    ]
+
+    # These are classes that have properties that need special handling
+    # during serialization of the class based on LSP.
+    # See: https://github.com/microsoft/vscode-languageserver-node/issues/967
+    all_code += [f"_SPECIAL_CLASSES = [{', '.join(set(special.special_classes))}]"]
+    all_code += [
+        "def is_special_class(cls) -> bool:",
+        '    """Returns true if the class or its properties require special handling."""',
+        "    return any(cls is c for c in _SPECIAL_CLASSES)",
+        "",
+    ]
+
+    # This is a collection of `class_name.property` as string. These properties
+    # need special handling as described by LSP>
+    # See: https://github.com/microsoft/vscode-languageserver-node/issues/967
+    #
+    # Example:
+    #   Consider RenameRegistrationOptions
+    #     * documentSelector property:
+    #         When you set `documentSelector` to None in python it has to be preserved when
+    #         serializing it. Since the serialized JSON value `{"documentSelector": null}`
+    #         means use the Clients document selector. Omitting it might throw error.
+    #     * prepareProvider property
+    #         This property does NOT need special handling, since omitting it or using
+    #         `{"prepareProvider": null}` has the same meaning.
+    all_code += [
+        f"_SPECIAL_PROPERTIES = [{', '.join(set(special.special_properties))}]"
+    ]
+    all_code += [
+        "def is_special_property(cls, property_name:str) -> bool:",
+        '    """Returns true if the class or its properties require special handling.',
+        "    Example:",
+        "      Consider RenameRegistrationOptions",
+        "        * documentSelector property:",
+        "            When you set `documentSelector` to None in python it has to be preserved when",
+        '            serializing it. Since the serialized JSON value `{"documentSelector": null}`',
+        "            means use the Clients document selector. Omitting it might throw error. ",
+        "        * prepareProvider property",
+        "            This property does NOT need special handling, since omitting it or using",
+        '            `{"prepareProvider": null}` in JSON has the same meaning.',
+        '    """',
+        '    qualified_name = f"{cls.__name__}.{property_name}"',
+        "    return qualified_name in _SPECIAL_PROPERTIES",
+        "",
+    ]
+
+    all_code += ["", "ALL_TYPES_MAP = {"]
+    all_code += [f"'{name}': {name}," for name in set(special.all_classes)]
+    all_code += ["}", ""]
+    return all_code
+
+
+def generate_message_direction(model: model.LSPModel) -> List[str]:
+    all_code = ["_MESSAGE_DIRECTION: Dict[str, str] = {"]
+
+    all_code += [f'"{r.method}":"{r.messageDirection}",' for r in model.requests]
+    all_code += [f'"{n.method}":"{n.messageDirection}",' for n in model.notifications]
+
+    all_code += ["}", ""]
+
+    all_code += [
+        "def message_direction(method:str) -> str:",
+        '    """Returns message direction clientToServer, serverToClient or both."""',
+        "    return _MESSAGE_DIRECTION[method]",
+        "",
+    ]
+    return all_code
 
 
 def generate_model_types(model: model.LSPModel) -> str:
@@ -860,18 +945,15 @@ def generate_model_types(model: model.LSPModel) -> str:
     all_imports: List[str] = []
     all_code: List[str] = ['__lsp_version__ = "3.17.0"']
 
-    keyword_classes: List[str] = []
-    all_classes: List[str] = []
-    special_classes: List[str] = []
-    special_properties: List[str] = []
+    special: SpecialClasses = SpecialClasses()
 
     def collect(name: str, is_keyword: bool, properties: List[str]):
-        all_classes.append(name)
+        special.all_classes.append(name)
         if is_keyword:
-            keyword_classes.append(name)
+            special.keyword_classes.append(name)
         if properties:
-            special_classes.append(name)
-            special_properties.extend([f"'{name}.{p}'" for p in properties])
+            special.special_classes.append(name)
+            special.special_properties.extend([f"'{name}.{p}'" for p in properties])
 
     imports, code = generate_enums(model, collect)
     all_imports += imports
@@ -893,61 +975,10 @@ def generate_model_types(model: model.LSPModel) -> str:
     all_imports += imports
     all_code += code
 
-    # These classes have properties that may be python keywords.
-    all_code += [f"_KEYWORD_CLASSES = [{', '.join(keyword_classes)}]"]
-    all_code += [
-        "def is_keyword_class(cls) -> bool:",
-        '    """Returns true if the class has a property that may be python keyword."""',
-        "    return any(cls is c for c in _KEYWORD_CLASSES)",
-        "",
-    ]
+    all_code += generate_special_cases(special)
 
-    # These are classes that have properties that need special handling
-    # during serialization of the class based on LSP.
-    # See: https://github.com/microsoft/vscode-languageserver-node/issues/967
-    all_code += [f"_SPECIAL_CLASSES = [{', '.join(special_classes)}]"]
-    all_code += [
-        "def is_special_class(cls) -> bool:",
-        '    """Returns true if the class or its properties require special handling."""',
-        "    return any(cls is c for c in _SPECIAL_CLASSES)",
-        "",
-    ]
+    all_code += generate_message_direction(model)
 
-    # This is a collection of `class_name.property` as string. These properties
-    # need special handling as described by LSP>
-    # See: https://github.com/microsoft/vscode-languageserver-node/issues/967
-    #
-    # Example:
-    #   Consider RenameRegistrationOptions
-    #     * documentSelector property:
-    #         When you set `documentSelector` to None in python it has to be preserved when
-    #         serializing it. Since the serialized JSON value `{"documentSelector": null}`
-    #         means use the Clients document selector. Omitting it might throw error.
-    #     * prepareProvider property
-    #         This property does NOT need special handling, since omitting it or using
-    #         `{"prepareProvider": null}` has the same meaning.
-    all_code += [f"_SPECIAL_PROPERTIES = [{', '.join(special_properties)}]"]
-    all_code += [
-        "def is_special_property(cls, property_name) -> bool:",
-        '    """Returns true if the class or its properties require special handling.',
-        "    Example:",
-        "      Consider RenameRegistrationOptions",
-        "        * documentSelector property:",
-        "            When you set `documentSelector` to None in python it has to be preserved when",
-        '            serializing it. Since the serialized JSON value `{"documentSelector": null}`',
-        "            means use the Clients document selector. Omitting it might throw error. ",
-        "        * prepareProvider property",
-        "            This property does NOT need special handling, since omitting it or using",
-        '            `{"prepareProvider": null}` in JSON has the same meaning.',
-        '"""',
-        '    qualified_name = f"{cls.__name__}.{property_name}"',
-        "    return qualified_name in _SPECIAL_PROPERTIES",
-        "",
-    ]
-
-    all_code += ["", "ALL_TYPES_MAP = {"]
-    all_code += [f"'{name}': {name}," for name in all_classes]
-    all_code += ["}", ""]
     # Remove duplicate imports and ensure there is separation
     all_imports = list(set([l for l in all_imports if len(l) > 0])) + [""]
 

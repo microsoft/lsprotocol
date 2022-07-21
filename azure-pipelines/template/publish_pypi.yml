@@ -15,6 +15,7 @@ jobs:
             displayName: "Download Pipeline Artifact"
             inputs:
                 artifactName: dist
+                targetPath: '$(Build.SourcesDirectory)/dist'
 
           - task: UsePythonVersion@0
             displayName: "Use Python 3.7"

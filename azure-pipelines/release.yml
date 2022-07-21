@@ -11,7 +11,7 @@ stages:
     - stage: pre_build
       displayName: Pre-build validation
       jobs:
-          - template: static_analysis.yml
+          - template: template/static_analysis.yml
 
     - stage: build
       displayName: Build sdist and wheels
@@ -19,7 +19,7 @@ stages:
       variables:
           skipComponentGovernanceDetection: true # handled by pre_build
       jobs:
-          - template: build_packages.yml
+          - template: template/build_packages.yml
 
     - stage: publish
       displayName: Publish
@@ -28,6 +28,6 @@ stages:
           skipComponentGovernanceDetection: true # handled by pre_build
       jobs:
           - ${{ if ne(parameters.publishPyPI, 'Skip') }}:
-                - template: publish_pypi.yml
+                - template: template/publish_pypi.yml
                   parameters:
                       publishPyPI: ${{parameters.publishPyPI}}

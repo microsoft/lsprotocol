@@ -1,0 +1,33 @@
+trigger: none
+
+parameters:
+    - name: publishPyPI
+      displayName: 🚀 Publish To PyPI
+      type: string
+      values: [Skip, Test, Real]
+      default: Test
+
+stages:
+    - stage: pre_build
+      displayName: Pre-build validation
+      jobs:
+          - template: static_analysis.yml
+
+    - stage: build
+      displayName: Build sdist and wheels
+      dependsOn: pre_build
+      variables:
+          skipComponentGovernanceDetection: true # handled by pre_build
+      jobs:
+          - template: build_packages.yml
+
+    - stage: publish
+      displayName: Publish
+      dependsOn: build
+      variables:
+          skipComponentGovernanceDetection: true # handled by pre_build
+      jobs:
+          - ${{ if ne(parameters.publishPyPI, 'Skip') }}:
+                - template: publish_pypi.yml
+                  parameters:
+                      publishPyPI: ${{parameters.publishPyPI}}

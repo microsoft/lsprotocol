@@ -1,0 +1,31 @@
+jobs:
+    - job: BuildPkg
+      displayName: Build package
+
+      pool:
+          vmImage: windows-latest
+
+      steps:
+          - task: UsePythonVersion@0
+            displayName: "Use Python 3.7"
+            inputs:
+                versionSpec: 3.7
+
+          - script: python -m pip install -U pip
+            displayName: Upgrade Pip
+
+          # For faster/better builds of sdists.
+          - script: python -m pip install wheel
+            displayName: Install build pre-requisite
+
+          - script: python -m pip install nox
+            displayName: Install nox
+
+          - script: python -m nox --session build
+            displayName: Build sdist and wheels
+
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish Artifact"
+            inputs:
+                pathToPublish: "$(Build.SourcesDirectory)/dist"
+                artifactName: dist

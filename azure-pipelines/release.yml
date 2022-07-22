@@ -28,7 +28,6 @@ stages:
       variables:
           skipComponentGovernanceDetection: true # handled by pre_build
       jobs:
-          - ${{ if ne(parameters.publishPyPI, 'Skip') }}:
-                - template: template/publish_pypi.yml
-                  parameters:
-                      publishPyPI: ${{parameters.publishPyPI}}
+          - template: template/publish_pypi.yml
+            parameters:
+                publishPyPI: ${{parameters.publishPyPI}}

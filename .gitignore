@@ -1,6 +1,6 @@
 out
 dist
-.venv/
+.venv*/
 .nox/
 **/__pycache__
 **/.pytest_cache

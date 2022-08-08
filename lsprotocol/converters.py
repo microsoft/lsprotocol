@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-from typing import Any, Optional, Union
+import sys
+from typing import Any, List, Optional, Union
 
 import attrs
 import cattrs
@@ -131,6 +132,14 @@ def _register_required_structure_hooks(
         ),
         (NotebookSelectorItem, _notebook_filter_hook),
     ]
+
+    if sys.version_info > (3, 8):
+        STRUCTURE_HOOKS += [
+            (
+                Union[lsp_types.LSPObject, List["LSPAny"], str, int, float, bool, None],
+                _lsp_object_hook,
+            )
+        ]
 
     for type_, hook in STRUCTURE_HOOKS:
         converter.register_structure_hook(type_, hook)

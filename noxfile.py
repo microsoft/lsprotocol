@@ -12,6 +12,8 @@ def tests(session: nox.Session):
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
     session.install("-r", "./tests/requirements.txt")
+
+    session.run("pip", "list")
     session.run("pytest", "./tests")
 
 
@@ -28,6 +30,8 @@ def _generate_model(session: nox.Session):
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
     session.install("isort", "black", "docformatter")
+
+    session.run("pip", "list")
 
     session.run("python", "-m", "generator", "--output", "./lsprotocol/types.py")
     session.run("isort", "--profile", "black", ".")

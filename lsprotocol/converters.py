@@ -139,10 +139,12 @@ def _register_required_structure_hooks(
 
 
 def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Converter:
-    def _keyword_rename(name: str):
+    def _to_camel_case(name: str):
         # TODO: when min Python becomes >= 3.9, then update this to:
         # `return name.removesuffix("_")`.
-        return name[:-1] if name.endswith("_") else name
+        new_name = name[:-1] if name.endswith("_") else name
+        parts = new_name.split("_")
+        return parts[0] + "".join(p.title() for p in parts[1:])
 
     def _omit(cls: type, prop: str) -> bool:
         special = lsp_types.is_special_property(cls, prop)
@@ -151,7 +153,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
     def _with_custom_unstructure(cls: type) -> Any:
         attributes = {
             a.name: cattrs.gen.override(
-                rename=_keyword_rename(a.name),
+                rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
             for a in attrs.fields(cls)
@@ -161,7 +163,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
     def _with_custom_structure(cls: type) -> Any:
         attributes = {
             a.name: cattrs.gen.override(
-                rename=_keyword_rename(a.name),
+                rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
             for a in attrs.fields(cls)

@@ -166,14 +166,12 @@ def test_keyword_field():
             },
         ],
     }
-    try:
-        converter = cv.get_converter()
-        obj = converter.structure(data, lsp.CallHierarchyIncomingCall)
-        hamcrest.assert_that(obj, hamcrest.instance_of(lsp.CallHierarchyIncomingCall))
-        rev = converter.unstructure(obj, lsp.CallHierarchyIncomingCall)
-        hamcrest.assert_that(rev, hamcrest.is_(data))
-    except Exception as ex:
-        raise ex
+
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.CallHierarchyIncomingCall)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.CallHierarchyIncomingCall))
+    rev = converter.unstructure(obj, lsp.CallHierarchyIncomingCall)
+    hamcrest.assert_that(rev, hamcrest.is_(data))
 
 
 @pytest.mark.parametrize(

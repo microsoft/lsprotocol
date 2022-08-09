@@ -216,7 +216,7 @@ def _generate_and_type(
     on_class(
         class_name,
         any(keyword.iskeyword(p.name) for p in properties),
-        [p.name for p in properties if _has_null_base_type(p)],
+        [_to_snake_case(p.name) for p in properties if _has_null_base_type(p)],
     )
 
     return imports, code_lines
@@ -272,7 +272,11 @@ def _generate_literal_dynamic_classes(
     on_class(
         literal_def.name,
         any(keyword.iskeyword(p.name) for p in literal_def.value.properties),
-        [p.name for p in literal_def.value.properties if _has_null_base_type(p)],
+        [
+            _to_snake_case(p.name)
+            for p in literal_def.value.properties
+            if _has_null_base_type(p)
+        ],
     )
 
     return (import_lines, code_lines)
@@ -410,6 +414,13 @@ def _generate_enum(
     return (import_lines, code_lines)
 
 
+def _to_snake_case(name: str) -> str:
+    new_name = METHOD_NAME_RE_1.sub(r"\1_\2", name)
+    new_name = METHOD_NAME_RE_2.sub(r"\1_\2", new_name)
+    new_name = new_name.lower()
+    return f"{new_name}_" if keyword.iskeyword(new_name) else new_name
+
+
 def _generate_properties(
     properties: List[model.Property], indent: str
 ) -> Tuple[List[str], List[str]]:
@@ -433,10 +444,8 @@ def _generate_properties(
         if property_def.optional:
             type_name = f"Optional[{type_name}]"
 
-        # make sure that property name is not a python keyword.
-        name = property_def.name
-        if keyword.iskeyword(name):
-            name = f"{name}_"
+        # make sure that property name is not a python keyword and snake cased.
+        name = _to_snake_case(property_def.name)
 
         prop_lines = [f"{indent}{name}: {type_name}{type_validator}"]
         prop_lines += [
@@ -529,7 +538,7 @@ def _generate_struct(
     on_class(
         class_name,
         any(keyword.iskeyword(p.name) for p in properties),
-        [p.name for p in properties if _has_null_base_type(p)],
+        [_to_snake_case(p.name) for p in properties if _has_null_base_type(p)],
     )
 
     structs[struct_def.name] = "done"
@@ -877,13 +886,13 @@ def generate_special_cases(special: SpecialClasses) -> List[str]:
     #
     # Example:
     #   Consider RenameRegistrationOptions
-    #     * documentSelector property:
-    #         When you set `documentSelector` to None in python it has to be preserved when
-    #         serializing it. Since the serialized JSON value `{"documentSelector": null}`
+    #     * document_selector property:
+    #         When you set `document_selector` to None in python it has to be preserved when
+    #         serializing it. Since the serialized JSON value `{"document_selector": null}`
     #         means use the Clients document selector. Omitting it might throw error.
-    #     * prepareProvider property
+    #     * prepare_provider property
     #         This property does NOT need special handling, since omitting it or using
-    #         `{"prepareProvider": null}` has the same meaning.
+    #         `{"prepare_provider": null}` has the same meaning.
     all_code += [
         f"_SPECIAL_PROPERTIES = [{', '.join(set(special.special_properties))}]"
     ]
@@ -892,13 +901,13 @@ def generate_special_cases(special: SpecialClasses) -> List[str]:
         '    """Returns true if the class or its properties require special handling.',
         "    Example:",
         "      Consider RenameRegistrationOptions",
-        "        * documentSelector property:",
-        "            When you set `documentSelector` to None in python it has to be preserved when",
-        '            serializing it. Since the serialized JSON value `{"documentSelector": null}`',
+        "        * document_selector property:",
+        "            When you set `document_selector` to None in python it has to be preserved when",
+        '            serializing it. Since the serialized JSON value `{"document_selector": null}`',
         "            means use the Clients document selector. Omitting it might throw error. ",
-        "        * prepareProvider property",
+        "        * prepare_provider property",
         "            This property does NOT need special handling, since omitting it or using",
-        '            `{"prepareProvider": null}` in JSON has the same meaning.',
+        '            `{"prepare_provider": null}` in JSON has the same meaning.',
         '    """',
         '    qualified_name = f"{cls.__name__}.{property_name}"',
         "    return qualified_name in _SPECIAL_PROPERTIES",

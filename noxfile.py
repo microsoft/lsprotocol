@@ -6,21 +6,23 @@ import urllib.request as url_lib
 import nox
 
 
-@nox.session(python="3.7")
+@nox.session()
 def tests(session: nox.Session):
     """Run tests for lsprotocol and generator."""
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
     session.install("-r", "./tests/requirements.txt")
+
+    session.run("pip", "list")
     session.run("pytest", "./tests")
 
 
-@nox.session(python="3.7")
+@nox.session()
 def lint(session: nox.Session):
     """Lint all packages."""
     session.install("isort", "black", "docformatter")
     session.run("isort", "--profile", "black", "--check", ".")
-    session.run("docformatter", "--check", ".")
+    session.run("docformatter", "--check", "--recursive", ".")
     session.run("black", "--check", ".")
 
 
@@ -29,13 +31,15 @@ def _generate_model(session: nox.Session):
     session.install("-r", "./generator/requirements.txt")
     session.install("isort", "black", "docformatter")
 
+    session.run("pip", "list")
+
     session.run("python", "-m", "generator", "--output", "./lsprotocol/types.py")
     session.run("isort", "--profile", "black", ".")
     session.run("docformatter", "--in-place", "--recursive", ".")
     session.run("black", ".")
 
 
-@nox.session(python="3.7")
+@nox.session()
 def build(session: nox.Session):
     """Build lsprotocol package."""
     session.install("flit")
@@ -55,13 +59,13 @@ MODEL_SCHEMA = "https://raw.githubusercontent.com/microsoft/vscode-languageserve
 MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.json"
 
 
-@nox.session(python="3.7")
+@nox.session()
 def build_lsp(session: nox.Session):
     """Generate lsprotocol package from LSP model."""
     _generate_model(session)
 
 
-@nox.session(python="3.7")
+@nox.session()
 def update_lsp(session: nox.Session):
     """Update the LSP model and generate the lsprotocol content."""
     session.log("Downloading LSP model schema.")
@@ -77,7 +81,7 @@ def update_lsp(session: nox.Session):
     _generate_model(session)
 
 
-@nox.session(python="3.7")
+@nox.session()
 def update_packages(session: nox.Session):
     """Update dependencies of generator and lsprotocol."""
     session.install("wheel", "pip-tools")

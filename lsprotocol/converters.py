@@ -1,7 +1,8 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-from typing import Any, Optional, Union
+import sys
+from typing import Any, List, Optional, Union
 
 import attrs
 import cattrs
@@ -132,6 +133,14 @@ def _register_required_structure_hooks(
         (NotebookSelectorItem, _notebook_filter_hook),
     ]
 
+    if sys.version_info > (3, 8):
+        STRUCTURE_HOOKS += [
+            (
+                Union[lsp_types.LSPObject, List["LSPAny"], str, int, float, bool, None],
+                _lsp_object_hook,
+            )
+        ]
+
     for type_, hook in STRUCTURE_HOOKS:
         converter.register_structure_hook(type_, hook)
 
@@ -139,10 +148,12 @@ def _register_required_structure_hooks(
 
 
 def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Converter:
-    def _keyword_rename(name: str):
+    def _to_camel_case(name: str):
         # TODO: when min Python becomes >= 3.9, then update this to:
         # `return name.removesuffix("_")`.
-        return name[:-1] if name.endswith("_") else name
+        new_name = name[:-1] if name.endswith("_") else name
+        parts = new_name.split("_")
+        return parts[0] + "".join(p.title() for p in parts[1:])
 
     def _omit(cls: type, prop: str) -> bool:
         special = lsp_types.is_special_property(cls, prop)
@@ -151,7 +162,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
     def _with_custom_unstructure(cls: type) -> Any:
         attributes = {
             a.name: cattrs.gen.override(
-                rename=_keyword_rename(a.name),
+                rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
             for a in attrs.fields(cls)
@@ -161,7 +172,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
     def _with_custom_structure(cls: type) -> Any:
         attributes = {
             a.name: cattrs.gen.override(
-                rename=_keyword_rename(a.name),
+                rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
             for a in attrs.fields(cls)

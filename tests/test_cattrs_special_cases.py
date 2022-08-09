@@ -166,6 +166,7 @@ def test_keyword_field():
             },
         ],
     }
+
     converter = cv.get_converter()
     obj = converter.structure(data, lsp.CallHierarchyIncomingCall)
     hamcrest.assert_that(obj, hamcrest.instance_of(lsp.CallHierarchyIncomingCall))

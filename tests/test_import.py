@@ -8,4 +8,4 @@ def test_import():
     """Ensure that LSP types are importable."""
     import lsprotocol.types as lsp
 
-    hamcrest.assert_that(lsp.MarkupKind.MARKDOWN.value, hamcrest.is_("markdown"))
+    hamcrest.assert_that(lsp.MarkupKind.Markdown.value, hamcrest.is_("markdown"))

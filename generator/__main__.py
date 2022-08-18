@@ -59,8 +59,7 @@ def main(argv: Sequence[str]) -> None:
 
     # load model and generate types.
     spec = model.create_lsp_model(json_model)
-    code = utils.generate_model_types(spec)
-
+    code = utils.TypesCodeGenerator(spec).get_code()
     if args.output:
         pathlib.Path(argv[1]).write_text(code, encoding="utf-8")
     else:

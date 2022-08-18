@@ -7,9 +7,8 @@
 # 2. Install nox: `python -m pip install nox`
 # 3. Run command: `python -m nox --session build_lsp`
 
-
 import enum
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import attrs
 
@@ -27,31 +26,31 @@ class SemanticTokenTypes(enum.Enum):
     """
 
     # Since: 3.16.0
-    NAMESPACE = "namespace"
-    TYPE = "type"
+    Namespace = "namespace"
+    Type = "type"
     """Represents a generic type. Acts as a fallback for types which can't be mapped to
     a specific type like class or enum."""
-    CLASS = "class"
-    ENUM = "enum"
-    INTERFACE = "interface"
-    STRUCT = "struct"
-    TYPE_PARAMETER = "typeParameter"
-    PARAMETER = "parameter"
-    VARIABLE = "variable"
-    PROPERTY = "property"
-    ENUM_MEMBER = "enumMember"
-    EVENT = "event"
-    FUNCTION = "function"
-    METHOD = "method"
-    MACRO = "macro"
-    KEYWORD = "keyword"
-    MODIFIER = "modifier"
-    COMMENT = "comment"
-    STRING = "string"
-    NUMBER = "number"
-    REGEXP = "regexp"
-    OPERATOR = "operator"
-    DECORATOR = "decorator"
+    Class = "class"
+    Enum = "enum"
+    Interface = "interface"
+    Struct = "struct"
+    TypeParameter = "typeParameter"
+    Parameter = "parameter"
+    Variable = "variable"
+    Property = "property"
+    EnumMember = "enumMember"
+    Event = "event"
+    Function = "function"
+    Method = "method"
+    Macro = "macro"
+    Keyword = "keyword"
+    Modifier = "modifier"
+    Comment = "comment"
+    String = "string"
+    Number = "number"
+    Regexp = "regexp"
+    Operator = "operator"
+    Decorator = "decorator"
     """@since 3.17.0"""
     # Since: 3.17.0
 
@@ -66,59 +65,34 @@ class SemanticTokenModifiers(enum.Enum):
     """
 
     # Since: 3.16.0
-    DECLARATION = "declaration"
-    DEFINITION = "definition"
-    READONLY = "readonly"
-    STATIC = "static"
-    DEPRECATED = "deprecated"
-    ABSTRACT = "abstract"
-    ASYNC = "async"
-    MODIFICATION = "modification"
-    DOCUMENTATION = "documentation"
-    DEFAULT_LIBRARY = "defaultLibrary"
+    Declaration = "declaration"
+    Definition = "definition"
+    Readonly = "readonly"
+    Static = "static"
+    Deprecated = "deprecated"
+    Abstract = "abstract"
+    Async = "async"
+    Modification = "modification"
+    Documentation = "documentation"
+    DefaultLibrary = "defaultLibrary"
 
 
 class ErrorCodes(enum.Enum):
     """Predefined error codes."""
 
-    PARSE_ERROR = -32700
-    INVALID_REQUEST = -32600
-    METHOD_NOT_FOUND = -32601
-    INVALID_PARAMS = -32602
-    INTERNAL_ERROR = -32603
-    JSONRPC_RESERVED_ERROR_RANGE_START = -32099
-    """This is the start range of JSON RPC reserved error codes.
-    It doesn't denote a real error code. No application error codes should
-    be defined between the start and end range. For backwards
-    compatibility the `ServerNotInitialized` and the `UnknownErrorCode`
-    are left in the range.
-    
-    @since 3.16.0"""
-    # Since: 3.16.0
-    SERVER_ERROR_START = -32099
-    """@deprecated use  jsonrpcReservedErrorRangeStart"""
-    SERVER_NOT_INITIALIZED = -32002
+    ParseError = -32700
+    InvalidRequest = -32600
+    MethodNotFound = -32601
+    InvalidParams = -32602
+    InternalError = -32603
+    ServerNotInitialized = -32002
     """Error code indicating that a server received a notification or
     request before the server has received the `initialize` request."""
-    UNKNOWN_ERROR_CODE = -32001
-    JSONRPC_RESERVED_ERROR_RANGE_END = -32000
-    """This is the end range of JSON RPC reserved error codes.
-    It doesn't denote a real error code.
-    
-    @since 3.16.0"""
-    # Since: 3.16.0
-    SERVER_ERROR_END = -32000
-    """@deprecated use  jsonrpcReservedErrorRangeEnd"""
+    UnknownErrorCode = -32001
 
 
 class LSPErrorCodes(enum.Enum):
-    LSP_RESERVED_ERROR_RANGE_START = -32899
-    """This is the start range of LSP reserved error codes.
-    It doesn't denote a real error code.
-    
-    @since 3.16.0"""
-    # Since: 3.16.0
-    REQUEST_FAILED = -32803
+    RequestFailed = -32803
     """A request failed but it was syntactically correct, e.g the
     method name was known and the parameters were valid. The error
     message should contain human readable information about why
@@ -126,14 +100,14 @@ class LSPErrorCodes(enum.Enum):
     
     @since 3.17.0"""
     # Since: 3.17.0
-    SERVER_CANCELLED = -32802
+    ServerCancelled = -32802
     """The server cancelled the request. This error code should
     only be used for requests that explicitly support being
     server cancellable.
     
     @since 3.17.0"""
     # Since: 3.17.0
-    CONTENT_MODIFIED = -32801
+    ContentModified = -32801
     """The server detected that the content of a document got
     modified outside normal conditions. A server should
     NOT send this error code if it detects a content change
@@ -142,26 +116,20 @@ class LSPErrorCodes(enum.Enum):
     
     If a client decides that a result is not of any use anymore
     the client should cancel the request."""
-    REQUEST_CANCELLED = -32800
+    RequestCancelled = -32800
     """The client has canceled a request and a server as detected
     the cancel."""
-    LSP_RESERVED_ERROR_RANGE_END = -32800
-    """This is the end range of LSP reserved error codes.
-    It doesn't denote a real error code.
-    
-    @since 3.16.0"""
-    # Since: 3.16.0
 
 
 @enum.unique
 class FoldingRangeKind(enum.Enum):
     """A set of predefined range kinds."""
 
-    COMMENT = "comment"
+    Comment = "comment"
     """Folding range for a comment"""
-    IMPORTS = "imports"
+    Imports = "imports"
     """Folding range for an import or include"""
-    REGION = "region"
+    Region = "region"
     """Folding range for a region (e.g. `#region`)"""
 
 
@@ -169,32 +137,32 @@ class FoldingRangeKind(enum.Enum):
 class SymbolKind(enum.Enum):
     """A symbol kind."""
 
-    FILE = 1
-    MODULE = 2
-    NAMESPACE = 3
-    PACKAGE = 4
-    CLASS = 5
-    METHOD = 6
-    PROPERTY = 7
-    FIELD = 8
-    CONSTRUCTOR = 9
-    ENUM = 10
-    INTERFACE = 11
-    FUNCTION = 12
-    VARIABLE = 13
-    CONSTANT = 14
-    STRING = 15
-    NUMBER = 16
-    BOOLEAN = 17
-    ARRAY = 18
-    OBJECT = 19
-    KEY = 20
-    NULL = 21
-    ENUM_MEMBER = 22
-    STRUCT = 23
-    EVENT = 24
-    OPERATOR = 25
-    TYPE_PARAMETER = 26
+    File = 1
+    Module = 2
+    Namespace = 3
+    Package = 4
+    Class = 5
+    Method = 6
+    Property = 7
+    Field = 8
+    Constructor = 9
+    Enum = 10
+    Interface = 11
+    Function = 12
+    Variable = 13
+    Constant = 14
+    String = 15
+    Number = 16
+    Boolean = 17
+    Array = 18
+    Object = 19
+    Key = 20
+    Null = 21
+    EnumMember = 22
+    Struct = 23
+    Event = 24
+    Operator = 25
+    TypeParameter = 26
 
 
 @enum.unique
@@ -205,7 +173,7 @@ class SymbolTag(enum.Enum):
     """
 
     # Since: 3.16
-    DEPRECATED = 1
+    Deprecated = 1
     """Render a symbol as obsolete, usually using a strike-out."""
 
 
@@ -217,15 +185,15 @@ class UniquenessLevel(enum.Enum):
     """
 
     # Since: 3.16.0
-    DOCUMENT = "document"
+    Document = "document"
     """The moniker is only unique inside a document"""
-    PROJECT = "project"
+    Project = "project"
     """The moniker is unique inside a project for which a dump got created"""
-    GROUP = "group"
+    Group = "group"
     """The moniker is unique inside the group to which a project belongs"""
-    SCHEME = "scheme"
+    Scheme = "scheme"
     """The moniker is unique inside the moniker scheme."""
-    GLOBAL = "global"
+    Global = "global"
     """The moniker is globally unique"""
 
 
@@ -237,11 +205,11 @@ class MonikerKind(enum.Enum):
     """
 
     # Since: 3.16.0
-    IMPORT = "import"
+    Import = "import"
     """The moniker represent a symbol that is imported into a project"""
-    EXPORT = "export"
+    Export = "export"
     """The moniker represents a symbol that is exported from a project"""
-    LOCAL = "local"
+    Local = "local"
     """The moniker represents a symbol that is local to a project (e.g. a local
     variable of a function, a class not visible outside the project, ...)"""
 
@@ -254,9 +222,9 @@ class InlayHintKind(enum.Enum):
     """
 
     # Since: 3.17.0
-    TYPE = 1
+    Type = 1
     """An inlay hint that for a type annotation."""
-    PARAMETER = 2
+    Parameter = 2
     """An inlay hint that is for a parameter."""
 
 
@@ -264,13 +232,13 @@ class InlayHintKind(enum.Enum):
 class MessageType(enum.Enum):
     """The message type."""
 
-    ERROR = 1
+    Error = 1
     """An error message."""
-    WARNING = 2
+    Warning = 2
     """A warning message."""
-    INFO = 3
+    Info = 3
     """An information message."""
-    LOG = 4
+    Log = 4
     """A log message."""
 
 
@@ -279,12 +247,12 @@ class TextDocumentSyncKind(enum.Enum):
     """Defines how the host (editor) should sync document changes to the
     language server."""
 
-    NONE = 0
+    None_ = 0
     """Documents should not be synced at all."""
-    FULL = 1
+    Full = 1
     """Documents are synced by always sending the full content
     of the document."""
-    INCREMENTAL = 2
+    Incremental = 2
     """Documents are synced by sending the full content on open.
     After that only incremental updates to the document are
     send."""
@@ -294,12 +262,12 @@ class TextDocumentSyncKind(enum.Enum):
 class TextDocumentSaveReason(enum.Enum):
     """Represents reasons why a text document is saved."""
 
-    MANUAL = 1
+    Manual = 1
     """Manually triggered, e.g. by the user pressing save, by starting debugging,
     or by an API call."""
-    AFTER_DELAY = 2
+    AfterDelay = 2
     """Automatic after a delay."""
-    FOCUS_OUT = 3
+    FocusOut = 3
     """When the editor lost focus."""
 
 
@@ -307,31 +275,31 @@ class TextDocumentSaveReason(enum.Enum):
 class CompletionItemKind(enum.Enum):
     """The kind of a completion entry."""
 
-    TEXT = 1
-    METHOD = 2
-    FUNCTION = 3
-    CONSTRUCTOR = 4
-    FIELD = 5
-    VARIABLE = 6
-    CLASS = 7
-    INTERFACE = 8
-    MODULE = 9
-    PROPERTY = 10
-    UNIT = 11
-    VALUE = 12
-    ENUM = 13
-    KEYWORD = 14
-    SNIPPET = 15
-    COLOR = 16
-    FILE = 17
-    REFERENCE = 18
-    FOLDER = 19
-    ENUM_MEMBER = 20
-    CONSTANT = 21
-    STRUCT = 22
-    EVENT = 23
-    OPERATOR = 24
-    TYPE_PARAMETER = 25
+    Text = 1
+    Method = 2
+    Function = 3
+    Constructor = 4
+    Field = 5
+    Variable = 6
+    Class = 7
+    Interface = 8
+    Module = 9
+    Property = 10
+    Unit = 11
+    Value = 12
+    Enum = 13
+    Keyword = 14
+    Snippet = 15
+    Color = 16
+    File = 17
+    Reference = 18
+    Folder = 19
+    EnumMember = 20
+    Constant = 21
+    Struct = 22
+    Event = 23
+    Operator = 24
+    TypeParameter = 25
 
 
 @enum.unique
@@ -343,7 +311,7 @@ class CompletionItemTag(enum.Enum):
     """
 
     # Since: 3.15.0
-    DEPRECATED = 1
+    Deprecated = 1
     """Render a completion as obsolete, usually using a strike-out."""
 
 
@@ -352,9 +320,9 @@ class InsertTextFormat(enum.Enum):
     """Defines whether the insert text in a completion item should be
     interpreted as plain text or a snippet."""
 
-    PLAIN_TEXT = 1
+    PlainText = 1
     """The primary text to be inserted is treated as a plain string."""
-    SNIPPET = 2
+    Snippet = 2
     """The primary text to be inserted is treated as a snippet.
     
     A snippet can define tab stops and placeholders with `$1`, `$2`
@@ -374,13 +342,13 @@ class InsertTextMode(enum.Enum):
     """
 
     # Since: 3.16.0
-    AS_IS = 1
+    AsIs = 1
     """The insertion or replace strings is taken as it is. If the
     value is multi line the lines below the cursor will be
     inserted using the indentation defined in the string value.
     The client will not apply any kind of adjustments to the
     string."""
-    ADJUST_INDENTATION = 2
+    AdjustIndentation = 2
     """The editor adjusts leading whitespace of new lines so that
     they match the indentation up to the cursor of the line for
     which the item is accepted.
@@ -394,11 +362,11 @@ class InsertTextMode(enum.Enum):
 class DocumentHighlightKind(enum.Enum):
     """A document highlight kind."""
 
-    TEXT = 1
+    Text = 1
     """A textual occurrence."""
-    READ = 2
+    Read = 2
     """Read-access of a symbol, like reading a variable."""
-    WRITE = 3
+    Write = 3
     """Write-access of a symbol, like writing to a variable."""
 
 
@@ -406,13 +374,13 @@ class DocumentHighlightKind(enum.Enum):
 class CodeActionKind(enum.Enum):
     """A set of predefined code action kinds."""
 
-    EMPTY = ""
+    Empty = ""
     """Empty kind."""
-    QUICK_FIX = "quickfix"
+    QuickFix = "quickfix"
     """Base kind for quickfix actions: 'quickfix'"""
-    REFACTOR = "refactor"
+    Refactor = "refactor"
     """Base kind for refactoring actions: 'refactor'"""
-    REFACTOR_EXTRACT = "refactor.extract"
+    RefactorExtract = "refactor.extract"
     """Base kind for refactoring extraction actions: 'refactor.extract'
     
     Example extract actions:
@@ -422,7 +390,7 @@ class CodeActionKind(enum.Enum):
     - Extract variable
     - Extract interface from class
     - ..."""
-    REFACTOR_INLINE = "refactor.inline"
+    RefactorInline = "refactor.inline"
     """Base kind for refactoring inline actions: 'refactor.inline'
     
     Example inline actions:
@@ -431,7 +399,7 @@ class CodeActionKind(enum.Enum):
     - Inline variable
     - Inline constant
     - ..."""
-    REFACTOR_REWRITE = "refactor.rewrite"
+    RefactorRewrite = "refactor.rewrite"
     """Base kind for refactoring rewrite actions: 'refactor.rewrite'
     
     Example rewrite actions:
@@ -442,13 +410,13 @@ class CodeActionKind(enum.Enum):
     - Make method static
     - Move method to base class
     - ..."""
-    SOURCE = "source"
+    Source = "source"
     """Base kind for source actions: `source`
     
     Source code actions apply to the entire file."""
-    SOURCE_ORGANIZE_IMPORTS = "source.organizeImports"
+    SourceOrganizeImports = "source.organizeImports"
     """Base kind for an organize imports source action: `source.organizeImports`"""
-    SOURCE_FIX_ALL = "source.fixAll"
+    SourceFixAll = "source.fixAll"
     """Base kind for auto-fix source actions: `source.fixAll`.
     
     Fix all actions automatically fix errors that have a clear fix that do not require user input.
@@ -460,11 +428,11 @@ class CodeActionKind(enum.Enum):
 
 @enum.unique
 class TraceValues(enum.Enum):
-    OFF = "off"
+    Off = "off"
     """Turn tracing off."""
-    MESSAGES = "messages"
+    Messages = "messages"
     """Trace messages only."""
-    VERBOSE = "verbose"
+    Verbose = "verbose"
     """Verbose message tracing."""
 
 
@@ -477,9 +445,9 @@ class MarkupKind(enum.Enum):
     are reserved for internal usage.
     """
 
-    PLAIN_TEXT = "plaintext"
+    PlainText = "plaintext"
     """Plain text is supported as a content format"""
-    MARKDOWN = "markdown"
+    Markdown = "markdown"
     """Markdown is supported as a content format"""
 
 
@@ -491,14 +459,14 @@ class PositionEncodingKind(enum.Enum):
     """
 
     # Since: 3.17.0
-    UTF8 = "utf-8"
+    Utf8 = "utf-8"
     """Character offsets count UTF-8 code units."""
-    UTF16 = "utf-16"
+    Utf16 = "utf-16"
     """Character offsets count UTF-16 code units.
     
     This is the default and must always be supported
     by servers"""
-    UTF32 = "utf-32"
+    Utf32 = "utf-32"
     """Character offsets count UTF-32 code units.
     
     Implementation note: these are the same as Unicode code points,
@@ -510,21 +478,21 @@ class PositionEncodingKind(enum.Enum):
 class FileChangeType(enum.Enum):
     """The file event type."""
 
-    CREATED = 1
+    Created = 1
     """The file got created."""
-    CHANGED = 2
+    Changed = 2
     """The file got changed."""
-    DELETED = 3
+    Deleted = 3
     """The file got deleted."""
 
 
 @enum.unique
 class WatchKind(enum.Enum):
-    CREATE = 1
+    Create = 1
     """Interested in create events."""
-    CHANGE = 2
+    Change = 2
     """Interested in change events"""
-    DELETE = 4
+    Delete = 4
     """Interested in delete events"""
 
 
@@ -532,13 +500,13 @@ class WatchKind(enum.Enum):
 class DiagnosticSeverity(enum.Enum):
     """The diagnostic's severity."""
 
-    ERROR = 1
+    Error = 1
     """Reports an error."""
-    WARNING = 2
+    Warning = 2
     """Reports a warning."""
-    INFORMATION = 3
+    Information = 3
     """Reports an information."""
-    HINT = 4
+    Hint = 4
     """Reports a hint."""
 
 
@@ -550,12 +518,12 @@ class DiagnosticTag(enum.Enum):
     """
 
     # Since: 3.15.0
-    UNNECESSARY = 1
+    Unnecessary = 1
     """Unused or unnecessary code.
     
     Clients are allowed to render diagnostics with this tag faded out instead of having
     an error squiggle."""
-    DEPRECATED = 2
+    Deprecated = 2
     """Deprecated or obsolete code.
     
     Clients are allowed to rendered diagnostics with this tag strike through."""
@@ -565,13 +533,13 @@ class DiagnosticTag(enum.Enum):
 class CompletionTriggerKind(enum.Enum):
     """How a completion was triggered."""
 
-    INVOKED = 1
+    Invoked = 1
     """Completion was triggered by typing an identifier (24x7 code
     complete), manual invocation (e.g Ctrl+Space) or via API."""
-    TRIGGER_CHARACTER = 2
+    TriggerCharacter = 2
     """Completion was triggered by a trigger character specified by
     the `triggerCharacters` properties of the `CompletionRegistrationOptions`."""
-    TRIGGER_FOR_INCOMPLETE_COMPLETIONS = 3
+    TriggerForIncompleteCompletions = 3
     """Completion was re-triggered as current completion list is incomplete"""
 
 
@@ -583,11 +551,11 @@ class SignatureHelpTriggerKind(enum.Enum):
     """
 
     # Since: 3.15.0
-    INVOKED = 1
+    Invoked = 1
     """Signature help was invoked manually by the user or by a command."""
-    TRIGGER_CHARACTER = 2
+    TriggerCharacter = 2
     """Signature help was triggered by a trigger character."""
-    CONTENT_CHANGE = 3
+    ContentChange = 3
     """Signature help was triggered by the cursor moving or by the document content changing."""
 
 
@@ -599,9 +567,9 @@ class CodeActionTriggerKind(enum.Enum):
     """
 
     # Since: 3.17.0
-    INVOKED = 1
+    Invoked = 1
     """Code actions were explicitly requested by the user or by an extension."""
-    AUTOMATIC = 2
+    Automatic = 2
     """Code actions were requested automatically.
     
     This typically happens when current selection in a file changes, but can
@@ -617,9 +585,9 @@ class FileOperationPatternKind(enum.Enum):
     """
 
     # Since: 3.16.0
-    FILE = "file"
+    File = "file"
     """The pattern matches a file only."""
-    FOLDER = "folder"
+    Folder = "folder"
     """The pattern matches a folder only."""
 
 
@@ -631,49 +599,49 @@ class NotebookCellKind(enum.Enum):
     """
 
     # Since: 3.17.0
-    MARKUP = 1
+    Markup = 1
     """A markup-cell is formatted source that is used for display."""
-    CODE = 2
+    Code = 2
     """A code-cell is source code."""
 
 
 @enum.unique
 class ResourceOperationKind(enum.Enum):
-    CREATE = "create"
+    Create = "create"
     """Supports creating new files and folders."""
-    RENAME = "rename"
+    Rename = "rename"
     """Supports renaming existing files and folders."""
-    DELETE = "delete"
+    Delete = "delete"
     """Supports deleting existing files and folders."""
 
 
 @enum.unique
 class FailureHandlingKind(enum.Enum):
-    ABORT = "abort"
+    Abort = "abort"
     """Applying the workspace change is simply aborted if one of the changes provided
     fails. All operations executed before the failing operation stay executed."""
-    TRANSACTIONAL = "transactional"
+    Transactional = "transactional"
     """All operations are executed transactional. That means they either all
     succeed or no changes at all are applied to the workspace."""
-    TEXT_ONLY_TRANSACTIONAL = "textOnlyTransactional"
+    TextOnlyTransactional = "textOnlyTransactional"
     """If the workspace edit contains only textual file changes they are executed transactional.
     If resource changes (create, rename or delete file) are part of the change the failure
     handling strategy is abort."""
-    UNDO = "undo"
+    Undo = "undo"
     """The client tries to undo the operations already executed. But there is no
     guarantee that this is succeeding."""
 
 
 @enum.unique
 class PrepareSupportDefaultBehavior(enum.Enum):
-    IDENTIFIER = 1
+    Identifier = 1
     """The client's default behavior is to select the identifier
     according the to language's syntax rule."""
 
 
 @enum.unique
 class TokenFormat(enum.Enum):
-    RELATIVE = "relative"
+    Relative = "relative"
 
 
 Definition = Union["Location", List["Location"]]
@@ -683,18 +651,15 @@ defined.
 
 Servers should prefer returning `DefinitionLink` over `Definition` if supported
 by the client."""
-
 DefinitionLink = "LocationLink"
 """Information about where a symbol is defined.
 
 Provides additional metadata over normal location definitions, including the range of
 the defining symbol"""
-
 LSPArray = List["LSPAny"]
 """LSP arrays.
 @since 3.17.0"""
 # Since: 3.17.0
-
 LSPAny = Union["LSPObject", "LSPArray", str, int, int, float, bool, None]
 """The LSP any type.
 Please note that strictly speaking a property with the value `undefined`
@@ -703,10 +668,8 @@ convenience it is allowed and assumed that all these properties are
 optional as well.
 @since 3.17.0"""
 # Since: 3.17.0
-
 Declaration = Union["Location", List["Location"]]
 """The declaration of a symbol representation as one or many locations."""
-
 DeclarationLink = "LocationLink"
 """Information about where a symbol is declared.
 
@@ -715,7 +678,6 @@ the declaring symbol.
 
 Servers should prefer returning `DeclarationLink` over `Declaration` if supported
 by the client."""
-
 InlineValue = Union[
     "InlineValueText", "InlineValueVariableLookup", "InlineValueEvaluatableExpression"
 ]
@@ -727,7 +689,6 @@ The InlineValue types combines all inline value types into one type.
 
 @since 3.17.0"""
 # Since: 3.17.0
-
 DocumentDiagnosticReport = Union[
     "RelatedFullDocumentDiagnosticReport", "RelatedUnchangedDocumentDiagnosticReport"
 ]
@@ -739,11 +700,10 @@ pull request.
 
 @since 3.17.0"""
 # Since: 3.17.0
-
-
 @attrs.define
 class PrepareRenameResult_Type1:
     range: "Range" = attrs.field()
+
     placeholder: str = attrs.field(validator=attrs.validators.instance_of(str))
 
 
@@ -755,15 +715,7 @@ class PrepareRenameResult_Type2:
 PrepareRenameResult = Union[
     "Range", "PrepareRenameResult_Type1", "PrepareRenameResult_Type2"
 ]
-
-URI = str
-"""A tagging type for string properties that are actually URIs
-
-@since 3.16.0"""
-# Since: 3.16.0
-
 ProgressToken = Union[int, str]
-
 DocumentSelector = List[Union[str, "DocumentFilter"]]
 """A document selector is the combination of one or many document filters.
 
@@ -771,10 +723,8 @@ DocumentSelector = List[Union[str, "DocumentFilter"]]
 
 The use of a string as a document filter is deprecated @since 3.16.0."""
 # Since: 3.16.0.
-
 ChangeAnnotationIdentifier = str
 """An identifier to refer to a change annotation stored with a workspace edit."""
-
 WorkspaceDocumentDiagnosticReport = Union[
     "WorkspaceFullDocumentDiagnosticReport",
     "WorkspaceUnchangedDocumentDiagnosticReport",
@@ -783,17 +733,16 @@ WorkspaceDocumentDiagnosticReport = Union[
 
 @since 3.17.0"""
 # Since: 3.17.0
-
-
 @attrs.define
 class TextDocumentContentChangeEvent_Type1:
     range: "Range" = attrs.field()
     """The range of the document that changed."""
+
     text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The new text for the provided range."""
+
     range_length: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The optional length of the range that got replaced.
     
@@ -816,6 +765,7 @@ it is considered to be the full content of the document."""
 @attrs.define
 class MarkedString_Type1:
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
+
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
 
 
@@ -832,30 +782,28 @@ ${value}
 
 Note that markdown strings will be sanitized - that means html will be escaped.
 @deprecated use MarkupContent instead."""
-
 DocumentFilter = Union["TextDocumentFilter", "NotebookCellTextDocumentFilter"]
 """A document filter describes a top level text document or
 a notebook cell document.
 
 @since 3.17.0 - proposed support for NotebookCellTextDocumentFilter."""
 # Since: 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
-
 GlobPattern = Union["Pattern", "RelativePattern"]
 """The glob pattern. Either a string pattern or a relative pattern.
 
 @since 3.17.0"""
 # Since: 3.17.0
-
-
 @attrs.define
 class TextDocumentFilter_Type1:
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A language id, like `typescript`."""
+
     scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A Uri scheme, like `file` or `untitled`."""
+
     pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -867,11 +815,13 @@ class TextDocumentFilter_Type1:
 class TextDocumentFilter_Type2:
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A Uri scheme, like `file` or `untitled`."""
+
     language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A language id, like `typescript`."""
+
     pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -883,11 +833,13 @@ class TextDocumentFilter_Type2:
 class TextDocumentFilter_Type3:
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A glob pattern, like `*.{ts,js}`."""
+
     language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A language id, like `typescript`."""
+
     scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -915,17 +867,17 @@ Glob patterns can have the following syntax:
 
 @since 3.17.0"""
 # Since: 3.17.0
-
-
 @attrs.define
 class NotebookDocumentFilter_Type1:
     notebook_type: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The type of the enclosing notebook."""
+
     scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A Uri scheme, like `file` or `untitled`."""
+
     pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -937,11 +889,13 @@ class NotebookDocumentFilter_Type1:
 class NotebookDocumentFilter_Type2:
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A Uri scheme, like `file` or `untitled`."""
+
     notebook_type: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The type of the enclosing notebook."""
+
     pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -953,11 +907,13 @@ class NotebookDocumentFilter_Type2:
 class NotebookDocumentFilter_Type3:
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A glob pattern."""
+
     notebook_type: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The type of the enclosing notebook."""
+
     scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -976,7 +932,6 @@ against the notebook's URI (same as with documents)
 
 @since 3.17.0"""
 # Since: 3.17.0
-
 Pattern = str
 """The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
 - `*` to match one or more characters in a path segment
@@ -988,8 +943,6 @@ Pattern = str
 
 @since 3.17.0"""
 # Since: 3.17.0
-
-
 @attrs.define
 class TextDocumentPositionParams:
     """A parameter literal used in requests to pass a text document and a
@@ -1149,7 +1102,7 @@ class TypeDefinitionRegistrationOptions:
 class WorkspaceFolder:
     """A workspace folder inside a client."""
 
-    uri: "URI" = attrs.field()
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The associated URI for this workspace folder."""
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -1297,14 +1250,12 @@ class FoldingRange:
     To be valid, the end must be zero or larger and smaller than the number of lines in the document."""
 
     start_character: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The zero-based character offset from where the folded range starts. If not defined, defaults to the length of the start line."""
 
     end_character: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line."""
 
@@ -1684,6 +1635,15 @@ class SemanticTokensPartialResult:
 
 
 @attrs.define
+class SemanticTokensOptionsFullType1:
+    delta: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The server supports deltas for full documents."""
+
+
+@attrs.define
 class SemanticTokensOptions:
     """@since 3.16.0"""
 
@@ -1692,17 +1652,28 @@ class SemanticTokensOptions:
     legend: "SemanticTokensLegend" = attrs.field()
     """The legend used by the server"""
 
-    range: Optional[Union[bool, "None"]] = attrs.field(default=None)
+    range: Optional[Union[bool, Any]] = attrs.field(default=None)
     """Server supports providing semantic tokens for a specific range
     of a document."""
 
-    full: Optional[Union[bool, "None"]] = attrs.field(default=None)
+    full: Optional[Union[bool, "SemanticTokensOptionsFullType1"]] = attrs.field(
+        default=None
+    )
     """Server supports providing semantic tokens for a full document."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
+
+
+@attrs.define
+class SemanticTokensRegistrationOptionsFullType1:
+    delta: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The server supports deltas for full documents."""
 
 
 @attrs.define
@@ -1720,11 +1691,13 @@ class SemanticTokensRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    range: Optional[Union[bool, "None"]] = attrs.field(default=None)
+    range: Optional[Union[bool, Any]] = attrs.field(default=None)
     """Server supports providing semantic tokens for a specific range
     of a document."""
 
-    full: Optional[Union[bool, "None"]] = attrs.field(default=None)
+    full: Optional[
+        Union[bool, "SemanticTokensRegistrationOptionsFullType1"]
+    ] = attrs.field(default=None)
     """Server supports providing semantic tokens for a full document."""
 
     id: Optional[str] = attrs.field(
@@ -1809,7 +1782,7 @@ class ShowDocumentParams:
 
     # Since: 3.16.0
 
-    uri: "URI" = attrs.field()
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The document uri to show."""
 
     external: Optional[bool] = attrs.field(
@@ -2673,6 +2646,18 @@ class UnregistrationParams:
 
 
 @attrs.define
+class InitializeParamsClientInfoType:
+    name: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The name of the client as defined by the client."""
+
+    version: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """The client's version as defined by the client."""
+
+
+@attrs.define
 class _InitializeParams:
     """The initialize parameters."""
 
@@ -2686,7 +2671,7 @@ class _InitializeParams:
     Is `null` if the process has not been started by another process.
     If the parent process is not alive then the server should exit."""
 
-    client_info: Optional["None"] = attrs.field(default=None)
+    client_info: Optional["InitializeParamsClientInfoType"] = attrs.field(default=None)
     """Information about the client
     
     @since 3.15.0"""
@@ -2758,7 +2743,7 @@ class InitializeParams:
     Is `null` if the process has not been started by another process.
     If the parent process is not alive then the server should exit."""
 
-    client_info: Optional["None"] = attrs.field(default=None)
+    client_info: Optional["InitializeParamsClientInfoType"] = attrs.field(default=None)
     """Information about the client
     
     @since 3.15.0"""
@@ -2811,13 +2796,25 @@ class InitializeParams:
 
 
 @attrs.define
+class InitializeResultServerInfoType:
+    name: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The name of the server as defined by the server."""
+
+    version: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """The server's version as defined by the server."""
+
+
+@attrs.define
 class InitializeResult:
     """The result returned from an initialize request."""
 
     capabilities: "ServerCapabilities" = attrs.field()
     """The capabilities the language server provides."""
 
-    server_info: Optional["None"] = attrs.field(default=None)
+    server_info: Optional["InitializeResultServerInfoType"] = attrs.field(default=None)
     """Information about the server.
     
     @since 3.15.0"""
@@ -3046,8 +3043,7 @@ class PublishDiagnosticsParams:
     """An array of diagnostic information items."""
 
     version: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.integer_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.integer_validator), default=None
     )
     """Optional the version number of the document the diagnostics are published for.
     
@@ -3248,6 +3244,48 @@ class CompletionItem:
 
 
 @attrs.define
+class CompletionListItemDefaultsTypeEditRangeType1:
+    insert: "Range" = attrs.field()
+
+    replace: "Range" = attrs.field()
+
+
+@attrs.define
+class CompletionListItemDefaultsType:
+    commit_characters: Optional[List[str]] = attrs.field(default=None)
+    """A default commit character set.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+    edit_range: Optional[
+        Union["Range", "CompletionListItemDefaultsTypeEditRangeType1"]
+    ] = attrs.field(default=None)
+    """A default edit range.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+    insert_text_format: Optional["InsertTextFormat"] = attrs.field(default=None)
+    """A default insert text format.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+    insert_text_mode: Optional["InsertTextMode"] = attrs.field(default=None)
+    """A default insert text mode.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+    data: Optional["LSPAny"] = attrs.field(default=None)
+    """A default data value.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+
+@attrs.define
 class CompletionList:
     """Represents a collection of completion items to be presented in the
     editor."""
@@ -3261,7 +3299,9 @@ class CompletionList:
     items: List["CompletionItem"] = attrs.field()
     """The completion items."""
 
-    item_defaults: Optional["None"] = attrs.field(default=None)
+    item_defaults: Optional["CompletionListItemDefaultsType"] = attrs.field(
+        default=None
+    )
     """In many cases the items of an actual completion result share the same
     value for properties like `commitCharacters` or the range of a text
     edit. A completion list can therefore define item defaults which will
@@ -3273,6 +3313,20 @@ class CompletionList:
     Servers are only allowed to return default values if the client
     signals support for this via the `completionList.itemDefaults`
     capability.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+
+@attrs.define
+class CompletionOptionsCompletionItemType:
+    label_details_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The server has support for completion item label
+    details (see also `CompletionItemLabelDetails`) when
+    receiving a completion item in a resolve call.
     
     @since 3.17.0"""
     # Since: 3.17.0
@@ -3310,7 +3364,9 @@ class CompletionOptions:
     """The server provides support to resolve additional
     information for a completion item."""
 
-    completion_item: Optional["None"] = attrs.field(default=None)
+    completion_item: Optional["CompletionOptionsCompletionItemType"] = attrs.field(
+        default=None
+    )
     """The server supports the following `CompletionItem` specific
     capabilities.
     
@@ -3321,6 +3377,20 @@ class CompletionOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
+
+
+@attrs.define
+class CompletionRegistrationOptionsCompletionItemType:
+    label_details_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The server has support for completion item label
+    details (see also `CompletionItemLabelDetails`) when
+    receiving a completion item in a resolve call.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
 
 
 @attrs.define
@@ -3361,7 +3431,9 @@ class CompletionRegistrationOptions:
     """The server provides support to resolve additional
     information for a completion item."""
 
-    completion_item: Optional["None"] = attrs.field(default=None)
+    completion_item: Optional[
+        "CompletionRegistrationOptionsCompletionItemType"
+    ] = attrs.field(default=None)
     """The server supports the following `CompletionItem` specific
     capabilities.
     
@@ -3451,8 +3523,7 @@ class SignatureHelp:
     """One or more signatures."""
 
     active_signature: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The active signature. If omitted or the value lies outside the
     range of `signatures` the value defaults to zero or is ignored if
@@ -3465,8 +3536,7 @@ class SignatureHelp:
     mandatory to better express this."""
 
     active_parameter: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The active parameter of the active signature. If omitted or the value
     lies outside the range of `signatures[activeSignature].parameters`
@@ -3878,6 +3948,14 @@ class Command:
 
 
 @attrs.define
+class CodeActionDisabledType:
+    reason: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """Human readable description of why the code action is currently disabled.
+    
+    This is displayed in the code actions UI."""
+
+
+@attrs.define
 class CodeAction:
     """A code action represents a change that can be performed in code, e.g. to
     fix a problem or to refactor code.
@@ -3911,7 +3989,7 @@ class CodeAction:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    disabled: Optional["None"] = attrs.field(default=None)
+    disabled: Optional["CodeActionDisabledType"] = attrs.field(default=None)
     """Marks that the code action cannot currently be applied.
     
     Clients should follow the following guidelines regarding disabled code actions:
@@ -4015,6 +4093,11 @@ class WorkspaceSymbolParams:
 
 
 @attrs.define
+class WorkspaceSymbolLocationType1:
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
+
+
+@attrs.define
 class WorkspaceSymbol:
     """A special workspace symbol that supports locations without a range.
 
@@ -4025,7 +4108,7 @@ class WorkspaceSymbol:
 
     # Since: 3.17.0
 
-    location: Union["Location", "None"] = attrs.field()
+    location: Union["Location", "WorkspaceSymbolLocationType1"] = attrs.field()
     """The location of the symbol. Whether a server is allowed to
     return a location without a range depends on the client
     capability `workspace.symbol.resolveSupport`.
@@ -4513,8 +4596,7 @@ class ApplyWorkspaceEditResult:
     a suitable error for a request that triggered the edit."""
 
     failed_change: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """Depending on the client's failure handling strategy `failedChange` might
     contain the index of the change that failed. This property is only available
@@ -4551,8 +4633,7 @@ class WorkDoneProgressBegin:
     If unset, the previous progress message (if any) is still valid."""
 
     percentage: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """Optional progress percentage to display (value 100 is considered 100%).
     If not provided infinite progress is assumed and clients are allowed
@@ -4587,8 +4668,7 @@ class WorkDoneProgressReport:
     If unset, the previous progress message (if any) is still valid."""
 
     percentage: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """Optional progress percentage to display (value 100 is considered 100%).
     If not provided infinite progress is assumed and clients are allowed
@@ -5311,7 +5391,7 @@ class NotebookDocument:
 
     # Since: 3.17.0
 
-    uri: "URI" = attrs.field()
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The notebook document's uri."""
 
     notebook_type: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -5361,8 +5441,45 @@ class VersionedNotebookDocumentIdentifier:
     version: int = attrs.field(validator=validators.integer_validator)
     """The version number of this notebook document."""
 
-    uri: "URI" = attrs.field()
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The notebook document's uri."""
+
+
+@attrs.define
+class NotebookDocumentChangeEventCellsTypeStructureType:
+    array: "NotebookCellArrayChange" = attrs.field()
+    """The change to the cell array."""
+
+    did_open: Optional[List["TextDocumentItem"]] = attrs.field(default=None)
+    """Additional opened cell text documents."""
+
+    did_close: Optional[List["TextDocumentIdentifier"]] = attrs.field(default=None)
+    """Additional closed cell text documents."""
+
+
+@attrs.define
+class NotebookDocumentChangeEventCellsTypeTextContentType:
+    document: "VersionedTextDocumentIdentifier" = attrs.field()
+
+    changes: List["TextDocumentContentChangeEvent"] = attrs.field()
+
+
+@attrs.define
+class NotebookDocumentChangeEventCellsType:
+    structure: Optional[
+        "NotebookDocumentChangeEventCellsTypeStructureType"
+    ] = attrs.field(default=None)
+    """Changes to the cell structure to add or
+    remove cells."""
+
+    data: Optional[List["NotebookCell"]] = attrs.field(default=None)
+    """Changes to notebook cells properties like its
+    kind, execution summary or metadata."""
+
+    text_content: Optional[
+        List["NotebookDocumentChangeEventCellsTypeTextContentType"]
+    ] = attrs.field(default=None)
+    """Changes to the text content of notebook cells."""
 
 
 @attrs.define
@@ -5379,7 +5496,7 @@ class NotebookDocumentChangeEvent:
     
     Note: should always be an object literal (e.g. LSPObject)"""
 
-    cells: Optional["None"] = attrs.field(default=None)
+    cells: Optional["NotebookDocumentChangeEventCellsType"] = attrs.field(default=None)
     """Changes to cells"""
 
 
@@ -5392,7 +5509,7 @@ class NotebookDocumentIdentifier:
 
     # Since: 3.17.0
 
-    uri: "URI" = attrs.field()
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The notebook document's uri."""
 
 
@@ -5422,6 +5539,23 @@ class Unregistration:
 
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The method to unregister for."""
+
+
+@attrs.define
+class ServerCapabilitiesWorkspaceType:
+    workspace_folders: Optional["WorkspaceFoldersServerCapabilities"] = attrs.field(
+        default=None
+    )
+    """The server supports workspace folder.
+    
+    @since 3.6.0"""
+    # Since: 3.6.0
+
+    file_operations: Optional["FileOperationOptions"] = attrs.field(default=None)
+    """The server is interested in notifications/requests for operations on files.
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
 
 
 @attrs.define
@@ -5625,7 +5759,7 @@ class ServerCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    workspace: Optional["None"] = attrs.field(default=None)
+    workspace: Optional["ServerCapabilitiesWorkspaceType"] = attrs.field(default=None)
     """Workspace specific server capabilities."""
 
     experimental: Optional["LSPAny"] = attrs.field(default=None)
@@ -5838,8 +5972,7 @@ class SignatureInformation:
     """The parameters of this signature."""
 
     active_parameter: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The index of the active parameter.
     
@@ -6239,6 +6372,42 @@ class TextDocumentSyncOptions:
 
 
 @attrs.define
+class NotebookDocumentSyncOptionsNotebookSelectorType1CellsType:
+    language: str = attrs.field(validator=attrs.validators.instance_of(str))
+
+
+@attrs.define
+class NotebookDocumentSyncOptionsNotebookSelectorType1:
+    notebook: Union[str, "NotebookDocumentFilter"] = attrs.field()
+    """The notebook to be synced If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+    cells: Optional[
+        List["NotebookDocumentSyncOptionsNotebookSelectorType1CellsType"]
+    ] = attrs.field(default=None)
+    """The cells of the matching notebook to be synced."""
+
+
+@attrs.define
+class NotebookDocumentSyncOptionsNotebookSelectorType2CellsType:
+    language: str = attrs.field(validator=attrs.validators.instance_of(str))
+
+
+@attrs.define
+class NotebookDocumentSyncOptionsNotebookSelectorType2:
+    cells: List[
+        "NotebookDocumentSyncOptionsNotebookSelectorType2CellsType"
+    ] = attrs.field()
+    """The cells of the matching notebook to be synced."""
+
+    notebook: Optional[Union[str, "NotebookDocumentFilter"]] = attrs.field(default=None)
+    """The notebook to be synced If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+
+@attrs.define
 class NotebookDocumentSyncOptions:
     """Options specific to a notebook plus its cells to be synced to the
     server.
@@ -6257,7 +6426,12 @@ class NotebookDocumentSyncOptions:
 
     # Since: 3.17.0
 
-    notebook_selector: List[Union["None", "None"]] = attrs.field()
+    notebook_selector: List[
+        Union[
+            "NotebookDocumentSyncOptionsNotebookSelectorType1",
+            "NotebookDocumentSyncOptionsNotebookSelectorType2",
+        ]
+    ] = attrs.field()
     """The notebooks to be synced"""
 
     save: Optional[bool] = attrs.field(
@@ -6269,6 +6443,42 @@ class NotebookDocumentSyncOptions:
 
 
 @attrs.define
+class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType:
+    language: str = attrs.field(validator=attrs.validators.instance_of(str))
+
+
+@attrs.define
+class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1:
+    notebook: Union[str, "NotebookDocumentFilter"] = attrs.field()
+    """The notebook to be synced If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+    cells: Optional[
+        List["NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType"]
+    ] = attrs.field(default=None)
+    """The cells of the matching notebook to be synced."""
+
+
+@attrs.define
+class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2CellsType:
+    language: str = attrs.field(validator=attrs.validators.instance_of(str))
+
+
+@attrs.define
+class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2:
+    cells: List[
+        "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2CellsType"
+    ] = attrs.field()
+    """The cells of the matching notebook to be synced."""
+
+    notebook: Optional[Union[str, "NotebookDocumentFilter"]] = attrs.field(default=None)
+    """The notebook to be synced If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+
+@attrs.define
 class NotebookDocumentSyncRegistrationOptions:
     """Registration options specific to a notebook.
 
@@ -6277,7 +6487,12 @@ class NotebookDocumentSyncRegistrationOptions:
 
     # Since: 3.17.0
 
-    notebook_selector: List[Union["None", "None"]] = attrs.field()
+    notebook_selector: List[
+        Union[
+            "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1",
+            "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2",
+        ]
+    ] = attrs.field()
     """The notebooks to be synced"""
 
     save: Optional[bool] = attrs.field(
@@ -6357,7 +6572,7 @@ class CodeDescription:
 
     # Since: 3.16.0
 
-    href: "URI" = attrs.field()
+    href: str = attrs.field(validator=attrs.validators.instance_of(str))
     """An URI to open with more information about the diagnostic error."""
 
 
@@ -6788,6 +7003,17 @@ class WindowClientCapabilities:
 
 
 @attrs.define
+class GeneralClientCapabilitiesStaleRequestSupportType:
+    cancel: bool = attrs.field(validator=attrs.validators.instance_of(bool))
+    """The client will actively cancel the request."""
+
+    retry_on_content_modified: List[str] = attrs.field()
+    """The list of requests for which the client
+    will retry the request if it receives a
+    response with error code `ContentModified`"""
+
+
+@attrs.define
 class GeneralClientCapabilities:
     """General client capabilities.
 
@@ -6796,7 +7022,9 @@ class GeneralClientCapabilities:
 
     # Since: 3.16.0
 
-    stale_request_support: Optional["None"] = attrs.field(default=None)
+    stale_request_support: Optional[
+        "GeneralClientCapabilitiesStaleRequestSupportType"
+    ] = attrs.field(default=None)
     """Client capability that signals how the client
     handles stale requests (e.g. a request
     for which the client will not process the response
@@ -6854,12 +7082,23 @@ class RelativePattern:
 
     # Since: 3.17.0
 
-    base_uri: Union["WorkspaceFolder", "URI"] = attrs.field()
+    base_uri: Union["WorkspaceFolder", str] = attrs.field()
     """A workspace folder or a base URI to which this pattern will be matched
     against relatively."""
 
     pattern: "Pattern" = attrs.field()
     """The actual glob pattern;"""
+
+
+@attrs.define
+class WorkspaceEditClientCapabilitiesChangeAnnotationSupportType:
+    groups_on_label: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client groups edits with equal labels into tree nodes,
+    for instance all edits labelled with "Changes in Strings" would
+    be a tree node."""
 
 
 @attrs.define
@@ -6900,7 +7139,9 @@ class WorkspaceEditClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    change_annotation_support: Optional["None"] = attrs.field(default=None)
+    change_annotation_support: Optional[
+        "WorkspaceEditClientCapabilitiesChangeAnnotationSupportType"
+    ] = attrs.field(default=None)
     """Whether the client in general supports change annotations on text edits,
     create file, rename file and delete file changes.
     
@@ -6941,6 +7182,32 @@ class DidChangeWatchedFilesClientCapabilities:
 
 
 @attrs.define
+class WorkspaceSymbolClientCapabilitiesSymbolKindType:
+    value_set: Optional[List["SymbolKind"]] = attrs.field(default=None)
+    """The symbol kind values the client supports. When this
+    property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back
+    to a default value when unknown.
+    
+    If this property is not present the client only supports
+    the symbol kinds from `File` to `Array` as defined in
+    the initial version of the protocol."""
+
+
+@attrs.define
+class WorkspaceSymbolClientCapabilitiesTagSupportType:
+    value_set: List["SymbolTag"] = attrs.field()
+    """The tags supported by the client."""
+
+
+@attrs.define
+class WorkspaceSymbolClientCapabilitiesResolveSupportType:
+    properties: List[str] = attrs.field()
+    """The properties that a client can resolve lazily. Usually
+    `location.range`"""
+
+
+@attrs.define
 class WorkspaceSymbolClientCapabilities:
     """Client capabilities for a WorkspaceSymbolRequest."""
 
@@ -6950,17 +7217,23 @@ class WorkspaceSymbolClientCapabilities:
     )
     """Symbol request supports dynamic registration."""
 
-    symbol_kind: Optional["None"] = attrs.field(default=None)
+    symbol_kind: Optional[
+        "WorkspaceSymbolClientCapabilitiesSymbolKindType"
+    ] = attrs.field(default=None)
     """Specific capabilities for the `SymbolKind` in the `workspace/symbol` request."""
 
-    tag_support: Optional["None"] = attrs.field(default=None)
+    tag_support: Optional[
+        "WorkspaceSymbolClientCapabilitiesTagSupportType"
+    ] = attrs.field(default=None)
     """The client supports tags on `SymbolInformation`.
     Clients supporting tags have to handle unknown tags gracefully.
     
     @since 3.16.0"""
     # Since: 3.16.0
 
-    resolve_support: Optional["None"] = attrs.field(default=None)
+    resolve_support: Optional[
+        "WorkspaceSymbolClientCapabilitiesResolveSupportType"
+    ] = attrs.field(default=None)
     """The client support partial workspace symbols. The client will send the
     request `workspaceSymbol/resolve` to the server to resolve additional
     properties.
@@ -7171,6 +7444,137 @@ class TextDocumentSyncClientCapabilities:
 
 
 @attrs.define
+class CompletionClientCapabilitiesCompletionItemTypeTagSupportType:
+    value_set: List["CompletionItemTag"] = attrs.field()
+    """The tags supported by the client."""
+
+
+@attrs.define
+class CompletionClientCapabilitiesCompletionItemTypeResolveSupportType:
+    properties: List[str] = attrs.field()
+    """The properties that a client can resolve lazily."""
+
+
+@attrs.define
+class CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType:
+    value_set: List["InsertTextMode"] = attrs.field()
+
+
+@attrs.define
+class CompletionClientCapabilitiesCompletionItemType:
+    snippet_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client supports snippets as insert text.
+    
+    A snippet can define tab stops and placeholders with `$1`, `$2`
+    and `${3:foo}`. `$0` defines the final tab stop, it defaults to
+    the end of the snippet. Placeholders with equal identifiers are linked,
+    that is typing in one will update others too."""
+
+    commit_characters_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client supports commit characters on a completion item."""
+
+    documentation_format: Optional[List["MarkupKind"]] = attrs.field(default=None)
+    """Client supports the following content formats for the documentation
+    property. The order describes the preferred format of the client."""
+
+    deprecated_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client supports the deprecated property on a completion item."""
+
+    preselect_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client supports the preselect property on a completion item."""
+
+    tag_support: Optional[
+        "CompletionClientCapabilitiesCompletionItemTypeTagSupportType"
+    ] = attrs.field(default=None)
+    """Client supports the tag property on a completion item. Clients supporting
+    tags have to handle unknown tags gracefully. Clients especially need to
+    preserve unknown tags when sending a completion item back to the server in
+    a resolve call.
+    
+    @since 3.15.0"""
+    # Since: 3.15.0
+
+    insert_replace_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client support insert replace edit to control different behavior if a
+    completion item is inserted in the text or should replace text.
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+    resolve_support: Optional[
+        "CompletionClientCapabilitiesCompletionItemTypeResolveSupportType"
+    ] = attrs.field(default=None)
+    """Indicates which properties a client can resolve lazily on a completion
+    item. Before version 3.16.0 only the predefined properties `documentation`
+    and `details` could be resolved lazily.
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+    insert_text_mode_support: Optional[
+        "CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType"
+    ] = attrs.field(default=None)
+    """The client supports the `insertTextMode` property on
+    a completion item to override the whitespace handling mode
+    as defined by the client (see `insertTextMode`).
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+    label_details_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The client has support for completion item label
+    details (see also `CompletionItemLabelDetails`).
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+
+@attrs.define
+class CompletionClientCapabilitiesCompletionItemKindType:
+    value_set: Optional[List["CompletionItemKind"]] = attrs.field(default=None)
+    """The completion item kind values the client supports. When this
+    property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back
+    to a default value when unknown.
+    
+    If this property is not present the client only supports
+    the completion items kinds from `Text` to `Reference` as defined in
+    the initial version of the protocol."""
+
+
+@attrs.define
+class CompletionClientCapabilitiesCompletionListType:
+    item_defaults: Optional[List[str]] = attrs.field(default=None)
+    """The client supports the following itemDefaults on
+    a completion list.
+    
+    The value lists the supported property names of the
+    `CompletionList.itemDefaults` object. If omitted
+    no properties are supported.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+
+@attrs.define
 class CompletionClientCapabilities:
     """Completion client capabilities."""
 
@@ -7180,11 +7584,15 @@ class CompletionClientCapabilities:
     )
     """Whether completion supports dynamic registration."""
 
-    completion_item: Optional["None"] = attrs.field(default=None)
+    completion_item: Optional[
+        "CompletionClientCapabilitiesCompletionItemType"
+    ] = attrs.field(default=None)
     """The client supports the following `CompletionItem` specific
     capabilities."""
 
-    completion_item_kind: Optional["None"] = attrs.field(default=None)
+    completion_item_kind: Optional[
+        "CompletionClientCapabilitiesCompletionItemKindType"
+    ] = attrs.field(default=None)
 
     insert_text_mode: Optional["InsertTextMode"] = attrs.field(default=None)
     """Defines how the client handles whitespace and indentation
@@ -7201,7 +7609,9 @@ class CompletionClientCapabilities:
     """The client supports to send additional context information for a
     `textDocument/completion` request."""
 
-    completion_list: Optional["None"] = attrs.field(default=None)
+    completion_list: Optional[
+        "CompletionClientCapabilitiesCompletionListType"
+    ] = attrs.field(default=None)
     """The client supports the following `CompletionList` specific
     capabilities.
     
@@ -7224,6 +7634,41 @@ class HoverClientCapabilities:
 
 
 @attrs.define
+class SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformationType:
+    label_offset_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The client supports processing label offsets instead of a
+    simple label string.
+    
+    @since 3.14.0"""
+    # Since: 3.14.0
+
+
+@attrs.define
+class SignatureHelpClientCapabilitiesSignatureInformationType:
+    documentation_format: Optional[List["MarkupKind"]] = attrs.field(default=None)
+    """Client supports the following content formats for the documentation
+    property. The order describes the preferred format of the client."""
+
+    parameter_information: Optional[
+        "SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformationType"
+    ] = attrs.field(default=None)
+    """Client capabilities specific to parameter information."""
+
+    active_parameter_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The client supports the `activeParameter` property on `SignatureInformation`
+    literal.
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+
+@attrs.define
 class SignatureHelpClientCapabilities:
     """Client Capabilities for a SignatureHelpRequest."""
 
@@ -7233,7 +7678,9 @@ class SignatureHelpClientCapabilities:
     )
     """Whether signature help supports dynamic registration."""
 
-    signature_information: Optional["None"] = attrs.field(default=None)
+    signature_information: Optional[
+        "SignatureHelpClientCapabilitiesSignatureInformationType"
+    ] = attrs.field(default=None)
     """The client supports the following `SignatureInformation`
     specific properties."""
 
@@ -7359,6 +7806,25 @@ class DocumentHighlightClientCapabilities:
 
 
 @attrs.define
+class DocumentSymbolClientCapabilitiesSymbolKindType:
+    value_set: Optional[List["SymbolKind"]] = attrs.field(default=None)
+    """The symbol kind values the client supports. When this
+    property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back
+    to a default value when unknown.
+    
+    If this property is not present the client only supports
+    the symbol kinds from `File` to `Array` as defined in
+    the initial version of the protocol."""
+
+
+@attrs.define
+class DocumentSymbolClientCapabilitiesTagSupportType:
+    value_set: List["SymbolTag"] = attrs.field()
+    """The tags supported by the client."""
+
+
+@attrs.define
 class DocumentSymbolClientCapabilities:
     """Client Capabilities for a DocumentSymbolRequest."""
 
@@ -7368,7 +7834,9 @@ class DocumentSymbolClientCapabilities:
     )
     """Whether document symbol supports dynamic registration."""
 
-    symbol_kind: Optional["None"] = attrs.field(default=None)
+    symbol_kind: Optional[
+        "DocumentSymbolClientCapabilitiesSymbolKindType"
+    ] = attrs.field(default=None)
     """Specific capabilities for the `SymbolKind` in the
     `textDocument/documentSymbol` request."""
 
@@ -7378,7 +7846,9 @@ class DocumentSymbolClientCapabilities:
     )
     """The client supports hierarchical document symbols."""
 
-    tag_support: Optional["None"] = attrs.field(default=None)
+    tag_support: Optional[
+        "DocumentSymbolClientCapabilitiesTagSupportType"
+    ] = attrs.field(default=None)
     """The client supports tags on `SymbolInformation`. Tags are supported on
     `DocumentSymbol` if `hierarchicalDocumentSymbolSupport` is set to true.
     Clients supporting tags have to handle unknown tags gracefully.
@@ -7398,6 +7868,30 @@ class DocumentSymbolClientCapabilities:
 
 
 @attrs.define
+class CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType:
+    value_set: List["CodeActionKind"] = attrs.field()
+    """The code action kind values the client supports. When this
+    property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back
+    to a default value when unknown."""
+
+
+@attrs.define
+class CodeActionClientCapabilitiesCodeActionLiteralSupportType:
+    code_action_kind: "CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType" = (
+        attrs.field()
+    )
+    """The code action kind is support with the following value
+    set."""
+
+
+@attrs.define
+class CodeActionClientCapabilitiesResolveSupportType:
+    properties: List[str] = attrs.field()
+    """The properties that a client can resolve lazily."""
+
+
+@attrs.define
 class CodeActionClientCapabilities:
     """The Client Capabilities of a CodeActionRequest."""
 
@@ -7407,7 +7901,9 @@ class CodeActionClientCapabilities:
     )
     """Whether code action supports dynamic registration."""
 
-    code_action_literal_support: Optional["None"] = attrs.field(default=None)
+    code_action_literal_support: Optional[
+        "CodeActionClientCapabilitiesCodeActionLiteralSupportType"
+    ] = attrs.field(default=None)
     """The client support code action literals of type `CodeAction` as a valid
     response of the `textDocument/codeAction` request. If the property is not
     set the request can only return `Command` literals.
@@ -7444,7 +7940,9 @@ class CodeActionClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    resolve_support: Optional["None"] = attrs.field(default=None)
+    resolve_support: Optional[
+        "CodeActionClientCapabilitiesResolveSupportType"
+    ] = attrs.field(default=None)
     """Whether the client supports resolving additional code action
     properties via a separate `codeAction/resolve` request.
     
@@ -7586,6 +8084,28 @@ class RenameClientCapabilities:
 
 
 @attrs.define
+class FoldingRangeClientCapabilitiesFoldingRangeKindType:
+    value_set: Optional[List["FoldingRangeKind"]] = attrs.field(default=None)
+    """The folding range kind values the client supports. When this
+    property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back
+    to a default value when unknown."""
+
+
+@attrs.define
+class FoldingRangeClientCapabilitiesFoldingRangeType:
+    collapsed_text: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """If set, the client signals that it supports setting collapsedText on
+    folding ranges to display custom labels instead of the default text.
+    
+    @since 3.17.0"""
+    # Since: 3.17.0
+
+
+@attrs.define
 class FoldingRangeClientCapabilities:
 
     dynamic_registration: Optional[bool] = attrs.field(
@@ -7598,8 +8118,7 @@ class FoldingRangeClientCapabilities:
     server capability as well."""
 
     range_limit: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator),
-        default=None,
+        validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The maximum number of folding ranges that the client prefers to receive
     per document. The value serves as a hint, servers are free to follow the
@@ -7613,13 +8132,17 @@ class FoldingRangeClientCapabilities:
     If set, client will ignore specified `startCharacter` and `endCharacter`
     properties in a FoldingRange."""
 
-    folding_range_kind: Optional["None"] = attrs.field(default=None)
+    folding_range_kind: Optional[
+        "FoldingRangeClientCapabilitiesFoldingRangeKindType"
+    ] = attrs.field(default=None)
     """Specific options for the folding range kind.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    folding_range: Optional["None"] = attrs.field(default=None)
+    folding_range: Optional[
+        "FoldingRangeClientCapabilitiesFoldingRangeType"
+    ] = attrs.field(default=None)
     """Specific options for the folding range.
     
     @since 3.17.0"""
@@ -7639,6 +8162,12 @@ class SelectionRangeClientCapabilities:
 
 
 @attrs.define
+class PublishDiagnosticsClientCapabilitiesTagSupportType:
+    value_set: List["DiagnosticTag"] = attrs.field()
+    """The tags supported by the client."""
+
+
+@attrs.define
 class PublishDiagnosticsClientCapabilities:
     """The publish diagnostic client capabilities."""
 
@@ -7648,7 +8177,9 @@ class PublishDiagnosticsClientCapabilities:
     )
     """Whether the clients accepts diagnostics with related information."""
 
-    tag_support: Optional["None"] = attrs.field(default=None)
+    tag_support: Optional[
+        "PublishDiagnosticsClientCapabilitiesTagSupportType"
+    ] = attrs.field(default=None)
     """Client supports the tag property to provide meta data about a diagnostic.
     Clients supporting tags have to handle unknown tags gracefully.
     
@@ -7702,12 +8233,35 @@ class CallHierarchyClientCapabilities:
 
 
 @attrs.define
+class SemanticTokensClientCapabilitiesRequestsTypeFullType1:
+    delta: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The client will send the `textDocument/semanticTokens/full/delta` request if
+    the server provides a corresponding handler."""
+
+
+@attrs.define
+class SemanticTokensClientCapabilitiesRequestsType:
+    range: Optional[Union[bool, Any]] = attrs.field(default=None)
+    """The client will send the `textDocument/semanticTokens/range` request if
+    the server provides a corresponding handler."""
+
+    full: Optional[
+        Union[bool, "SemanticTokensClientCapabilitiesRequestsTypeFullType1"]
+    ] = attrs.field(default=None)
+    """The client will send the `textDocument/semanticTokens/full` request if
+    the server provides a corresponding handler."""
+
+
+@attrs.define
 class SemanticTokensClientCapabilities:
     """@since 3.16.0"""
 
     # Since: 3.16.0
 
-    requests: "None" = attrs.field()
+    requests: "SemanticTokensClientCapabilitiesRequestsType" = attrs.field()
     """Which requests the client supports and might send to the server
     depending on the server's capability. Please note that clients might not
     show semantic tokens or degrade some of the user experience if a range
@@ -7843,6 +8397,12 @@ class InlineValueClientCapabilities:
 
 
 @attrs.define
+class InlayHintClientCapabilitiesResolveSupportType:
+    properties: List[str] = attrs.field()
+    """The properties that a client can resolve lazily."""
+
+
+@attrs.define
 class InlayHintClientCapabilities:
     """Inlay hint client capabilities.
 
@@ -7857,7 +8417,9 @@ class InlayHintClientCapabilities:
     )
     """Whether inlay hints support dynamic registration."""
 
-    resolve_support: Optional["None"] = attrs.field(default=None)
+    resolve_support: Optional[
+        "InlayHintClientCapabilitiesResolveSupportType"
+    ] = attrs.field(default=None)
     """Indicates which properties a client can resolve lazily on an inlay
     hint."""
 
@@ -7912,10 +8474,23 @@ class NotebookDocumentSyncClientCapabilities:
 
 
 @attrs.define
+class ShowMessageRequestClientCapabilitiesMessageActionItemType:
+    additional_properties_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client supports additional attributes which
+    are preserved and send back to the server in the
+    request's response."""
+
+
+@attrs.define
 class ShowMessageRequestClientCapabilities:
     """Show message request client capabilities."""
 
-    message_action_item: Optional["None"] = attrs.field(default=None)
+    message_action_item: Optional[
+        "ShowMessageRequestClientCapabilitiesMessageActionItemType"
+    ] = attrs.field(default=None)
     """Capabilities specific to the `MessageActionItem` type."""
 
 
@@ -8005,10 +8580,8 @@ class TextDocumentColorPresentationOptions:
 class ResponseError:
     code: int = attrs.field(validator=validators.integer_validator)
     """A number indicating the error type that occurred."""
-
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A string providing a short description of the error."""
-
     data: Optional[LSPAny] = attrs.field(default=None)
     """A primitive or structured value that contains additional information
     about the error. Can be omitted."""
@@ -8056,7 +8629,7 @@ class TextDocumentTypeDefinitionRequest:
     """A request to resolve the type definition locations of a symbol at a
     given text document position.
 
-    The request's parameter is of type [TextDocumentPositioParams]
+    The request's parameter is of type [TextDocumentPositionParams]
     (#TextDocumentPositionParams) the response is of type Definition or
     a Thenable that resolves to such.
     """
@@ -9925,658 +10498,752 @@ class ProgressNotification:
     jsonrpc: str = attrs.field(default="2.0")
 
 
+@enum.unique
+class MessageDirection(enum.Enum):
+    ClientToServer = "clientToServer"
+    ServerToClient = "serverToClient"
+    Both = "both"
+
+
+CALL_HIERARCHY_INCOMING_CALLS = "callHierarchy/incomingCalls"
+CALL_HIERARCHY_OUTGOING_CALLS = "callHierarchy/outgoingCalls"
+CANCEL_REQUEST = "$/cancelRequest"
+CLIENT_REGISTER_CAPABILITY = "client/registerCapability"
+CLIENT_UNREGISTER_CAPABILITY = "client/unregisterCapability"
+CODE_ACTION_RESOLVE = "codeAction/resolve"
+CODE_LENS_RESOLVE = "codeLens/resolve"
+COMPLETION_ITEM_RESOLVE = "completionItem/resolve"
+DOCUMENT_LINK_RESOLVE = "documentLink/resolve"
+EXIT = "exit"
+INITIALIZE = "initialize"
+INITIALIZED = "initialized"
+INLAY_HINT_RESOLVE = "inlayHint/resolve"
+LOG_TRACE = "$/logTrace"
+NOTEBOOK_DOCUMENT_DID_CHANGE = "notebookDocument/didChange"
+NOTEBOOK_DOCUMENT_DID_CLOSE = "notebookDocument/didClose"
+NOTEBOOK_DOCUMENT_DID_OPEN = "notebookDocument/didOpen"
+NOTEBOOK_DOCUMENT_DID_SAVE = "notebookDocument/didSave"
+PROGRESS = "$/progress"
+SET_TRACE = "$/setTrace"
+SHUTDOWN = "shutdown"
+TELEMETRY_EVENT = "telemetry/event"
+TEXT_DOCUMENT_CODE_ACTION = "textDocument/codeAction"
+TEXT_DOCUMENT_CODE_LENS = "textDocument/codeLens"
+TEXT_DOCUMENT_COLOR_PRESENTATION = "textDocument/colorPresentation"
+TEXT_DOCUMENT_COMPLETION = "textDocument/completion"
+TEXT_DOCUMENT_DECLARATION = "textDocument/declaration"
+TEXT_DOCUMENT_DEFINITION = "textDocument/definition"
+TEXT_DOCUMENT_DIAGNOSTIC = "textDocument/diagnostic"
+TEXT_DOCUMENT_DID_CHANGE = "textDocument/didChange"
+TEXT_DOCUMENT_DID_CLOSE = "textDocument/didClose"
+TEXT_DOCUMENT_DID_OPEN = "textDocument/didOpen"
+TEXT_DOCUMENT_DID_SAVE = "textDocument/didSave"
+TEXT_DOCUMENT_DOCUMENT_COLOR = "textDocument/documentColor"
+TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT = "textDocument/documentHighlight"
+TEXT_DOCUMENT_DOCUMENT_LINK = "textDocument/documentLink"
+TEXT_DOCUMENT_DOCUMENT_SYMBOL = "textDocument/documentSymbol"
+TEXT_DOCUMENT_FOLDING_RANGE = "textDocument/foldingRange"
+TEXT_DOCUMENT_FORMATTING = "textDocument/formatting"
+TEXT_DOCUMENT_HOVER = "textDocument/hover"
+TEXT_DOCUMENT_IMPLEMENTATION = "textDocument/implementation"
+TEXT_DOCUMENT_INLAY_HINT = "textDocument/inlayHint"
+TEXT_DOCUMENT_INLINE_VALUE = "textDocument/inlineValue"
+TEXT_DOCUMENT_LINKED_EDITING_RANGE = "textDocument/linkedEditingRange"
+TEXT_DOCUMENT_MONIKER = "textDocument/moniker"
+TEXT_DOCUMENT_ON_TYPE_FORMATTING = "textDocument/onTypeFormatting"
+TEXT_DOCUMENT_PREPARE_CALL_HIERARCHY = "textDocument/prepareCallHierarchy"
+TEXT_DOCUMENT_PREPARE_RENAME = "textDocument/prepareRename"
+TEXT_DOCUMENT_PREPARE_TYPE_HIERARCHY = "textDocument/prepareTypeHierarchy"
+TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS = "textDocument/publishDiagnostics"
+TEXT_DOCUMENT_RANGE_FORMATTING = "textDocument/rangeFormatting"
+TEXT_DOCUMENT_REFERENCES = "textDocument/references"
+TEXT_DOCUMENT_RENAME = "textDocument/rename"
+TEXT_DOCUMENT_SELECTION_RANGE = "textDocument/selectionRange"
+TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL = "textDocument/semanticTokens/full"
+TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL_DELTA = "textDocument/semanticTokens/full/delta"
+TEXT_DOCUMENT_SEMANTIC_TOKENS_RANGE = "textDocument/semanticTokens/range"
+TEXT_DOCUMENT_SIGNATURE_HELP = "textDocument/signatureHelp"
+TEXT_DOCUMENT_TYPE_DEFINITION = "textDocument/typeDefinition"
+TEXT_DOCUMENT_WILL_SAVE = "textDocument/willSave"
+TEXT_DOCUMENT_WILL_SAVE_WAIT_UNTIL = "textDocument/willSaveWaitUntil"
+TYPE_HIERARCHY_SUBTYPES = "typeHierarchy/subtypes"
+TYPE_HIERARCHY_SUPERTYPES = "typeHierarchy/supertypes"
+WINDOW_LOG_MESSAGE = "window/logMessage"
+WINDOW_SHOW_DOCUMENT = "window/showDocument"
+WINDOW_SHOW_MESSAGE = "window/showMessage"
+WINDOW_SHOW_MESSAGE_REQUEST = "window/showMessageRequest"
+WINDOW_WORK_DONE_PROGRESS_CANCEL = "window/workDoneProgress/cancel"
+WINDOW_WORK_DONE_PROGRESS_CREATE = "window/workDoneProgress/create"
+WORKSPACE_APPLY_EDIT = "workspace/applyEdit"
+WORKSPACE_CODE_LENS_REFRESH = "workspace/codeLens/refresh"
+WORKSPACE_CONFIGURATION = "workspace/configuration"
+WORKSPACE_DIAGNOSTIC = "workspace/diagnostic"
+WORKSPACE_DIAGNOSTIC_REFRESH = "workspace/diagnostic/refresh"
+WORKSPACE_DID_CHANGE_CONFIGURATION = "workspace/didChangeConfiguration"
+WORKSPACE_DID_CHANGE_WATCHED_FILES = "workspace/didChangeWatchedFiles"
+WORKSPACE_DID_CHANGE_WORKSPACE_FOLDERS = "workspace/didChangeWorkspaceFolders"
+WORKSPACE_DID_CREATE_FILES = "workspace/didCreateFiles"
+WORKSPACE_DID_DELETE_FILES = "workspace/didDeleteFiles"
+WORKSPACE_DID_RENAME_FILES = "workspace/didRenameFiles"
+WORKSPACE_EXECUTE_COMMAND = "workspace/executeCommand"
+WORKSPACE_INLAY_HINT_REFRESH = "workspace/inlayHint/refresh"
+WORKSPACE_INLINE_VALUE_REFRESH = "workspace/inlineValue/refresh"
+WORKSPACE_SEMANTIC_TOKENS_REFRESH = "workspace/semanticTokens/refresh"
+WORKSPACE_SYMBOL = "workspace/symbol"
+WORKSPACE_SYMBOL_RESOLVE = "workspaceSymbol/resolve"
+WORKSPACE_WILL_CREATE_FILES = "workspace/willCreateFiles"
+WORKSPACE_WILL_DELETE_FILES = "workspace/willDeleteFiles"
+WORKSPACE_WILL_RENAME_FILES = "workspace/willRenameFiles"
+WORKSPACE_WORKSPACE_FOLDERS = "workspace/workspaceFolders"
+
 METHOD_TO_TYPES = {
-    "textDocument/implementation": (
-        TextDocumentImplementationRequest,
-        TextDocumentImplementationResponse,
-        ImplementationParams,
-        ImplementationRegistrationOptions,
-    ),
-    "textDocument/typeDefinition": (
-        TextDocumentTypeDefinitionRequest,
-        TextDocumentTypeDefinitionResponse,
-        TypeDefinitionParams,
-        TypeDefinitionRegistrationOptions,
-    ),
-    "workspace/workspaceFolders": (
-        WorkspaceWorkspaceFoldersRequest,
-        WorkspaceWorkspaceFoldersResponse,
-        None,
-        None,
-    ),
-    "workspace/configuration": (
-        WorkspaceConfigurationRequest,
-        WorkspaceConfigurationResponse,
-        WorkspaceConfigurationParams,
-        None,
-    ),
-    "textDocument/documentColor": (
-        TextDocumentDocumentColorRequest,
-        TextDocumentDocumentColorResponse,
-        DocumentColorParams,
-        DocumentColorRegistrationOptions,
-    ),
-    "textDocument/colorPresentation": (
-        TextDocumentColorPresentationRequest,
-        TextDocumentColorPresentationResponse,
-        ColorPresentationParams,
-        TextDocumentColorPresentationOptions,
-    ),
-    "textDocument/foldingRange": (
-        TextDocumentFoldingRangeRequest,
-        TextDocumentFoldingRangeResponse,
-        FoldingRangeParams,
-        FoldingRangeRegistrationOptions,
-    ),
-    "textDocument/declaration": (
-        TextDocumentDeclarationRequest,
-        TextDocumentDeclarationResponse,
-        DeclarationParams,
-        DeclarationRegistrationOptions,
-    ),
-    "textDocument/selectionRange": (
-        TextDocumentSelectionRangeRequest,
-        TextDocumentSelectionRangeResponse,
-        SelectionRangeParams,
-        SelectionRangeRegistrationOptions,
-    ),
-    "window/workDoneProgress/create": (
-        WindowWorkDoneProgressCreateRequest,
-        WindowWorkDoneProgressCreateResponse,
-        WorkDoneProgressCreateParams,
-        None,
-    ),
-    "textDocument/prepareCallHierarchy": (
-        TextDocumentPrepareCallHierarchyRequest,
-        TextDocumentPrepareCallHierarchyResponse,
-        CallHierarchyPrepareParams,
-        CallHierarchyRegistrationOptions,
-    ),
-    "callHierarchy/incomingCalls": (
+    # Requests
+    CALL_HIERARCHY_INCOMING_CALLS: (
         CallHierarchyIncomingCallsRequest,
         CallHierarchyIncomingCallsResponse,
         CallHierarchyIncomingCallsParams,
         None,
     ),
-    "callHierarchy/outgoingCalls": (
+    CALL_HIERARCHY_OUTGOING_CALLS: (
         CallHierarchyOutgoingCallsRequest,
         CallHierarchyOutgoingCallsResponse,
         CallHierarchyOutgoingCallsParams,
         None,
     ),
-    "textDocument/semanticTokens/full": (
-        TextDocumentSemanticTokensFullRequest,
-        TextDocumentSemanticTokensFullResponse,
-        SemanticTokensParams,
-        SemanticTokensRegistrationOptions,
-    ),
-    "textDocument/semanticTokens/full/delta": (
-        TextDocumentSemanticTokensFullDeltaRequest,
-        TextDocumentSemanticTokensFullDeltaResponse,
-        SemanticTokensDeltaParams,
-        SemanticTokensRegistrationOptions,
-    ),
-    "textDocument/semanticTokens/range": (
-        TextDocumentSemanticTokensRangeRequest,
-        TextDocumentSemanticTokensRangeResponse,
-        SemanticTokensRangeParams,
-        None,
-    ),
-    "workspace/semanticTokens/refresh": (
-        WorkspaceSemanticTokensRefreshRequest,
-        WorkspaceSemanticTokensRefreshResponse,
-        None,
-        None,
-    ),
-    "window/showDocument": (
-        WindowShowDocumentRequest,
-        WindowShowDocumentResponse,
-        ShowDocumentParams,
-        None,
-    ),
-    "textDocument/linkedEditingRange": (
-        TextDocumentLinkedEditingRangeRequest,
-        TextDocumentLinkedEditingRangeResponse,
-        LinkedEditingRangeParams,
-        LinkedEditingRangeRegistrationOptions,
-    ),
-    "workspace/willCreateFiles": (
-        WorkspaceWillCreateFilesRequest,
-        WorkspaceWillCreateFilesResponse,
-        CreateFilesParams,
-        FileOperationRegistrationOptions,
-    ),
-    "workspace/willRenameFiles": (
-        WorkspaceWillRenameFilesRequest,
-        WorkspaceWillRenameFilesResponse,
-        RenameFilesParams,
-        FileOperationRegistrationOptions,
-    ),
-    "workspace/willDeleteFiles": (
-        WorkspaceWillDeleteFilesRequest,
-        WorkspaceWillDeleteFilesResponse,
-        DeleteFilesParams,
-        FileOperationRegistrationOptions,
-    ),
-    "textDocument/moniker": (
-        TextDocumentMonikerRequest,
-        TextDocumentMonikerResponse,
-        MonikerParams,
-        MonikerRegistrationOptions,
-    ),
-    "textDocument/prepareTypeHierarchy": (
-        TextDocumentPrepareTypeHierarchyRequest,
-        TextDocumentPrepareTypeHierarchyResponse,
-        TypeHierarchyPrepareParams,
-        TypeHierarchyRegistrationOptions,
-    ),
-    "typeHierarchy/supertypes": (
-        TypeHierarchySupertypesRequest,
-        TypeHierarchySupertypesResponse,
-        TypeHierarchySupertypesParams,
-        None,
-    ),
-    "typeHierarchy/subtypes": (
-        TypeHierarchySubtypesRequest,
-        TypeHierarchySubtypesResponse,
-        TypeHierarchySubtypesParams,
-        None,
-    ),
-    "textDocument/inlineValue": (
-        TextDocumentInlineValueRequest,
-        TextDocumentInlineValueResponse,
-        InlineValueParams,
-        InlineValueRegistrationOptions,
-    ),
-    "workspace/inlineValue/refresh": (
-        WorkspaceInlineValueRefreshRequest,
-        WorkspaceInlineValueRefreshResponse,
-        None,
-        None,
-    ),
-    "textDocument/inlayHint": (
-        TextDocumentInlayHintRequest,
-        TextDocumentInlayHintResponse,
-        InlayHintParams,
-        InlayHintRegistrationOptions,
-    ),
-    "inlayHint/resolve": (
-        InlayHintResolveRequest,
-        InlayHintResolveResponse,
-        InlayHint,
-        None,
-    ),
-    "workspace/inlayHint/refresh": (
-        WorkspaceInlayHintRefreshRequest,
-        WorkspaceInlayHintRefreshResponse,
-        None,
-        None,
-    ),
-    "textDocument/diagnostic": (
-        TextDocumentDiagnosticRequest,
-        TextDocumentDiagnosticResponse,
-        DocumentDiagnosticParams,
-        DiagnosticRegistrationOptions,
-    ),
-    "workspace/diagnostic": (
-        WorkspaceDiagnosticRequest,
-        WorkspaceDiagnosticResponse,
-        WorkspaceDiagnosticParams,
-        None,
-    ),
-    "workspace/diagnostic/refresh": (
-        WorkspaceDiagnosticRefreshRequest,
-        WorkspaceDiagnosticRefreshResponse,
-        None,
-        None,
-    ),
-    "client/registerCapability": (
+    CLIENT_REGISTER_CAPABILITY: (
         ClientRegisterCapabilityRequest,
         ClientRegisterCapabilityResponse,
         RegistrationParams,
         None,
     ),
-    "client/unregisterCapability": (
+    CLIENT_UNREGISTER_CAPABILITY: (
         ClientUnregisterCapabilityRequest,
         ClientUnregisterCapabilityResponse,
         UnregistrationParams,
         None,
     ),
-    "initialize": (InitializeRequest, InitializeResponse, InitializeParams, None),
-    "shutdown": (ShutdownRequest, ShutdownResponse, None, None),
-    "window/showMessageRequest": (
-        WindowShowMessageRequestRequest,
-        WindowShowMessageRequestResponse,
-        ShowMessageRequestParams,
-        None,
-    ),
-    "textDocument/willSaveWaitUntil": (
-        TextDocumentWillSaveWaitUntilRequest,
-        TextDocumentWillSaveWaitUntilResponse,
-        WillSaveTextDocumentParams,
-        TextDocumentRegistrationOptions,
-    ),
-    "textDocument/completion": (
-        TextDocumentCompletionRequest,
-        TextDocumentCompletionResponse,
-        CompletionParams,
-        CompletionRegistrationOptions,
-    ),
-    "completionItem/resolve": (
-        CompletionItemResolveRequest,
-        CompletionItemResolveResponse,
-        CompletionItem,
-        None,
-    ),
-    "textDocument/hover": (
-        TextDocumentHoverRequest,
-        TextDocumentHoverResponse,
-        HoverParams,
-        HoverRegistrationOptions,
-    ),
-    "textDocument/signatureHelp": (
-        TextDocumentSignatureHelpRequest,
-        TextDocumentSignatureHelpResponse,
-        SignatureHelpParams,
-        SignatureHelpRegistrationOptions,
-    ),
-    "textDocument/definition": (
-        TextDocumentDefinitionRequest,
-        TextDocumentDefinitionResponse,
-        DefinitionParams,
-        DefinitionRegistrationOptions,
-    ),
-    "textDocument/references": (
-        TextDocumentReferencesRequest,
-        TextDocumentReferencesResponse,
-        ReferenceParams,
-        ReferenceRegistrationOptions,
-    ),
-    "textDocument/documentHighlight": (
-        TextDocumentDocumentHighlightRequest,
-        TextDocumentDocumentHighlightResponse,
-        DocumentHighlightParams,
-        DocumentHighlightRegistrationOptions,
-    ),
-    "textDocument/documentSymbol": (
-        TextDocumentDocumentSymbolRequest,
-        TextDocumentDocumentSymbolResponse,
-        DocumentSymbolParams,
-        DocumentSymbolRegistrationOptions,
-    ),
-    "textDocument/codeAction": (
-        TextDocumentCodeActionRequest,
-        TextDocumentCodeActionResponse,
-        CodeActionParams,
-        CodeActionRegistrationOptions,
-    ),
-    "codeAction/resolve": (
+    CODE_ACTION_RESOLVE: (
         CodeActionResolveRequest,
         CodeActionResolveResponse,
         CodeAction,
         None,
     ),
-    "workspace/symbol": (
-        WorkspaceSymbolRequest,
-        WorkspaceSymbolResponse,
-        WorkspaceSymbolParams,
-        WorkspaceSymbolRegistrationOptions,
-    ),
-    "workspaceSymbol/resolve": (
-        WorkspaceSymbolResolveRequest,
-        WorkspaceSymbolResolveResponse,
-        WorkspaceSymbol,
-        None,
-    ),
-    "textDocument/codeLens": (
-        TextDocumentCodeLensRequest,
-        TextDocumentCodeLensResponse,
-        CodeLensParams,
-        CodeLensRegistrationOptions,
-    ),
-    "codeLens/resolve": (
+    CODE_LENS_RESOLVE: (
         CodeLensResolveRequest,
         CodeLensResolveResponse,
         CodeLens,
         None,
     ),
-    "workspace/codeLens/refresh": (
-        WorkspaceCodeLensRefreshRequest,
-        WorkspaceCodeLensRefreshResponse,
-        None,
+    COMPLETION_ITEM_RESOLVE: (
+        CompletionItemResolveRequest,
+        CompletionItemResolveResponse,
+        CompletionItem,
         None,
     ),
-    "textDocument/documentLink": (
-        TextDocumentDocumentLinkRequest,
-        TextDocumentDocumentLinkResponse,
-        DocumentLinkParams,
-        DocumentLinkRegistrationOptions,
-    ),
-    "documentLink/resolve": (
+    DOCUMENT_LINK_RESOLVE: (
         DocumentLinkResolveRequest,
         DocumentLinkResolveResponse,
         DocumentLink,
         None,
     ),
-    "textDocument/formatting": (
+    INITIALIZE: (InitializeRequest, InitializeResponse, InitializeParams, None),
+    INLAY_HINT_RESOLVE: (
+        InlayHintResolveRequest,
+        InlayHintResolveResponse,
+        InlayHint,
+        None,
+    ),
+    SHUTDOWN: (ShutdownRequest, ShutdownResponse, None, None),
+    TEXT_DOCUMENT_CODE_ACTION: (
+        TextDocumentCodeActionRequest,
+        TextDocumentCodeActionResponse,
+        CodeActionParams,
+        CodeActionRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_CODE_LENS: (
+        TextDocumentCodeLensRequest,
+        TextDocumentCodeLensResponse,
+        CodeLensParams,
+        CodeLensRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_COLOR_PRESENTATION: (
+        TextDocumentColorPresentationRequest,
+        TextDocumentColorPresentationResponse,
+        ColorPresentationParams,
+        TextDocumentColorPresentationOptions,
+    ),
+    TEXT_DOCUMENT_COMPLETION: (
+        TextDocumentCompletionRequest,
+        TextDocumentCompletionResponse,
+        CompletionParams,
+        CompletionRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DECLARATION: (
+        TextDocumentDeclarationRequest,
+        TextDocumentDeclarationResponse,
+        DeclarationParams,
+        DeclarationRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DEFINITION: (
+        TextDocumentDefinitionRequest,
+        TextDocumentDefinitionResponse,
+        DefinitionParams,
+        DefinitionRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DIAGNOSTIC: (
+        TextDocumentDiagnosticRequest,
+        TextDocumentDiagnosticResponse,
+        DocumentDiagnosticParams,
+        DiagnosticRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DOCUMENT_COLOR: (
+        TextDocumentDocumentColorRequest,
+        TextDocumentDocumentColorResponse,
+        DocumentColorParams,
+        DocumentColorRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT: (
+        TextDocumentDocumentHighlightRequest,
+        TextDocumentDocumentHighlightResponse,
+        DocumentHighlightParams,
+        DocumentHighlightRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DOCUMENT_LINK: (
+        TextDocumentDocumentLinkRequest,
+        TextDocumentDocumentLinkResponse,
+        DocumentLinkParams,
+        DocumentLinkRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DOCUMENT_SYMBOL: (
+        TextDocumentDocumentSymbolRequest,
+        TextDocumentDocumentSymbolResponse,
+        DocumentSymbolParams,
+        DocumentSymbolRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_FOLDING_RANGE: (
+        TextDocumentFoldingRangeRequest,
+        TextDocumentFoldingRangeResponse,
+        FoldingRangeParams,
+        FoldingRangeRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_FORMATTING: (
         TextDocumentFormattingRequest,
         TextDocumentFormattingResponse,
         DocumentFormattingParams,
         DocumentFormattingRegistrationOptions,
     ),
-    "textDocument/rangeFormatting": (
-        TextDocumentRangeFormattingRequest,
-        TextDocumentRangeFormattingResponse,
-        DocumentRangeFormattingParams,
-        DocumentRangeFormattingRegistrationOptions,
+    TEXT_DOCUMENT_HOVER: (
+        TextDocumentHoverRequest,
+        TextDocumentHoverResponse,
+        HoverParams,
+        HoverRegistrationOptions,
     ),
-    "textDocument/onTypeFormatting": (
+    TEXT_DOCUMENT_IMPLEMENTATION: (
+        TextDocumentImplementationRequest,
+        TextDocumentImplementationResponse,
+        ImplementationParams,
+        ImplementationRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_INLAY_HINT: (
+        TextDocumentInlayHintRequest,
+        TextDocumentInlayHintResponse,
+        InlayHintParams,
+        InlayHintRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_INLINE_VALUE: (
+        TextDocumentInlineValueRequest,
+        TextDocumentInlineValueResponse,
+        InlineValueParams,
+        InlineValueRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_LINKED_EDITING_RANGE: (
+        TextDocumentLinkedEditingRangeRequest,
+        TextDocumentLinkedEditingRangeResponse,
+        LinkedEditingRangeParams,
+        LinkedEditingRangeRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_MONIKER: (
+        TextDocumentMonikerRequest,
+        TextDocumentMonikerResponse,
+        MonikerParams,
+        MonikerRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_ON_TYPE_FORMATTING: (
         TextDocumentOnTypeFormattingRequest,
         TextDocumentOnTypeFormattingResponse,
         DocumentOnTypeFormattingParams,
         DocumentOnTypeFormattingRegistrationOptions,
     ),
-    "textDocument/rename": (
-        TextDocumentRenameRequest,
-        TextDocumentRenameResponse,
-        RenameParams,
-        RenameRegistrationOptions,
+    TEXT_DOCUMENT_PREPARE_CALL_HIERARCHY: (
+        TextDocumentPrepareCallHierarchyRequest,
+        TextDocumentPrepareCallHierarchyResponse,
+        CallHierarchyPrepareParams,
+        CallHierarchyRegistrationOptions,
     ),
-    "textDocument/prepareRename": (
+    TEXT_DOCUMENT_PREPARE_RENAME: (
         TextDocumentPrepareRenameRequest,
         TextDocumentPrepareRenameResponse,
         PrepareRenameParams,
         None,
     ),
-    "workspace/executeCommand": (
-        WorkspaceExecuteCommandRequest,
-        WorkspaceExecuteCommandResponse,
-        ExecuteCommandParams,
-        ExecuteCommandRegistrationOptions,
+    TEXT_DOCUMENT_PREPARE_TYPE_HIERARCHY: (
+        TextDocumentPrepareTypeHierarchyRequest,
+        TextDocumentPrepareTypeHierarchyResponse,
+        TypeHierarchyPrepareParams,
+        TypeHierarchyRegistrationOptions,
     ),
-    "workspace/applyEdit": (
+    TEXT_DOCUMENT_RANGE_FORMATTING: (
+        TextDocumentRangeFormattingRequest,
+        TextDocumentRangeFormattingResponse,
+        DocumentRangeFormattingParams,
+        DocumentRangeFormattingRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_REFERENCES: (
+        TextDocumentReferencesRequest,
+        TextDocumentReferencesResponse,
+        ReferenceParams,
+        ReferenceRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_RENAME: (
+        TextDocumentRenameRequest,
+        TextDocumentRenameResponse,
+        RenameParams,
+        RenameRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_SELECTION_RANGE: (
+        TextDocumentSelectionRangeRequest,
+        TextDocumentSelectionRangeResponse,
+        SelectionRangeParams,
+        SelectionRangeRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL: (
+        TextDocumentSemanticTokensFullRequest,
+        TextDocumentSemanticTokensFullResponse,
+        SemanticTokensParams,
+        SemanticTokensRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL_DELTA: (
+        TextDocumentSemanticTokensFullDeltaRequest,
+        TextDocumentSemanticTokensFullDeltaResponse,
+        SemanticTokensDeltaParams,
+        SemanticTokensRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_SEMANTIC_TOKENS_RANGE: (
+        TextDocumentSemanticTokensRangeRequest,
+        TextDocumentSemanticTokensRangeResponse,
+        SemanticTokensRangeParams,
+        None,
+    ),
+    TEXT_DOCUMENT_SIGNATURE_HELP: (
+        TextDocumentSignatureHelpRequest,
+        TextDocumentSignatureHelpResponse,
+        SignatureHelpParams,
+        SignatureHelpRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_TYPE_DEFINITION: (
+        TextDocumentTypeDefinitionRequest,
+        TextDocumentTypeDefinitionResponse,
+        TypeDefinitionParams,
+        TypeDefinitionRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_WILL_SAVE_WAIT_UNTIL: (
+        TextDocumentWillSaveWaitUntilRequest,
+        TextDocumentWillSaveWaitUntilResponse,
+        WillSaveTextDocumentParams,
+        TextDocumentRegistrationOptions,
+    ),
+    TYPE_HIERARCHY_SUBTYPES: (
+        TypeHierarchySubtypesRequest,
+        TypeHierarchySubtypesResponse,
+        TypeHierarchySubtypesParams,
+        None,
+    ),
+    TYPE_HIERARCHY_SUPERTYPES: (
+        TypeHierarchySupertypesRequest,
+        TypeHierarchySupertypesResponse,
+        TypeHierarchySupertypesParams,
+        None,
+    ),
+    WINDOW_SHOW_DOCUMENT: (
+        WindowShowDocumentRequest,
+        WindowShowDocumentResponse,
+        ShowDocumentParams,
+        None,
+    ),
+    WINDOW_SHOW_MESSAGE_REQUEST: (
+        WindowShowMessageRequestRequest,
+        WindowShowMessageRequestResponse,
+        ShowMessageRequestParams,
+        None,
+    ),
+    WINDOW_WORK_DONE_PROGRESS_CREATE: (
+        WindowWorkDoneProgressCreateRequest,
+        WindowWorkDoneProgressCreateResponse,
+        WorkDoneProgressCreateParams,
+        None,
+    ),
+    WORKSPACE_APPLY_EDIT: (
         WorkspaceApplyEditRequest,
         WorkspaceApplyEditResponse,
         ApplyWorkspaceEditParams,
         None,
     ),
-    "workspace/didChangeWorkspaceFolders": (
-        WorkspaceDidChangeWorkspaceFoldersNotification,
+    WORKSPACE_CODE_LENS_REFRESH: (
+        WorkspaceCodeLensRefreshRequest,
+        WorkspaceCodeLensRefreshResponse,
         None,
-        DidChangeWorkspaceFoldersParams,
-        None,
-    ),
-    "window/workDoneProgress/cancel": (
-        WindowWorkDoneProgressCancelNotification,
-        None,
-        WorkDoneProgressCancelParams,
         None,
     ),
-    "workspace/didCreateFiles": (
-        WorkspaceDidCreateFilesNotification,
+    WORKSPACE_CONFIGURATION: (
+        WorkspaceConfigurationRequest,
+        WorkspaceConfigurationResponse,
+        WorkspaceConfigurationParams,
         None,
+    ),
+    WORKSPACE_DIAGNOSTIC: (
+        WorkspaceDiagnosticRequest,
+        WorkspaceDiagnosticResponse,
+        WorkspaceDiagnosticParams,
+        None,
+    ),
+    WORKSPACE_DIAGNOSTIC_REFRESH: (
+        WorkspaceDiagnosticRefreshRequest,
+        WorkspaceDiagnosticRefreshResponse,
+        None,
+        None,
+    ),
+    WORKSPACE_EXECUTE_COMMAND: (
+        WorkspaceExecuteCommandRequest,
+        WorkspaceExecuteCommandResponse,
+        ExecuteCommandParams,
+        ExecuteCommandRegistrationOptions,
+    ),
+    WORKSPACE_INLAY_HINT_REFRESH: (
+        WorkspaceInlayHintRefreshRequest,
+        WorkspaceInlayHintRefreshResponse,
+        None,
+        None,
+    ),
+    WORKSPACE_INLINE_VALUE_REFRESH: (
+        WorkspaceInlineValueRefreshRequest,
+        WorkspaceInlineValueRefreshResponse,
+        None,
+        None,
+    ),
+    WORKSPACE_SEMANTIC_TOKENS_REFRESH: (
+        WorkspaceSemanticTokensRefreshRequest,
+        WorkspaceSemanticTokensRefreshResponse,
+        None,
+        None,
+    ),
+    WORKSPACE_SYMBOL: (
+        WorkspaceSymbolRequest,
+        WorkspaceSymbolResponse,
+        WorkspaceSymbolParams,
+        WorkspaceSymbolRegistrationOptions,
+    ),
+    WORKSPACE_SYMBOL_RESOLVE: (
+        WorkspaceSymbolResolveRequest,
+        WorkspaceSymbolResolveResponse,
+        WorkspaceSymbol,
+        None,
+    ),
+    WORKSPACE_WILL_CREATE_FILES: (
+        WorkspaceWillCreateFilesRequest,
+        WorkspaceWillCreateFilesResponse,
         CreateFilesParams,
         FileOperationRegistrationOptions,
     ),
-    "workspace/didRenameFiles": (
-        WorkspaceDidRenameFilesNotification,
-        None,
-        RenameFilesParams,
-        FileOperationRegistrationOptions,
-    ),
-    "workspace/didDeleteFiles": (
-        WorkspaceDidDeleteFilesNotification,
-        None,
+    WORKSPACE_WILL_DELETE_FILES: (
+        WorkspaceWillDeleteFilesRequest,
+        WorkspaceWillDeleteFilesResponse,
         DeleteFilesParams,
         FileOperationRegistrationOptions,
     ),
-    "notebookDocument/didOpen": (
-        NotebookDocumentDidOpenNotification,
+    WORKSPACE_WILL_RENAME_FILES: (
+        WorkspaceWillRenameFilesRequest,
+        WorkspaceWillRenameFilesResponse,
+        RenameFilesParams,
+        FileOperationRegistrationOptions,
+    ),
+    WORKSPACE_WORKSPACE_FOLDERS: (
+        WorkspaceWorkspaceFoldersRequest,
+        WorkspaceWorkspaceFoldersResponse,
         None,
-        DidOpenNotebookDocumentParams,
         None,
     ),
-    "notebookDocument/didChange": (
+    # Notifications
+    CANCEL_REQUEST: (CancelRequestNotification, None, CancelParams, None),
+    EXIT: (ExitNotification, None, None, None),
+    INITIALIZED: (InitializedNotification, None, InitializedParams, None),
+    LOG_TRACE: (LogTraceNotification, None, LogTraceParams, None),
+    NOTEBOOK_DOCUMENT_DID_CHANGE: (
         NotebookDocumentDidChangeNotification,
         None,
         DidChangeNotebookDocumentParams,
         None,
     ),
-    "notebookDocument/didSave": (
-        NotebookDocumentDidSaveNotification,
-        None,
-        DidSaveNotebookDocumentParams,
-        None,
-    ),
-    "notebookDocument/didClose": (
+    NOTEBOOK_DOCUMENT_DID_CLOSE: (
         NotebookDocumentDidCloseNotification,
         None,
         DidCloseNotebookDocumentParams,
         None,
     ),
-    "initialized": (InitializedNotification, None, InitializedParams, None),
-    "exit": (ExitNotification, None, None, None),
-    "workspace/didChangeConfiguration": (
-        WorkspaceDidChangeConfigurationNotification,
+    NOTEBOOK_DOCUMENT_DID_OPEN: (
+        NotebookDocumentDidOpenNotification,
         None,
-        DidChangeConfigurationParams,
-        DidChangeConfigurationRegistrationOptions,
-    ),
-    "window/showMessage": (
-        WindowShowMessageNotification,
-        None,
-        ShowMessageParams,
+        DidOpenNotebookDocumentParams,
         None,
     ),
-    "window/logMessage": (WindowLogMessageNotification, None, LogMessageParams, None),
-    "telemetry/event": (TelemetryEventNotification, None, LSPAny, None),
-    "textDocument/didOpen": (
-        TextDocumentDidOpenNotification,
+    NOTEBOOK_DOCUMENT_DID_SAVE: (
+        NotebookDocumentDidSaveNotification,
         None,
-        DidOpenTextDocumentParams,
-        TextDocumentRegistrationOptions,
+        DidSaveNotebookDocumentParams,
+        None,
     ),
-    "textDocument/didChange": (
+    PROGRESS: (ProgressNotification, None, ProgressParams, None),
+    SET_TRACE: (SetTraceNotification, None, SetTraceParams, None),
+    TELEMETRY_EVENT: (TelemetryEventNotification, None, LSPAny, None),
+    TEXT_DOCUMENT_DID_CHANGE: (
         TextDocumentDidChangeNotification,
         None,
         DidChangeTextDocumentParams,
         TextDocumentChangeRegistrationOptions,
     ),
-    "textDocument/didClose": (
+    TEXT_DOCUMENT_DID_CLOSE: (
         TextDocumentDidCloseNotification,
         None,
         DidCloseTextDocumentParams,
         TextDocumentRegistrationOptions,
     ),
-    "textDocument/didSave": (
+    TEXT_DOCUMENT_DID_OPEN: (
+        TextDocumentDidOpenNotification,
+        None,
+        DidOpenTextDocumentParams,
+        TextDocumentRegistrationOptions,
+    ),
+    TEXT_DOCUMENT_DID_SAVE: (
         TextDocumentDidSaveNotification,
         None,
         DidSaveTextDocumentParams,
         TextDocumentSaveRegistrationOptions,
     ),
-    "textDocument/willSave": (
-        TextDocumentWillSaveNotification,
-        None,
-        WillSaveTextDocumentParams,
-        TextDocumentRegistrationOptions,
-    ),
-    "workspace/didChangeWatchedFiles": (
-        WorkspaceDidChangeWatchedFilesNotification,
-        None,
-        DidChangeWatchedFilesParams,
-        DidChangeWatchedFilesRegistrationOptions,
-    ),
-    "textDocument/publishDiagnostics": (
+    TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS: (
         TextDocumentPublishDiagnosticsNotification,
         None,
         PublishDiagnosticsParams,
         None,
     ),
-    "$/setTrace": (SetTraceNotification, None, SetTraceParams, None),
-    "$/logTrace": (LogTraceNotification, None, LogTraceParams, None),
-    "$/cancelRequest": (CancelRequestNotification, None, CancelParams, None),
-    "$/progress": (ProgressNotification, None, ProgressParams, None),
+    TEXT_DOCUMENT_WILL_SAVE: (
+        TextDocumentWillSaveNotification,
+        None,
+        WillSaveTextDocumentParams,
+        TextDocumentRegistrationOptions,
+    ),
+    WINDOW_LOG_MESSAGE: (WindowLogMessageNotification, None, LogMessageParams, None),
+    WINDOW_SHOW_MESSAGE: (WindowShowMessageNotification, None, ShowMessageParams, None),
+    WINDOW_WORK_DONE_PROGRESS_CANCEL: (
+        WindowWorkDoneProgressCancelNotification,
+        None,
+        WorkDoneProgressCancelParams,
+        None,
+    ),
+    WORKSPACE_DID_CHANGE_CONFIGURATION: (
+        WorkspaceDidChangeConfigurationNotification,
+        None,
+        DidChangeConfigurationParams,
+        DidChangeConfigurationRegistrationOptions,
+    ),
+    WORKSPACE_DID_CHANGE_WATCHED_FILES: (
+        WorkspaceDidChangeWatchedFilesNotification,
+        None,
+        DidChangeWatchedFilesParams,
+        DidChangeWatchedFilesRegistrationOptions,
+    ),
+    WORKSPACE_DID_CHANGE_WORKSPACE_FOLDERS: (
+        WorkspaceDidChangeWorkspaceFoldersNotification,
+        None,
+        DidChangeWorkspaceFoldersParams,
+        None,
+    ),
+    WORKSPACE_DID_CREATE_FILES: (
+        WorkspaceDidCreateFilesNotification,
+        None,
+        CreateFilesParams,
+        FileOperationRegistrationOptions,
+    ),
+    WORKSPACE_DID_DELETE_FILES: (
+        WorkspaceDidDeleteFilesNotification,
+        None,
+        DeleteFilesParams,
+        FileOperationRegistrationOptions,
+    ),
+    WORKSPACE_DID_RENAME_FILES: (
+        WorkspaceDidRenameFilesNotification,
+        None,
+        RenameFilesParams,
+        FileOperationRegistrationOptions,
+    ),
 }
-
 REQUESTS = Union[
-    TextDocumentImplementationRequest,
-    TextDocumentTypeDefinitionRequest,
-    WorkspaceWorkspaceFoldersRequest,
-    WorkspaceConfigurationRequest,
-    TextDocumentDocumentColorRequest,
-    TextDocumentColorPresentationRequest,
-    TextDocumentFoldingRangeRequest,
-    TextDocumentDeclarationRequest,
-    TextDocumentSelectionRangeRequest,
-    WindowWorkDoneProgressCreateRequest,
-    TextDocumentPrepareCallHierarchyRequest,
     CallHierarchyIncomingCallsRequest,
     CallHierarchyOutgoingCallsRequest,
-    TextDocumentSemanticTokensFullRequest,
-    TextDocumentSemanticTokensFullDeltaRequest,
-    TextDocumentSemanticTokensRangeRequest,
-    WorkspaceSemanticTokensRefreshRequest,
-    WindowShowDocumentRequest,
-    TextDocumentLinkedEditingRangeRequest,
-    WorkspaceWillCreateFilesRequest,
-    WorkspaceWillRenameFilesRequest,
-    WorkspaceWillDeleteFilesRequest,
-    TextDocumentMonikerRequest,
-    TextDocumentPrepareTypeHierarchyRequest,
-    TypeHierarchySupertypesRequest,
-    TypeHierarchySubtypesRequest,
-    TextDocumentInlineValueRequest,
-    WorkspaceInlineValueRefreshRequest,
-    TextDocumentInlayHintRequest,
-    InlayHintResolveRequest,
-    WorkspaceInlayHintRefreshRequest,
-    TextDocumentDiagnosticRequest,
-    WorkspaceDiagnosticRequest,
-    WorkspaceDiagnosticRefreshRequest,
     ClientRegisterCapabilityRequest,
     ClientUnregisterCapabilityRequest,
-    InitializeRequest,
-    ShutdownRequest,
-    WindowShowMessageRequestRequest,
-    TextDocumentWillSaveWaitUntilRequest,
-    TextDocumentCompletionRequest,
-    CompletionItemResolveRequest,
-    TextDocumentHoverRequest,
-    TextDocumentSignatureHelpRequest,
-    TextDocumentDefinitionRequest,
-    TextDocumentReferencesRequest,
-    TextDocumentDocumentHighlightRequest,
-    TextDocumentDocumentSymbolRequest,
-    TextDocumentCodeActionRequest,
     CodeActionResolveRequest,
+    CodeLensResolveRequest,
+    CompletionItemResolveRequest,
+    DocumentLinkResolveRequest,
+    InitializeRequest,
+    InlayHintResolveRequest,
+    ShutdownRequest,
+    TextDocumentCodeActionRequest,
+    TextDocumentCodeLensRequest,
+    TextDocumentColorPresentationRequest,
+    TextDocumentCompletionRequest,
+    TextDocumentDeclarationRequest,
+    TextDocumentDefinitionRequest,
+    TextDocumentDiagnosticRequest,
+    TextDocumentDocumentColorRequest,
+    TextDocumentDocumentHighlightRequest,
+    TextDocumentDocumentLinkRequest,
+    TextDocumentDocumentSymbolRequest,
+    TextDocumentFoldingRangeRequest,
+    TextDocumentFormattingRequest,
+    TextDocumentHoverRequest,
+    TextDocumentImplementationRequest,
+    TextDocumentInlayHintRequest,
+    TextDocumentInlineValueRequest,
+    TextDocumentLinkedEditingRangeRequest,
+    TextDocumentMonikerRequest,
+    TextDocumentOnTypeFormattingRequest,
+    TextDocumentPrepareCallHierarchyRequest,
+    TextDocumentPrepareRenameRequest,
+    TextDocumentPrepareTypeHierarchyRequest,
+    TextDocumentRangeFormattingRequest,
+    TextDocumentReferencesRequest,
+    TextDocumentRenameRequest,
+    TextDocumentSelectionRangeRequest,
+    TextDocumentSemanticTokensFullDeltaRequest,
+    TextDocumentSemanticTokensFullRequest,
+    TextDocumentSemanticTokensRangeRequest,
+    TextDocumentSignatureHelpRequest,
+    TextDocumentTypeDefinitionRequest,
+    TextDocumentWillSaveWaitUntilRequest,
+    TypeHierarchySubtypesRequest,
+    TypeHierarchySupertypesRequest,
+    WindowShowDocumentRequest,
+    WindowShowMessageRequestRequest,
+    WindowWorkDoneProgressCreateRequest,
+    WorkspaceApplyEditRequest,
+    WorkspaceCodeLensRefreshRequest,
+    WorkspaceConfigurationRequest,
+    WorkspaceDiagnosticRefreshRequest,
+    WorkspaceDiagnosticRequest,
+    WorkspaceExecuteCommandRequest,
+    WorkspaceInlayHintRefreshRequest,
+    WorkspaceInlineValueRefreshRequest,
+    WorkspaceSemanticTokensRefreshRequest,
     WorkspaceSymbolRequest,
     WorkspaceSymbolResolveRequest,
-    TextDocumentCodeLensRequest,
-    CodeLensResolveRequest,
-    WorkspaceCodeLensRefreshRequest,
-    TextDocumentDocumentLinkRequest,
-    DocumentLinkResolveRequest,
-    TextDocumentFormattingRequest,
-    TextDocumentRangeFormattingRequest,
-    TextDocumentOnTypeFormattingRequest,
-    TextDocumentRenameRequest,
-    TextDocumentPrepareRenameRequest,
-    WorkspaceExecuteCommandRequest,
-    WorkspaceApplyEditRequest,
+    WorkspaceWillCreateFilesRequest,
+    WorkspaceWillDeleteFilesRequest,
+    WorkspaceWillRenameFilesRequest,
+    WorkspaceWorkspaceFoldersRequest,
 ]
 RESPONSES = Union[
-    TextDocumentImplementationResponse,
-    TextDocumentTypeDefinitionResponse,
-    WorkspaceWorkspaceFoldersResponse,
-    WorkspaceConfigurationResponse,
-    TextDocumentDocumentColorResponse,
-    TextDocumentColorPresentationResponse,
-    TextDocumentFoldingRangeResponse,
-    TextDocumentDeclarationResponse,
-    TextDocumentSelectionRangeResponse,
-    WindowWorkDoneProgressCreateResponse,
-    TextDocumentPrepareCallHierarchyResponse,
     CallHierarchyIncomingCallsResponse,
     CallHierarchyOutgoingCallsResponse,
-    TextDocumentSemanticTokensFullResponse,
-    TextDocumentSemanticTokensFullDeltaResponse,
-    TextDocumentSemanticTokensRangeResponse,
-    WorkspaceSemanticTokensRefreshResponse,
-    WindowShowDocumentResponse,
-    TextDocumentLinkedEditingRangeResponse,
-    WorkspaceWillCreateFilesResponse,
-    WorkspaceWillRenameFilesResponse,
-    WorkspaceWillDeleteFilesResponse,
-    TextDocumentMonikerResponse,
-    TextDocumentPrepareTypeHierarchyResponse,
-    TypeHierarchySupertypesResponse,
-    TypeHierarchySubtypesResponse,
-    TextDocumentInlineValueResponse,
-    WorkspaceInlineValueRefreshResponse,
-    TextDocumentInlayHintResponse,
-    InlayHintResolveResponse,
-    WorkspaceInlayHintRefreshResponse,
-    TextDocumentDiagnosticResponse,
-    WorkspaceDiagnosticResponse,
-    WorkspaceDiagnosticRefreshResponse,
     ClientRegisterCapabilityResponse,
     ClientUnregisterCapabilityResponse,
-    InitializeResponse,
-    ShutdownResponse,
-    WindowShowMessageRequestResponse,
-    TextDocumentWillSaveWaitUntilResponse,
-    TextDocumentCompletionResponse,
-    CompletionItemResolveResponse,
-    TextDocumentHoverResponse,
-    TextDocumentSignatureHelpResponse,
-    TextDocumentDefinitionResponse,
-    TextDocumentReferencesResponse,
-    TextDocumentDocumentHighlightResponse,
-    TextDocumentDocumentSymbolResponse,
-    TextDocumentCodeActionResponse,
     CodeActionResolveResponse,
-    WorkspaceSymbolResponse,
-    WorkspaceSymbolResolveResponse,
-    TextDocumentCodeLensResponse,
     CodeLensResolveResponse,
-    WorkspaceCodeLensRefreshResponse,
-    TextDocumentDocumentLinkResponse,
+    CompletionItemResolveResponse,
     DocumentLinkResolveResponse,
+    InitializeResponse,
+    InlayHintResolveResponse,
+    ShutdownResponse,
+    TextDocumentCodeActionResponse,
+    TextDocumentCodeLensResponse,
+    TextDocumentColorPresentationResponse,
+    TextDocumentCompletionResponse,
+    TextDocumentDeclarationResponse,
+    TextDocumentDefinitionResponse,
+    TextDocumentDiagnosticResponse,
+    TextDocumentDocumentColorResponse,
+    TextDocumentDocumentHighlightResponse,
+    TextDocumentDocumentLinkResponse,
+    TextDocumentDocumentSymbolResponse,
+    TextDocumentFoldingRangeResponse,
     TextDocumentFormattingResponse,
-    TextDocumentRangeFormattingResponse,
+    TextDocumentHoverResponse,
+    TextDocumentImplementationResponse,
+    TextDocumentInlayHintResponse,
+    TextDocumentInlineValueResponse,
+    TextDocumentLinkedEditingRangeResponse,
+    TextDocumentMonikerResponse,
     TextDocumentOnTypeFormattingResponse,
-    TextDocumentRenameResponse,
+    TextDocumentPrepareCallHierarchyResponse,
     TextDocumentPrepareRenameResponse,
-    WorkspaceExecuteCommandResponse,
+    TextDocumentPrepareTypeHierarchyResponse,
+    TextDocumentRangeFormattingResponse,
+    TextDocumentReferencesResponse,
+    TextDocumentRenameResponse,
+    TextDocumentSelectionRangeResponse,
+    TextDocumentSemanticTokensFullDeltaResponse,
+    TextDocumentSemanticTokensFullResponse,
+    TextDocumentSemanticTokensRangeResponse,
+    TextDocumentSignatureHelpResponse,
+    TextDocumentTypeDefinitionResponse,
+    TextDocumentWillSaveWaitUntilResponse,
+    TypeHierarchySubtypesResponse,
+    TypeHierarchySupertypesResponse,
+    WindowShowDocumentResponse,
+    WindowShowMessageRequestResponse,
+    WindowWorkDoneProgressCreateResponse,
     WorkspaceApplyEditResponse,
+    WorkspaceCodeLensRefreshResponse,
+    WorkspaceConfigurationResponse,
+    WorkspaceDiagnosticRefreshResponse,
+    WorkspaceDiagnosticResponse,
+    WorkspaceExecuteCommandResponse,
+    WorkspaceInlayHintRefreshResponse,
+    WorkspaceInlineValueRefreshResponse,
+    WorkspaceSemanticTokensRefreshResponse,
+    WorkspaceSymbolResolveResponse,
+    WorkspaceSymbolResponse,
+    WorkspaceWillCreateFilesResponse,
+    WorkspaceWillDeleteFilesResponse,
+    WorkspaceWillRenameFilesResponse,
+    WorkspaceWorkspaceFoldersResponse,
 ]
 NOTIFICATIONS = Union[
-    WorkspaceDidChangeWorkspaceFoldersNotification,
-    WindowWorkDoneProgressCancelNotification,
-    WorkspaceDidCreateFilesNotification,
-    WorkspaceDidRenameFilesNotification,
-    WorkspaceDidDeleteFilesNotification,
-    NotebookDocumentDidOpenNotification,
-    NotebookDocumentDidChangeNotification,
-    NotebookDocumentDidSaveNotification,
-    NotebookDocumentDidCloseNotification,
-    InitializedNotification,
+    CancelRequestNotification,
     ExitNotification,
-    WorkspaceDidChangeConfigurationNotification,
-    WindowShowMessageNotification,
-    WindowLogMessageNotification,
+    InitializedNotification,
+    LogTraceNotification,
+    NotebookDocumentDidChangeNotification,
+    NotebookDocumentDidCloseNotification,
+    NotebookDocumentDidOpenNotification,
+    NotebookDocumentDidSaveNotification,
+    ProgressNotification,
+    SetTraceNotification,
     TelemetryEventNotification,
-    TextDocumentDidOpenNotification,
     TextDocumentDidChangeNotification,
     TextDocumentDidCloseNotification,
+    TextDocumentDidOpenNotification,
     TextDocumentDidSaveNotification,
-    TextDocumentWillSaveNotification,
-    WorkspaceDidChangeWatchedFilesNotification,
     TextDocumentPublishDiagnosticsNotification,
-    SetTraceNotification,
-    LogTraceNotification,
-    CancelRequestNotification,
-    ProgressNotification,
+    TextDocumentWillSaveNotification,
+    WindowLogMessageNotification,
+    WindowShowMessageNotification,
+    WindowWorkDoneProgressCancelNotification,
+    WorkspaceDidChangeConfigurationNotification,
+    WorkspaceDidChangeWatchedFilesNotification,
+    WorkspaceDidChangeWorkspaceFoldersNotification,
+    WorkspaceDidCreateFilesNotification,
+    WorkspaceDidDeleteFilesNotification,
+    WorkspaceDidRenameFilesNotification,
 ]
 MESSAGE_TYPES = Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]
 
@@ -10589,199 +11256,199 @@ def is_keyword_class(cls) -> bool:
 
 
 _SPECIAL_CLASSES = [
-    CodeActionResolveResponse,
-    HoverRegistrationOptions,
-    CodeLensResolveRequest,
-    WorkspaceDiagnosticResponse,
-    TextDocumentDocumentLinkResponse,
-    WorkspaceFoldersInitializeParams,
-    DocumentColorRegistrationOptions,
-    TextDocumentDefinitionResponse,
-    TypeHierarchySubtypesRequest,
-    TextDocumentReferencesResponse,
-    TextDocumentFormattingRequest,
-    TextDocumentDocumentHighlightResponse,
-    TextDocumentCodeLensResponse,
-    InlineValueRegistrationOptions,
-    DocumentSymbolRegistrationOptions,
-    WorkspaceCodeLensRefreshRequest,
-    WorkspaceUnchangedDocumentDiagnosticReport,
-    TextDocumentCodeLensRequest,
-    WorkspaceDiagnosticRefreshRequest,
-    TextDocumentWillSaveWaitUntilResponse,
-    WorkspaceWillCreateFilesResponse,
-    WorkspaceInlineValueRefreshRequest,
-    CallHierarchyOutgoingCallsRequest,
-    ClientRegisterCapabilityResponse,
-    CallHierarchyIncomingCallsResponse,
-    TextDocumentSemanticTokensRangeResponse,
-    TextDocumentDiagnosticResponse,
-    DocumentLinkRegistrationOptions,
-    WorkspaceConfigurationRequest,
-    WindowWorkDoneProgressCreateResponse,
-    TextDocumentLinkedEditingRangeResponse,
-    WorkspaceDidChangeConfigurationNotification,
-    WorkspaceSymbolResolveResponse,
-    LogTraceNotification,
-    ClientUnregisterCapabilityResponse,
-    WorkspaceWillCreateFilesRequest,
-    TextDocumentDidCloseNotification,
-    CodeLensResolveResponse,
-    WorkspaceExecuteCommandResponse,
-    WorkspaceDidChangeWatchedFilesNotification,
-    InitializeParams,
-    FoldingRangeRegistrationOptions,
-    TextDocumentPrepareRenameResponse,
-    CompletionItemResolveResponse,
-    WorkspaceDiagnosticRefreshResponse,
-    TextDocumentColorPresentationOptions,
-    TextDocumentPrepareTypeHierarchyResponse,
-    SemanticTokensRegistrationOptions,
-    CodeLensRegistrationOptions,
-    TextDocumentHoverRequest,
-    TextDocumentSignatureHelpResponse,
-    TextDocumentDocumentColorRequest,
-    WorkspaceDidRenameFilesNotification,
-    TextDocumentInlayHintResponse,
-    TextDocumentRangeFormattingResponse,
-    WindowWorkDoneProgressCreateRequest,
-    TypeHierarchySupertypesResponse,
-    _InitializeParams,
     CallHierarchyIncomingCallsRequest,
-    InlayHintResolveResponse,
-    TextDocumentRenameRequest,
-    DeclarationRegistrationOptions,
-    InitializeResponse,
-    WorkspaceCodeLensRefreshResponse,
-    TextDocumentDidChangeNotification,
-    TextDocumentFoldingRangeRequest,
-    DocumentRangeFormattingRegistrationOptions,
-    InlayHintResolveRequest,
-    TypeHierarchyRegistrationOptions,
-    TextDocumentDocumentSymbolResponse,
-    WorkspaceWillDeleteFilesResponse,
-    InitializedNotification,
-    MonikerRegistrationOptions,
-    TextDocumentInlineValueResponse,
-    TypeDefinitionRegistrationOptions,
-    CompletionItemResolveRequest,
-    ResponseErrorMessage,
-    TextDocumentColorPresentationResponse,
-    TextDocumentDefinitionRequest,
-    TextDocumentRegistrationOptions,
-    WorkspaceInlayHintRefreshRequest,
-    TypeHierarchySubtypesResponse,
-    TextDocumentPrepareCallHierarchyResponse,
-    TextDocumentWillSaveWaitUntilRequest,
-    WorkspaceDidChangeWorkspaceFoldersNotification,
-    WorkspaceWillRenameFilesResponse,
-    SelectionRangeRegistrationOptions,
-    TelemetryEventNotification,
-    WorkspaceSymbolResponse,
-    ClientUnregisterCapabilityRequest,
-    WindowShowMessageNotification,
-    TextDocumentMonikerResponse,
+    CallHierarchyIncomingCallsResponse,
+    CallHierarchyOutgoingCallsRequest,
     CallHierarchyOutgoingCallsResponse,
-    CodeActionRegistrationOptions,
-    NotebookDocumentDidOpenNotification,
-    TextDocumentReferencesRequest,
-    WorkspaceInlineValueRefreshResponse,
-    SetTraceNotification,
-    TextDocumentOnTypeFormattingResponse,
-    TextDocumentCompletionRequest,
-    WorkspaceExecuteCommandRequest,
-    ClientRegisterCapabilityRequest,
-    WorkspaceConfigurationResponse,
-    TextDocumentDidOpenNotification,
-    NotebookDocumentDidSaveNotification,
-    TextDocumentWillSaveNotification,
-    WorkspaceWillRenameFilesRequest,
-    TextDocumentInlineValueRequest,
-    TextDocumentDiagnosticRequest,
-    TextDocumentCodeActionRequest,
-    TextDocumentTypeDefinitionResponse,
-    CodeActionResolveRequest,
-    WorkspaceSymbolResolveRequest,
-    TextDocumentOnTypeFormattingRequest,
-    WorkspaceInlayHintRefreshResponse,
-    ImplementationRegistrationOptions,
-    ExitNotification,
-    TextDocumentPrepareCallHierarchyRequest,
-    WorkspaceDiagnosticRequest,
-    ShutdownRequest,
-    TextDocumentSemanticTokensFullDeltaRequest,
-    NotebookDocumentDidCloseNotification,
-    TextDocumentSemanticTokensFullRequest,
-    NotebookDocumentDidChangeNotification,
-    InlayHintRegistrationOptions,
-    TextDocumentRenameResponse,
-    TextDocumentColorPresentationRequest,
-    TextDocumentSemanticTokensFullResponse,
-    InitializeRequest,
-    WorkspaceDidDeleteFilesNotification,
-    DefinitionRegistrationOptions,
-    TextDocumentChangeRegistrationOptions,
-    TextDocumentDocumentLinkRequest,
-    CancelRequestNotification,
-    WorkspaceWorkspaceFoldersRequest,
-    DocumentFormattingRegistrationOptions,
-    TextDocumentFoldingRangeResponse,
-    TextDocumentDocumentSymbolRequest,
-    TextDocumentCompletionResponse,
-    TextDocumentSemanticTokensRangeRequest,
-    ProgressNotification,
-    WindowShowMessageRequestRequest,
-    TextDocumentSemanticTokensFullDeltaResponse,
-    TextDocumentHoverResponse,
-    OptionalVersionedTextDocumentIdentifier,
-    TextDocumentPrepareRenameRequest,
-    TextDocumentCodeActionResponse,
-    TextDocumentSaveRegistrationOptions,
-    WorkspaceWillDeleteFilesRequest,
-    CompletionRegistrationOptions,
-    DocumentHighlightRegistrationOptions,
-    TextDocumentRangeFormattingRequest,
-    TextDocumentTypeDefinitionRequest,
-    DocumentOnTypeFormattingRegistrationOptions,
-    WindowShowDocumentRequest,
-    TextDocumentLinkedEditingRangeRequest,
-    TextDocumentMonikerRequest,
-    TextDocumentDocumentHighlightRequest,
-    WindowLogMessageNotification,
-    TextDocumentDocumentColorResponse,
-    WorkspaceSemanticTokensRefreshResponse,
-    WorkspaceFullDocumentDiagnosticReport,
-    RenameRegistrationOptions,
-    WorkspaceSymbolRequest,
-    TextDocumentDidSaveNotification,
-    WindowWorkDoneProgressCancelNotification,
-    TextDocumentDeclarationRequest,
-    TextDocumentPublishDiagnosticsNotification,
-    TypeHierarchySupertypesRequest,
-    WorkspaceWorkspaceFoldersResponse,
-    WorkspaceApplyEditResponse,
     CallHierarchyRegistrationOptions,
+    CancelRequestNotification,
+    ClientRegisterCapabilityRequest,
+    ClientRegisterCapabilityResponse,
+    ClientUnregisterCapabilityRequest,
+    ClientUnregisterCapabilityResponse,
+    CodeActionRegistrationOptions,
+    CodeActionResolveRequest,
+    CodeActionResolveResponse,
+    CodeLensRegistrationOptions,
+    CodeLensResolveRequest,
+    CodeLensResolveResponse,
+    CompletionItemResolveRequest,
+    CompletionItemResolveResponse,
+    CompletionRegistrationOptions,
+    DeclarationRegistrationOptions,
+    DefinitionRegistrationOptions,
+    DiagnosticRegistrationOptions,
+    DocumentColorRegistrationOptions,
+    DocumentFormattingRegistrationOptions,
+    DocumentHighlightRegistrationOptions,
+    DocumentLinkRegistrationOptions,
+    DocumentLinkResolveRequest,
+    DocumentLinkResolveResponse,
+    DocumentOnTypeFormattingRegistrationOptions,
+    DocumentRangeFormattingRegistrationOptions,
+    DocumentSymbolRegistrationOptions,
+    ExitNotification,
+    FoldingRangeRegistrationOptions,
+    HoverRegistrationOptions,
+    ImplementationRegistrationOptions,
+    InitializeParams,
+    InitializeRequest,
+    InitializeResponse,
+    InitializedNotification,
+    InlayHintRegistrationOptions,
+    InlayHintResolveRequest,
+    InlayHintResolveResponse,
+    InlineValueRegistrationOptions,
+    LinkedEditingRangeRegistrationOptions,
+    LogTraceNotification,
+    MonikerRegistrationOptions,
+    NotebookDocumentDidChangeNotification,
+    NotebookDocumentDidCloseNotification,
+    NotebookDocumentDidOpenNotification,
+    NotebookDocumentDidSaveNotification,
+    OptionalVersionedTextDocumentIdentifier,
+    ProgressNotification,
+    ReferenceRegistrationOptions,
+    RenameRegistrationOptions,
+    ResponseErrorMessage,
+    SelectionRangeRegistrationOptions,
+    SemanticTokensRegistrationOptions,
+    SetTraceNotification,
+    ShutdownRequest,
     ShutdownResponse,
     SignatureHelpRegistrationOptions,
-    TextDocumentImplementationResponse,
-    TextDocumentSelectionRangeResponse,
-    DocumentLinkResolveRequest,
-    WorkspaceDidCreateFilesNotification,
-    TextDocumentFormattingResponse,
-    TextDocumentSignatureHelpRequest,
-    DiagnosticRegistrationOptions,
-    TextDocumentImplementationRequest,
-    WorkspaceSemanticTokensRefreshRequest,
-    TextDocumentSelectionRangeRequest,
-    DocumentLinkResolveResponse,
-    ReferenceRegistrationOptions,
-    WorkspaceApplyEditRequest,
-    WindowShowDocumentResponse,
-    WindowShowMessageRequestResponse,
+    TelemetryEventNotification,
+    TextDocumentChangeRegistrationOptions,
+    TextDocumentCodeActionRequest,
+    TextDocumentCodeActionResponse,
+    TextDocumentCodeLensRequest,
+    TextDocumentCodeLensResponse,
+    TextDocumentColorPresentationOptions,
+    TextDocumentColorPresentationRequest,
+    TextDocumentColorPresentationResponse,
+    TextDocumentCompletionRequest,
+    TextDocumentCompletionResponse,
+    TextDocumentDeclarationRequest,
     TextDocumentDeclarationResponse,
+    TextDocumentDefinitionRequest,
+    TextDocumentDefinitionResponse,
+    TextDocumentDiagnosticRequest,
+    TextDocumentDiagnosticResponse,
+    TextDocumentDidChangeNotification,
+    TextDocumentDidCloseNotification,
+    TextDocumentDidOpenNotification,
+    TextDocumentDidSaveNotification,
+    TextDocumentDocumentColorRequest,
+    TextDocumentDocumentColorResponse,
+    TextDocumentDocumentHighlightRequest,
+    TextDocumentDocumentHighlightResponse,
+    TextDocumentDocumentLinkRequest,
+    TextDocumentDocumentLinkResponse,
+    TextDocumentDocumentSymbolRequest,
+    TextDocumentDocumentSymbolResponse,
+    TextDocumentFoldingRangeRequest,
+    TextDocumentFoldingRangeResponse,
+    TextDocumentFormattingRequest,
+    TextDocumentFormattingResponse,
+    TextDocumentHoverRequest,
+    TextDocumentHoverResponse,
+    TextDocumentImplementationRequest,
+    TextDocumentImplementationResponse,
     TextDocumentInlayHintRequest,
-    LinkedEditingRangeRegistrationOptions,
+    TextDocumentInlayHintResponse,
+    TextDocumentInlineValueRequest,
+    TextDocumentInlineValueResponse,
+    TextDocumentLinkedEditingRangeRequest,
+    TextDocumentLinkedEditingRangeResponse,
+    TextDocumentMonikerRequest,
+    TextDocumentMonikerResponse,
+    TextDocumentOnTypeFormattingRequest,
+    TextDocumentOnTypeFormattingResponse,
+    TextDocumentPrepareCallHierarchyRequest,
+    TextDocumentPrepareCallHierarchyResponse,
+    TextDocumentPrepareRenameRequest,
+    TextDocumentPrepareRenameResponse,
     TextDocumentPrepareTypeHierarchyRequest,
+    TextDocumentPrepareTypeHierarchyResponse,
+    TextDocumentPublishDiagnosticsNotification,
+    TextDocumentRangeFormattingRequest,
+    TextDocumentRangeFormattingResponse,
+    TextDocumentReferencesRequest,
+    TextDocumentReferencesResponse,
+    TextDocumentRegistrationOptions,
+    TextDocumentRenameRequest,
+    TextDocumentRenameResponse,
+    TextDocumentSaveRegistrationOptions,
+    TextDocumentSelectionRangeRequest,
+    TextDocumentSelectionRangeResponse,
+    TextDocumentSemanticTokensFullDeltaRequest,
+    TextDocumentSemanticTokensFullDeltaResponse,
+    TextDocumentSemanticTokensFullRequest,
+    TextDocumentSemanticTokensFullResponse,
+    TextDocumentSemanticTokensRangeRequest,
+    TextDocumentSemanticTokensRangeResponse,
+    TextDocumentSignatureHelpRequest,
+    TextDocumentSignatureHelpResponse,
+    TextDocumentTypeDefinitionRequest,
+    TextDocumentTypeDefinitionResponse,
+    TextDocumentWillSaveNotification,
+    TextDocumentWillSaveWaitUntilRequest,
+    TextDocumentWillSaveWaitUntilResponse,
+    TypeDefinitionRegistrationOptions,
+    TypeHierarchyRegistrationOptions,
+    TypeHierarchySubtypesRequest,
+    TypeHierarchySubtypesResponse,
+    TypeHierarchySupertypesRequest,
+    TypeHierarchySupertypesResponse,
+    WindowLogMessageNotification,
+    WindowShowDocumentRequest,
+    WindowShowDocumentResponse,
+    WindowShowMessageNotification,
+    WindowShowMessageRequestRequest,
+    WindowShowMessageRequestResponse,
+    WindowWorkDoneProgressCancelNotification,
+    WindowWorkDoneProgressCreateRequest,
+    WindowWorkDoneProgressCreateResponse,
+    WorkspaceApplyEditRequest,
+    WorkspaceApplyEditResponse,
+    WorkspaceCodeLensRefreshRequest,
+    WorkspaceCodeLensRefreshResponse,
+    WorkspaceConfigurationRequest,
+    WorkspaceConfigurationResponse,
+    WorkspaceDiagnosticRefreshRequest,
+    WorkspaceDiagnosticRefreshResponse,
+    WorkspaceDiagnosticRequest,
+    WorkspaceDiagnosticResponse,
+    WorkspaceDidChangeConfigurationNotification,
+    WorkspaceDidChangeWatchedFilesNotification,
+    WorkspaceDidChangeWorkspaceFoldersNotification,
+    WorkspaceDidCreateFilesNotification,
+    WorkspaceDidDeleteFilesNotification,
+    WorkspaceDidRenameFilesNotification,
+    WorkspaceExecuteCommandRequest,
+    WorkspaceExecuteCommandResponse,
+    WorkspaceFoldersInitializeParams,
+    WorkspaceFullDocumentDiagnosticReport,
+    WorkspaceInlayHintRefreshRequest,
+    WorkspaceInlayHintRefreshResponse,
+    WorkspaceInlineValueRefreshRequest,
+    WorkspaceInlineValueRefreshResponse,
+    WorkspaceSemanticTokensRefreshRequest,
+    WorkspaceSemanticTokensRefreshResponse,
+    WorkspaceSymbolRequest,
+    WorkspaceSymbolResolveRequest,
+    WorkspaceSymbolResolveResponse,
+    WorkspaceSymbolResponse,
+    WorkspaceUnchangedDocumentDiagnosticReport,
+    WorkspaceWillCreateFilesRequest,
+    WorkspaceWillCreateFilesResponse,
+    WorkspaceWillDeleteFilesRequest,
+    WorkspaceWillDeleteFilesResponse,
+    WorkspaceWillRenameFilesRequest,
+    WorkspaceWillRenameFilesResponse,
+    WorkspaceWorkspaceFoldersRequest,
+    WorkspaceWorkspaceFoldersResponse,
+    _InitializeParams,
 ]
 
 
@@ -10791,359 +11458,359 @@ def is_special_class(cls) -> bool:
 
 
 _SPECIAL_PROPERTIES = [
-    "TextDocumentSelectionRangeRequest.jsonrpc",
-    "TextDocumentSemanticTokensFullDeltaResponse.result",
-    "ShutdownResponse.jsonrpc",
-    "TextDocumentCompletionRequest.jsonrpc",
-    "TextDocumentDocumentColorRequest.jsonrpc",
-    "WorkspaceWorkspaceFoldersResponse.jsonrpc",
-    "TextDocumentSemanticTokensRangeResponse.result",
-    "WorkspaceCodeLensRefreshResponse.result",
-    "TextDocumentInlineValueRequest.method",
-    "SetTraceNotification.method",
-    "TextDocumentMonikerResponse.jsonrpc",
-    "TextDocumentPrepareRenameRequest.method",
-    "TextDocumentWillSaveNotification.jsonrpc",
-    "WorkspaceSymbolResolveResponse.jsonrpc",
-    "DocumentLinkResolveResponse.jsonrpc",
-    "CallHierarchyIncomingCallsResponse.result",
-    "WindowLogMessageNotification.jsonrpc",
-    "ExitNotification.jsonrpc",
-    "DiagnosticRegistrationOptions.document_selector",
-    "TextDocumentLinkedEditingRangeResponse.result",
-    "TextDocumentDeclarationRequest.jsonrpc",
-    "ClientUnregisterCapabilityRequest.method",
-    "TextDocumentPrepareCallHierarchyRequest.jsonrpc",
-    "CodeLensRegistrationOptions.document_selector",
-    "TextDocumentCodeActionResponse.result",
-    "TextDocumentMonikerRequest.method",
-    "ProgressNotification.method",
-    "InitializeResponse.jsonrpc",
-    "WorkspaceDiagnosticRefreshResponse.result",
-    "TextDocumentSemanticTokensRangeRequest.method",
-    "CallHierarchyIncomingCallsRequest.method",
-    "TextDocumentDidChangeNotification.jsonrpc",
-    "WorkspaceSemanticTokensRefreshRequest.method",
-    "WindowWorkDoneProgressCreateRequest.method",
-    "TextDocumentDocumentColorResponse.jsonrpc",
-    "NotebookDocumentDidChangeNotification.jsonrpc",
-    "TextDocumentPrepareCallHierarchyResponse.jsonrpc",
-    "TextDocumentCompletionResponse.result",
-    "TextDocumentDocumentHighlightRequest.jsonrpc",
-    "InitializeParams.process_id",
-    "TextDocumentInlineValueResponse.jsonrpc",
-    "LogTraceNotification.jsonrpc",
-    "TextDocumentTypeDefinitionResponse.result",
-    "TextDocumentDocumentLinkRequest.method",
     "CallHierarchyIncomingCallsRequest.jsonrpc",
-    "TextDocumentDocumentSymbolResponse.jsonrpc",
-    "TextDocumentColorPresentationRequest.jsonrpc",
-    "TypeHierarchySubtypesResponse.result",
-    "TextDocumentPrepareTypeHierarchyRequest.method",
-    "WorkspaceApplyEditRequest.jsonrpc",
-    "ShutdownRequest.jsonrpc",
-    "TextDocumentImplementationResponse.jsonrpc",
-    "WorkspaceDiagnosticRequest.method",
-    "TextDocumentDocumentColorRequest.method",
-    "TypeHierarchySupertypesResponse.result",
-    "ResponseErrorMessage.error",
-    "WorkspaceWillCreateFilesRequest.method",
-    "ClientRegisterCapabilityResponse.jsonrpc",
-    "InlayHintResolveResponse.result",
-    "TextDocumentCodeActionResponse.jsonrpc",
-    "WorkspaceDidRenameFilesNotification.method",
-    "WorkspaceDidChangeWorkspaceFoldersNotification.method",
-    "TextDocumentPrepareTypeHierarchyRequest.jsonrpc",
-    "ClientUnregisterCapabilityResponse.jsonrpc",
-    "InitializeParams.workspace_folders",
-    "TextDocumentInlayHintResponse.result",
-    "TextDocumentDocumentSymbolRequest.jsonrpc",
-    "TextDocumentRangeFormattingRequest.jsonrpc",
-    "WorkspaceDiagnosticRequest.jsonrpc",
-    "CallHierarchyRegistrationOptions.document_selector",
-    "TextDocumentSignatureHelpResponse.jsonrpc",
-    "TextDocumentCodeLensRequest.method",
-    "TextDocumentOnTypeFormattingRequest.jsonrpc",
-    "TextDocumentPrepareRenameResponse.jsonrpc",
-    "TextDocumentLinkedEditingRangeResponse.jsonrpc",
-    "WorkspaceSymbolResponse.jsonrpc",
-    "WorkspaceSymbolResponse.result",
-    "WorkspaceSymbolResolveRequest.jsonrpc",
-    "CompletionItemResolveRequest.jsonrpc",
-    "WorkspaceExecuteCommandRequest.method",
-    "DocumentFormattingRegistrationOptions.document_selector",
-    "CodeActionResolveRequest.method",
-    "TextDocumentOnTypeFormattingResponse.jsonrpc",
-    "TextDocumentCodeActionRequest.method",
-    "TextDocumentHoverResponse.result",
-    "ReferenceRegistrationOptions.document_selector",
-    "NotebookDocumentDidChangeNotification.method",
-    "InitializeParams.root_path",
-    "TextDocumentTypeDefinitionRequest.method",
-    "WorkspaceWillCreateFilesResponse.result",
-    "WorkspaceDidRenameFilesNotification.jsonrpc",
-    "WorkspaceInlineValueRefreshRequest.jsonrpc",
-    "TextDocumentFoldingRangeRequest.jsonrpc",
-    "WorkspaceDiagnosticRefreshRequest.jsonrpc",
-    "WindowShowMessageRequestResponse.jsonrpc",
-    "TextDocumentDocumentLinkRequest.jsonrpc",
-    "TextDocumentImplementationRequest.jsonrpc",
-    "TextDocumentTypeDefinitionRequest.jsonrpc",
-    "InlineValueRegistrationOptions.document_selector",
-    "WorkspaceExecuteCommandRequest.jsonrpc",
-    "TypeHierarchySubtypesRequest.method",
-    "WorkspaceInlineValueRefreshResponse.result",
-    "WorkspaceConfigurationResponse.jsonrpc",
-    "TextDocumentInlayHintRequest.jsonrpc",
-    "DocumentLinkResolveRequest.jsonrpc",
-    "SemanticTokensRegistrationOptions.document_selector",
-    "TextDocumentRangeFormattingRequest.method",
-    "DefinitionRegistrationOptions.document_selector",
-    "WorkspaceDiagnosticResponse.jsonrpc",
-    "TextDocumentSignatureHelpRequest.jsonrpc",
-    "NotebookDocumentDidCloseNotification.method",
-    "WorkspaceInlayHintRefreshResponse.result",
-    "TypeHierarchySupertypesRequest.method",
-    "WorkspaceApplyEditResponse.jsonrpc",
-    "NotebookDocumentDidOpenNotification.jsonrpc",
-    "TextDocumentDefinitionRequest.method",
-    "WorkspaceDidChangeConfigurationNotification.method",
-    "TextDocumentDocumentColorResponse.result",
-    "WindowShowMessageRequestResponse.result",
-    "TextDocumentColorPresentationResponse.jsonrpc",
-    "InlayHintResolveRequest.jsonrpc",
-    "TextDocumentColorPresentationOptions.document_selector",
-    "TextDocumentTypeDefinitionResponse.jsonrpc",
-    "TextDocumentSemanticTokensFullDeltaRequest.jsonrpc",
-    "TextDocumentChangeRegistrationOptions.document_selector",
-    "CodeLensResolveRequest.method",
-    "TextDocumentPrepareRenameRequest.jsonrpc",
-    "CodeActionRegistrationOptions.document_selector",
-    "TextDocumentLinkedEditingRangeRequest.method",
-    "WorkspaceApplyEditRequest.method",
-    "TextDocumentDocumentHighlightRequest.method",
-    "TypeHierarchySubtypesRequest.jsonrpc",
-    "WorkspaceDidDeleteFilesNotification.jsonrpc",
-    "TextDocumentSemanticTokensRangeRequest.jsonrpc",
-    "CodeLensResolveResponse.jsonrpc",
-    "WorkspaceInlineValueRefreshResponse.jsonrpc",
-    "DocumentRangeFormattingRegistrationOptions.document_selector",
-    "WorkspaceInlineValueRefreshRequest.method",
-    "WindowShowDocumentResponse.result",
-    "RenameRegistrationOptions.document_selector",
-    "TextDocumentSaveRegistrationOptions.document_selector",
-    "LinkedEditingRangeRegistrationOptions.document_selector",
-    "WorkspaceDidChangeWorkspaceFoldersNotification.jsonrpc",
-    "WorkspaceDiagnosticRefreshRequest.method",
-    "TextDocumentDidOpenNotification.jsonrpc",
-    "TextDocumentDiagnosticResponse.jsonrpc",
-    "TextDocumentHoverRequest.method",
-    "WorkspaceDidChangeWatchedFilesNotification.jsonrpc",
-    "WindowLogMessageNotification.method",
-    "_InitializeParams.root_path",
-    "TextDocumentDiagnosticRequest.jsonrpc",
-    "WorkspaceDidCreateFilesNotification.jsonrpc",
-    "CodeLensResolveRequest.jsonrpc",
-    "TextDocumentSemanticTokensRangeResponse.jsonrpc",
-    "WorkspaceDidCreateFilesNotification.method",
-    "TextDocumentCodeLensResponse.result",
-    "WorkspaceApplyEditResponse.result",
-    "InlayHintResolveRequest.method",
-    "TextDocumentDeclarationResponse.jsonrpc",
-    "WorkspaceExecuteCommandResponse.result",
-    "TelemetryEventNotification.method",
-    "TextDocumentDocumentSymbolRequest.method",
-    "HoverRegistrationOptions.document_selector",
-    "InitializeRequest.jsonrpc",
-    "DocumentOnTypeFormattingRegistrationOptions.document_selector",
-    "NotebookDocumentDidCloseNotification.jsonrpc",
-    "CompletionItemResolveResponse.jsonrpc",
-    "TextDocumentPrepareCallHierarchyResponse.result",
-    "TextDocumentSemanticTokensFullRequest.jsonrpc",
-    "ExitNotification.method",
-    "NotebookDocumentDidSaveNotification.jsonrpc",
-    "WindowWorkDoneProgressCreateResponse.jsonrpc",
-    "TextDocumentReferencesRequest.jsonrpc",
-    "TextDocumentCodeLensRequest.jsonrpc",
+    "CallHierarchyIncomingCallsRequest.method",
     "CallHierarchyIncomingCallsResponse.jsonrpc",
-    "TypeHierarchySupertypesRequest.jsonrpc",
-    "_InitializeParams.root_uri",
-    "WorkspaceSemanticTokensRefreshRequest.jsonrpc",
-    "TelemetryEventNotification.jsonrpc",
-    "TextDocumentOnTypeFormattingRequest.method",
-    "WorkspaceDidChangeWatchedFilesNotification.method",
-    "TextDocumentImplementationResponse.result",
-    "TextDocumentInlayHintResponse.jsonrpc",
-    "TextDocumentCodeActionRequest.jsonrpc",
-    "DocumentHighlightRegistrationOptions.document_selector",
-    "TextDocumentCompletionRequest.method",
-    "TextDocumentReferencesResponse.result",
-    "WorkspaceSymbolResolveResponse.result",
-    "TextDocumentDidOpenNotification.method",
-    "TextDocumentDidSaveNotification.method",
-    "WorkspaceFullDocumentDiagnosticReport.version",
-    "WorkspaceWillRenameFilesRequest.jsonrpc",
-    "TextDocumentFoldingRangeResponse.result",
-    "WorkspaceWillCreateFilesResponse.jsonrpc",
-    "SetTraceNotification.jsonrpc",
-    "TextDocumentMonikerRequest.jsonrpc",
-    "ClientRegisterCapabilityResponse.result",
-    "TextDocumentSemanticTokensFullDeltaRequest.method",
-    "TextDocumentDocumentSymbolResponse.result",
-    "TextDocumentFormattingResponse.jsonrpc",
-    "TextDocumentPrepareTypeHierarchyResponse.jsonrpc",
-    "TextDocumentPrepareCallHierarchyRequest.method",
-    "WorkspaceInlayHintRefreshRequest.method",
-    "WorkspaceDidChangeConfigurationNotification.jsonrpc",
-    "TextDocumentLinkedEditingRangeRequest.jsonrpc",
-    "TextDocumentSignatureHelpRequest.method",
-    "TextDocumentDocumentHighlightResponse.result",
-    "OptionalVersionedTextDocumentIdentifier.version",
-    "TextDocumentSignatureHelpResponse.result",
-    "TextDocumentDeclarationRequest.method",
-    "TextDocumentHoverRequest.jsonrpc",
-    "NotebookDocumentDidOpenNotification.method",
-    "WorkspaceWorkspaceFoldersRequest.method",
-    "CompletionItemResolveResponse.result",
-    "TextDocumentRenameRequest.jsonrpc",
-    "TextDocumentPrepareRenameResponse.result",
-    "TextDocumentRangeFormattingResponse.result",
-    "WorkspaceWillRenameFilesResponse.jsonrpc",
-    "TextDocumentDiagnosticResponse.result",
-    "ResponseErrorMessage.jsonrpc",
-    "CancelRequestNotification.method",
-    "ShutdownRequest.method",
-    "WorkspaceWillRenameFilesResponse.result",
-    "TextDocumentWillSaveWaitUntilRequest.method",
-    "WorkspaceSemanticTokensRefreshResponse.jsonrpc",
-    "TextDocumentSelectionRangeResponse.result",
-    "TextDocumentColorPresentationRequest.method",
-    "DocumentLinkResolveRequest.method",
-    "TextDocumentFoldingRangeRequest.method",
-    "ClientUnregisterCapabilityResponse.result",
-    "TextDocumentFormattingRequest.jsonrpc",
-    "TextDocumentPublishDiagnosticsNotification.jsonrpc",
-    "CodeActionResolveRequest.jsonrpc",
-    "TextDocumentWillSaveWaitUntilResponse.result",
-    "WorkspaceUnchangedDocumentDiagnosticReport.version",
-    "TextDocumentDeclarationResponse.result",
-    "TextDocumentCompletionResponse.jsonrpc",
-    "ImplementationRegistrationOptions.document_selector",
-    "WorkspaceConfigurationRequest.jsonrpc",
-    "WorkspaceConfigurationRequest.method",
-    "InitializeResponse.result",
-    "TypeHierarchySupertypesResponse.jsonrpc",
-    "WindowWorkDoneProgressCancelNotification.method",
-    "DocumentLinkResolveResponse.result",
-    "TextDocumentInlineValueRequest.jsonrpc",
-    "WorkspaceDiagnosticResponse.result",
-    "MonikerRegistrationOptions.document_selector",
-    "TextDocumentFoldingRangeResponse.jsonrpc",
-    "TextDocumentPublishDiagnosticsNotification.method",
-    "WorkspaceCodeLensRefreshResponse.jsonrpc",
-    "TextDocumentDiagnosticRequest.method",
-    "TextDocumentInlineValueResponse.result",
-    "DocumentLinkRegistrationOptions.document_selector",
-    "TextDocumentCodeLensResponse.jsonrpc",
-    "TextDocumentRenameResponse.jsonrpc",
-    "TextDocumentDidCloseNotification.method",
-    "WorkspaceWillCreateFilesRequest.jsonrpc",
-    "WorkspaceDiagnosticRefreshResponse.jsonrpc",
-    "TextDocumentDefinitionResponse.jsonrpc",
-    "TextDocumentRegistrationOptions.document_selector",
-    "WindowShowMessageRequestRequest.method",
-    "TextDocumentWillSaveNotification.method",
-    "InlayHintRegistrationOptions.document_selector",
-    "WorkspaceInlayHintRefreshRequest.jsonrpc",
-    "CodeActionResolveResponse.result",
-    "CompletionRegistrationOptions.document_selector",
-    "ClientRegisterCapabilityRequest.method",
-    "WorkspaceWillDeleteFilesResponse.result",
-    "WorkspaceInlayHintRefreshResponse.jsonrpc",
-    "WorkspaceSymbolRequest.method",
-    "TextDocumentWillSaveWaitUntilRequest.jsonrpc",
-    "WindowShowMessageNotification.jsonrpc",
-    "TextDocumentSemanticTokensFullResponse.result",
-    "WorkspaceCodeLensRefreshRequest.jsonrpc",
-    "TypeDefinitionRegistrationOptions.document_selector",
-    "CallHierarchyOutgoingCallsResponse.result",
-    "TextDocumentDocumentHighlightResponse.jsonrpc",
+    "CallHierarchyIncomingCallsResponse.result",
     "CallHierarchyOutgoingCallsRequest.jsonrpc",
-    "NotebookDocumentDidSaveNotification.method",
-    "WorkspaceWillDeleteFilesRequest.jsonrpc",
-    "ProgressNotification.jsonrpc",
-    "TextDocumentDefinitionRequest.jsonrpc",
-    "CallHierarchyOutgoingCallsResponse.jsonrpc",
-    "WorkspaceExecuteCommandResponse.jsonrpc",
-    "TextDocumentRenameResponse.result",
-    "WindowWorkDoneProgressCreateRequest.jsonrpc",
-    "ClientUnregisterCapabilityRequest.jsonrpc",
-    "CodeLensResolveResponse.result",
-    "TextDocumentDocumentLinkResponse.result",
-    "TextDocumentImplementationRequest.method",
-    "WorkspaceWillDeleteFilesResponse.jsonrpc",
-    "InitializedNotification.jsonrpc",
-    "TextDocumentDidCloseNotification.jsonrpc",
-    "WorkspaceWorkspaceFoldersRequest.jsonrpc",
-    "TextDocumentFormattingResponse.result",
-    "FoldingRangeRegistrationOptions.document_selector",
-    "TextDocumentRenameRequest.method",
-    "DocumentColorRegistrationOptions.document_selector",
-    "TextDocumentPrepareTypeHierarchyResponse.result",
-    "TextDocumentDidChangeNotification.method",
-    "WorkspaceSemanticTokensRefreshResponse.result",
-    "TextDocumentSelectionRangeResponse.jsonrpc",
-    "WindowWorkDoneProgressCreateResponse.result",
-    "TextDocumentMonikerResponse.result",
-    "TextDocumentInlayHintRequest.method",
-    "WorkspaceFoldersInitializeParams.workspace_folders",
-    "TextDocumentDidSaveNotification.jsonrpc",
-    "TypeHierarchySubtypesResponse.jsonrpc",
-    "TextDocumentDefinitionResponse.result",
-    "ShutdownResponse.result",
-    "WindowShowMessageRequestRequest.jsonrpc",
-    "DocumentSymbolRegistrationOptions.document_selector",
-    "InitializeRequest.method",
-    "TextDocumentWillSaveWaitUntilResponse.jsonrpc",
-    "InitializeParams.root_uri",
-    "WindowWorkDoneProgressCancelNotification.jsonrpc",
-    "WindowShowMessageNotification.method",
-    "WorkspaceCodeLensRefreshRequest.method",
-    "TextDocumentOnTypeFormattingResponse.result",
-    "TextDocumentHoverResponse.jsonrpc",
-    "CancelRequestNotification.jsonrpc",
-    "WorkspaceWillRenameFilesRequest.method",
-    "InlayHintResolveResponse.jsonrpc",
-    "_InitializeParams.process_id",
-    "InitializedNotification.method",
-    "CodeActionResolveResponse.jsonrpc",
-    "TextDocumentDocumentLinkResponse.jsonrpc",
     "CallHierarchyOutgoingCallsRequest.method",
-    "TextDocumentSemanticTokensFullResponse.jsonrpc",
-    "SelectionRangeRegistrationOptions.document_selector",
-    "WorkspaceSymbolResolveRequest.method",
-    "TextDocumentSemanticTokensFullRequest.method",
-    "WindowShowDocumentRequest.jsonrpc",
+    "CallHierarchyOutgoingCallsResponse.jsonrpc",
+    "CallHierarchyOutgoingCallsResponse.result",
+    "CallHierarchyRegistrationOptions.document_selector",
+    "CancelRequestNotification.jsonrpc",
+    "CancelRequestNotification.method",
     "ClientRegisterCapabilityRequest.jsonrpc",
-    "WorkspaceSymbolRequest.jsonrpc",
-    "TextDocumentFormattingRequest.method",
-    "WorkspaceConfigurationResponse.result",
-    "TextDocumentSemanticTokensFullDeltaResponse.jsonrpc",
-    "TextDocumentRangeFormattingResponse.jsonrpc",
-    "DeclarationRegistrationOptions.document_selector",
+    "ClientRegisterCapabilityRequest.method",
+    "ClientRegisterCapabilityResponse.jsonrpc",
+    "ClientRegisterCapabilityResponse.result",
+    "ClientUnregisterCapabilityRequest.jsonrpc",
+    "ClientUnregisterCapabilityRequest.method",
+    "ClientUnregisterCapabilityResponse.jsonrpc",
+    "ClientUnregisterCapabilityResponse.result",
+    "CodeActionRegistrationOptions.document_selector",
+    "CodeActionResolveRequest.jsonrpc",
+    "CodeActionResolveRequest.method",
+    "CodeActionResolveResponse.jsonrpc",
+    "CodeActionResolveResponse.result",
+    "CodeLensRegistrationOptions.document_selector",
+    "CodeLensResolveRequest.jsonrpc",
+    "CodeLensResolveRequest.method",
+    "CodeLensResolveResponse.jsonrpc",
+    "CodeLensResolveResponse.result",
+    "CompletionItemResolveRequest.jsonrpc",
     "CompletionItemResolveRequest.method",
-    "WorkspaceWorkspaceFoldersResponse.result",
-    "WorkspaceDidDeleteFilesNotification.method",
+    "CompletionItemResolveResponse.jsonrpc",
+    "CompletionItemResolveResponse.result",
+    "CompletionRegistrationOptions.document_selector",
+    "DeclarationRegistrationOptions.document_selector",
+    "DefinitionRegistrationOptions.document_selector",
+    "DiagnosticRegistrationOptions.document_selector",
+    "DocumentColorRegistrationOptions.document_selector",
+    "DocumentFormattingRegistrationOptions.document_selector",
+    "DocumentHighlightRegistrationOptions.document_selector",
+    "DocumentLinkRegistrationOptions.document_selector",
+    "DocumentLinkResolveRequest.jsonrpc",
+    "DocumentLinkResolveRequest.method",
+    "DocumentLinkResolveResponse.jsonrpc",
+    "DocumentLinkResolveResponse.result",
+    "DocumentOnTypeFormattingRegistrationOptions.document_selector",
+    "DocumentRangeFormattingRegistrationOptions.document_selector",
+    "DocumentSymbolRegistrationOptions.document_selector",
+    "ExitNotification.jsonrpc",
+    "ExitNotification.method",
+    "FoldingRangeRegistrationOptions.document_selector",
+    "HoverRegistrationOptions.document_selector",
+    "ImplementationRegistrationOptions.document_selector",
+    "InitializeParams.process_id",
+    "InitializeParams.root_path",
+    "InitializeParams.root_uri",
+    "InitializeParams.workspace_folders",
+    "InitializeRequest.jsonrpc",
+    "InitializeRequest.method",
+    "InitializeResponse.jsonrpc",
+    "InitializeResponse.result",
+    "InitializedNotification.jsonrpc",
+    "InitializedNotification.method",
+    "InlayHintRegistrationOptions.document_selector",
+    "InlayHintResolveRequest.jsonrpc",
+    "InlayHintResolveRequest.method",
+    "InlayHintResolveResponse.jsonrpc",
+    "InlayHintResolveResponse.result",
+    "InlineValueRegistrationOptions.document_selector",
+    "LinkedEditingRangeRegistrationOptions.document_selector",
+    "LogTraceNotification.jsonrpc",
+    "LogTraceNotification.method",
+    "MonikerRegistrationOptions.document_selector",
+    "NotebookDocumentDidChangeNotification.jsonrpc",
+    "NotebookDocumentDidChangeNotification.method",
+    "NotebookDocumentDidCloseNotification.jsonrpc",
+    "NotebookDocumentDidCloseNotification.method",
+    "NotebookDocumentDidOpenNotification.jsonrpc",
+    "NotebookDocumentDidOpenNotification.method",
+    "NotebookDocumentDidSaveNotification.jsonrpc",
+    "NotebookDocumentDidSaveNotification.method",
+    "OptionalVersionedTextDocumentIdentifier.version",
+    "ProgressNotification.jsonrpc",
+    "ProgressNotification.method",
+    "ReferenceRegistrationOptions.document_selector",
+    "RenameRegistrationOptions.document_selector",
+    "ResponseErrorMessage.error",
+    "ResponseErrorMessage.jsonrpc",
+    "SelectionRangeRegistrationOptions.document_selector",
+    "SemanticTokensRegistrationOptions.document_selector",
+    "SetTraceNotification.jsonrpc",
+    "SetTraceNotification.method",
+    "ShutdownRequest.jsonrpc",
+    "ShutdownRequest.method",
+    "ShutdownResponse.jsonrpc",
+    "ShutdownResponse.result",
+    "SignatureHelpRegistrationOptions.document_selector",
+    "TelemetryEventNotification.jsonrpc",
+    "TelemetryEventNotification.method",
+    "TextDocumentChangeRegistrationOptions.document_selector",
+    "TextDocumentCodeActionRequest.jsonrpc",
+    "TextDocumentCodeActionRequest.method",
+    "TextDocumentCodeActionResponse.jsonrpc",
+    "TextDocumentCodeActionResponse.result",
+    "TextDocumentCodeLensRequest.jsonrpc",
+    "TextDocumentCodeLensRequest.method",
+    "TextDocumentCodeLensResponse.jsonrpc",
+    "TextDocumentCodeLensResponse.result",
+    "TextDocumentColorPresentationOptions.document_selector",
+    "TextDocumentColorPresentationRequest.jsonrpc",
+    "TextDocumentColorPresentationRequest.method",
+    "TextDocumentColorPresentationResponse.jsonrpc",
     "TextDocumentColorPresentationResponse.result",
+    "TextDocumentCompletionRequest.jsonrpc",
+    "TextDocumentCompletionRequest.method",
+    "TextDocumentCompletionResponse.jsonrpc",
+    "TextDocumentCompletionResponse.result",
+    "TextDocumentDeclarationRequest.jsonrpc",
+    "TextDocumentDeclarationRequest.method",
+    "TextDocumentDeclarationResponse.jsonrpc",
+    "TextDocumentDeclarationResponse.result",
+    "TextDocumentDefinitionRequest.jsonrpc",
+    "TextDocumentDefinitionRequest.method",
+    "TextDocumentDefinitionResponse.jsonrpc",
+    "TextDocumentDefinitionResponse.result",
+    "TextDocumentDiagnosticRequest.jsonrpc",
+    "TextDocumentDiagnosticRequest.method",
+    "TextDocumentDiagnosticResponse.jsonrpc",
+    "TextDocumentDiagnosticResponse.result",
+    "TextDocumentDidChangeNotification.jsonrpc",
+    "TextDocumentDidChangeNotification.method",
+    "TextDocumentDidCloseNotification.jsonrpc",
+    "TextDocumentDidCloseNotification.method",
+    "TextDocumentDidOpenNotification.jsonrpc",
+    "TextDocumentDidOpenNotification.method",
+    "TextDocumentDidSaveNotification.jsonrpc",
+    "TextDocumentDidSaveNotification.method",
+    "TextDocumentDocumentColorRequest.jsonrpc",
+    "TextDocumentDocumentColorRequest.method",
+    "TextDocumentDocumentColorResponse.jsonrpc",
+    "TextDocumentDocumentColorResponse.result",
+    "TextDocumentDocumentHighlightRequest.jsonrpc",
+    "TextDocumentDocumentHighlightRequest.method",
+    "TextDocumentDocumentHighlightResponse.jsonrpc",
+    "TextDocumentDocumentHighlightResponse.result",
+    "TextDocumentDocumentLinkRequest.jsonrpc",
+    "TextDocumentDocumentLinkRequest.method",
+    "TextDocumentDocumentLinkResponse.jsonrpc",
+    "TextDocumentDocumentLinkResponse.result",
+    "TextDocumentDocumentSymbolRequest.jsonrpc",
+    "TextDocumentDocumentSymbolRequest.method",
+    "TextDocumentDocumentSymbolResponse.jsonrpc",
+    "TextDocumentDocumentSymbolResponse.result",
+    "TextDocumentFoldingRangeRequest.jsonrpc",
+    "TextDocumentFoldingRangeRequest.method",
+    "TextDocumentFoldingRangeResponse.jsonrpc",
+    "TextDocumentFoldingRangeResponse.result",
+    "TextDocumentFormattingRequest.jsonrpc",
+    "TextDocumentFormattingRequest.method",
+    "TextDocumentFormattingResponse.jsonrpc",
+    "TextDocumentFormattingResponse.result",
+    "TextDocumentHoverRequest.jsonrpc",
+    "TextDocumentHoverRequest.method",
+    "TextDocumentHoverResponse.jsonrpc",
+    "TextDocumentHoverResponse.result",
+    "TextDocumentImplementationRequest.jsonrpc",
+    "TextDocumentImplementationRequest.method",
+    "TextDocumentImplementationResponse.jsonrpc",
+    "TextDocumentImplementationResponse.result",
+    "TextDocumentInlayHintRequest.jsonrpc",
+    "TextDocumentInlayHintRequest.method",
+    "TextDocumentInlayHintResponse.jsonrpc",
+    "TextDocumentInlayHintResponse.result",
+    "TextDocumentInlineValueRequest.jsonrpc",
+    "TextDocumentInlineValueRequest.method",
+    "TextDocumentInlineValueResponse.jsonrpc",
+    "TextDocumentInlineValueResponse.result",
+    "TextDocumentLinkedEditingRangeRequest.jsonrpc",
+    "TextDocumentLinkedEditingRangeRequest.method",
+    "TextDocumentLinkedEditingRangeResponse.jsonrpc",
+    "TextDocumentLinkedEditingRangeResponse.result",
+    "TextDocumentMonikerRequest.jsonrpc",
+    "TextDocumentMonikerRequest.method",
+    "TextDocumentMonikerResponse.jsonrpc",
+    "TextDocumentMonikerResponse.result",
+    "TextDocumentOnTypeFormattingRequest.jsonrpc",
+    "TextDocumentOnTypeFormattingRequest.method",
+    "TextDocumentOnTypeFormattingResponse.jsonrpc",
+    "TextDocumentOnTypeFormattingResponse.result",
+    "TextDocumentPrepareCallHierarchyRequest.jsonrpc",
+    "TextDocumentPrepareCallHierarchyRequest.method",
+    "TextDocumentPrepareCallHierarchyResponse.jsonrpc",
+    "TextDocumentPrepareCallHierarchyResponse.result",
+    "TextDocumentPrepareRenameRequest.jsonrpc",
+    "TextDocumentPrepareRenameRequest.method",
+    "TextDocumentPrepareRenameResponse.jsonrpc",
+    "TextDocumentPrepareRenameResponse.result",
+    "TextDocumentPrepareTypeHierarchyRequest.jsonrpc",
+    "TextDocumentPrepareTypeHierarchyRequest.method",
+    "TextDocumentPrepareTypeHierarchyResponse.jsonrpc",
+    "TextDocumentPrepareTypeHierarchyResponse.result",
+    "TextDocumentPublishDiagnosticsNotification.jsonrpc",
+    "TextDocumentPublishDiagnosticsNotification.method",
+    "TextDocumentRangeFormattingRequest.jsonrpc",
+    "TextDocumentRangeFormattingRequest.method",
+    "TextDocumentRangeFormattingResponse.jsonrpc",
+    "TextDocumentRangeFormattingResponse.result",
+    "TextDocumentReferencesRequest.jsonrpc",
+    "TextDocumentReferencesRequest.method",
     "TextDocumentReferencesResponse.jsonrpc",
+    "TextDocumentReferencesResponse.result",
+    "TextDocumentRegistrationOptions.document_selector",
+    "TextDocumentRenameRequest.jsonrpc",
+    "TextDocumentRenameRequest.method",
+    "TextDocumentRenameResponse.jsonrpc",
+    "TextDocumentRenameResponse.result",
+    "TextDocumentSaveRegistrationOptions.document_selector",
+    "TextDocumentSelectionRangeRequest.jsonrpc",
+    "TextDocumentSelectionRangeRequest.method",
+    "TextDocumentSelectionRangeResponse.jsonrpc",
+    "TextDocumentSelectionRangeResponse.result",
+    "TextDocumentSemanticTokensFullDeltaRequest.jsonrpc",
+    "TextDocumentSemanticTokensFullDeltaRequest.method",
+    "TextDocumentSemanticTokensFullDeltaResponse.jsonrpc",
+    "TextDocumentSemanticTokensFullDeltaResponse.result",
+    "TextDocumentSemanticTokensFullRequest.jsonrpc",
+    "TextDocumentSemanticTokensFullRequest.method",
+    "TextDocumentSemanticTokensFullResponse.jsonrpc",
+    "TextDocumentSemanticTokensFullResponse.result",
+    "TextDocumentSemanticTokensRangeRequest.jsonrpc",
+    "TextDocumentSemanticTokensRangeRequest.method",
+    "TextDocumentSemanticTokensRangeResponse.jsonrpc",
+    "TextDocumentSemanticTokensRangeResponse.result",
+    "TextDocumentSignatureHelpRequest.jsonrpc",
+    "TextDocumentSignatureHelpRequest.method",
+    "TextDocumentSignatureHelpResponse.jsonrpc",
+    "TextDocumentSignatureHelpResponse.result",
+    "TextDocumentTypeDefinitionRequest.jsonrpc",
+    "TextDocumentTypeDefinitionRequest.method",
+    "TextDocumentTypeDefinitionResponse.jsonrpc",
+    "TextDocumentTypeDefinitionResponse.result",
+    "TextDocumentWillSaveNotification.jsonrpc",
+    "TextDocumentWillSaveNotification.method",
+    "TextDocumentWillSaveWaitUntilRequest.jsonrpc",
+    "TextDocumentWillSaveWaitUntilRequest.method",
+    "TextDocumentWillSaveWaitUntilResponse.jsonrpc",
+    "TextDocumentWillSaveWaitUntilResponse.result",
+    "TypeDefinitionRegistrationOptions.document_selector",
+    "TypeHierarchyRegistrationOptions.document_selector",
+    "TypeHierarchySubtypesRequest.jsonrpc",
+    "TypeHierarchySubtypesRequest.method",
+    "TypeHierarchySubtypesResponse.jsonrpc",
+    "TypeHierarchySubtypesResponse.result",
+    "TypeHierarchySupertypesRequest.jsonrpc",
+    "TypeHierarchySupertypesRequest.method",
+    "TypeHierarchySupertypesResponse.jsonrpc",
+    "TypeHierarchySupertypesResponse.result",
+    "WindowLogMessageNotification.jsonrpc",
+    "WindowLogMessageNotification.method",
+    "WindowShowDocumentRequest.jsonrpc",
     "WindowShowDocumentRequest.method",
     "WindowShowDocumentResponse.jsonrpc",
+    "WindowShowDocumentResponse.result",
+    "WindowShowMessageNotification.jsonrpc",
+    "WindowShowMessageNotification.method",
+    "WindowShowMessageRequestRequest.jsonrpc",
+    "WindowShowMessageRequestRequest.method",
+    "WindowShowMessageRequestResponse.jsonrpc",
+    "WindowShowMessageRequestResponse.result",
+    "WindowWorkDoneProgressCancelNotification.jsonrpc",
+    "WindowWorkDoneProgressCancelNotification.method",
+    "WindowWorkDoneProgressCreateRequest.jsonrpc",
+    "WindowWorkDoneProgressCreateRequest.method",
+    "WindowWorkDoneProgressCreateResponse.jsonrpc",
+    "WindowWorkDoneProgressCreateResponse.result",
+    "WorkspaceApplyEditRequest.jsonrpc",
+    "WorkspaceApplyEditRequest.method",
+    "WorkspaceApplyEditResponse.jsonrpc",
+    "WorkspaceApplyEditResponse.result",
+    "WorkspaceCodeLensRefreshRequest.jsonrpc",
+    "WorkspaceCodeLensRefreshRequest.method",
+    "WorkspaceCodeLensRefreshResponse.jsonrpc",
+    "WorkspaceCodeLensRefreshResponse.result",
+    "WorkspaceConfigurationRequest.jsonrpc",
+    "WorkspaceConfigurationRequest.method",
+    "WorkspaceConfigurationResponse.jsonrpc",
+    "WorkspaceConfigurationResponse.result",
+    "WorkspaceDiagnosticRefreshRequest.jsonrpc",
+    "WorkspaceDiagnosticRefreshRequest.method",
+    "WorkspaceDiagnosticRefreshResponse.jsonrpc",
+    "WorkspaceDiagnosticRefreshResponse.result",
+    "WorkspaceDiagnosticRequest.jsonrpc",
+    "WorkspaceDiagnosticRequest.method",
+    "WorkspaceDiagnosticResponse.jsonrpc",
+    "WorkspaceDiagnosticResponse.result",
+    "WorkspaceDidChangeConfigurationNotification.jsonrpc",
+    "WorkspaceDidChangeConfigurationNotification.method",
+    "WorkspaceDidChangeWatchedFilesNotification.jsonrpc",
+    "WorkspaceDidChangeWatchedFilesNotification.method",
+    "WorkspaceDidChangeWorkspaceFoldersNotification.jsonrpc",
+    "WorkspaceDidChangeWorkspaceFoldersNotification.method",
+    "WorkspaceDidCreateFilesNotification.jsonrpc",
+    "WorkspaceDidCreateFilesNotification.method",
+    "WorkspaceDidDeleteFilesNotification.jsonrpc",
+    "WorkspaceDidDeleteFilesNotification.method",
+    "WorkspaceDidRenameFilesNotification.jsonrpc",
+    "WorkspaceDidRenameFilesNotification.method",
+    "WorkspaceExecuteCommandRequest.jsonrpc",
+    "WorkspaceExecuteCommandRequest.method",
+    "WorkspaceExecuteCommandResponse.jsonrpc",
+    "WorkspaceExecuteCommandResponse.result",
+    "WorkspaceFoldersInitializeParams.workspace_folders",
+    "WorkspaceFullDocumentDiagnosticReport.version",
+    "WorkspaceInlayHintRefreshRequest.jsonrpc",
+    "WorkspaceInlayHintRefreshRequest.method",
+    "WorkspaceInlayHintRefreshResponse.jsonrpc",
+    "WorkspaceInlayHintRefreshResponse.result",
+    "WorkspaceInlineValueRefreshRequest.jsonrpc",
+    "WorkspaceInlineValueRefreshRequest.method",
+    "WorkspaceInlineValueRefreshResponse.jsonrpc",
+    "WorkspaceInlineValueRefreshResponse.result",
+    "WorkspaceSemanticTokensRefreshRequest.jsonrpc",
+    "WorkspaceSemanticTokensRefreshRequest.method",
+    "WorkspaceSemanticTokensRefreshResponse.jsonrpc",
+    "WorkspaceSemanticTokensRefreshResponse.result",
+    "WorkspaceSymbolRequest.jsonrpc",
+    "WorkspaceSymbolRequest.method",
+    "WorkspaceSymbolResolveRequest.jsonrpc",
+    "WorkspaceSymbolResolveRequest.method",
+    "WorkspaceSymbolResolveResponse.jsonrpc",
+    "WorkspaceSymbolResolveResponse.result",
+    "WorkspaceSymbolResponse.jsonrpc",
+    "WorkspaceSymbolResponse.result",
+    "WorkspaceUnchangedDocumentDiagnosticReport.version",
+    "WorkspaceWillCreateFilesRequest.jsonrpc",
+    "WorkspaceWillCreateFilesRequest.method",
+    "WorkspaceWillCreateFilesResponse.jsonrpc",
+    "WorkspaceWillCreateFilesResponse.result",
+    "WorkspaceWillDeleteFilesRequest.jsonrpc",
     "WorkspaceWillDeleteFilesRequest.method",
-    "TypeHierarchyRegistrationOptions.document_selector",
-    "TextDocumentReferencesRequest.method",
-    "TextDocumentSelectionRangeRequest.method",
-    "SignatureHelpRegistrationOptions.document_selector",
-    "LogTraceNotification.method",
+    "WorkspaceWillDeleteFilesResponse.jsonrpc",
+    "WorkspaceWillDeleteFilesResponse.result",
+    "WorkspaceWillRenameFilesRequest.jsonrpc",
+    "WorkspaceWillRenameFilesRequest.method",
+    "WorkspaceWillRenameFilesResponse.jsonrpc",
+    "WorkspaceWillRenameFilesResponse.result",
+    "WorkspaceWorkspaceFoldersRequest.jsonrpc",
+    "WorkspaceWorkspaceFoldersRequest.method",
+    "WorkspaceWorkspaceFoldersResponse.jsonrpc",
+    "WorkspaceWorkspaceFoldersResponse.result",
+    "_InitializeParams.process_id",
+    "_InitializeParams.root_path",
+    "_InitializeParams.root_uri",
 ]
 
 
@@ -11164,637 +11831,687 @@ def is_special_property(cls, property_name: str) -> bool:
 
 
 ALL_TYPES_MAP = {
-    "HoverRegistrationOptions": HoverRegistrationOptions,
-    "TextDocumentFilter_Type1": TextDocumentFilter_Type1,
-    "CompletionClientCapabilities": CompletionClientCapabilities,
-    "DeclarationOptions": DeclarationOptions,
-    "ExecutionSummary": ExecutionSummary,
-    "WorkDoneProgressEnd": WorkDoneProgressEnd,
-    "SignatureHelpOptions": SignatureHelpOptions,
-    "TypeHierarchySubtypesRequest": TypeHierarchySubtypesRequest,
-    "FileSystemWatcher": FileSystemWatcher,
-    "TextDocumentDocumentHighlightResponse": TextDocumentDocumentHighlightResponse,
-    "WillSaveTextDocumentParams": WillSaveTextDocumentParams,
-    "WorkspaceCodeLensRefreshRequest": WorkspaceCodeLensRefreshRequest,
-    "DidCloseTextDocumentParams": DidCloseTextDocumentParams,
-    "TextDocumentWillSaveWaitUntilResponse": TextDocumentWillSaveWaitUntilResponse,
-    "CallHierarchyOutgoingCallsRequest": CallHierarchyOutgoingCallsRequest,
-    "LSPArray": LSPArray,
-    "DocumentColorClientCapabilities": DocumentColorClientCapabilities,
-    "TextDocumentLinkedEditingRangeResponse": TextDocumentLinkedEditingRangeResponse,
-    "CodeActionClientCapabilities": CodeActionClientCapabilities,
-    "DocumentColorParams": DocumentColorParams,
-    "LocationLink": LocationLink,
-    "PreviousResultId": PreviousResultId,
-    "WorkspaceDidChangeConfigurationNotification": WorkspaceDidChangeConfigurationNotification,
-    "DiagnosticClientCapabilities": DiagnosticClientCapabilities,
-    "WorkspaceFoldersChangeEvent": WorkspaceFoldersChangeEvent,
-    "CallHierarchyOptions": CallHierarchyOptions,
-    "TextDocumentPositionParams": TextDocumentPositionParams,
-    "InlineValueText": InlineValueText,
-    "WorkspaceDiagnosticReport": WorkspaceDiagnosticReport,
-    "Hover": Hover,
-    "TextDocumentPrepareRenameResponse": TextDocumentPrepareRenameResponse,
-    "FileCreate": FileCreate,
-    "TextDocumentDocumentColorRequest": TextDocumentDocumentColorRequest,
-    "TextDocumentRangeFormattingResponse": TextDocumentRangeFormattingResponse,
-    "CallHierarchyIncomingCallsRequest": CallHierarchyIncomingCallsRequest,
-    "InlayHintResolveResponse": InlayHintResolveResponse,
-    "DeclarationRegistrationOptions": DeclarationRegistrationOptions,
-    "ExecuteCommandRegistrationOptions": ExecuteCommandRegistrationOptions,
-    "FileOperationPattern": FileOperationPattern,
-    "InsertReplaceEdit": InsertReplaceEdit,
-    "DocumentRangeFormattingRegistrationOptions": DocumentRangeFormattingRegistrationOptions,
-    "DeclarationParams": DeclarationParams,
-    "SignatureHelp": SignatureHelp,
-    "InlayHintResolveRequest": InlayHintResolveRequest,
-    "InitializeError": InitializeError,
-    "Registration": Registration,
-    "CallHierarchyPrepareParams": CallHierarchyPrepareParams,
-    "CompletionList": CompletionList,
-    "TypeDefinitionRegistrationOptions": TypeDefinitionRegistrationOptions,
-    "InitializeResult": InitializeResult,
-    "CompletionItemResolveRequest": CompletionItemResolveRequest,
-    "TextDocumentColorPresentationResponse": TextDocumentColorPresentationResponse,
-    "InlayHintLabelPart": InlayHintLabelPart,
-    "Color": Color,
-    "DocumentSymbolParams": DocumentSymbolParams,
-    "TextDocumentPrepareCallHierarchyResponse": TextDocumentPrepareCallHierarchyResponse,
-    "SignatureHelpContext": SignatureHelpContext,
-    "WorkspaceWillRenameFilesResponse": WorkspaceWillRenameFilesResponse,
-    "SelectionRangeRegistrationOptions": SelectionRangeRegistrationOptions,
-    "ClientUnregisterCapabilityRequest": ClientUnregisterCapabilityRequest,
-    "DocumentLinkClientCapabilities": DocumentLinkClientCapabilities,
-    "RenameFile": RenameFile,
-    "WorkspaceExecuteCommandRequest": WorkspaceExecuteCommandRequest,
-    "TextDocumentWillSaveNotification": TextDocumentWillSaveNotification,
-    "FoldingRangeParams": FoldingRangeParams,
-    "DocumentSymbolClientCapabilities": DocumentSymbolClientCapabilities,
-    "TypeHierarchySupertypesParams": TypeHierarchySupertypesParams,
-    "ReferenceOptions": ReferenceOptions,
-    "InlineValueVariableLookup": InlineValueVariableLookup,
-    "WorkspaceSymbolResolveRequest": WorkspaceSymbolResolveRequest,
-    "TextDocumentPrepareCallHierarchyRequest": TextDocumentPrepareCallHierarchyRequest,
-    "ShutdownRequest": ShutdownRequest,
-    "CompletionItem": CompletionItem,
-    "ShowDocumentResult": ShowDocumentResult,
-    "MarkedString_Type1": MarkedString_Type1,
-    "NotebookDocumentDidChangeNotification": NotebookDocumentDidChangeNotification,
-    "WorkspaceSymbolClientCapabilities": WorkspaceSymbolClientCapabilities,
-    "InlayHintRegistrationOptions": InlayHintRegistrationOptions,
-    "TextDocumentRenameResponse": TextDocumentRenameResponse,
-    "InitializeRequest": InitializeRequest,
-    "DocumentRangeFormattingOptions": DocumentRangeFormattingOptions,
-    "CallHierarchyItem": CallHierarchyItem,
-    "InlineValueOptions": InlineValueOptions,
-    "TextDocumentFoldingRangeResponse": TextDocumentFoldingRangeResponse,
-    "DocumentSymbolOptions": DocumentSymbolOptions,
-    "TextDocumentCompletionResponse": TextDocumentCompletionResponse,
-    "ChangeAnnotation": ChangeAnnotation,
-    "SemanticTokensPartialResult": SemanticTokensPartialResult,
-    "SignatureHelpClientCapabilities": SignatureHelpClientCapabilities,
-    "DidOpenTextDocumentParams": DidOpenTextDocumentParams,
-    "CodeLensOptions": CodeLensOptions,
-    "TextDocumentContentChangeEvent_Type1": TextDocumentContentChangeEvent_Type1,
-    "UnchangedDocumentDiagnosticReport": UnchangedDocumentDiagnosticReport,
-    "Pattern": Pattern,
+    "AnnotatedTextEdit": AnnotatedTextEdit,
     "ApplyWorkspaceEditParams": ApplyWorkspaceEditParams,
-    "WindowClientCapabilities": WindowClientCapabilities,
-    "RenameParams": RenameParams,
-    "SelectionRangeOptions": SelectionRangeOptions,
-    "CodeLens": CodeLens,
-    "WorkspaceEditClientCapabilities": WorkspaceEditClientCapabilities,
-    "SymbolInformation": SymbolInformation,
-    "TextDocumentContentChangeEvent_Type2": TextDocumentContentChangeEvent_Type2,
-    "FoldingRangeOptions": FoldingRangeOptions,
-    "TypeDefinitionParams": TypeDefinitionParams,
-    "Location": Location,
-    "SemanticTokenTypes": SemanticTokenTypes,
-    "TypeHierarchySupertypesRequest": TypeHierarchySupertypesRequest,
-    "CallHierarchyOutgoingCallsParams": CallHierarchyOutgoingCallsParams,
-    "CallHierarchyRegistrationOptions": CallHierarchyRegistrationOptions,
-    "LSPErrorCodes": LSPErrorCodes,
-    "SignatureHelpRegistrationOptions": SignatureHelpRegistrationOptions,
-    "MonikerOptions": MonikerOptions,
-    "FileChangeType": FileChangeType,
-    "DocumentLinkResolveRequest": DocumentLinkResolveRequest,
-    "WorkspaceEdit": WorkspaceEdit,
-    "TextDocumentSignatureHelpRequest": TextDocumentSignatureHelpRequest,
-    "DiagnosticRegistrationOptions": DiagnosticRegistrationOptions,
-    "DocumentLinkResolveResponse": DocumentLinkResolveResponse,
-    "DiagnosticSeverity": DiagnosticSeverity,
-    "ReferenceRegistrationOptions": ReferenceRegistrationOptions,
-    "TypeHierarchyOptions": TypeHierarchyOptions,
-    "WindowShowMessageRequestResponse": WindowShowMessageRequestResponse,
-    "TextDocumentDeclarationResponse": TextDocumentDeclarationResponse,
-    "RelativePattern": RelativePattern,
-    "DidSaveTextDocumentParams": DidSaveTextDocumentParams,
-    "PartialResultParams": PartialResultParams,
-    "CodeActionResolveResponse": CodeActionResolveResponse,
-    "NotebookDocumentSyncRegistrationOptions": NotebookDocumentSyncRegistrationOptions,
-    "WorkDoneProgressOptions": WorkDoneProgressOptions,
-    "NotebookCellTextDocumentFilter": NotebookCellTextDocumentFilter,
-    "ConfigurationItem": ConfigurationItem,
-    "ClientCapabilities": ClientCapabilities,
-    "TextDocumentSyncOptions": TextDocumentSyncOptions,
-    "SignatureInformation": SignatureInformation,
-    "InlineValueRegistrationOptions": InlineValueRegistrationOptions,
-    "DocumentOnTypeFormattingClientCapabilities": DocumentOnTypeFormattingClientCapabilities,
-    "CallHierarchyIncomingCallsResponse": CallHierarchyIncomingCallsResponse,
-    "WorkspaceConfigurationRequest": WorkspaceConfigurationRequest,
-    "TypeHierarchyItem": TypeHierarchyItem,
-    "DidOpenNotebookDocumentParams": DidOpenNotebookDocumentParams,
-    "Unregistration": Unregistration,
-    "PrepareRenameParams": PrepareRenameParams,
-    "FileOperationFilter": FileOperationFilter,
-    "Definition": Definition,
-    "VersionedNotebookDocumentIdentifier": VersionedNotebookDocumentIdentifier,
-    "TextDocumentDidCloseNotification": TextDocumentDidCloseNotification,
-    "CodeLensResolveResponse": CodeLensResolveResponse,
-    "WorkspaceDidChangeWatchedFilesNotification": WorkspaceDidChangeWatchedFilesNotification,
-    "PublishDiagnosticsClientCapabilities": PublishDiagnosticsClientCapabilities,
-    "FoldingRangeRegistrationOptions": FoldingRangeRegistrationOptions,
-    "FileOperationPatternKind": FileOperationPatternKind,
-    "PrepareRenameResult_Type2": PrepareRenameResult_Type2,
-    "TextDocumentHoverRequest": TextDocumentHoverRequest,
-    "CreateFileOptions": CreateFileOptions,
-    "WindowWorkDoneProgressCreateRequest": WindowWorkDoneProgressCreateRequest,
-    "_InitializeParams": _InitializeParams,
-    "DocumentFormattingOptions": DocumentFormattingOptions,
-    "TextDocumentDidChangeNotification": TextDocumentDidChangeNotification,
-    "DocumentHighlightParams": DocumentHighlightParams,
-    "NotebookDocumentSyncOptions": NotebookDocumentSyncOptions,
-    "TextDocumentFoldingRangeRequest": TextDocumentFoldingRangeRequest,
-    "CompletionContext": CompletionContext,
-    "ResourceOperationKind": ResourceOperationKind,
-    "DocumentColorOptions": DocumentColorOptions,
-    "CodeLensClientCapabilities": CodeLensClientCapabilities,
-    "SelectionRange": SelectionRange,
-    "InsertTextMode": InsertTextMode,
-    "Diagnostic": Diagnostic,
-    "DidChangeConfigurationClientCapabilities": DidChangeConfigurationClientCapabilities,
-    "TextDocumentDefinitionRequest": TextDocumentDefinitionRequest,
-    "FileRename": FileRename,
-    "WorkDoneProgressBegin": WorkDoneProgressBegin,
-    "ExecuteCommandParams": ExecuteCommandParams,
-    "TextDocumentWillSaveWaitUntilRequest": TextDocumentWillSaveWaitUntilRequest,
-    "WorkDoneProgressCreateParams": WorkDoneProgressCreateParams,
-    "DocumentSymbol": DocumentSymbol,
-    "FormattingOptions": FormattingOptions,
-    "InlayHintParams": InlayHintParams,
-    "CallHierarchyOutgoingCallsResponse": CallHierarchyOutgoingCallsResponse,
-    "CreateFile": CreateFile,
-    "HoverClientCapabilities": HoverClientCapabilities,
-    "TextDocumentReferencesRequest": TextDocumentReferencesRequest,
-    "UnregistrationParams": UnregistrationParams,
+    "ApplyWorkspaceEditResult": ApplyWorkspaceEditResult,
+    "BaseSymbolInformation": BaseSymbolInformation,
     "CallHierarchyClientCapabilities": CallHierarchyClientCapabilities,
-    "TypeHierarchyClientCapabilities": TypeHierarchyClientCapabilities,
-    "RenameFilesParams": RenameFilesParams,
-    "ResourceOperation": ResourceOperation,
-    "DocumentLink": DocumentLink,
-    "CompletionTriggerKind": CompletionTriggerKind,
-    "TextDocumentDiagnosticRequest": TextDocumentDiagnosticRequest,
-    "MonikerParams": MonikerParams,
-    "NotebookDocumentDidCloseNotification": NotebookDocumentDidCloseNotification,
-    "TextDocumentSemanticTokensFullRequest": TextDocumentSemanticTokensFullRequest,
-    "FileOperationPatternOptions": FileOperationPatternOptions,
-    "Command": Command,
-    "NotebookDocumentChangeEvent": NotebookDocumentChangeEvent,
-    "WorkspaceDidDeleteFilesNotification": WorkspaceDidDeleteFilesNotification,
-    "TextDocumentDocumentLinkRequest": TextDocumentDocumentLinkRequest,
-    "TextDocumentFilter_Type3": TextDocumentFilter_Type3,
-    "SemanticTokensDeltaPartialResult": SemanticTokensDeltaPartialResult,
-    "SemanticTokensClientCapabilities": SemanticTokensClientCapabilities,
-    "TypeHierarchyPrepareParams": TypeHierarchyPrepareParams,
-    "CompletionParams": CompletionParams,
-    "CodeDescription": CodeDescription,
-    "WatchKind": WatchKind,
-    "TextDocumentCodeActionResponse": TextDocumentCodeActionResponse,
-    "SemanticTokensEdit": SemanticTokensEdit,
-    "TypeDefinitionOptions": TypeDefinitionOptions,
-    "CompletionRegistrationOptions": CompletionRegistrationOptions,
-    "DocumentHighlightRegistrationOptions": DocumentHighlightRegistrationOptions,
-    "WindowShowDocumentRequest": WindowShowDocumentRequest,
-    "TextDocumentLinkedEditingRangeRequest": TextDocumentLinkedEditingRangeRequest,
-    "TextDocumentMonikerRequest": TextDocumentMonikerRequest,
-    "TextDocumentDocumentHighlightRequest": TextDocumentDocumentHighlightRequest,
-    "CreateFilesParams": CreateFilesParams,
-    "FileOperationClientCapabilities": FileOperationClientCapabilities,
-    "WorkspaceSemanticTokensRefreshResponse": WorkspaceSemanticTokensRefreshResponse,
-    "NotebookDocumentFilter_Type1": NotebookDocumentFilter_Type1,
-    "NotebookDocumentFilter_Type3": NotebookDocumentFilter_Type3,
-    "WorkspaceSymbolRequest": WorkspaceSymbolRequest,
-    "ImplementationOptions": ImplementationOptions,
-    "HoverParams": HoverParams,
-    "TextDocumentPublishDiagnosticsNotification": TextDocumentPublishDiagnosticsNotification,
-    "DeleteFilesParams": DeleteFilesParams,
-    "ReferenceParams": ReferenceParams,
-    "WorkspaceApplyEditResponse": WorkspaceApplyEditResponse,
-    "NotebookDocumentSyncClientCapabilities": NotebookDocumentSyncClientCapabilities,
-    "InlayHintKind": InlayHintKind,
-    "ShutdownResponse": ShutdownResponse,
-    "WorkDoneProgressCancelParams": WorkDoneProgressCancelParams,
-    "InlineValueEvaluatableExpression": InlineValueEvaluatableExpression,
-    "SymbolKind": SymbolKind,
-    "InitializedParams": InitializedParams,
-    "VersionedTextDocumentIdentifier": VersionedTextDocumentIdentifier,
-    "Range": Range,
-    "WorkspaceApplyEditRequest": WorkspaceApplyEditRequest,
-    "WindowShowDocumentResponse": WindowShowDocumentResponse,
-    "NotebookCell": NotebookCell,
-    "TextDocumentInlayHintRequest": TextDocumentInlayHintRequest,
-    "RenameOptions": RenameOptions,
-    "WorkspaceDocumentDiagnosticReport": WorkspaceDocumentDiagnosticReport,
-    "TextDocumentPrepareTypeHierarchyRequest": TextDocumentPrepareTypeHierarchyRequest,
-    "TextDocumentDidOpenNotification": TextDocumentDidOpenNotification,
-    "DocumentOnTypeFormattingParams": DocumentOnTypeFormattingParams,
-    "CodeActionOptions": CodeActionOptions,
-    "DocumentFormattingClientCapabilities": DocumentFormattingClientCapabilities,
-    "TextDocumentDocumentLinkResponse": TextDocumentDocumentLinkResponse,
-    "TextDocumentDefinitionResponse": TextDocumentDefinitionResponse,
-    "SetTraceParams": SetTraceParams,
-    "TextDocumentReferencesResponse": TextDocumentReferencesResponse,
-    "MessageActionItem": MessageActionItem,
-    "RegistrationParams": RegistrationParams,
-    "DidChangeWatchedFilesClientCapabilities": DidChangeWatchedFilesClientCapabilities,
-    "DidChangeTextDocumentParams": DidChangeTextDocumentParams,
-    "TextDocumentClientCapabilities": TextDocumentClientCapabilities,
-    "WorkspaceUnchangedDocumentDiagnosticReport": WorkspaceUnchangedDocumentDiagnosticReport,
-    "StaticRegistrationOptions": StaticRegistrationOptions,
-    "DocumentOnTypeFormattingOptions": DocumentOnTypeFormattingOptions,
-    "HoverOptions": HoverOptions,
-    "WorkspaceWillCreateFilesResponse": WorkspaceWillCreateFilesResponse,
-    "CodeAction": CodeAction,
+    "CallHierarchyIncomingCall": CallHierarchyIncomingCall,
+    "CallHierarchyIncomingCallsParams": CallHierarchyIncomingCallsParams,
+    "CallHierarchyIncomingCallsRequest": CallHierarchyIncomingCallsRequest,
+    "CallHierarchyIncomingCallsResponse": CallHierarchyIncomingCallsResponse,
+    "CallHierarchyItem": CallHierarchyItem,
+    "CallHierarchyOptions": CallHierarchyOptions,
+    "CallHierarchyOutgoingCall": CallHierarchyOutgoingCall,
+    "CallHierarchyOutgoingCallsParams": CallHierarchyOutgoingCallsParams,
+    "CallHierarchyOutgoingCallsRequest": CallHierarchyOutgoingCallsRequest,
+    "CallHierarchyOutgoingCallsResponse": CallHierarchyOutgoingCallsResponse,
+    "CallHierarchyPrepareParams": CallHierarchyPrepareParams,
+    "CallHierarchyRegistrationOptions": CallHierarchyRegistrationOptions,
+    "CancelParams": CancelParams,
+    "CancelRequestNotification": CancelRequestNotification,
+    "ChangeAnnotation": ChangeAnnotation,
+    "ChangeAnnotationIdentifier": ChangeAnnotationIdentifier,
+    "ClientCapabilities": ClientCapabilities,
+    "ClientRegisterCapabilityRequest": ClientRegisterCapabilityRequest,
     "ClientRegisterCapabilityResponse": ClientRegisterCapabilityResponse,
-    "SemanticTokensDelta": SemanticTokensDelta,
-    "TextDocumentDiagnosticResponse": TextDocumentDiagnosticResponse,
-    "DocumentLinkRegistrationOptions": DocumentLinkRegistrationOptions,
-    "WorkspaceSymbolParams": WorkspaceSymbolParams,
-    "ShowMessageRequestParams": ShowMessageRequestParams,
-    "DefinitionClientCapabilities": DefinitionClientCapabilities,
-    "LogTraceNotification": LogTraceNotification,
+    "ClientUnregisterCapabilityRequest": ClientUnregisterCapabilityRequest,
     "ClientUnregisterCapabilityResponse": ClientUnregisterCapabilityResponse,
-    "ShowDocumentClientCapabilities": ShowDocumentClientCapabilities,
-    "FullDocumentDiagnosticReport": FullDocumentDiagnosticReport,
-    "InlineValueContext": InlineValueContext,
-    "WorkspaceExecuteCommandResponse": WorkspaceExecuteCommandResponse,
-    "InitializeParams": InitializeParams,
+    "CodeAction": CodeAction,
+    "CodeActionClientCapabilities": CodeActionClientCapabilities,
+    "CodeActionClientCapabilitiesCodeActionLiteralSupportType": CodeActionClientCapabilitiesCodeActionLiteralSupportType,
+    "CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType": CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType,
+    "CodeActionClientCapabilitiesResolveSupportType": CodeActionClientCapabilitiesResolveSupportType,
+    "CodeActionContext": CodeActionContext,
+    "CodeActionDisabledType": CodeActionDisabledType,
+    "CodeActionKind": CodeActionKind,
+    "CodeActionOptions": CodeActionOptions,
+    "CodeActionParams": CodeActionParams,
+    "CodeActionRegistrationOptions": CodeActionRegistrationOptions,
+    "CodeActionResolveRequest": CodeActionResolveRequest,
+    "CodeActionResolveResponse": CodeActionResolveResponse,
+    "CodeActionTriggerKind": CodeActionTriggerKind,
+    "CodeDescription": CodeDescription,
+    "CodeLens": CodeLens,
+    "CodeLensClientCapabilities": CodeLensClientCapabilities,
+    "CodeLensOptions": CodeLensOptions,
+    "CodeLensParams": CodeLensParams,
+    "CodeLensRegistrationOptions": CodeLensRegistrationOptions,
+    "CodeLensResolveRequest": CodeLensResolveRequest,
+    "CodeLensResolveResponse": CodeLensResolveResponse,
+    "CodeLensWorkspaceClientCapabilities": CodeLensWorkspaceClientCapabilities,
+    "Color": Color,
+    "ColorInformation": ColorInformation,
+    "ColorPresentation": ColorPresentation,
+    "ColorPresentationParams": ColorPresentationParams,
+    "Command": Command,
+    "CompletionClientCapabilities": CompletionClientCapabilities,
+    "CompletionClientCapabilitiesCompletionItemKindType": CompletionClientCapabilitiesCompletionItemKindType,
+    "CompletionClientCapabilitiesCompletionItemType": CompletionClientCapabilitiesCompletionItemType,
+    "CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType": CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType,
+    "CompletionClientCapabilitiesCompletionItemTypeResolveSupportType": CompletionClientCapabilitiesCompletionItemTypeResolveSupportType,
+    "CompletionClientCapabilitiesCompletionItemTypeTagSupportType": CompletionClientCapabilitiesCompletionItemTypeTagSupportType,
+    "CompletionClientCapabilitiesCompletionListType": CompletionClientCapabilitiesCompletionListType,
+    "CompletionContext": CompletionContext,
+    "CompletionItem": CompletionItem,
+    "CompletionItemKind": CompletionItemKind,
+    "CompletionItemLabelDetails": CompletionItemLabelDetails,
+    "CompletionItemResolveRequest": CompletionItemResolveRequest,
+    "CompletionItemResolveResponse": CompletionItemResolveResponse,
+    "CompletionItemTag": CompletionItemTag,
+    "CompletionList": CompletionList,
+    "CompletionListItemDefaultsType": CompletionListItemDefaultsType,
+    "CompletionListItemDefaultsTypeEditRangeType1": CompletionListItemDefaultsTypeEditRangeType1,
+    "CompletionOptions": CompletionOptions,
+    "CompletionOptionsCompletionItemType": CompletionOptionsCompletionItemType,
+    "CompletionParams": CompletionParams,
+    "CompletionRegistrationOptions": CompletionRegistrationOptions,
+    "CompletionRegistrationOptionsCompletionItemType": CompletionRegistrationOptionsCompletionItemType,
+    "CompletionTriggerKind": CompletionTriggerKind,
+    "ConfigurationItem": ConfigurationItem,
+    "ConfigurationParams": ConfigurationParams,
+    "CreateFile": CreateFile,
+    "CreateFileOptions": CreateFileOptions,
+    "CreateFilesParams": CreateFilesParams,
+    "Declaration": Declaration,
+    "DeclarationClientCapabilities": DeclarationClientCapabilities,
+    "DeclarationLink": DeclarationLink,
+    "DeclarationOptions": DeclarationOptions,
+    "DeclarationParams": DeclarationParams,
+    "DeclarationRegistrationOptions": DeclarationRegistrationOptions,
+    "Definition": Definition,
+    "DefinitionClientCapabilities": DefinitionClientCapabilities,
+    "DefinitionLink": DefinitionLink,
+    "DefinitionOptions": DefinitionOptions,
+    "DefinitionParams": DefinitionParams,
+    "DefinitionRegistrationOptions": DefinitionRegistrationOptions,
     "DeleteFile": DeleteFile,
+    "DeleteFileOptions": DeleteFileOptions,
+    "DeleteFilesParams": DeleteFilesParams,
+    "Diagnostic": Diagnostic,
+    "DiagnosticClientCapabilities": DiagnosticClientCapabilities,
+    "DiagnosticOptions": DiagnosticOptions,
+    "DiagnosticRegistrationOptions": DiagnosticRegistrationOptions,
+    "DiagnosticRelatedInformation": DiagnosticRelatedInformation,
+    "DiagnosticServerCancellationData": DiagnosticServerCancellationData,
+    "DiagnosticSeverity": DiagnosticSeverity,
+    "DiagnosticTag": DiagnosticTag,
+    "DiagnosticWorkspaceClientCapabilities": DiagnosticWorkspaceClientCapabilities,
+    "DidChangeConfigurationClientCapabilities": DidChangeConfigurationClientCapabilities,
+    "DidChangeConfigurationParams": DidChangeConfigurationParams,
+    "DidChangeConfigurationRegistrationOptions": DidChangeConfigurationRegistrationOptions,
+    "DidChangeNotebookDocumentParams": DidChangeNotebookDocumentParams,
+    "DidChangeTextDocumentParams": DidChangeTextDocumentParams,
+    "DidChangeWatchedFilesClientCapabilities": DidChangeWatchedFilesClientCapabilities,
+    "DidChangeWatchedFilesParams": DidChangeWatchedFilesParams,
+    "DidChangeWatchedFilesRegistrationOptions": DidChangeWatchedFilesRegistrationOptions,
+    "DidChangeWorkspaceFoldersParams": DidChangeWorkspaceFoldersParams,
+    "DidCloseNotebookDocumentParams": DidCloseNotebookDocumentParams,
+    "DidCloseTextDocumentParams": DidCloseTextDocumentParams,
+    "DidOpenNotebookDocumentParams": DidOpenNotebookDocumentParams,
+    "DidOpenTextDocumentParams": DidOpenTextDocumentParams,
+    "DidSaveNotebookDocumentParams": DidSaveNotebookDocumentParams,
+    "DidSaveTextDocumentParams": DidSaveTextDocumentParams,
+    "DocumentColorClientCapabilities": DocumentColorClientCapabilities,
+    "DocumentColorOptions": DocumentColorOptions,
+    "DocumentColorParams": DocumentColorParams,
+    "DocumentColorRegistrationOptions": DocumentColorRegistrationOptions,
+    "DocumentDiagnosticParams": DocumentDiagnosticParams,
+    "DocumentDiagnosticReport": DocumentDiagnosticReport,
+    "DocumentDiagnosticReportPartialResult": DocumentDiagnosticReportPartialResult,
+    "DocumentFilter": DocumentFilter,
+    "DocumentFormattingClientCapabilities": DocumentFormattingClientCapabilities,
+    "DocumentFormattingOptions": DocumentFormattingOptions,
+    "DocumentFormattingParams": DocumentFormattingParams,
+    "DocumentFormattingRegistrationOptions": DocumentFormattingRegistrationOptions,
+    "DocumentHighlight": DocumentHighlight,
+    "DocumentHighlightClientCapabilities": DocumentHighlightClientCapabilities,
+    "DocumentHighlightKind": DocumentHighlightKind,
+    "DocumentHighlightOptions": DocumentHighlightOptions,
+    "DocumentHighlightParams": DocumentHighlightParams,
+    "DocumentHighlightRegistrationOptions": DocumentHighlightRegistrationOptions,
+    "DocumentLink": DocumentLink,
+    "DocumentLinkClientCapabilities": DocumentLinkClientCapabilities,
+    "DocumentLinkOptions": DocumentLinkOptions,
+    "DocumentLinkParams": DocumentLinkParams,
+    "DocumentLinkRegistrationOptions": DocumentLinkRegistrationOptions,
+    "DocumentLinkResolveRequest": DocumentLinkResolveRequest,
+    "DocumentLinkResolveResponse": DocumentLinkResolveResponse,
+    "DocumentOnTypeFormattingClientCapabilities": DocumentOnTypeFormattingClientCapabilities,
+    "DocumentOnTypeFormattingOptions": DocumentOnTypeFormattingOptions,
+    "DocumentOnTypeFormattingParams": DocumentOnTypeFormattingParams,
+    "DocumentOnTypeFormattingRegistrationOptions": DocumentOnTypeFormattingRegistrationOptions,
+    "DocumentRangeFormattingClientCapabilities": DocumentRangeFormattingClientCapabilities,
+    "DocumentRangeFormattingOptions": DocumentRangeFormattingOptions,
+    "DocumentRangeFormattingParams": DocumentRangeFormattingParams,
+    "DocumentRangeFormattingRegistrationOptions": DocumentRangeFormattingRegistrationOptions,
+    "DocumentSelector": DocumentSelector,
+    "DocumentSymbol": DocumentSymbol,
+    "DocumentSymbolClientCapabilities": DocumentSymbolClientCapabilities,
+    "DocumentSymbolClientCapabilitiesSymbolKindType": DocumentSymbolClientCapabilitiesSymbolKindType,
+    "DocumentSymbolClientCapabilitiesTagSupportType": DocumentSymbolClientCapabilitiesTagSupportType,
+    "DocumentSymbolOptions": DocumentSymbolOptions,
+    "DocumentSymbolParams": DocumentSymbolParams,
+    "DocumentSymbolRegistrationOptions": DocumentSymbolRegistrationOptions,
+    "ErrorCodes": ErrorCodes,
+    "ExecuteCommandClientCapabilities": ExecuteCommandClientCapabilities,
+    "ExecuteCommandOptions": ExecuteCommandOptions,
+    "ExecuteCommandParams": ExecuteCommandParams,
+    "ExecuteCommandRegistrationOptions": ExecuteCommandRegistrationOptions,
+    "ExecutionSummary": ExecutionSummary,
+    "ExitNotification": ExitNotification,
+    "FailureHandlingKind": FailureHandlingKind,
+    "FileChangeType": FileChangeType,
+    "FileCreate": FileCreate,
+    "FileDelete": FileDelete,
+    "FileEvent": FileEvent,
+    "FileOperationClientCapabilities": FileOperationClientCapabilities,
+    "FileOperationFilter": FileOperationFilter,
+    "FileOperationOptions": FileOperationOptions,
+    "FileOperationPattern": FileOperationPattern,
+    "FileOperationPatternKind": FileOperationPatternKind,
+    "FileOperationPatternOptions": FileOperationPatternOptions,
+    "FileOperationRegistrationOptions": FileOperationRegistrationOptions,
+    "FileRename": FileRename,
+    "FileSystemWatcher": FileSystemWatcher,
+    "FoldingRange": FoldingRange,
+    "FoldingRangeClientCapabilities": FoldingRangeClientCapabilities,
+    "FoldingRangeClientCapabilitiesFoldingRangeKindType": FoldingRangeClientCapabilitiesFoldingRangeKindType,
+    "FoldingRangeClientCapabilitiesFoldingRangeType": FoldingRangeClientCapabilitiesFoldingRangeType,
+    "FoldingRangeKind": FoldingRangeKind,
+    "FoldingRangeOptions": FoldingRangeOptions,
+    "FoldingRangeParams": FoldingRangeParams,
+    "FoldingRangeRegistrationOptions": FoldingRangeRegistrationOptions,
+    "FormattingOptions": FormattingOptions,
+    "FullDocumentDiagnosticReport": FullDocumentDiagnosticReport,
+    "GeneralClientCapabilities": GeneralClientCapabilities,
+    "GeneralClientCapabilitiesStaleRequestSupportType": GeneralClientCapabilitiesStaleRequestSupportType,
+    "GlobPattern": GlobPattern,
+    "Hover": Hover,
+    "HoverClientCapabilities": HoverClientCapabilities,
+    "HoverOptions": HoverOptions,
+    "HoverParams": HoverParams,
+    "HoverRegistrationOptions": HoverRegistrationOptions,
+    "ImplementationClientCapabilities": ImplementationClientCapabilities,
+    "ImplementationOptions": ImplementationOptions,
+    "ImplementationParams": ImplementationParams,
+    "ImplementationRegistrationOptions": ImplementationRegistrationOptions,
+    "InitializeError": InitializeError,
+    "InitializeParams": InitializeParams,
+    "InitializeParamsClientInfoType": InitializeParamsClientInfoType,
+    "InitializeRequest": InitializeRequest,
+    "InitializeResponse": InitializeResponse,
+    "InitializeResult": InitializeResult,
+    "InitializeResultServerInfoType": InitializeResultServerInfoType,
+    "InitializedNotification": InitializedNotification,
+    "InitializedParams": InitializedParams,
+    "InlayHint": InlayHint,
+    "InlayHintClientCapabilities": InlayHintClientCapabilities,
+    "InlayHintClientCapabilitiesResolveSupportType": InlayHintClientCapabilitiesResolveSupportType,
+    "InlayHintKind": InlayHintKind,
+    "InlayHintLabelPart": InlayHintLabelPart,
+    "InlayHintOptions": InlayHintOptions,
+    "InlayHintParams": InlayHintParams,
+    "InlayHintRegistrationOptions": InlayHintRegistrationOptions,
+    "InlayHintResolveRequest": InlayHintResolveRequest,
+    "InlayHintResolveResponse": InlayHintResolveResponse,
+    "InlayHintWorkspaceClientCapabilities": InlayHintWorkspaceClientCapabilities,
+    "InlineValue": InlineValue,
+    "InlineValueClientCapabilities": InlineValueClientCapabilities,
+    "InlineValueContext": InlineValueContext,
+    "InlineValueEvaluatableExpression": InlineValueEvaluatableExpression,
+    "InlineValueOptions": InlineValueOptions,
+    "InlineValueParams": InlineValueParams,
+    "InlineValueRegistrationOptions": InlineValueRegistrationOptions,
+    "InlineValueText": InlineValueText,
+    "InlineValueVariableLookup": InlineValueVariableLookup,
+    "InlineValueWorkspaceClientCapabilities": InlineValueWorkspaceClientCapabilities,
+    "InsertReplaceEdit": InsertReplaceEdit,
+    "InsertTextFormat": InsertTextFormat,
+    "InsertTextMode": InsertTextMode,
+    "LSPAny": LSPAny,
+    "LSPArray": LSPArray,
+    "LSPErrorCodes": LSPErrorCodes,
+    "LSPObject": LSPObject,
+    "LinkedEditingRangeClientCapabilities": LinkedEditingRangeClientCapabilities,
+    "LinkedEditingRangeOptions": LinkedEditingRangeOptions,
+    "LinkedEditingRangeParams": LinkedEditingRangeParams,
+    "LinkedEditingRangeRegistrationOptions": LinkedEditingRangeRegistrationOptions,
+    "LinkedEditingRanges": LinkedEditingRanges,
+    "Location": Location,
+    "LocationLink": LocationLink,
+    "LogMessageParams": LogMessageParams,
+    "LogTraceNotification": LogTraceNotification,
+    "LogTraceParams": LogTraceParams,
+    "MarkdownClientCapabilities": MarkdownClientCapabilities,
+    "MarkedString": MarkedString,
+    "MarkedString_Type1": MarkedString_Type1,
+    "MarkupContent": MarkupContent,
+    "MarkupKind": MarkupKind,
+    "MessageActionItem": MessageActionItem,
+    "MessageDirection": MessageDirection,
+    "MessageType": MessageType,
+    "Moniker": Moniker,
+    "MonikerClientCapabilities": MonikerClientCapabilities,
+    "MonikerKind": MonikerKind,
+    "MonikerOptions": MonikerOptions,
+    "MonikerParams": MonikerParams,
+    "MonikerRegistrationOptions": MonikerRegistrationOptions,
+    "NotebookCell": NotebookCell,
+    "NotebookCellArrayChange": NotebookCellArrayChange,
+    "NotebookCellKind": NotebookCellKind,
+    "NotebookCellTextDocumentFilter": NotebookCellTextDocumentFilter,
+    "NotebookDocument": NotebookDocument,
+    "NotebookDocumentChangeEvent": NotebookDocumentChangeEvent,
+    "NotebookDocumentChangeEventCellsType": NotebookDocumentChangeEventCellsType,
+    "NotebookDocumentChangeEventCellsTypeStructureType": NotebookDocumentChangeEventCellsTypeStructureType,
+    "NotebookDocumentChangeEventCellsTypeTextContentType": NotebookDocumentChangeEventCellsTypeTextContentType,
+    "NotebookDocumentClientCapabilities": NotebookDocumentClientCapabilities,
+    "NotebookDocumentDidChangeNotification": NotebookDocumentDidChangeNotification,
+    "NotebookDocumentDidCloseNotification": NotebookDocumentDidCloseNotification,
+    "NotebookDocumentDidOpenNotification": NotebookDocumentDidOpenNotification,
+    "NotebookDocumentDidSaveNotification": NotebookDocumentDidSaveNotification,
+    "NotebookDocumentFilter": NotebookDocumentFilter,
+    "NotebookDocumentFilter_Type1": NotebookDocumentFilter_Type1,
+    "NotebookDocumentFilter_Type2": NotebookDocumentFilter_Type2,
+    "NotebookDocumentFilter_Type3": NotebookDocumentFilter_Type3,
+    "NotebookDocumentIdentifier": NotebookDocumentIdentifier,
+    "NotebookDocumentSyncClientCapabilities": NotebookDocumentSyncClientCapabilities,
+    "NotebookDocumentSyncOptions": NotebookDocumentSyncOptions,
+    "NotebookDocumentSyncOptionsNotebookSelectorType1": NotebookDocumentSyncOptionsNotebookSelectorType1,
+    "NotebookDocumentSyncOptionsNotebookSelectorType1CellsType": NotebookDocumentSyncOptionsNotebookSelectorType1CellsType,
+    "NotebookDocumentSyncOptionsNotebookSelectorType2": NotebookDocumentSyncOptionsNotebookSelectorType2,
+    "NotebookDocumentSyncOptionsNotebookSelectorType2CellsType": NotebookDocumentSyncOptionsNotebookSelectorType2CellsType,
+    "NotebookDocumentSyncRegistrationOptions": NotebookDocumentSyncRegistrationOptions,
+    "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1": NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1,
+    "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType": NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType,
+    "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2": NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2,
+    "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2CellsType": NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2CellsType,
+    "OptionalVersionedTextDocumentIdentifier": OptionalVersionedTextDocumentIdentifier,
+    "ParameterInformation": ParameterInformation,
+    "PartialResultParams": PartialResultParams,
+    "Pattern": Pattern,
+    "Position": Position,
+    "PositionEncodingKind": PositionEncodingKind,
+    "PrepareRenameParams": PrepareRenameParams,
+    "PrepareRenameResult": PrepareRenameResult,
+    "PrepareRenameResult_Type1": PrepareRenameResult_Type1,
+    "PrepareRenameResult_Type2": PrepareRenameResult_Type2,
+    "PrepareSupportDefaultBehavior": PrepareSupportDefaultBehavior,
+    "PreviousResultId": PreviousResultId,
+    "ProgressNotification": ProgressNotification,
+    "ProgressParams": ProgressParams,
+    "ProgressToken": ProgressToken,
+    "PublishDiagnosticsClientCapabilities": PublishDiagnosticsClientCapabilities,
+    "PublishDiagnosticsClientCapabilitiesTagSupportType": PublishDiagnosticsClientCapabilitiesTagSupportType,
+    "PublishDiagnosticsParams": PublishDiagnosticsParams,
+    "Range": Range,
+    "ReferenceClientCapabilities": ReferenceClientCapabilities,
+    "ReferenceContext": ReferenceContext,
+    "ReferenceOptions": ReferenceOptions,
+    "ReferenceParams": ReferenceParams,
+    "ReferenceRegistrationOptions": ReferenceRegistrationOptions,
+    "Registration": Registration,
+    "RegistrationParams": RegistrationParams,
+    "RegularExpressionsClientCapabilities": RegularExpressionsClientCapabilities,
+    "RelatedFullDocumentDiagnosticReport": RelatedFullDocumentDiagnosticReport,
+    "RelatedUnchangedDocumentDiagnosticReport": RelatedUnchangedDocumentDiagnosticReport,
+    "RelativePattern": RelativePattern,
     "RenameClientCapabilities": RenameClientCapabilities,
+    "RenameFile": RenameFile,
+    "RenameFileOptions": RenameFileOptions,
+    "RenameFilesParams": RenameFilesParams,
+    "RenameOptions": RenameOptions,
+    "RenameParams": RenameParams,
+    "RenameRegistrationOptions": RenameRegistrationOptions,
+    "ResourceOperation": ResourceOperation,
+    "ResourceOperationKind": ResourceOperationKind,
+    "ResponseError": ResponseError,
+    "ResponseErrorMessage": ResponseErrorMessage,
+    "SaveOptions": SaveOptions,
+    "SelectionRange": SelectionRange,
+    "SelectionRangeClientCapabilities": SelectionRangeClientCapabilities,
+    "SelectionRangeOptions": SelectionRangeOptions,
+    "SelectionRangeParams": SelectionRangeParams,
+    "SelectionRangeRegistrationOptions": SelectionRangeRegistrationOptions,
+    "SemanticTokenModifiers": SemanticTokenModifiers,
+    "SemanticTokenTypes": SemanticTokenTypes,
+    "SemanticTokens": SemanticTokens,
+    "SemanticTokensClientCapabilities": SemanticTokensClientCapabilities,
+    "SemanticTokensClientCapabilitiesRequestsType": SemanticTokensClientCapabilitiesRequestsType,
+    "SemanticTokensClientCapabilitiesRequestsTypeFullType1": SemanticTokensClientCapabilitiesRequestsTypeFullType1,
+    "SemanticTokensDelta": SemanticTokensDelta,
+    "SemanticTokensDeltaParams": SemanticTokensDeltaParams,
+    "SemanticTokensDeltaPartialResult": SemanticTokensDeltaPartialResult,
+    "SemanticTokensEdit": SemanticTokensEdit,
+    "SemanticTokensLegend": SemanticTokensLegend,
+    "SemanticTokensOptions": SemanticTokensOptions,
+    "SemanticTokensOptionsFullType1": SemanticTokensOptionsFullType1,
+    "SemanticTokensParams": SemanticTokensParams,
+    "SemanticTokensPartialResult": SemanticTokensPartialResult,
+    "SemanticTokensRangeParams": SemanticTokensRangeParams,
+    "SemanticTokensRegistrationOptions": SemanticTokensRegistrationOptions,
+    "SemanticTokensRegistrationOptionsFullType1": SemanticTokensRegistrationOptionsFullType1,
+    "SemanticTokensWorkspaceClientCapabilities": SemanticTokensWorkspaceClientCapabilities,
+    "ServerCapabilities": ServerCapabilities,
+    "ServerCapabilitiesWorkspaceType": ServerCapabilitiesWorkspaceType,
+    "SetTraceNotification": SetTraceNotification,
+    "SetTraceParams": SetTraceParams,
+    "ShowDocumentClientCapabilities": ShowDocumentClientCapabilities,
+    "ShowDocumentParams": ShowDocumentParams,
+    "ShowDocumentResult": ShowDocumentResult,
+    "ShowMessageParams": ShowMessageParams,
+    "ShowMessageRequestClientCapabilities": ShowMessageRequestClientCapabilities,
+    "ShowMessageRequestClientCapabilitiesMessageActionItemType": ShowMessageRequestClientCapabilitiesMessageActionItemType,
+    "ShowMessageRequestParams": ShowMessageRequestParams,
+    "ShutdownRequest": ShutdownRequest,
+    "ShutdownResponse": ShutdownResponse,
+    "SignatureHelp": SignatureHelp,
+    "SignatureHelpClientCapabilities": SignatureHelpClientCapabilities,
+    "SignatureHelpClientCapabilitiesSignatureInformationType": SignatureHelpClientCapabilitiesSignatureInformationType,
+    "SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformationType": SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformationType,
+    "SignatureHelpContext": SignatureHelpContext,
+    "SignatureHelpOptions": SignatureHelpOptions,
+    "SignatureHelpParams": SignatureHelpParams,
+    "SignatureHelpRegistrationOptions": SignatureHelpRegistrationOptions,
+    "SignatureHelpTriggerKind": SignatureHelpTriggerKind,
+    "SignatureInformation": SignatureInformation,
+    "StaticRegistrationOptions": StaticRegistrationOptions,
+    "SymbolInformation": SymbolInformation,
+    "SymbolKind": SymbolKind,
+    "SymbolTag": SymbolTag,
+    "TelemetryEventNotification": TelemetryEventNotification,
+    "TextDocumentChangeRegistrationOptions": TextDocumentChangeRegistrationOptions,
+    "TextDocumentClientCapabilities": TextDocumentClientCapabilities,
+    "TextDocumentCodeActionRequest": TextDocumentCodeActionRequest,
+    "TextDocumentCodeActionResponse": TextDocumentCodeActionResponse,
+    "TextDocumentCodeLensRequest": TextDocumentCodeLensRequest,
+    "TextDocumentCodeLensResponse": TextDocumentCodeLensResponse,
+    "TextDocumentColorPresentationOptions": TextDocumentColorPresentationOptions,
+    "TextDocumentColorPresentationRequest": TextDocumentColorPresentationRequest,
+    "TextDocumentColorPresentationResponse": TextDocumentColorPresentationResponse,
+    "TextDocumentCompletionRequest": TextDocumentCompletionRequest,
+    "TextDocumentCompletionResponse": TextDocumentCompletionResponse,
+    "TextDocumentContentChangeEvent": TextDocumentContentChangeEvent,
+    "TextDocumentContentChangeEvent_Type1": TextDocumentContentChangeEvent_Type1,
+    "TextDocumentContentChangeEvent_Type2": TextDocumentContentChangeEvent_Type2,
+    "TextDocumentDeclarationRequest": TextDocumentDeclarationRequest,
+    "TextDocumentDeclarationResponse": TextDocumentDeclarationResponse,
+    "TextDocumentDefinitionRequest": TextDocumentDefinitionRequest,
+    "TextDocumentDefinitionResponse": TextDocumentDefinitionResponse,
+    "TextDocumentDiagnosticRequest": TextDocumentDiagnosticRequest,
+    "TextDocumentDiagnosticResponse": TextDocumentDiagnosticResponse,
+    "TextDocumentDidChangeNotification": TextDocumentDidChangeNotification,
+    "TextDocumentDidCloseNotification": TextDocumentDidCloseNotification,
+    "TextDocumentDidOpenNotification": TextDocumentDidOpenNotification,
+    "TextDocumentDidSaveNotification": TextDocumentDidSaveNotification,
+    "TextDocumentDocumentColorRequest": TextDocumentDocumentColorRequest,
+    "TextDocumentDocumentColorResponse": TextDocumentDocumentColorResponse,
+    "TextDocumentDocumentHighlightRequest": TextDocumentDocumentHighlightRequest,
+    "TextDocumentDocumentHighlightResponse": TextDocumentDocumentHighlightResponse,
+    "TextDocumentDocumentLinkRequest": TextDocumentDocumentLinkRequest,
+    "TextDocumentDocumentLinkResponse": TextDocumentDocumentLinkResponse,
+    "TextDocumentDocumentSymbolRequest": TextDocumentDocumentSymbolRequest,
+    "TextDocumentDocumentSymbolResponse": TextDocumentDocumentSymbolResponse,
+    "TextDocumentEdit": TextDocumentEdit,
+    "TextDocumentFilter": TextDocumentFilter,
+    "TextDocumentFilter_Type1": TextDocumentFilter_Type1,
+    "TextDocumentFilter_Type2": TextDocumentFilter_Type2,
+    "TextDocumentFilter_Type3": TextDocumentFilter_Type3,
+    "TextDocumentFoldingRangeRequest": TextDocumentFoldingRangeRequest,
+    "TextDocumentFoldingRangeResponse": TextDocumentFoldingRangeResponse,
+    "TextDocumentFormattingRequest": TextDocumentFormattingRequest,
+    "TextDocumentFormattingResponse": TextDocumentFormattingResponse,
+    "TextDocumentHoverRequest": TextDocumentHoverRequest,
+    "TextDocumentHoverResponse": TextDocumentHoverResponse,
+    "TextDocumentIdentifier": TextDocumentIdentifier,
+    "TextDocumentImplementationRequest": TextDocumentImplementationRequest,
+    "TextDocumentImplementationResponse": TextDocumentImplementationResponse,
+    "TextDocumentInlayHintRequest": TextDocumentInlayHintRequest,
+    "TextDocumentInlayHintResponse": TextDocumentInlayHintResponse,
+    "TextDocumentInlineValueRequest": TextDocumentInlineValueRequest,
+    "TextDocumentInlineValueResponse": TextDocumentInlineValueResponse,
+    "TextDocumentItem": TextDocumentItem,
+    "TextDocumentLinkedEditingRangeRequest": TextDocumentLinkedEditingRangeRequest,
+    "TextDocumentLinkedEditingRangeResponse": TextDocumentLinkedEditingRangeResponse,
+    "TextDocumentMonikerRequest": TextDocumentMonikerRequest,
+    "TextDocumentMonikerResponse": TextDocumentMonikerResponse,
+    "TextDocumentOnTypeFormattingRequest": TextDocumentOnTypeFormattingRequest,
+    "TextDocumentOnTypeFormattingResponse": TextDocumentOnTypeFormattingResponse,
+    "TextDocumentPositionParams": TextDocumentPositionParams,
+    "TextDocumentPrepareCallHierarchyRequest": TextDocumentPrepareCallHierarchyRequest,
+    "TextDocumentPrepareCallHierarchyResponse": TextDocumentPrepareCallHierarchyResponse,
+    "TextDocumentPrepareRenameRequest": TextDocumentPrepareRenameRequest,
+    "TextDocumentPrepareRenameResponse": TextDocumentPrepareRenameResponse,
+    "TextDocumentPrepareTypeHierarchyRequest": TextDocumentPrepareTypeHierarchyRequest,
+    "TextDocumentPrepareTypeHierarchyResponse": TextDocumentPrepareTypeHierarchyResponse,
+    "TextDocumentPublishDiagnosticsNotification": TextDocumentPublishDiagnosticsNotification,
+    "TextDocumentRangeFormattingRequest": TextDocumentRangeFormattingRequest,
+    "TextDocumentRangeFormattingResponse": TextDocumentRangeFormattingResponse,
+    "TextDocumentReferencesRequest": TextDocumentReferencesRequest,
+    "TextDocumentReferencesResponse": TextDocumentReferencesResponse,
+    "TextDocumentRegistrationOptions": TextDocumentRegistrationOptions,
+    "TextDocumentRenameRequest": TextDocumentRenameRequest,
+    "TextDocumentRenameResponse": TextDocumentRenameResponse,
+    "TextDocumentSaveReason": TextDocumentSaveReason,
+    "TextDocumentSaveRegistrationOptions": TextDocumentSaveRegistrationOptions,
+    "TextDocumentSelectionRangeRequest": TextDocumentSelectionRangeRequest,
+    "TextDocumentSelectionRangeResponse": TextDocumentSelectionRangeResponse,
+    "TextDocumentSemanticTokensFullDeltaRequest": TextDocumentSemanticTokensFullDeltaRequest,
+    "TextDocumentSemanticTokensFullDeltaResponse": TextDocumentSemanticTokensFullDeltaResponse,
+    "TextDocumentSemanticTokensFullRequest": TextDocumentSemanticTokensFullRequest,
+    "TextDocumentSemanticTokensFullResponse": TextDocumentSemanticTokensFullResponse,
+    "TextDocumentSemanticTokensRangeRequest": TextDocumentSemanticTokensRangeRequest,
+    "TextDocumentSemanticTokensRangeResponse": TextDocumentSemanticTokensRangeResponse,
+    "TextDocumentSignatureHelpRequest": TextDocumentSignatureHelpRequest,
     "TextDocumentSignatureHelpResponse": TextDocumentSignatureHelpResponse,
     "TextDocumentSyncClientCapabilities": TextDocumentSyncClientCapabilities,
-    "SemanticTokensRangeParams": SemanticTokensRangeParams,
-    "TextDocumentInlayHintResponse": TextDocumentInlayHintResponse,
-    "ProgressToken": ProgressToken,
-    "TypeHierarchySupertypesResponse": TypeHierarchySupertypesResponse,
-    "NotebookDocument": NotebookDocument,
-    "MessageType": MessageType,
-    "SignatureHelpParams": SignatureHelpParams,
-    "CompletionItemTag": CompletionItemTag,
-    "WorkspaceFolder": WorkspaceFolder,
-    "CompletionItemLabelDetails": CompletionItemLabelDetails,
-    "LogMessageParams": LogMessageParams,
-    "DocumentRangeFormattingParams": DocumentRangeFormattingParams,
-    "SemanticTokensWorkspaceClientCapabilities": SemanticTokensWorkspaceClientCapabilities,
-    "CompletionOptions": CompletionOptions,
-    "TypeHierarchyRegistrationOptions": TypeHierarchyRegistrationOptions,
-    "TextDocumentDocumentSymbolResponse": TextDocumentDocumentSymbolResponse,
-    "InitializedNotification": InitializedNotification,
-    "TokenFormat": TokenFormat,
-    "MonikerRegistrationOptions": MonikerRegistrationOptions,
-    "CodeActionContext": CodeActionContext,
-    "SemanticTokensParams": SemanticTokensParams,
-    "NotebookDocumentFilter": NotebookDocumentFilter,
-    "DidChangeConfigurationParams": DidChangeConfigurationParams,
-    "TextDocumentRegistrationOptions": TextDocumentRegistrationOptions,
-    "WorkspaceFoldersServerCapabilities": WorkspaceFoldersServerCapabilities,
-    "DocumentFilter": DocumentFilter,
-    "MarkedString": MarkedString,
-    "RegularExpressionsClientCapabilities": RegularExpressionsClientCapabilities,
-    "PrepareRenameResult": PrepareRenameResult,
-    "AnnotatedTextEdit": AnnotatedTextEdit,
-    "TextDocumentSaveReason": TextDocumentSaveReason,
-    "Position": Position,
-    "WindowShowMessageNotification": WindowShowMessageNotification,
-    "CodeActionRegistrationOptions": CodeActionRegistrationOptions,
-    "NotebookDocumentDidOpenNotification": NotebookDocumentDidOpenNotification,
-    "ErrorCodes": ErrorCodes,
-    "TextDocumentOnTypeFormattingResponse": TextDocumentOnTypeFormattingResponse,
-    "TextDocumentCompletionRequest": TextDocumentCompletionRequest,
-    "InlayHintOptions": InlayHintOptions,
-    "NotebookDocumentClientCapabilities": NotebookDocumentClientCapabilities,
-    "URI": URI,
-    "ReferenceContext": ReferenceContext,
-    "SymbolTag": SymbolTag,
-    "TypeHierarchySubtypesParams": TypeHierarchySubtypesParams,
-    "FileOperationOptions": FileOperationOptions,
-    "WorkspaceWillRenameFilesRequest": WorkspaceWillRenameFilesRequest,
-    "TextDocumentInlineValueRequest": TextDocumentInlineValueRequest,
-    "RelatedFullDocumentDiagnosticReport": RelatedFullDocumentDiagnosticReport,
-    "TextDocumentTypeDefinitionResponse": TextDocumentTypeDefinitionResponse,
-    "TextDocumentOnTypeFormattingRequest": TextDocumentOnTypeFormattingRequest,
-    "WorkspaceInlayHintRefreshResponse": WorkspaceInlayHintRefreshResponse,
-    "ExitNotification": ExitNotification,
-    "FileOperationRegistrationOptions": FileOperationRegistrationOptions,
-    "ShowMessageRequestClientCapabilities": ShowMessageRequestClientCapabilities,
-    "TextDocumentSemanticTokensFullDeltaRequest": TextDocumentSemanticTokensFullDeltaRequest,
-    "CodeActionParams": CodeActionParams,
-    "CancelParams": CancelParams,
-    "DidSaveNotebookDocumentParams": DidSaveNotebookDocumentParams,
-    "TextDocumentColorPresentationRequest": TextDocumentColorPresentationRequest,
-    "TextDocumentChangeRegistrationOptions": TextDocumentChangeRegistrationOptions,
-    "CancelRequestNotification": CancelRequestNotification,
-    "NotebookDocumentIdentifier": NotebookDocumentIdentifier,
-    "TextDocumentContentChangeEvent": TextDocumentContentChangeEvent,
-    "DocumentFormattingRegistrationOptions": DocumentFormattingRegistrationOptions,
-    "WorkspaceSymbolRegistrationOptions": WorkspaceSymbolRegistrationOptions,
-    "NotebookCellArrayChange": NotebookCellArrayChange,
-    "TextDocumentSemanticTokensFullDeltaResponse": TextDocumentSemanticTokensFullDeltaResponse,
-    "TextEdit": TextEdit,
-    "OptionalVersionedTextDocumentIdentifier": OptionalVersionedTextDocumentIdentifier,
-    "TextDocumentSaveRegistrationOptions": TextDocumentSaveRegistrationOptions,
-    "WorkspaceWillDeleteFilesRequest": WorkspaceWillDeleteFilesRequest,
-    "DocumentDiagnosticParams": DocumentDiagnosticParams,
-    "SemanticTokensOptions": SemanticTokensOptions,
-    "DocumentOnTypeFormattingRegistrationOptions": DocumentOnTypeFormattingRegistrationOptions,
-    "Declaration": Declaration,
-    "ColorPresentationParams": ColorPresentationParams,
-    "DocumentHighlightClientCapabilities": DocumentHighlightClientCapabilities,
-    "DiagnosticRelatedInformation": DiagnosticRelatedInformation,
-    "DefinitionParams": DefinitionParams,
-    "PublishDiagnosticsParams": PublishDiagnosticsParams,
-    "LinkedEditingRangeParams": LinkedEditingRangeParams,
-    "DocumentSelector": DocumentSelector,
-    "DocumentLinkParams": DocumentLinkParams,
-    "FoldingRange": FoldingRange,
-    "WorkspaceFullDocumentDiagnosticReport": WorkspaceFullDocumentDiagnosticReport,
-    "ColorInformation": ColorInformation,
-    "TextDocumentFilter_Type2": TextDocumentFilter_Type2,
-    "DefinitionOptions": DefinitionOptions,
-    "RenameRegistrationOptions": RenameRegistrationOptions,
-    "CompletionItemKind": CompletionItemKind,
-    "Moniker": Moniker,
-    "ImplementationParams": ImplementationParams,
-    "WorkspaceWorkspaceFoldersResponse": WorkspaceWorkspaceFoldersResponse,
-    "InlayHintClientCapabilities": InlayHintClientCapabilities,
-    "PrepareSupportDefaultBehavior": PrepareSupportDefaultBehavior,
-    "LSPObject": LSPObject,
-    "SemanticTokensDeltaParams": SemanticTokensDeltaParams,
-    "GlobPattern": GlobPattern,
-    "WorkspaceSemanticTokensRefreshRequest": WorkspaceSemanticTokensRefreshRequest,
-    "TextDocumentSelectionRangeRequest": TextDocumentSelectionRangeRequest,
-    "ImplementationClientCapabilities": ImplementationClientCapabilities,
-    "WindowWorkDoneProgressCancelNotification": WindowWorkDoneProgressCancelNotification,
-    "LinkedEditingRangeRegistrationOptions": LinkedEditingRangeRegistrationOptions,
-    "SemanticTokenModifiers": SemanticTokenModifiers,
-    "ReferenceClientCapabilities": ReferenceClientCapabilities,
-    "UniquenessLevel": UniquenessLevel,
-    "WorkspaceDiagnosticParams": WorkspaceDiagnosticParams,
-    "CodeLensResolveRequest": CodeLensResolveRequest,
-    "WorkspaceDiagnosticResponse": WorkspaceDiagnosticResponse,
-    "WorkspaceFoldersInitializeParams": WorkspaceFoldersInitializeParams,
-    "SemanticTokensLegend": SemanticTokensLegend,
-    "DocumentColorRegistrationOptions": DocumentColorRegistrationOptions,
-    "ProgressParams": ProgressParams,
-    "DidChangeNotebookDocumentParams": DidChangeNotebookDocumentParams,
-    "DocumentDiagnosticReport": DocumentDiagnosticReport,
-    "TextDocumentFormattingRequest": TextDocumentFormattingRequest,
-    "DidChangeWatchedFilesParams": DidChangeWatchedFilesParams,
-    "TextDocumentCodeLensResponse": TextDocumentCodeLensResponse,
-    "ColorPresentation": ColorPresentation,
-    "DidCloseNotebookDocumentParams": DidCloseNotebookDocumentParams,
-    "DocumentSymbolRegistrationOptions": DocumentSymbolRegistrationOptions,
-    "TextDocumentCodeLensRequest": TextDocumentCodeLensRequest,
-    "WorkspaceDiagnosticRefreshRequest": WorkspaceDiagnosticRefreshRequest,
-    "WorkspaceInlineValueRefreshRequest": WorkspaceInlineValueRefreshRequest,
-    "CallHierarchyOutgoingCall": CallHierarchyOutgoingCall,
-    "ConfigurationParams": ConfigurationParams,
-    "DocumentRangeFormattingClientCapabilities": DocumentRangeFormattingClientCapabilities,
-    "TextDocumentSemanticTokensRangeResponse": TextDocumentSemanticTokensRangeResponse,
-    "DocumentDiagnosticReportPartialResult": DocumentDiagnosticReportPartialResult,
-    "WindowWorkDoneProgressCreateResponse": WindowWorkDoneProgressCreateResponse,
-    "DidChangeConfigurationRegistrationOptions": DidChangeConfigurationRegistrationOptions,
-    "SelectionRangeClientCapabilities": SelectionRangeClientCapabilities,
-    "NotebookCellKind": NotebookCellKind,
-    "TextDocumentEdit": TextDocumentEdit,
-    "WorkspaceSymbolResolveResponse": WorkspaceSymbolResolveResponse,
-    "DiagnosticServerCancellationData": DiagnosticServerCancellationData,
-    "CodeLensWorkspaceClientCapabilities": CodeLensWorkspaceClientCapabilities,
-    "WorkspaceWillCreateFilesRequest": WorkspaceWillCreateFilesRequest,
-    "SemanticTokens": SemanticTokens,
-    "ShowDocumentParams": ShowDocumentParams,
     "TextDocumentSyncKind": TextDocumentSyncKind,
-    "CompletionItemResolveResponse": CompletionItemResolveResponse,
-    "WorkspaceDiagnosticRefreshResponse": WorkspaceDiagnosticRefreshResponse,
-    "TextDocumentColorPresentationOptions": TextDocumentColorPresentationOptions,
-    "TextDocumentPrepareTypeHierarchyResponse": TextDocumentPrepareTypeHierarchyResponse,
-    "SemanticTokensRegistrationOptions": SemanticTokensRegistrationOptions,
-    "CodeLensRegistrationOptions": CodeLensRegistrationOptions,
-    "CodeActionTriggerKind": CodeActionTriggerKind,
-    "SelectionRangeParams": SelectionRangeParams,
-    "WorkspaceDidRenameFilesNotification": WorkspaceDidRenameFilesNotification,
-    "InlineValueClientCapabilities": InlineValueClientCapabilities,
-    "LinkedEditingRangeClientCapabilities": LinkedEditingRangeClientCapabilities,
-    "CallHierarchyIncomingCallsParams": CallHierarchyIncomingCallsParams,
-    "TextDocumentRenameRequest": TextDocumentRenameRequest,
-    "InitializeResponse": InitializeResponse,
-    "WorkspaceCodeLensRefreshResponse": WorkspaceCodeLensRefreshResponse,
-    "WorkspaceWillDeleteFilesResponse": WorkspaceWillDeleteFilesResponse,
-    "FoldingRangeKind": FoldingRangeKind,
-    "TextDocumentInlineValueResponse": TextDocumentInlineValueResponse,
-    "BaseSymbolInformation": BaseSymbolInformation,
-    "DocumentLinkOptions": DocumentLinkOptions,
-    "RelatedUnchangedDocumentDiagnosticReport": RelatedUnchangedDocumentDiagnosticReport,
-    "WorkDoneProgressReport": WorkDoneProgressReport,
-    "ResponseErrorMessage": ResponseErrorMessage,
-    "DiagnosticWorkspaceClientCapabilities": DiagnosticWorkspaceClientCapabilities,
-    "LinkedEditingRanges": LinkedEditingRanges,
-    "WorkspaceInlayHintRefreshRequest": WorkspaceInlayHintRefreshRequest,
-    "ChangeAnnotationIdentifier": ChangeAnnotationIdentifier,
-    "TypeHierarchySubtypesResponse": TypeHierarchySubtypesResponse,
-    "LogTraceParams": LogTraceParams,
-    "WorkspaceClientCapabilities": WorkspaceClientCapabilities,
-    "DeclarationClientCapabilities": DeclarationClientCapabilities,
-    "ExecuteCommandOptions": ExecuteCommandOptions,
-    "WorkspaceDidChangeWorkspaceFoldersNotification": WorkspaceDidChangeWorkspaceFoldersNotification,
-    "TelemetryEventNotification": TelemetryEventNotification,
-    "PrepareRenameResult_Type1": PrepareRenameResult_Type1,
-    "WorkspaceSymbolResponse": WorkspaceSymbolResponse,
-    "TextDocumentMonikerResponse": TextDocumentMonikerResponse,
-    "MonikerClientCapabilities": MonikerClientCapabilities,
-    "InlayHint": InlayHint,
-    "TraceValues": TraceValues,
-    "WorkspaceInlineValueRefreshResponse": WorkspaceInlineValueRefreshResponse,
-    "SetTraceNotification": SetTraceNotification,
-    "PositionEncodingKind": PositionEncodingKind,
-    "InlineValueParams": InlineValueParams,
-    "ClientRegisterCapabilityRequest": ClientRegisterCapabilityRequest,
-    "WorkspaceConfigurationResponse": WorkspaceConfigurationResponse,
-    "WorkspaceConfigurationParams": WorkspaceConfigurationParams,
-    "CodeActionKind": CodeActionKind,
-    "NotebookDocumentDidSaveNotification": NotebookDocumentDidSaveNotification,
-    "ParameterInformation": ParameterInformation,
-    "TextDocumentCodeActionRequest": TextDocumentCodeActionRequest,
-    "CodeActionResolveRequest": CodeActionResolveRequest,
-    "FoldingRangeClientCapabilities": FoldingRangeClientCapabilities,
-    "ImplementationRegistrationOptions": ImplementationRegistrationOptions,
-    "DocumentHighlightKind": DocumentHighlightKind,
-    "LSPAny": LSPAny,
-    "WorkspaceDiagnosticRequest": WorkspaceDiagnosticRequest,
-    "ApplyWorkspaceEditResult": ApplyWorkspaceEditResult,
-    "ShowMessageParams": ShowMessageParams,
-    "DidChangeWatchedFilesRegistrationOptions": DidChangeWatchedFilesRegistrationOptions,
-    "FailureHandlingKind": FailureHandlingKind,
-    "DefinitionLink": DefinitionLink,
-    "DocumentHighlightOptions": DocumentHighlightOptions,
-    "TextDocumentIdentifier": TextDocumentIdentifier,
-    "TextDocumentSemanticTokensFullResponse": TextDocumentSemanticTokensFullResponse,
-    "DidChangeWorkspaceFoldersParams": DidChangeWorkspaceFoldersParams,
-    "LinkedEditingRangeOptions": LinkedEditingRangeOptions,
-    "DefinitionRegistrationOptions": DefinitionRegistrationOptions,
-    "WorkspaceSymbol": WorkspaceSymbol,
-    "WorkDoneProgressParams": WorkDoneProgressParams,
-    "WorkspaceWorkspaceFoldersRequest": WorkspaceWorkspaceFoldersRequest,
-    "TextDocumentDocumentSymbolRequest": TextDocumentDocumentSymbolRequest,
-    "CallHierarchyIncomingCall": CallHierarchyIncomingCall,
-    "DeclarationLink": DeclarationLink,
-    "MarkdownClientCapabilities": MarkdownClientCapabilities,
-    "TextDocumentSemanticTokensRangeRequest": TextDocumentSemanticTokensRangeRequest,
-    "ProgressNotification": ProgressNotification,
-    "WindowShowMessageRequestRequest": WindowShowMessageRequestRequest,
-    "MarkupContent": MarkupContent,
-    "DocumentFormattingParams": DocumentFormattingParams,
-    "FileEvent": FileEvent,
-    "GeneralClientCapabilities": GeneralClientCapabilities,
-    "InlineValue": InlineValue,
-    "DiagnosticOptions": DiagnosticOptions,
-    "TextDocumentHoverResponse": TextDocumentHoverResponse,
-    "TextDocumentPrepareRenameRequest": TextDocumentPrepareRenameRequest,
-    "MarkupKind": MarkupKind,
-    "CodeLensParams": CodeLensParams,
-    "TextDocumentRangeFormattingRequest": TextDocumentRangeFormattingRequest,
+    "TextDocumentSyncOptions": TextDocumentSyncOptions,
     "TextDocumentTypeDefinitionRequest": TextDocumentTypeDefinitionRequest,
-    "WindowLogMessageNotification": WindowLogMessageNotification,
-    "SaveOptions": SaveOptions,
-    "MonikerKind": MonikerKind,
-    "InsertTextFormat": InsertTextFormat,
-    "TextDocumentDocumentColorResponse": TextDocumentDocumentColorResponse,
-    "TextDocumentDidSaveNotification": TextDocumentDidSaveNotification,
-    "InlayHintWorkspaceClientCapabilities": InlayHintWorkspaceClientCapabilities,
-    "TextDocumentDeclarationRequest": TextDocumentDeclarationRequest,
-    "DiagnosticTag": DiagnosticTag,
-    "WorkspaceSymbolOptions": WorkspaceSymbolOptions,
-    "TextDocumentFilter": TextDocumentFilter,
-    "NotebookDocumentFilter_Type2": NotebookDocumentFilter_Type2,
-    "FileDelete": FileDelete,
-    "InlineValueWorkspaceClientCapabilities": InlineValueWorkspaceClientCapabilities,
-    "TextDocumentImplementationResponse": TextDocumentImplementationResponse,
-    "DeleteFileOptions": DeleteFileOptions,
-    "ExecuteCommandClientCapabilities": ExecuteCommandClientCapabilities,
-    "TextDocumentSelectionRangeResponse": TextDocumentSelectionRangeResponse,
-    "WorkspaceDidCreateFilesNotification": WorkspaceDidCreateFilesNotification,
-    "TextDocumentItem": TextDocumentItem,
-    "TextDocumentFormattingResponse": TextDocumentFormattingResponse,
-    "DocumentHighlight": DocumentHighlight,
-    "ServerCapabilities": ServerCapabilities,
-    "SignatureHelpTriggerKind": SignatureHelpTriggerKind,
+    "TextDocumentTypeDefinitionResponse": TextDocumentTypeDefinitionResponse,
+    "TextDocumentWillSaveNotification": TextDocumentWillSaveNotification,
+    "TextDocumentWillSaveWaitUntilRequest": TextDocumentWillSaveWaitUntilRequest,
+    "TextDocumentWillSaveWaitUntilResponse": TextDocumentWillSaveWaitUntilResponse,
+    "TextEdit": TextEdit,
+    "TokenFormat": TokenFormat,
+    "TraceValues": TraceValues,
     "TypeDefinitionClientCapabilities": TypeDefinitionClientCapabilities,
-    "TextDocumentImplementationRequest": TextDocumentImplementationRequest,
+    "TypeDefinitionOptions": TypeDefinitionOptions,
+    "TypeDefinitionParams": TypeDefinitionParams,
+    "TypeDefinitionRegistrationOptions": TypeDefinitionRegistrationOptions,
+    "TypeHierarchyClientCapabilities": TypeHierarchyClientCapabilities,
+    "TypeHierarchyItem": TypeHierarchyItem,
+    "TypeHierarchyOptions": TypeHierarchyOptions,
+    "TypeHierarchyPrepareParams": TypeHierarchyPrepareParams,
+    "TypeHierarchyRegistrationOptions": TypeHierarchyRegistrationOptions,
+    "TypeHierarchySubtypesParams": TypeHierarchySubtypesParams,
+    "TypeHierarchySubtypesRequest": TypeHierarchySubtypesRequest,
+    "TypeHierarchySubtypesResponse": TypeHierarchySubtypesResponse,
+    "TypeHierarchySupertypesParams": TypeHierarchySupertypesParams,
+    "TypeHierarchySupertypesRequest": TypeHierarchySupertypesRequest,
+    "TypeHierarchySupertypesResponse": TypeHierarchySupertypesResponse,
+    "UnchangedDocumentDiagnosticReport": UnchangedDocumentDiagnosticReport,
+    "UniquenessLevel": UniquenessLevel,
+    "Unregistration": Unregistration,
+    "UnregistrationParams": UnregistrationParams,
+    "VersionedNotebookDocumentIdentifier": VersionedNotebookDocumentIdentifier,
+    "VersionedTextDocumentIdentifier": VersionedTextDocumentIdentifier,
+    "WatchKind": WatchKind,
+    "WillSaveTextDocumentParams": WillSaveTextDocumentParams,
+    "WindowClientCapabilities": WindowClientCapabilities,
+    "WindowLogMessageNotification": WindowLogMessageNotification,
+    "WindowShowDocumentRequest": WindowShowDocumentRequest,
+    "WindowShowDocumentResponse": WindowShowDocumentResponse,
+    "WindowShowMessageNotification": WindowShowMessageNotification,
+    "WindowShowMessageRequestRequest": WindowShowMessageRequestRequest,
+    "WindowShowMessageRequestResponse": WindowShowMessageRequestResponse,
+    "WindowWorkDoneProgressCancelNotification": WindowWorkDoneProgressCancelNotification,
+    "WindowWorkDoneProgressCreateRequest": WindowWorkDoneProgressCreateRequest,
+    "WindowWorkDoneProgressCreateResponse": WindowWorkDoneProgressCreateResponse,
+    "WorkDoneProgressBegin": WorkDoneProgressBegin,
+    "WorkDoneProgressCancelParams": WorkDoneProgressCancelParams,
+    "WorkDoneProgressCreateParams": WorkDoneProgressCreateParams,
+    "WorkDoneProgressEnd": WorkDoneProgressEnd,
+    "WorkDoneProgressOptions": WorkDoneProgressOptions,
+    "WorkDoneProgressParams": WorkDoneProgressParams,
+    "WorkDoneProgressReport": WorkDoneProgressReport,
+    "WorkspaceApplyEditRequest": WorkspaceApplyEditRequest,
+    "WorkspaceApplyEditResponse": WorkspaceApplyEditResponse,
+    "WorkspaceClientCapabilities": WorkspaceClientCapabilities,
+    "WorkspaceCodeLensRefreshRequest": WorkspaceCodeLensRefreshRequest,
+    "WorkspaceCodeLensRefreshResponse": WorkspaceCodeLensRefreshResponse,
+    "WorkspaceConfigurationParams": WorkspaceConfigurationParams,
+    "WorkspaceConfigurationRequest": WorkspaceConfigurationRequest,
+    "WorkspaceConfigurationResponse": WorkspaceConfigurationResponse,
+    "WorkspaceDiagnosticParams": WorkspaceDiagnosticParams,
+    "WorkspaceDiagnosticRefreshRequest": WorkspaceDiagnosticRefreshRequest,
+    "WorkspaceDiagnosticRefreshResponse": WorkspaceDiagnosticRefreshResponse,
+    "WorkspaceDiagnosticReport": WorkspaceDiagnosticReport,
     "WorkspaceDiagnosticReportPartialResult": WorkspaceDiagnosticReportPartialResult,
-    "RenameFileOptions": RenameFileOptions,
+    "WorkspaceDiagnosticRequest": WorkspaceDiagnosticRequest,
+    "WorkspaceDiagnosticResponse": WorkspaceDiagnosticResponse,
+    "WorkspaceDidChangeConfigurationNotification": WorkspaceDidChangeConfigurationNotification,
+    "WorkspaceDidChangeWatchedFilesNotification": WorkspaceDidChangeWatchedFilesNotification,
+    "WorkspaceDidChangeWorkspaceFoldersNotification": WorkspaceDidChangeWorkspaceFoldersNotification,
+    "WorkspaceDidCreateFilesNotification": WorkspaceDidCreateFilesNotification,
+    "WorkspaceDidDeleteFilesNotification": WorkspaceDidDeleteFilesNotification,
+    "WorkspaceDidRenameFilesNotification": WorkspaceDidRenameFilesNotification,
+    "WorkspaceDocumentDiagnosticReport": WorkspaceDocumentDiagnosticReport,
+    "WorkspaceEdit": WorkspaceEdit,
+    "WorkspaceEditClientCapabilities": WorkspaceEditClientCapabilities,
+    "WorkspaceEditClientCapabilitiesChangeAnnotationSupportType": WorkspaceEditClientCapabilitiesChangeAnnotationSupportType,
+    "WorkspaceExecuteCommandRequest": WorkspaceExecuteCommandRequest,
+    "WorkspaceExecuteCommandResponse": WorkspaceExecuteCommandResponse,
+    "WorkspaceFolder": WorkspaceFolder,
+    "WorkspaceFoldersChangeEvent": WorkspaceFoldersChangeEvent,
+    "WorkspaceFoldersInitializeParams": WorkspaceFoldersInitializeParams,
+    "WorkspaceFoldersServerCapabilities": WorkspaceFoldersServerCapabilities,
+    "WorkspaceFullDocumentDiagnosticReport": WorkspaceFullDocumentDiagnosticReport,
+    "WorkspaceInlayHintRefreshRequest": WorkspaceInlayHintRefreshRequest,
+    "WorkspaceInlayHintRefreshResponse": WorkspaceInlayHintRefreshResponse,
+    "WorkspaceInlineValueRefreshRequest": WorkspaceInlineValueRefreshRequest,
+    "WorkspaceInlineValueRefreshResponse": WorkspaceInlineValueRefreshResponse,
+    "WorkspaceSemanticTokensRefreshRequest": WorkspaceSemanticTokensRefreshRequest,
+    "WorkspaceSemanticTokensRefreshResponse": WorkspaceSemanticTokensRefreshResponse,
+    "WorkspaceSymbol": WorkspaceSymbol,
+    "WorkspaceSymbolClientCapabilities": WorkspaceSymbolClientCapabilities,
+    "WorkspaceSymbolClientCapabilitiesResolveSupportType": WorkspaceSymbolClientCapabilitiesResolveSupportType,
+    "WorkspaceSymbolClientCapabilitiesSymbolKindType": WorkspaceSymbolClientCapabilitiesSymbolKindType,
+    "WorkspaceSymbolClientCapabilitiesTagSupportType": WorkspaceSymbolClientCapabilitiesTagSupportType,
+    "WorkspaceSymbolLocationType1": WorkspaceSymbolLocationType1,
+    "WorkspaceSymbolOptions": WorkspaceSymbolOptions,
+    "WorkspaceSymbolParams": WorkspaceSymbolParams,
+    "WorkspaceSymbolRegistrationOptions": WorkspaceSymbolRegistrationOptions,
+    "WorkspaceSymbolRequest": WorkspaceSymbolRequest,
+    "WorkspaceSymbolResolveRequest": WorkspaceSymbolResolveRequest,
+    "WorkspaceSymbolResolveResponse": WorkspaceSymbolResolveResponse,
+    "WorkspaceSymbolResponse": WorkspaceSymbolResponse,
+    "WorkspaceUnchangedDocumentDiagnosticReport": WorkspaceUnchangedDocumentDiagnosticReport,
+    "WorkspaceWillCreateFilesRequest": WorkspaceWillCreateFilesRequest,
+    "WorkspaceWillCreateFilesResponse": WorkspaceWillCreateFilesResponse,
+    "WorkspaceWillDeleteFilesRequest": WorkspaceWillDeleteFilesRequest,
+    "WorkspaceWillDeleteFilesResponse": WorkspaceWillDeleteFilesResponse,
+    "WorkspaceWillRenameFilesRequest": WorkspaceWillRenameFilesRequest,
+    "WorkspaceWillRenameFilesResponse": WorkspaceWillRenameFilesResponse,
+    "WorkspaceWorkspaceFoldersRequest": WorkspaceWorkspaceFoldersRequest,
+    "WorkspaceWorkspaceFoldersResponse": WorkspaceWorkspaceFoldersResponse,
+    "_InitializeParams": _InitializeParams,
 }
 
 _MESSAGE_DIRECTION: Dict[str, str] = {
-    "textDocument/implementation": "clientToServer",
-    "textDocument/typeDefinition": "clientToServer",
-    "workspace/workspaceFolders": "serverToClient",
-    "workspace/configuration": "serverToClient",
-    "textDocument/documentColor": "clientToServer",
-    "textDocument/colorPresentation": "clientToServer",
-    "textDocument/foldingRange": "clientToServer",
-    "textDocument/declaration": "clientToServer",
-    "textDocument/selectionRange": "clientToServer",
-    "window/workDoneProgress/create": "serverToClient",
-    "textDocument/prepareCallHierarchy": "clientToServer",
-    "callHierarchy/incomingCalls": "clientToServer",
-    "callHierarchy/outgoingCalls": "clientToServer",
-    "textDocument/semanticTokens/full": "clientToServer",
-    "textDocument/semanticTokens/full/delta": "clientToServer",
-    "textDocument/semanticTokens/range": "clientToServer",
-    "workspace/semanticTokens/refresh": "clientToServer",
-    "window/showDocument": "serverToClient",
-    "textDocument/linkedEditingRange": "clientToServer",
-    "workspace/willCreateFiles": "clientToServer",
-    "workspace/willRenameFiles": "clientToServer",
-    "workspace/willDeleteFiles": "clientToServer",
-    "textDocument/moniker": "clientToServer",
-    "textDocument/prepareTypeHierarchy": "clientToServer",
-    "typeHierarchy/supertypes": "clientToServer",
-    "typeHierarchy/subtypes": "clientToServer",
-    "textDocument/inlineValue": "clientToServer",
-    "workspace/inlineValue/refresh": "clientToServer",
-    "textDocument/inlayHint": "clientToServer",
-    "inlayHint/resolve": "clientToServer",
-    "workspace/inlayHint/refresh": "clientToServer",
-    "textDocument/diagnostic": "clientToServer",
-    "workspace/diagnostic": "clientToServer",
-    "workspace/diagnostic/refresh": "clientToServer",
-    "client/registerCapability": "serverToClient",
-    "client/unregisterCapability": "serverToClient",
-    "initialize": "clientToServer",
-    "shutdown": "clientToServer",
-    "window/showMessageRequest": "serverToClient",
-    "textDocument/willSaveWaitUntil": "clientToServer",
-    "textDocument/completion": "clientToServer",
-    "completionItem/resolve": "clientToServer",
-    "textDocument/hover": "clientToServer",
-    "textDocument/signatureHelp": "clientToServer",
-    "textDocument/definition": "clientToServer",
-    "textDocument/references": "clientToServer",
-    "textDocument/documentHighlight": "clientToServer",
-    "textDocument/documentSymbol": "clientToServer",
-    "textDocument/codeAction": "clientToServer",
-    "codeAction/resolve": "clientToServer",
-    "workspace/symbol": "clientToServer",
-    "workspaceSymbol/resolve": "clientToServer",
-    "textDocument/codeLens": "clientToServer",
-    "codeLens/resolve": "clientToServer",
-    "workspace/codeLens/refresh": "serverToClient",
-    "textDocument/documentLink": "clientToServer",
-    "documentLink/resolve": "clientToServer",
-    "textDocument/formatting": "clientToServer",
-    "textDocument/rangeFormatting": "clientToServer",
-    "textDocument/onTypeFormatting": "clientToServer",
-    "textDocument/rename": "clientToServer",
-    "textDocument/prepareRename": "clientToServer",
-    "workspace/executeCommand": "clientToServer",
-    "workspace/applyEdit": "serverToClient",
-    "workspace/didChangeWorkspaceFolders": "clientToServer",
-    "window/workDoneProgress/cancel": "clientToServer",
-    "workspace/didCreateFiles": "clientToServer",
-    "workspace/didRenameFiles": "clientToServer",
-    "workspace/didDeleteFiles": "clientToServer",
-    "notebookDocument/didOpen": "clientToServer",
-    "notebookDocument/didChange": "clientToServer",
-    "notebookDocument/didSave": "clientToServer",
-    "notebookDocument/didClose": "clientToServer",
-    "initialized": "clientToServer",
-    "exit": "clientToServer",
-    "workspace/didChangeConfiguration": "clientToServer",
-    "window/showMessage": "serverToClient",
-    "window/logMessage": "serverToClient",
-    "telemetry/event": "serverToClient",
-    "textDocument/didOpen": "clientToServer",
-    "textDocument/didChange": "clientToServer",
-    "textDocument/didClose": "clientToServer",
-    "textDocument/didSave": "clientToServer",
-    "textDocument/willSave": "clientToServer",
-    "workspace/didChangeWatchedFiles": "clientToServer",
-    "textDocument/publishDiagnostics": "serverToClient",
-    "$/setTrace": "clientToServer",
-    "$/logTrace": "serverToClient",
-    "$/cancelRequest": "both",
-    "$/progress": "both",
+    # Request methods
+    CALL_HIERARCHY_INCOMING_CALLS: "clientToServer",
+    CALL_HIERARCHY_OUTGOING_CALLS: "clientToServer",
+    CLIENT_REGISTER_CAPABILITY: "serverToClient",
+    CLIENT_UNREGISTER_CAPABILITY: "serverToClient",
+    CODE_ACTION_RESOLVE: "clientToServer",
+    CODE_LENS_RESOLVE: "clientToServer",
+    COMPLETION_ITEM_RESOLVE: "clientToServer",
+    DOCUMENT_LINK_RESOLVE: "clientToServer",
+    INITIALIZE: "clientToServer",
+    INLAY_HINT_RESOLVE: "clientToServer",
+    SHUTDOWN: "clientToServer",
+    TEXT_DOCUMENT_CODE_ACTION: "clientToServer",
+    TEXT_DOCUMENT_CODE_LENS: "clientToServer",
+    TEXT_DOCUMENT_COLOR_PRESENTATION: "clientToServer",
+    TEXT_DOCUMENT_COMPLETION: "clientToServer",
+    TEXT_DOCUMENT_DECLARATION: "clientToServer",
+    TEXT_DOCUMENT_DEFINITION: "clientToServer",
+    TEXT_DOCUMENT_DIAGNOSTIC: "clientToServer",
+    TEXT_DOCUMENT_DOCUMENT_COLOR: "clientToServer",
+    TEXT_DOCUMENT_DOCUMENT_HIGHLIGHT: "clientToServer",
+    TEXT_DOCUMENT_DOCUMENT_LINK: "clientToServer",
+    TEXT_DOCUMENT_DOCUMENT_SYMBOL: "clientToServer",
+    TEXT_DOCUMENT_FOLDING_RANGE: "clientToServer",
+    TEXT_DOCUMENT_FORMATTING: "clientToServer",
+    TEXT_DOCUMENT_HOVER: "clientToServer",
+    TEXT_DOCUMENT_IMPLEMENTATION: "clientToServer",
+    TEXT_DOCUMENT_INLAY_HINT: "clientToServer",
+    TEXT_DOCUMENT_INLINE_VALUE: "clientToServer",
+    TEXT_DOCUMENT_LINKED_EDITING_RANGE: "clientToServer",
+    TEXT_DOCUMENT_MONIKER: "clientToServer",
+    TEXT_DOCUMENT_ON_TYPE_FORMATTING: "clientToServer",
+    TEXT_DOCUMENT_PREPARE_CALL_HIERARCHY: "clientToServer",
+    TEXT_DOCUMENT_PREPARE_RENAME: "clientToServer",
+    TEXT_DOCUMENT_PREPARE_TYPE_HIERARCHY: "clientToServer",
+    TEXT_DOCUMENT_RANGE_FORMATTING: "clientToServer",
+    TEXT_DOCUMENT_REFERENCES: "clientToServer",
+    TEXT_DOCUMENT_RENAME: "clientToServer",
+    TEXT_DOCUMENT_SELECTION_RANGE: "clientToServer",
+    TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL: "clientToServer",
+    TEXT_DOCUMENT_SEMANTIC_TOKENS_FULL_DELTA: "clientToServer",
+    TEXT_DOCUMENT_SEMANTIC_TOKENS_RANGE: "clientToServer",
+    TEXT_DOCUMENT_SIGNATURE_HELP: "clientToServer",
+    TEXT_DOCUMENT_TYPE_DEFINITION: "clientToServer",
+    TEXT_DOCUMENT_WILL_SAVE_WAIT_UNTIL: "clientToServer",
+    TYPE_HIERARCHY_SUBTYPES: "clientToServer",
+    TYPE_HIERARCHY_SUPERTYPES: "clientToServer",
+    WINDOW_SHOW_DOCUMENT: "serverToClient",
+    WINDOW_SHOW_MESSAGE_REQUEST: "serverToClient",
+    WINDOW_WORK_DONE_PROGRESS_CREATE: "serverToClient",
+    WORKSPACE_APPLY_EDIT: "serverToClient",
+    WORKSPACE_CODE_LENS_REFRESH: "serverToClient",
+    WORKSPACE_CONFIGURATION: "serverToClient",
+    WORKSPACE_DIAGNOSTIC: "clientToServer",
+    WORKSPACE_DIAGNOSTIC_REFRESH: "clientToServer",
+    WORKSPACE_EXECUTE_COMMAND: "clientToServer",
+    WORKSPACE_INLAY_HINT_REFRESH: "clientToServer",
+    WORKSPACE_INLINE_VALUE_REFRESH: "clientToServer",
+    WORKSPACE_SEMANTIC_TOKENS_REFRESH: "clientToServer",
+    WORKSPACE_SYMBOL: "clientToServer",
+    WORKSPACE_SYMBOL_RESOLVE: "clientToServer",
+    WORKSPACE_WILL_CREATE_FILES: "clientToServer",
+    WORKSPACE_WILL_DELETE_FILES: "clientToServer",
+    WORKSPACE_WILL_RENAME_FILES: "clientToServer",
+    WORKSPACE_WORKSPACE_FOLDERS: "serverToClient",
+    # Notification methods
+    CANCEL_REQUEST: "both",
+    EXIT: "clientToServer",
+    INITIALIZED: "clientToServer",
+    LOG_TRACE: "serverToClient",
+    NOTEBOOK_DOCUMENT_DID_CHANGE: "clientToServer",
+    NOTEBOOK_DOCUMENT_DID_CLOSE: "clientToServer",
+    NOTEBOOK_DOCUMENT_DID_OPEN: "clientToServer",
+    NOTEBOOK_DOCUMENT_DID_SAVE: "clientToServer",
+    PROGRESS: "both",
+    SET_TRACE: "clientToServer",
+    TELEMETRY_EVENT: "serverToClient",
+    TEXT_DOCUMENT_DID_CHANGE: "clientToServer",
+    TEXT_DOCUMENT_DID_CLOSE: "clientToServer",
+    TEXT_DOCUMENT_DID_OPEN: "clientToServer",
+    TEXT_DOCUMENT_DID_SAVE: "clientToServer",
+    TEXT_DOCUMENT_PUBLISH_DIAGNOSTICS: "serverToClient",
+    TEXT_DOCUMENT_WILL_SAVE: "clientToServer",
+    WINDOW_LOG_MESSAGE: "serverToClient",
+    WINDOW_SHOW_MESSAGE: "serverToClient",
+    WINDOW_WORK_DONE_PROGRESS_CANCEL: "clientToServer",
+    WORKSPACE_DID_CHANGE_CONFIGURATION: "clientToServer",
+    WORKSPACE_DID_CHANGE_WATCHED_FILES: "clientToServer",
+    WORKSPACE_DID_CHANGE_WORKSPACE_FOLDERS: "clientToServer",
+    WORKSPACE_DID_CREATE_FILES: "clientToServer",
+    WORKSPACE_DID_DELETE_FILES: "clientToServer",
+    WORKSPACE_DID_RENAME_FILES: "clientToServer",
 }
 
 

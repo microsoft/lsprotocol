@@ -88,18 +88,17 @@ def test_forward_refs():
     [
         {},  # No properties provided
         {"documentSelector": None},
-        {"documentSelector": ["something"]},
+        {"documentSelector": []},
         {"documentSelector": [{"pattern": "something/**"}]},
         {"documentSelector": [{"language": "python"}]},
         {"documentSelector": [{"scheme": "file"}]},
         {"documentSelector": [{"notebook": "jupyter"}]},
-        {"documentSelector": ["something", {"language": "python"}]},
+        {"documentSelector": [{"language": "python"}]},
         {"documentSelector": [{"notebook": {"notebookType": "jupyter-notebook"}}]},
         {"documentSelector": [{"notebook": {"scheme": "file"}}]},
         {"documentSelector": [{"notebook": {"pattern": "something/**"}}]},
         {
             "documentSelector": [
-                "something",
                 {"pattern": "something/**"},
                 {"language": "python"},
                 {"scheme": "file"},
@@ -119,10 +118,7 @@ def test_union_with_complex_type(data):
     """Ensure types with multiple possible resolutions are handled
     correctly."""
     converter = cv.get_converter()
-    try:
-        obj = converter.structure(data, lsp.TextDocumentRegistrationOptions)
-    except Exception as ex:
-        pass
+    obj = converter.structure(data, lsp.TextDocumentRegistrationOptions)
     hamcrest.assert_that(obj, hamcrest.instance_of(lsp.TextDocumentRegistrationOptions))
 
 
@@ -195,5 +191,6 @@ def test_LSPAny(data):
     obj = converter.structure(data, lsp.DidChangeConfigurationParams)
     hamcrest.assert_that(obj, hamcrest.instance_of(lsp.DidChangeConfigurationParams))
     hamcrest.assert_that(
-        converter.unstructure(obj, lsp.DidChangeConfigurationParams), hamcrest.is_(data)
+        converter.unstructure(obj, lsp.DidChangeConfigurationParams),
+        hamcrest.is_(data),
     )

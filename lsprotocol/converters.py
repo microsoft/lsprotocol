@@ -100,7 +100,6 @@ def _register_required_structure_hooks(
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentFilter_Type3)
 
-    DocumentSelectorItem = Union[str, "DocumentFilter"]
     NotebookSelectorItem = attrs.fields(
         lsp_types.NotebookCellTextDocumentFilter
     ).notebook.type
@@ -112,7 +111,6 @@ def _register_required_structure_hooks(
         (Optional[Union[str, bool]], _optional_union_str_bool),
         (
             Union[
-                str,
                 lsp_types.TextDocumentFilter_Type1,
                 lsp_types.TextDocumentFilter_Type2,
                 lsp_types.TextDocumentFilter_Type3,
@@ -120,7 +118,7 @@ def _register_required_structure_hooks(
             ],
             _text_document_filter_hook,
         ),
-        (DocumentSelectorItem, _text_document_filter_hook),
+        (lsp_types.DocumentFilter, _text_document_filter_hook),
         (
             Union[
                 str,
@@ -131,15 +129,17 @@ def _register_required_structure_hooks(
             _notebook_filter_hook,
         ),
         (NotebookSelectorItem, _notebook_filter_hook),
+        (
+            Union[lsp_types.LSPObject, List["LSPAny"], str, int, float, bool, None],
+            _lsp_object_hook,
+        ),
+        (
+            Union[
+                lsp_types.LSPObject, List[lsp_types.LSPAny], str, int, float, bool, None
+            ],
+            _lsp_object_hook,
+        ),
     ]
-
-    if sys.version_info > (3, 8):
-        STRUCTURE_HOOKS += [
-            (
-                Union[lsp_types.LSPObject, List["LSPAny"], str, int, float, bool, None],
-                _lsp_object_hook,
-            )
-        ]
 
     for type_, hook in STRUCTURE_HOOKS:
         converter.register_structure_hook(type_, hook)

@@ -141,6 +141,32 @@ def _register_required_structure_hooks(
         ),
     ]
 
+    if sys.version_info > (3, 8):
+        STRUCTURE_HOOKS += [
+            (
+                Union[
+                    lsp_types.LSPObject,
+                    List[
+                        Union[
+                            lsp_types.LSPObject,
+                            List["LSPAny"],
+                            str,
+                            int,
+                            float,
+                            bool,
+                            None,
+                        ]
+                    ],
+                    str,
+                    int,
+                    float,
+                    bool,
+                    None,
+                ],
+                _lsp_object_hook,
+            )
+        ]
+
     for type_, hook in STRUCTURE_HOOKS:
         converter.register_structure_hook(type_, hook)
 

@@ -4834,7 +4834,8 @@ class Position:
     offset of b is 3 since `𐐀` is represented using two code units in UTF-16.
     Since 3.17 clients and servers can agree on a different string encoding
     representation (e.g. UTF-8). The client announces it's supported encoding
-    via the client capability
+    via the client capability.
+
     [`general.positionEncodings`](#clientCapabilities). The value is an array
     of position encodings the client supports, with decreasing preference (e.g.
     the encoding at index `0` is the most preferred one). To stay backwards

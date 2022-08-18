@@ -147,7 +147,7 @@ class BaseType:
     name: str = attrs.field(
         validator=attrs.validators.in_(
             [
-                "Uri",
+                "URI",
                 "DocumentUri",
                 "integer",
                 "uinteger",
@@ -211,7 +211,7 @@ class BaseMapKeyType:
     name: str = attrs.field(
         validator=attrs.validators.in_(
             [
-                "Uri",
+                "URI",
                 "DocumentUri",
                 "integer",
                 "string",
@@ -243,6 +243,11 @@ class MapType:
     value: LSP_TYPE_SPEC = attrs.field(
         validator=type_validator, converter=partial_apply(convert_to_lsp_type)
     )
+
+
+@attrs.define
+class MetaData:
+    version: str = attrs.field(validator=attrs.validators.instance_of(str))
 
 
 @attrs.define
@@ -441,6 +446,7 @@ class LSPModel:
     structures: Iterable[Structure] = attrs.field(converter=list_converter(Structure))
     enumerations: Iterable[Enum] = attrs.field(converter=list_converter(Enum))
     typeAliases: Iterable[TypeAlias] = attrs.field(converter=list_converter(TypeAlias))
+    metaData: MetaData = attrs.field(converter=lambda x: MetaData(**x))
 
 
 def create_lsp_model(model: Dict[str, Any]) -> LSPModel:

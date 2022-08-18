@@ -42,9 +42,9 @@ iniconfig==1.1.1 \
     --hash=sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3 \
     --hash=sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32
     # via pytest
-jsonschema==4.10.2 \
-    --hash=sha256:09a0c8547c0d5c3651e43889dcf6626d35965cc2b4924d3fb0d66cdd9e038101 \
-    --hash=sha256:1a500bb42bd96f54a00aa61213d8595ee9d07c06150c5cd74cb9d307a4a8e40a
+jsonschema==4.12.1 \
+    --hash=sha256:05f975aee3f1244a1ea0e018e8ad2672f6ca5fd1a28bc46ffc7d4b3e9896cac4 \
+    --hash=sha256:c7dd96a88c4ea60bdc8478589ee2d4ea5d73ab235e24d17641ad733dde4e3eb1
     # via -r ./tests/requirements.in
 packaging==21.3 \
     --hash=sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb \

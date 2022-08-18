@@ -660,7 +660,7 @@ LSPArray = List["LSPAny"]
 """LSP arrays.
 @since 3.17.0"""
 # Since: 3.17.0
-LSPAny = Union["LSPObject", "LSPArray", str, int, int, float, bool, None]
+LSPAny = Union["LSPObject", LSPArray, str, int, int, float, bool, None]
 """The LSP any type.
 Please note that strictly speaking a property with the value `undefined`
 can't be converted into JSON preserving the property name. However for
@@ -716,7 +716,7 @@ PrepareRenameResult = Union[
     "Range", "PrepareRenameResult_Type1", "PrepareRenameResult_Type2"
 ]
 ProgressToken = Union[int, str]
-DocumentSelector = List[Union[str, "DocumentFilter"]]
+DocumentSelector = List["DocumentFilter"]
 """A document selector is the combination of one or many document filters.
 
 @sample `let sel:DocumentSelector = [{ language: 'typescript' }, { language: 'json', pattern: '**/tsconfig.json' }]`;
@@ -958,14 +958,14 @@ class TextDocumentPositionParams:
 @attrs.define
 class WorkDoneProgressParams:
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
 @attrs.define
 class PartialResultParams:
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -979,10 +979,10 @@ class ImplementationParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1001,7 +1001,7 @@ class Location:
 class TextDocumentRegistrationOptions:
     """General text document registration options."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1041,7 +1041,7 @@ class StaticRegistrationOptions:
 @attrs.define
 class ImplementationRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1064,10 +1064,10 @@ class TypeDefinitionParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1084,7 +1084,7 @@ class TypeDefinitionOptions:
 @attrs.define
 class TypeDefinitionRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1133,10 +1133,10 @@ class DocumentColorParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1164,7 +1164,7 @@ class DocumentColorOptions:
 @attrs.define
 class DocumentColorRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1191,10 +1191,10 @@ class ColorPresentationParams:
     range: "Range" = attrs.field()
     """The range where the color would be inserted. Serves as a context."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1224,10 +1224,10 @@ class FoldingRangeParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1259,7 +1259,7 @@ class FoldingRange:
     )
     """The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line."""
 
-    kind: Optional["FoldingRangeKind"] = attrs.field(default=None)
+    kind: Optional[FoldingRangeKind] = attrs.field(default=None)
     """Describes the kind of the folding range such as `comment' or 'region'. The kind
     is used to categorize folding ranges and used by commands like 'Fold all comments'.
     See FoldingRangeKind for an enumeration of standardized kinds."""
@@ -1288,7 +1288,7 @@ class FoldingRangeOptions:
 @attrs.define
 class FoldingRangeRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1311,10 +1311,10 @@ class DeclarationParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1331,7 +1331,7 @@ class DeclarationOptions:
 @attrs.define
 class DeclarationRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1355,10 +1355,10 @@ class SelectionRangeParams:
     positions: List["Position"] = attrs.field()
     """The positions inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1390,7 +1390,7 @@ class SelectionRangeOptions:
 @attrs.define
 class SelectionRangeRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1407,14 +1407,14 @@ class SelectionRangeRegistrationOptions:
 @attrs.define
 class WorkDoneProgressCreateParams:
 
-    token: "ProgressToken" = attrs.field()
+    token: ProgressToken = attrs.field()
     """The token to be used to report progress."""
 
 
 @attrs.define
 class WorkDoneProgressCancelParams:
 
-    token: "ProgressToken" = attrs.field()
+    token: ProgressToken = attrs.field()
     """The token to be used to report progress."""
 
 
@@ -1433,7 +1433,7 @@ class CallHierarchyPrepareParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -1450,7 +1450,7 @@ class CallHierarchyItem:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this item."""
 
-    kind: "SymbolKind" = attrs.field()
+    kind: SymbolKind = attrs.field()
     """The kind of this item."""
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -1463,7 +1463,7 @@ class CallHierarchyItem:
     """The range that should be selected and revealed when this symbol is being picked, e.g. the name of a function.
     Must be contained by the [`range`](#CallHierarchyItem.range)."""
 
-    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
 
     detail: Optional[str] = attrs.field(
@@ -1472,7 +1472,7 @@ class CallHierarchyItem:
     )
     """More detail for this item, e.g. the signature of a function."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved between a call hierarchy prepare and
     incoming calls or outgoing calls requests."""
 
@@ -1501,7 +1501,7 @@ class CallHierarchyRegistrationOptions:
 
     # Since: 3.16.0
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1524,12 +1524,12 @@ class CallHierarchyIncomingCallsParams:
 
     # Since: 3.16.0
 
-    item: "CallHierarchyItem" = attrs.field()
+    item: CallHierarchyItem = attrs.field()
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1543,7 +1543,7 @@ class CallHierarchyIncomingCall:
 
     # Since: 3.16.0
 
-    from_: "CallHierarchyItem" = attrs.field()
+    from_: CallHierarchyItem = attrs.field()
     """The item that makes the call."""
 
     from_ranges: List["Range"] = attrs.field()
@@ -1560,12 +1560,12 @@ class CallHierarchyOutgoingCallsParams:
 
     # Since: 3.16.0
 
-    item: "CallHierarchyItem" = attrs.field()
+    item: CallHierarchyItem = attrs.field()
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1580,7 +1580,7 @@ class CallHierarchyOutgoingCall:
 
     # Since: 3.16.0
 
-    to: "CallHierarchyItem" = attrs.field()
+    to: CallHierarchyItem = attrs.field()
     """The item that is called."""
 
     from_ranges: List["Range"] = attrs.field()
@@ -1598,10 +1598,10 @@ class SemanticTokensParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1685,7 +1685,7 @@ class SemanticTokensRegistrationOptions:
     legend: "SemanticTokensLegend" = attrs.field()
     """The legend used by the server"""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1721,10 +1721,10 @@ class SemanticTokensDeltaParams:
     """The result id of a previous response. The result Id can either point to a full response
     or a delta response depending on what was received last."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1765,10 +1765,10 @@ class SemanticTokensRangeParams:
     range: "Range" = attrs.field()
     """The range the semantic tokens are requested for."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -1831,7 +1831,7 @@ class LinkedEditingRangeParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -1869,7 +1869,7 @@ class LinkedEditingRangeOptions:
 @attrs.define
 class LinkedEditingRangeRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -1932,7 +1932,7 @@ class WorkspaceEdit:
     only plain `TextEdit`s using the `changes` property are supported."""
 
     change_annotations: Optional[
-        Dict["ChangeAnnotationIdentifier", "ChangeAnnotation"]
+        Dict[ChangeAnnotationIdentifier, "ChangeAnnotation"]
     ] = attrs.field(default=None)
     """A map of change annotations that can be referenced in `AnnotatedTextEdit`s or create, rename and
     delete file / folder operations.
@@ -1994,10 +1994,10 @@ class MonikerParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2018,10 +2018,10 @@ class Moniker:
     """The identifier of the moniker. The value is opaque in LSIF however
     schema owners are allowed to define the structure if they want."""
 
-    unique: "UniquenessLevel" = attrs.field()
+    unique: UniquenessLevel = attrs.field()
     """The scope in which the moniker is unique"""
 
-    kind: Optional["MonikerKind"] = attrs.field(default=None)
+    kind: Optional[MonikerKind] = attrs.field(default=None)
     """The moniker kind if known."""
 
 
@@ -2037,7 +2037,7 @@ class MonikerOptions:
 @attrs.define
 class MonikerRegistrationOptions:
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2059,7 +2059,7 @@ class TypeHierarchyPrepareParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -2072,7 +2072,7 @@ class TypeHierarchyItem:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this item."""
 
-    kind: "SymbolKind" = attrs.field()
+    kind: SymbolKind = attrs.field()
     """The kind of this item."""
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -2087,7 +2087,7 @@ class TypeHierarchyItem:
     picked, e.g. the name of a function. Must be contained by the
     [`range`](#TypeHierarchyItem.range)."""
 
-    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
 
     detail: Optional[str] = attrs.field(
@@ -2096,7 +2096,7 @@ class TypeHierarchyItem:
     )
     """More detail for this item, e.g. the signature of a function."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved between a type hierarchy prepare and
     supertypes or subtypes requests. It could also be used to identify the
     type hierarchy in the server, helping improve the performance on
@@ -2127,7 +2127,7 @@ class TypeHierarchyRegistrationOptions:
 
     # Since: 3.17.0
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2150,12 +2150,12 @@ class TypeHierarchySupertypesParams:
 
     # Since: 3.17.0
 
-    item: "TypeHierarchyItem" = attrs.field()
+    item: TypeHierarchyItem = attrs.field()
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2169,12 +2169,12 @@ class TypeHierarchySubtypesParams:
 
     # Since: 3.17.0
 
-    item: "TypeHierarchyItem" = attrs.field()
+    item: TypeHierarchyItem = attrs.field()
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2198,7 +2198,7 @@ class InlineValueParams:
     """Additional information about the context in which inline values were
     requested."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -2226,7 +2226,7 @@ class InlineValueRegistrationOptions:
 
     # Since: 3.17.0
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2255,7 +2255,7 @@ class InlayHintParams:
     range: "Range" = attrs.field()
     """The document range for which inlay hints should be computed."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -2277,7 +2277,7 @@ class InlayHint:
     
     *Note* that neither the string nor the label part can be empty."""
 
-    kind: Optional["InlayHintKind"] = attrs.field(default=None)
+    kind: Optional[InlayHintKind] = attrs.field(default=None)
     """The kind of this hint. Can be omitted in which case the client
     should fall back to a reasonable default."""
 
@@ -2311,7 +2311,7 @@ class InlayHint:
     background color of the hint itself. That means padding can be used
     to visually align/separate an inlay hint."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on an inlay hint between
     a `textDocument/inlayHint` and a `inlayHint/resolve` request."""
 
@@ -2354,7 +2354,7 @@ class InlayHintRegistrationOptions:
     """The server provides support to resolve additional
     information for an inlay hint item."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2392,10 +2392,10 @@ class DocumentDiagnosticParams:
     )
     """The result id of a previous response if provided."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2483,7 +2483,7 @@ class DiagnosticRegistrationOptions:
     )
     """The server provides support for workspace diagnostics as well."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2523,10 +2523,10 @@ class WorkspaceDiagnosticParams:
     )
     """The additional identifier provided during registration."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -2540,7 +2540,7 @@ class WorkspaceDiagnosticReport:
 
     # Since: 3.17.0
 
-    items: List["WorkspaceDocumentDiagnosticReport"] = attrs.field()
+    items: List[WorkspaceDocumentDiagnosticReport] = attrs.field()
 
 
 @attrs.define
@@ -2552,7 +2552,7 @@ class WorkspaceDiagnosticReportPartialResult:
 
     # Since: 3.17.0
 
-    items: List["WorkspaceDocumentDiagnosticReport"] = attrs.field()
+    items: List[WorkspaceDocumentDiagnosticReport] = attrs.field()
 
 
 @attrs.define
@@ -2704,20 +2704,20 @@ class _InitializeParams:
     
     @deprecated in favour of workspaceFolders."""
 
-    initialization_options: Optional["LSPAny"] = attrs.field(default=None)
+    initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
     trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
 @attrs.define
 class WorkspaceFoldersInitializeParams:
 
-    workspace_folders: Optional[Union[List["WorkspaceFolder"], None]] = attrs.field(
+    workspace_folders: Optional[Union[List[WorkspaceFolder], None]] = attrs.field(
         default=None
     )
     """The workspace folders configured in the client when the server starts.
@@ -2776,13 +2776,13 @@ class InitializeParams:
     
     @deprecated in favour of workspaceFolders."""
 
-    initialization_options: Optional["LSPAny"] = attrs.field(default=None)
+    initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
     trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
 
-    workspace_folders: Optional[Union[List["WorkspaceFolder"], None]] = attrs.field(
+    workspace_folders: Optional[Union[List[WorkspaceFolder], None]] = attrs.field(
         default=None
     )
     """The workspace folders configured in the client when the server starts.
@@ -2842,7 +2842,7 @@ class InitializedParams:
 class DidChangeConfigurationParams:
     """The parameters of a change configuration notification."""
 
-    settings: "LSPAny" = attrs.field()
+    settings: LSPAny = attrs.field()
     """The actual changed settings"""
 
 
@@ -2856,7 +2856,7 @@ class DidChangeConfigurationRegistrationOptions:
 class ShowMessageParams:
     """The parameters of a notification message."""
 
-    type: "MessageType" = attrs.field()
+    type: MessageType = attrs.field()
     """The message type. See {@link MessageType}"""
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -2866,7 +2866,7 @@ class ShowMessageParams:
 @attrs.define
 class ShowMessageRequestParams:
 
-    type: "MessageType" = attrs.field()
+    type: MessageType = attrs.field()
     """The message type. See {@link MessageType}"""
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -2887,7 +2887,7 @@ class MessageActionItem:
 class LogMessageParams:
     """The log message parameters."""
 
-    type: "MessageType" = attrs.field()
+    type: MessageType = attrs.field()
     """The message type. See {@link MessageType}"""
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -2911,7 +2911,7 @@ class DidChangeTextDocumentParams:
     to the version after all provided content changes have
     been applied."""
 
-    content_changes: List["TextDocumentContentChangeEvent"] = attrs.field()
+    content_changes: List[TextDocumentContentChangeEvent] = attrs.field()
     """The actual content changes. The content changes describe single state changes
     to the document. So if there are two content changes c1 (at array index 0) and
     c2 (at array index 1) for a document in state S then c1 moves the document from
@@ -2930,10 +2930,10 @@ class TextDocumentChangeRegistrationOptions:
     """Describe options to be used when registered for text document change
     events."""
 
-    sync_kind: "TextDocumentSyncKind" = attrs.field()
+    sync_kind: TextDocumentSyncKind = attrs.field()
     """How documents are synced to the server."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2978,7 +2978,7 @@ class SaveOptions:
 class TextDocumentSaveRegistrationOptions:
     """Save registration options."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -2998,7 +2998,7 @@ class WillSaveTextDocumentParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document that will be saved."""
 
-    reason: "TextDocumentSaveReason" = attrs.field()
+    reason: TextDocumentSaveReason = attrs.field()
     """The 'TextDocumentSaveReason'."""
 
 
@@ -3065,10 +3065,10 @@ class CompletionParams:
     """The completion context. This is only available it the client specifies
     to send this using the client capability `textDocument.completion.contextSupport === true`"""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3093,11 +3093,11 @@ class CompletionItem:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    kind: Optional["CompletionItemKind"] = attrs.field(default=None)
+    kind: Optional[CompletionItemKind] = attrs.field(default=None)
     """The kind of this completion item. Based of the kind
     an icon is chosen by the editor."""
 
-    tags: Optional[List["CompletionItemTag"]] = attrs.field(default=None)
+    tags: Optional[List[CompletionItemTag]] = attrs.field(default=None)
     """Tags for this completion item.
     
     @since 3.15.0"""
@@ -3162,7 +3162,7 @@ class CompletionItem:
     recommended to use `textEdit` instead since it avoids additional client
     side interpretation."""
 
-    insert_text_format: Optional["InsertTextFormat"] = attrs.field(default=None)
+    insert_text_format: Optional[InsertTextFormat] = attrs.field(default=None)
     """The format of the insert text. The format applies to both the
     `insertText` property and the `newText` property of a provided
     `textEdit`. If omitted defaults to `InsertTextFormat.PlainText`.
@@ -3170,7 +3170,7 @@ class CompletionItem:
     Please note that the insertTextFormat doesn't apply to
     `additionalTextEdits`."""
 
-    insert_text_mode: Optional["InsertTextMode"] = attrs.field(default=None)
+    insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
     """How whitespace and indentation is handled during completion
     item insertion. If not provided the clients default value depends on
     the `textDocument.completion.insertTextMode` client capability.
@@ -3178,7 +3178,7 @@ class CompletionItem:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    text_edit: Optional[Union["TextEdit", "InsertReplaceEdit"]] = attrs.field(
+    text_edit: Optional[Union[TextEdit, "InsertReplaceEdit"]] = attrs.field(
         default=None
     )
     """An edit which is applied to a document when selecting
@@ -3219,7 +3219,7 @@ class CompletionItem:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    additional_text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
+    additional_text_edits: Optional[List[TextEdit]] = attrs.field(default=None)
     """An optional array of additional text edits that are applied when
     selecting this completion. Edits must not overlap (including the same insert position)
     with the main edit nor with themselves.
@@ -3238,7 +3238,7 @@ class CompletionItem:
     additional modifications to the current document should be described with the
     additionalTextEdits-property."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on a completion item between a
     CompletionRequest and a CompletionResolveRequest."""
 
@@ -3266,19 +3266,19 @@ class CompletionListItemDefaultsType:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    insert_text_format: Optional["InsertTextFormat"] = attrs.field(default=None)
+    insert_text_format: Optional[InsertTextFormat] = attrs.field(default=None)
     """A default insert text format.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    insert_text_mode: Optional["InsertTextMode"] = attrs.field(default=None)
+    insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
     """A default insert text mode.
     
     @since 3.17.0"""
     # Since: 3.17.0
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A default data value.
     
     @since 3.17.0"""
@@ -3296,7 +3296,7 @@ class CompletionList:
     Recomputed lists have all their items replaced (not appended) in the
     incomplete completion sessions."""
 
-    items: List["CompletionItem"] = attrs.field()
+    items: List[CompletionItem] = attrs.field()
     """The completion items."""
 
     item_defaults: Optional["CompletionListItemDefaultsType"] = attrs.field(
@@ -3397,7 +3397,7 @@ class CompletionRegistrationOptionsCompletionItemType:
 class CompletionRegistrationOptions:
     """Registration options for a CompletionRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3451,7 +3451,7 @@ class HoverParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -3459,9 +3459,7 @@ class HoverParams:
 class Hover:
     """The result of a hover request."""
 
-    contents: Union[
-        "MarkupContent", "MarkedString", List["MarkedString"]
-    ] = attrs.field()
+    contents: Union["MarkupContent", MarkedString, List[MarkedString]] = attrs.field()
     """The hover's content"""
 
     range: Optional["Range"] = attrs.field(default=None)
@@ -3483,7 +3481,7 @@ class HoverOptions:
 class HoverRegistrationOptions:
     """Registration options for a HoverRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3507,7 +3505,7 @@ class SignatureHelpParams:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -3573,7 +3571,7 @@ class SignatureHelpOptions:
 class SignatureHelpRegistrationOptions:
     """Registration options for a SignatureHelpRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3602,10 +3600,10 @@ class DefinitionParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3624,7 +3622,7 @@ class DefinitionOptions:
 class DefinitionRegistrationOptions:
     """Registration options for a DefinitionRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3643,10 +3641,10 @@ class ReferenceParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3665,7 +3663,7 @@ class ReferenceOptions:
 class ReferenceRegistrationOptions:
     """Registration options for a ReferencesRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3682,10 +3680,10 @@ class DocumentHighlightParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3702,7 +3700,7 @@ class DocumentHighlight:
     range: "Range" = attrs.field()
     """The range this highlight applies to."""
 
-    kind: Optional["DocumentHighlightKind"] = attrs.field(default=None)
+    kind: Optional[DocumentHighlightKind] = attrs.field(default=None)
     """The highlight kind, default is text."""
 
 
@@ -3720,7 +3718,7 @@ class DocumentHighlightOptions:
 class DocumentHighlightRegistrationOptions:
     """Registration options for a DocumentHighlightRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3734,10 +3732,10 @@ class DocumentSymbolParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3749,10 +3747,10 @@ class BaseSymbolInformation:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this symbol."""
 
-    kind: "SymbolKind" = attrs.field()
+    kind: SymbolKind = attrs.field()
     """The kind of this symbol."""
 
-    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
@@ -3773,7 +3771,7 @@ class SymbolInformation:
     """Represents information about programming constructs like variables,
     classes, interfaces etc."""
 
-    location: "Location" = attrs.field()
+    location: Location = attrs.field()
     """The location of this symbol. The location's range is used by a tool
     to reveal the location in the editor. If the symbol is selected in the
     tool the range's start information is used to position the cursor. So
@@ -3787,7 +3785,7 @@ class SymbolInformation:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this symbol."""
 
-    kind: "SymbolKind" = attrs.field()
+    kind: SymbolKind = attrs.field()
     """The kind of this symbol."""
 
     deprecated: Optional[bool] = attrs.field(
@@ -3798,7 +3796,7 @@ class SymbolInformation:
     
     @deprecated Use tags instead"""
 
-    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
@@ -3829,7 +3827,7 @@ class DocumentSymbol:
     """The name of this symbol. Will be displayed in the user interface and therefore must not be
     an empty string or a string only consisting of white spaces."""
 
-    kind: "SymbolKind" = attrs.field()
+    kind: SymbolKind = attrs.field()
     """The kind of this symbol."""
 
     range: "Range" = attrs.field()
@@ -3847,7 +3845,7 @@ class DocumentSymbol:
     )
     """More detail for this symbol, e.g the signature of a function."""
 
-    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this document symbol.
     
     @since 3.16.0"""
@@ -3889,7 +3887,7 @@ class DocumentSymbolOptions:
 class DocumentSymbolRegistrationOptions:
     """Registration options for a DocumentSymbolRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -3919,10 +3917,10 @@ class CodeActionParams:
     context: "CodeActionContext" = attrs.field()
     """Context carrying additional information."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -3942,7 +3940,7 @@ class Command:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
-    arguments: Optional[List["LSPAny"]] = attrs.field(default=None)
+    arguments: Optional[List[LSPAny]] = attrs.field(default=None)
     """Arguments that the command handler should be
     invoked with."""
 
@@ -3968,7 +3966,7 @@ class CodeAction:
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A short, human-readable, title for this code action."""
 
-    kind: Optional["CodeActionKind"] = attrs.field(default=None)
+    kind: Optional[CodeActionKind] = attrs.field(default=None)
     """The kind of the code action.
     
     Used to filter code actions."""
@@ -4007,15 +4005,15 @@ class CodeAction:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    edit: Optional["WorkspaceEdit"] = attrs.field(default=None)
+    edit: Optional[WorkspaceEdit] = attrs.field(default=None)
     """The workspace edit this code action performs."""
 
-    command: Optional["Command"] = attrs.field(default=None)
+    command: Optional[Command] = attrs.field(default=None)
     """A command this code action executes. If a code action
     provides an edit and a command, first the edit is
     executed and then the command."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on a code action between
     a `textDocument/codeAction` and a `codeAction/resolve` request.
     
@@ -4027,7 +4025,7 @@ class CodeAction:
 class CodeActionOptions:
     """Provider options for a CodeActionRequest."""
 
-    code_action_kinds: Optional[List["CodeActionKind"]] = attrs.field(default=None)
+    code_action_kinds: Optional[List[CodeActionKind]] = attrs.field(default=None)
     """CodeActionKinds that this server may return.
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
@@ -4053,13 +4051,13 @@ class CodeActionOptions:
 class CodeActionRegistrationOptions:
     """Registration options for a CodeActionRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    code_action_kinds: Optional[List["CodeActionKind"]] = attrs.field(default=None)
+    code_action_kinds: Optional[List[CodeActionKind]] = attrs.field(default=None)
     """CodeActionKinds that this server may return.
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
@@ -4084,10 +4082,10 @@ class WorkspaceSymbolParams:
     """A query string to filter symbols by. Clients may send an empty
     string here to request all symbols."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -4108,7 +4106,7 @@ class WorkspaceSymbol:
 
     # Since: 3.17.0
 
-    location: Union["Location", "WorkspaceSymbolLocationType1"] = attrs.field()
+    location: Union[Location, "WorkspaceSymbolLocationType1"] = attrs.field()
     """The location of the symbol. Whether a server is allowed to
     return a location without a range depends on the client
     capability `workspace.symbol.resolveSupport`.
@@ -4118,14 +4116,14 @@ class WorkspaceSymbol:
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this symbol."""
 
-    kind: "SymbolKind" = attrs.field()
+    kind: SymbolKind = attrs.field()
     """The kind of this symbol."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on a workspace symbol between a
     workspace symbol request and a workspace symbol resolve request."""
 
-    tags: Optional[List["SymbolTag"]] = attrs.field(default=None)
+    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
@@ -4183,10 +4181,10 @@ class CodeLensParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to request code lens for."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -4204,10 +4202,10 @@ class CodeLens:
     range: "Range" = attrs.field()
     """The range in which this code lens is valid. Should only span a single line."""
 
-    command: Optional["Command"] = attrs.field(default=None)
+    command: Optional[Command] = attrs.field(default=None)
     """The command this code lens represents."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on a code lens item between
     a CodeLensRequest and a [CodeLensResolveRequest]
     (#CodeLensResolveRequest)"""
@@ -4233,7 +4231,7 @@ class CodeLensOptions:
 class CodeLensRegistrationOptions:
     """Registration options for a CodeLensRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -4253,10 +4251,10 @@ class DocumentLinkParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to provide document links for."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -4288,7 +4286,7 @@ class DocumentLink:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on a document link between a
     DocumentLinkRequest and a DocumentLinkResolveRequest."""
 
@@ -4313,7 +4311,7 @@ class DocumentLinkOptions:
 class DocumentLinkRegistrationOptions:
     """Registration options for a DocumentLinkRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -4336,7 +4334,7 @@ class DocumentFormattingParams:
     options: "FormattingOptions" = attrs.field()
     """The format options."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4354,7 +4352,7 @@ class DocumentFormattingOptions:
 class DocumentFormattingRegistrationOptions:
     """Registration options for a DocumentFormattingRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -4374,7 +4372,7 @@ class DocumentRangeFormattingParams:
     options: "FormattingOptions" = attrs.field()
     """The format options"""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4392,7 +4390,7 @@ class DocumentRangeFormattingOptions:
 class DocumentRangeFormattingRegistrationOptions:
     """Registration options for a DocumentRangeFormattingRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -4443,7 +4441,7 @@ class DocumentOnTypeFormattingRegistrationOptions:
     )
     """A character on which formatting should be triggered, like `{`."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -4468,7 +4466,7 @@ class RenameParams:
     request must return a ResponseError with an
     appropriate message set."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4495,7 +4493,7 @@ class RenameOptions:
 class RenameRegistrationOptions:
     """Registration options for a RenameRequest."""
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -4520,7 +4518,7 @@ class PrepareRenameParams:
     position: "Position" = attrs.field()
     """The position inside the text document."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4531,10 +4529,10 @@ class ExecuteCommandParams:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
-    arguments: Optional[List["LSPAny"]] = attrs.field(default=None)
+    arguments: Optional[List[LSPAny]] = attrs.field(default=None)
     """Arguments that the command should be invoked with."""
 
-    work_done_token: Optional["ProgressToken"] = attrs.field(default=None)
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
@@ -4563,7 +4561,7 @@ class ExecuteCommandRegistrationOptions:
 class ApplyWorkspaceEditParams:
     """The parameters passed via a apply workspace edit request."""
 
-    edit: "WorkspaceEdit" = attrs.field()
+    edit: WorkspaceEdit = attrs.field()
     """The edits to apply."""
 
     label: Optional[str] = attrs.field(
@@ -4694,7 +4692,7 @@ class WorkDoneProgressEnd:
 @attrs.define
 class SetTraceParams:
 
-    value: "TraceValues" = attrs.field()
+    value: TraceValues = attrs.field()
 
 
 @attrs.define
@@ -4718,10 +4716,10 @@ class CancelParams:
 @attrs.define
 class ProgressParams:
 
-    token: "ProgressToken" = attrs.field()
+    token: ProgressToken = attrs.field()
     """The progress token provided by the client or server."""
 
-    value: "LSPAny" = attrs.field()
+    value: LSPAny = attrs.field()
     """The progress data."""
 
 
@@ -4779,10 +4777,10 @@ class Range:
 class WorkspaceFoldersChangeEvent:
     """The workspace folder change event."""
 
-    added: List["WorkspaceFolder"] = attrs.field()
+    added: List[WorkspaceFolder] = attrs.field()
     """The array of added workspace folders"""
 
-    removed: List["WorkspaceFolder"] = attrs.field()
+    removed: List[WorkspaceFolder] = attrs.field()
     """The array of the removed workspace folders"""
 
 
@@ -4922,7 +4920,7 @@ class TextDocumentEdit:
     text_document: "OptionalVersionedTextDocumentIdentifier" = attrs.field()
     """The text document to change."""
 
-    edits: List[Union["TextEdit", "AnnotatedTextEdit"]] = attrs.field()
+    edits: List[Union[TextEdit, "AnnotatedTextEdit"]] = attrs.field()
     """The edits to be applied.
     
     @since 3.16.0 - support for AnnotatedTextEdit. This is guarded using a
@@ -4937,7 +4935,7 @@ class ResourceOperation:
     kind: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The resource operation kind."""
 
-    annotation_id: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
+    annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -4960,7 +4958,7 @@ class CreateFile:
     options: Optional["CreateFileOptions"] = attrs.field(default=None)
     """Additional options"""
 
-    annotation_id: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
+    annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -4986,7 +4984,7 @@ class RenameFile:
     options: Optional["RenameFileOptions"] = attrs.field(default=None)
     """Rename options."""
 
-    annotation_id: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
+    annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -5009,7 +5007,7 @@ class DeleteFile:
     options: Optional["DeleteFileOptions"] = attrs.field(default=None)
     """Delete options."""
 
-    annotation_id: Optional["ChangeAnnotationIdentifier"] = attrs.field(default=None)
+    annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
     
     @since 3.16.0"""
@@ -5102,7 +5100,7 @@ class InlineValueContext:
     frame_id: int = attrs.field(validator=validators.integer_validator)
     """The stack frame (as a DAP Id) where the execution has stopped."""
 
-    stopped_location: "Range" = attrs.field()
+    stopped_location: Range = attrs.field()
     """The document range where execution has stopped.
     Typically the end position of the range denotes the line where the inline values are shown."""
 
@@ -5116,7 +5114,7 @@ class InlineValueText:
 
     # Since: 3.17.0
 
-    range: "Range" = attrs.field()
+    range: Range = attrs.field()
     """The document range for which the inline value applies."""
 
     text: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -5135,7 +5133,7 @@ class InlineValueVariableLookup:
 
     # Since: 3.17.0
 
-    range: "Range" = attrs.field()
+    range: Range = attrs.field()
     """The document range for which the inline value applies.
     The range is used to extract the variable name from the underlying document."""
 
@@ -5163,7 +5161,7 @@ class InlineValueEvaluatableExpression:
 
     # Since: 3.17.0
 
-    range: "Range" = attrs.field()
+    range: Range = attrs.field()
     """The document range for which the inline value applies.
     The range is used to extract the evaluatable expression from the underlying document."""
 
@@ -5192,7 +5190,7 @@ class InlayHintLabelPart:
     the client capability `inlayHint.resolveSupport` clients might resolve
     this property late using the resolve request."""
 
-    location: Optional["Location"] = attrs.field(default=None)
+    location: Optional[Location] = attrs.field(default=None)
     """An optional source code location that represents this
     label part.
     
@@ -5205,7 +5203,7 @@ class InlayHintLabelPart:
     Depending on the client capability `inlayHint.resolveSupport` clients
     might resolve this property late using the resolve request."""
 
-    command: Optional["Command"] = attrs.field(default=None)
+    command: Optional[Command] = attrs.field(default=None)
     """An optional command for this label part.
     
     Depending on the client capability `inlayHint.resolveSupport` clients
@@ -5239,7 +5237,7 @@ class MarkupContent:
     remove HTML from the markdown to avoid script execution.
     """
 
-    kind: "MarkupKind" = attrs.field()
+    kind: MarkupKind = attrs.field()
     """The type of the Markup"""
 
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -5288,7 +5286,7 @@ class RelatedFullDocumentDiagnosticReport:
     related_documents: Optional[
         Dict[
             str,
-            Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"],
+            Union[FullDocumentDiagnosticReport, "UnchangedDocumentDiagnosticReport"],
         ]
     ] = attrs.field(default=None)
     """Diagnostics of related documents. This information is useful
@@ -5351,8 +5349,7 @@ class RelatedUnchangedDocumentDiagnosticReport:
 
     related_documents: Optional[
         Dict[
-            str,
-            Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"],
+            str, Union[FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport]
         ]
     ] = attrs.field(default=None)
     """Diagnostics of related documents. This information is useful
@@ -5450,10 +5447,10 @@ class NotebookDocumentChangeEventCellsTypeStructureType:
     array: "NotebookCellArrayChange" = attrs.field()
     """The change to the cell array."""
 
-    did_open: Optional[List["TextDocumentItem"]] = attrs.field(default=None)
+    did_open: Optional[List[TextDocumentItem]] = attrs.field(default=None)
     """Additional opened cell text documents."""
 
-    did_close: Optional[List["TextDocumentIdentifier"]] = attrs.field(default=None)
+    did_close: Optional[List[TextDocumentIdentifier]] = attrs.field(default=None)
     """Additional closed cell text documents."""
 
 
@@ -5461,7 +5458,7 @@ class NotebookDocumentChangeEventCellsTypeStructureType:
 class NotebookDocumentChangeEventCellsTypeTextContentType:
     document: "VersionedTextDocumentIdentifier" = attrs.field()
 
-    changes: List["TextDocumentContentChangeEvent"] = attrs.field()
+    changes: List[TextDocumentContentChangeEvent] = attrs.field()
 
 
 @attrs.define
@@ -5525,7 +5522,7 @@ class Registration:
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The method / capability to register for."""
 
-    register_options: Optional["LSPAny"] = attrs.field(default=None)
+    register_options: Optional[LSPAny] = attrs.field(default=None)
     """Options necessary for the registration."""
 
 
@@ -5562,7 +5559,7 @@ class ServerCapabilitiesWorkspaceType:
 class ServerCapabilities:
     """Defines the capabilities provided by a language server."""
 
-    position_encoding: Optional["PositionEncodingKind"] = attrs.field(default=None)
+    position_encoding: Optional[PositionEncodingKind] = attrs.field(default=None)
     """The position encoding the server picked from the encodings offered
     by the client via the client capability `general.positionEncodings`.
     
@@ -5575,7 +5572,7 @@ class ServerCapabilities:
     # Since: 3.17.0
 
     text_document_sync: Optional[
-        Union["TextDocumentSyncOptions", "TextDocumentSyncKind"]
+        Union["TextDocumentSyncOptions", TextDocumentSyncKind]
     ] = attrs.field(default=None)
     """Defines how text documents are synced. Is either a detailed structure
     defining each notification or for backwards compatibility the
@@ -5589,112 +5586,110 @@ class ServerCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    completion_provider: Optional["CompletionOptions"] = attrs.field(default=None)
+    completion_provider: Optional[CompletionOptions] = attrs.field(default=None)
     """The server provides completion support."""
 
-    hover_provider: Optional[Union[bool, "HoverOptions"]] = attrs.field(default=None)
+    hover_provider: Optional[Union[bool, HoverOptions]] = attrs.field(default=None)
     """The server provides hover support."""
 
-    signature_help_provider: Optional["SignatureHelpOptions"] = attrs.field(
-        default=None
-    )
+    signature_help_provider: Optional[SignatureHelpOptions] = attrs.field(default=None)
     """The server provides signature help support."""
 
     declaration_provider: Optional[
-        Union[bool, "DeclarationOptions", "DeclarationRegistrationOptions"]
+        Union[bool, DeclarationOptions, DeclarationRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides Goto Declaration support."""
 
-    definition_provider: Optional[Union[bool, "DefinitionOptions"]] = attrs.field(
+    definition_provider: Optional[Union[bool, DefinitionOptions]] = attrs.field(
         default=None
     )
     """The server provides goto definition support."""
 
     type_definition_provider: Optional[
-        Union[bool, "TypeDefinitionOptions", "TypeDefinitionRegistrationOptions"]
+        Union[bool, TypeDefinitionOptions, TypeDefinitionRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides Goto Type Definition support."""
 
     implementation_provider: Optional[
-        Union[bool, "ImplementationOptions", "ImplementationRegistrationOptions"]
+        Union[bool, ImplementationOptions, ImplementationRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides Goto Implementation support."""
 
-    references_provider: Optional[Union[bool, "ReferenceOptions"]] = attrs.field(
+    references_provider: Optional[Union[bool, ReferenceOptions]] = attrs.field(
         default=None
     )
     """The server provides find references support."""
 
     document_highlight_provider: Optional[
-        Union[bool, "DocumentHighlightOptions"]
+        Union[bool, DocumentHighlightOptions]
     ] = attrs.field(default=None)
     """The server provides document highlight support."""
 
     document_symbol_provider: Optional[
-        Union[bool, "DocumentSymbolOptions"]
+        Union[bool, DocumentSymbolOptions]
     ] = attrs.field(default=None)
     """The server provides document symbol support."""
 
-    code_action_provider: Optional[Union[bool, "CodeActionOptions"]] = attrs.field(
+    code_action_provider: Optional[Union[bool, CodeActionOptions]] = attrs.field(
         default=None
     )
     """The server provides code actions. CodeActionOptions may only be
     specified if the client states that it supports
     `codeActionLiteralSupport` in its initial `initialize` request."""
 
-    code_lens_provider: Optional["CodeLensOptions"] = attrs.field(default=None)
+    code_lens_provider: Optional[CodeLensOptions] = attrs.field(default=None)
     """The server provides code lens."""
 
-    document_link_provider: Optional["DocumentLinkOptions"] = attrs.field(default=None)
+    document_link_provider: Optional[DocumentLinkOptions] = attrs.field(default=None)
     """The server provides document link support."""
 
     color_provider: Optional[
-        Union[bool, "DocumentColorOptions", "DocumentColorRegistrationOptions"]
+        Union[bool, DocumentColorOptions, DocumentColorRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides color provider support."""
 
     workspace_symbol_provider: Optional[
-        Union[bool, "WorkspaceSymbolOptions"]
+        Union[bool, WorkspaceSymbolOptions]
     ] = attrs.field(default=None)
     """The server provides workspace symbol support."""
 
     document_formatting_provider: Optional[
-        Union[bool, "DocumentFormattingOptions"]
+        Union[bool, DocumentFormattingOptions]
     ] = attrs.field(default=None)
     """The server provides document formatting."""
 
     document_range_formatting_provider: Optional[
-        Union[bool, "DocumentRangeFormattingOptions"]
+        Union[bool, DocumentRangeFormattingOptions]
     ] = attrs.field(default=None)
     """The server provides document range formatting."""
 
     document_on_type_formatting_provider: Optional[
-        "DocumentOnTypeFormattingOptions"
+        DocumentOnTypeFormattingOptions
     ] = attrs.field(default=None)
     """The server provides document formatting on typing."""
 
-    rename_provider: Optional[Union[bool, "RenameOptions"]] = attrs.field(default=None)
+    rename_provider: Optional[Union[bool, RenameOptions]] = attrs.field(default=None)
     """The server provides rename support. RenameOptions may only be
     specified if the client states that it supports
     `prepareSupport` in its initial `initialize` request."""
 
     folding_range_provider: Optional[
-        Union[bool, "FoldingRangeOptions", "FoldingRangeRegistrationOptions"]
+        Union[bool, FoldingRangeOptions, FoldingRangeRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides folding provider support."""
 
     selection_range_provider: Optional[
-        Union[bool, "SelectionRangeOptions", "SelectionRangeRegistrationOptions"]
+        Union[bool, SelectionRangeOptions, SelectionRangeRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides selection range support."""
 
-    execute_command_provider: Optional["ExecuteCommandOptions"] = attrs.field(
+    execute_command_provider: Optional[ExecuteCommandOptions] = attrs.field(
         default=None
     )
     """The server provides execute command support."""
 
     call_hierarchy_provider: Optional[
-        Union[bool, "CallHierarchyOptions", "CallHierarchyRegistrationOptions"]
+        Union[bool, CallHierarchyOptions, CallHierarchyRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides call hierarchy support.
     
@@ -5702,9 +5697,7 @@ class ServerCapabilities:
     # Since: 3.16.0
 
     linked_editing_range_provider: Optional[
-        Union[
-            bool, "LinkedEditingRangeOptions", "LinkedEditingRangeRegistrationOptions"
-        ]
+        Union[bool, LinkedEditingRangeOptions, LinkedEditingRangeRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides linked editing range support.
     
@@ -5712,7 +5705,7 @@ class ServerCapabilities:
     # Since: 3.16.0
 
     semantic_tokens_provider: Optional[
-        Union["SemanticTokensOptions", "SemanticTokensRegistrationOptions"]
+        Union[SemanticTokensOptions, SemanticTokensRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides semantic tokens support.
     
@@ -5720,7 +5713,7 @@ class ServerCapabilities:
     # Since: 3.16.0
 
     moniker_provider: Optional[
-        Union[bool, "MonikerOptions", "MonikerRegistrationOptions"]
+        Union[bool, MonikerOptions, MonikerRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides moniker support.
     
@@ -5728,7 +5721,7 @@ class ServerCapabilities:
     # Since: 3.16.0
 
     type_hierarchy_provider: Optional[
-        Union[bool, "TypeHierarchyOptions", "TypeHierarchyRegistrationOptions"]
+        Union[bool, TypeHierarchyOptions, TypeHierarchyRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides type hierarchy support.
     
@@ -5736,7 +5729,7 @@ class ServerCapabilities:
     # Since: 3.17.0
 
     inline_value_provider: Optional[
-        Union[bool, "InlineValueOptions", "InlineValueRegistrationOptions"]
+        Union[bool, InlineValueOptions, InlineValueRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides inline values.
     
@@ -5744,7 +5737,7 @@ class ServerCapabilities:
     # Since: 3.17.0
 
     inlay_hint_provider: Optional[
-        Union[bool, "InlayHintOptions", "InlayHintRegistrationOptions"]
+        Union[bool, InlayHintOptions, InlayHintRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides inlay hints.
     
@@ -5752,7 +5745,7 @@ class ServerCapabilities:
     # Since: 3.17.0
 
     diagnostic_provider: Optional[
-        Union["DiagnosticOptions", "DiagnosticRegistrationOptions"]
+        Union[DiagnosticOptions, DiagnosticRegistrationOptions]
     ] = attrs.field(default=None)
     """The server has support for pull model diagnostics.
     
@@ -5762,7 +5755,7 @@ class ServerCapabilities:
     workspace: Optional["ServerCapabilitiesWorkspaceType"] = attrs.field(default=None)
     """Workspace specific server capabilities."""
 
-    experimental: Optional["LSPAny"] = attrs.field(default=None)
+    experimental: Optional[LSPAny] = attrs.field(default=None)
     """Experimental server capabilities."""
 
 
@@ -5785,20 +5778,20 @@ class FileEvent:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The file's uri."""
 
-    type: "FileChangeType" = attrs.field()
+    type: FileChangeType = attrs.field()
     """The change type."""
 
 
 @attrs.define
 class FileSystemWatcher:
 
-    glob_pattern: "GlobPattern" = attrs.field()
+    glob_pattern: GlobPattern = attrs.field()
     """The glob pattern to watch. See {@link GlobPattern glob pattern} for more detail.
     
     @since 3.17.0 support for relative patterns."""
     # Since: 3.17.0 support for relative patterns.
 
-    kind: Optional["WatchKind"] = attrs.field(default=None)
+    kind: Optional[WatchKind] = attrs.field(default=None)
     """The kind of events of interest. If omitted it defaults
     to WatchKind.Create | WatchKind.Change | WatchKind.Delete
     which is 7."""
@@ -5811,13 +5804,13 @@ class Diagnostic:
     Diagnostic objects are only valid in the scope of a resource.
     """
 
-    range: "Range" = attrs.field()
+    range: Range = attrs.field()
     """The range at which the message applies"""
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The diagnostic's message. It usually appears in the user interface"""
 
-    severity: Optional["DiagnosticSeverity"] = attrs.field(default=None)
+    severity: Optional[DiagnosticSeverity] = attrs.field(default=None)
     """The diagnostic's severity. Can be omitted. If omitted it is up to the
     client to interpret diagnostics as error, warning, info or hint."""
 
@@ -5839,7 +5832,7 @@ class Diagnostic:
     diagnostic, e.g. 'typescript' or 'super lint'. It usually
     appears in the user interface."""
 
-    tags: Optional[List["DiagnosticTag"]] = attrs.field(default=None)
+    tags: Optional[List[DiagnosticTag]] = attrs.field(default=None)
     """Additional metadata about the diagnostic.
     
     @since 3.15.0"""
@@ -5851,7 +5844,7 @@ class Diagnostic:
     """An array of related diagnostic information, e.g. when symbol-names within
     a scope collide all definitions can be marked via this property."""
 
-    data: Optional["LSPAny"] = attrs.field(default=None)
+    data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved between a `textDocument/publishDiagnostics`
     notification and `textDocument/codeAction` request.
     
@@ -5864,7 +5857,7 @@ class CompletionContext:
     """Contains additional information about the context in which a completion
     request is triggered."""
 
-    trigger_kind: "CompletionTriggerKind" = attrs.field()
+    trigger_kind: CompletionTriggerKind = attrs.field()
     """How the completion was triggered."""
 
     trigger_character: Optional[str] = attrs.field(
@@ -5911,10 +5904,10 @@ class InsertReplaceEdit:
     new_text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The string to be inserted."""
 
-    insert: "Range" = attrs.field()
+    insert: Range = attrs.field()
     """The range if the insert is requested"""
 
-    replace: "Range" = attrs.field()
+    replace: Range = attrs.field()
     """The range if the replace is requested."""
 
 
@@ -5928,7 +5921,7 @@ class SignatureHelpContext:
 
     # Since: 3.15.0
 
-    trigger_kind: "SignatureHelpTriggerKind" = attrs.field()
+    trigger_kind: SignatureHelpTriggerKind = attrs.field()
     """Action that caused signature help to be triggered."""
 
     is_retrigger: bool = attrs.field(validator=attrs.validators.instance_of(bool))
@@ -5945,7 +5938,7 @@ class SignatureHelpContext:
     
     This is undefined when `triggerKind !== SignatureHelpTriggerKind.TriggerCharacter`"""
 
-    active_signature_help: Optional["SignatureHelp"] = attrs.field(default=None)
+    active_signature_help: Optional[SignatureHelp] = attrs.field(default=None)
     """The currently active `SignatureHelp`.
     
     The `activeSignatureHelp` has its `SignatureHelp.activeSignature` field updated based on
@@ -5964,7 +5957,7 @@ class SignatureInformation:
     """The label of this signature. Will be shown in
     the UI."""
 
-    documentation: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
+    documentation: Optional[Union[str, MarkupContent]] = attrs.field(default=None)
     """The human-readable doc-comment of this signature. Will be shown
     in the UI but can be omitted."""
 
@@ -5998,20 +5991,20 @@ class CodeActionContext:
     """Contains additional diagnostic information about the context in which a
     code action is run."""
 
-    diagnostics: List["Diagnostic"] = attrs.field()
+    diagnostics: List[Diagnostic] = attrs.field()
     """An array of diagnostics known on the client side overlapping the range provided to the
     `textDocument/codeAction` request. They are provided so that the server knows which
     errors are currently presented to the user for the given range. There is no guarantee
     that these accurately reflect the error state of the resource. The primary parameter
     to compute code actions is the provided range."""
 
-    only: Optional[List["CodeActionKind"]] = attrs.field(default=None)
+    only: Optional[List[CodeActionKind]] = attrs.field(default=None)
     """Requested kind of actions to return.
     
     Actions not of this kind are filtered out by the client before being shown. So servers
     can omit computing them."""
 
-    trigger_kind: Optional["CodeActionTriggerKind"] = attrs.field(default=None)
+    trigger_kind: Optional[CodeActionTriggerKind] = attrs.field(default=None)
     """The reason why code actions were requested.
     
     @since 3.17.0"""
@@ -6094,10 +6087,10 @@ class AnnotatedTextEdit:
 
     # Since: 3.16.0.
 
-    annotation_id: "ChangeAnnotationIdentifier" = attrs.field()
+    annotation_id: ChangeAnnotationIdentifier = attrs.field()
     """The actual identifier of the change annotation"""
 
-    range: "Range" = attrs.field()
+    range: Range = attrs.field()
     """The range of the text document to be manipulated. To insert
     text into a document create a range where start === end."""
 
@@ -6176,7 +6169,7 @@ class FileOperationPattern:
     - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
     - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)"""
 
-    matches: Optional["FileOperationPatternKind"] = attrs.field(default=None)
+    matches: Optional[FileOperationPatternKind] = attrs.field(default=None)
     """Whether to match files or folders with this pattern.
     
     Matches both if undefined."""
@@ -6200,7 +6193,7 @@ class WorkspaceFullDocumentDiagnosticReport:
     kind: str = attrs.field()
     """A full document diagnostic report."""
 
-    items: List["Diagnostic"] = attrs.field()
+    items: List[Diagnostic] = attrs.field()
     """The actual items."""
 
     version: Optional[Union[int, None]] = attrs.field(default=None)
@@ -6268,14 +6261,14 @@ class NotebookCell:
 
     # Since: 3.17.0
 
-    kind: "NotebookCellKind" = attrs.field()
+    kind: NotebookCellKind = attrs.field()
     """The cell's kind"""
 
     document: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI of the cell's text document
     content."""
 
-    metadata: Optional["LSPObject"] = attrs.field(default=None)
+    metadata: Optional[LSPObject] = attrs.field(default=None)
     """Additional metadata stored with the cell.
     
     Note: should always be an object literal (e.g. LSPObject)"""
@@ -6301,7 +6294,7 @@ class NotebookCellArrayChange:
     delete_count: int = attrs.field(validator=validators.uinteger_validator)
     """The deleted cells"""
 
-    cells: Optional[List["NotebookCell"]] = attrs.field(default=None)
+    cells: Optional[List[NotebookCell]] = attrs.field(default=None)
     """The new cells, if any"""
 
 
@@ -6334,7 +6327,7 @@ class ClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    experimental: Optional["LSPAny"] = attrs.field(default=None)
+    experimental: Optional[LSPAny] = attrs.field(default=None)
     """Experimental client capabilities."""
 
 
@@ -6348,7 +6341,7 @@ class TextDocumentSyncOptions:
     """Open and close notifications are sent to the server. If omitted open close notification should not
     be sent."""
 
-    change: Optional["TextDocumentSyncKind"] = attrs.field(default=None)
+    change: Optional[TextDocumentSyncKind] = attrs.field(default=None)
     """Change notifications are sent to the server. See TextDocumentSyncKind.None, TextDocumentSyncKind.Full
     and TextDocumentSyncKind.Incremental. If omitted it defaults to TextDocumentSyncKind.None."""
 
@@ -6366,7 +6359,7 @@ class TextDocumentSyncOptions:
     """If present will save wait until requests are sent to the server. If omitted the request should not be
     sent."""
 
-    save: Optional[Union[bool, "SaveOptions"]] = attrs.field(default=None)
+    save: Optional[Union[bool, SaveOptions]] = attrs.field(default=None)
     """If present save notifications are sent to the server. If omitted the notification should not be
     sent."""
 
@@ -6378,7 +6371,7 @@ class NotebookDocumentSyncOptionsNotebookSelectorType1CellsType:
 
 @attrs.define
 class NotebookDocumentSyncOptionsNotebookSelectorType1:
-    notebook: Union[str, "NotebookDocumentFilter"] = attrs.field()
+    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
     """The notebook to be synced If a string
     value is provided it matches against the
     notebook type. '*' matches every notebook."""
@@ -6401,7 +6394,7 @@ class NotebookDocumentSyncOptionsNotebookSelectorType2:
     ] = attrs.field()
     """The cells of the matching notebook to be synced."""
 
-    notebook: Optional[Union[str, "NotebookDocumentFilter"]] = attrs.field(default=None)
+    notebook: Optional[Union[str, NotebookDocumentFilter]] = attrs.field(default=None)
     """The notebook to be synced If a string
     value is provided it matches against the
     notebook type. '*' matches every notebook."""
@@ -6449,7 +6442,7 @@ class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType:
 
 @attrs.define
 class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1:
-    notebook: Union[str, "NotebookDocumentFilter"] = attrs.field()
+    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
     """The notebook to be synced If a string
     value is provided it matches against the
     notebook type. '*' matches every notebook."""
@@ -6472,7 +6465,7 @@ class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2:
     ] = attrs.field()
     """The cells of the matching notebook to be synced."""
 
-    notebook: Optional[Union[str, "NotebookDocumentFilter"]] = attrs.field(default=None)
+    notebook: Optional[Union[str, NotebookDocumentFilter]] = attrs.field(default=None)
     """The notebook to be synced If a string
     value is provided it matches against the
     notebook type. '*' matches every notebook."""
@@ -6538,28 +6531,22 @@ class FileOperationOptions:
 
     # Since: 3.16.0
 
-    did_create: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
+    did_create: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving didCreateFiles notifications."""
 
-    will_create: Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    will_create: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving willCreateFiles requests."""
 
-    did_rename: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
+    did_rename: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving didRenameFiles notifications."""
 
-    will_rename: Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    will_rename: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving willRenameFiles requests."""
 
-    did_delete: Optional["FileOperationRegistrationOptions"] = attrs.field(default=None)
+    did_delete: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving didDeleteFiles file notifications."""
 
-    will_delete: Optional["FileOperationRegistrationOptions"] = attrs.field(
-        default=None
-    )
+    will_delete: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving willDeleteFiles file requests."""
 
 
@@ -6584,7 +6571,7 @@ class DiagnosticRelatedInformation:
     to a diagnostics, e.g when duplicating a symbol in a scope.
     """
 
-    location: "Location" = attrs.field()
+    location: Location = attrs.field()
     """The location of this related diagnostic information."""
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -6608,7 +6595,7 @@ class ParameterInformation:
     *Note*: a label of type string should be a substring of its containing signature label.
     Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`."""
 
-    documentation: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
+    documentation: Optional[Union[str, MarkupContent]] = attrs.field(default=None)
     """The human-readable doc-comment of this parameter. Will be shown
     in the UI but can be omitted."""
 
@@ -6623,7 +6610,7 @@ class NotebookCellTextDocumentFilter:
 
     # Since: 3.17.0
 
-    notebook: Union[str, "NotebookDocumentFilter"] = attrs.field()
+    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
     """A filter that matches against the notebook
     containing the notebook cell. If a string
     value is provided it matches against the
@@ -7047,9 +7034,7 @@ class GeneralClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    position_encodings: Optional[List["PositionEncodingKind"]] = attrs.field(
-        default=None
-    )
+    position_encodings: Optional[List[PositionEncodingKind]] = attrs.field(default=None)
     """The position encodings supported by the client. Client and server
     have to agree on the same position encoding to ensure that offsets
     (e.g. character position in a line) are interpreted the same on both
@@ -7082,11 +7067,11 @@ class RelativePattern:
 
     # Since: 3.17.0
 
-    base_uri: Union["WorkspaceFolder", str] = attrs.field()
+    base_uri: Union[WorkspaceFolder, str] = attrs.field()
     """A workspace folder or a base URI to which this pattern will be matched
     against relatively."""
 
-    pattern: "Pattern" = attrs.field()
+    pattern: Pattern = attrs.field()
     """The actual glob pattern;"""
 
 
@@ -7110,7 +7095,7 @@ class WorkspaceEditClientCapabilities:
     )
     """The client supports versioned document changes in `WorkspaceEdit`s"""
 
-    resource_operations: Optional[List["ResourceOperationKind"]] = attrs.field(
+    resource_operations: Optional[List[ResourceOperationKind]] = attrs.field(
         default=None
     )
     """The resource operations the client supports. Clients should at least
@@ -7119,7 +7104,7 @@ class WorkspaceEditClientCapabilities:
     @since 3.13.0"""
     # Since: 3.13.0
 
-    failure_handling: Optional["FailureHandlingKind"] = attrs.field(default=None)
+    failure_handling: Optional[FailureHandlingKind] = attrs.field(default=None)
     """The failure handling strategy of a client if applying the workspace edit
     fails.
     
@@ -7183,7 +7168,7 @@ class DidChangeWatchedFilesClientCapabilities:
 
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesSymbolKindType:
-    value_set: Optional[List["SymbolKind"]] = attrs.field(default=None)
+    value_set: Optional[List[SymbolKind]] = attrs.field(default=None)
     """The symbol kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -7196,7 +7181,7 @@ class WorkspaceSymbolClientCapabilitiesSymbolKindType:
 
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesTagSupportType:
-    value_set: List["SymbolTag"] = attrs.field()
+    value_set: List[SymbolTag] = attrs.field()
     """The tags supported by the client."""
 
 
@@ -7445,7 +7430,7 @@ class TextDocumentSyncClientCapabilities:
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemTypeTagSupportType:
-    value_set: List["CompletionItemTag"] = attrs.field()
+    value_set: List[CompletionItemTag] = attrs.field()
     """The tags supported by the client."""
 
 
@@ -7457,7 +7442,7 @@ class CompletionClientCapabilitiesCompletionItemTypeResolveSupportType:
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType:
-    value_set: List["InsertTextMode"] = attrs.field()
+    value_set: List[InsertTextMode] = attrs.field()
 
 
 @attrs.define
@@ -7479,7 +7464,7 @@ class CompletionClientCapabilitiesCompletionItemType:
     )
     """Client supports commit characters on a completion item."""
 
-    documentation_format: Optional[List["MarkupKind"]] = attrs.field(default=None)
+    documentation_format: Optional[List[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
     property. The order describes the preferred format of the client."""
 
@@ -7549,7 +7534,7 @@ class CompletionClientCapabilitiesCompletionItemType:
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemKindType:
-    value_set: Optional[List["CompletionItemKind"]] = attrs.field(default=None)
+    value_set: Optional[List[CompletionItemKind]] = attrs.field(default=None)
     """The completion item kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -7594,7 +7579,7 @@ class CompletionClientCapabilities:
         "CompletionClientCapabilitiesCompletionItemKindType"
     ] = attrs.field(default=None)
 
-    insert_text_mode: Optional["InsertTextMode"] = attrs.field(default=None)
+    insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
     """Defines how the client handles whitespace and indentation
     when accepting a completion item that uses multi line
     text in either `insertText` or `textEdit`.
@@ -7628,7 +7613,7 @@ class HoverClientCapabilities:
     )
     """Whether hover supports dynamic registration."""
 
-    content_format: Optional[List["MarkupKind"]] = attrs.field(default=None)
+    content_format: Optional[List[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the content
     property. The order describes the preferred format of the client."""
 
@@ -7648,7 +7633,7 @@ class SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformatio
 
 @attrs.define
 class SignatureHelpClientCapabilitiesSignatureInformationType:
-    documentation_format: Optional[List["MarkupKind"]] = attrs.field(default=None)
+    documentation_format: Optional[List[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
     property. The order describes the preferred format of the client."""
 
@@ -7807,7 +7792,7 @@ class DocumentHighlightClientCapabilities:
 
 @attrs.define
 class DocumentSymbolClientCapabilitiesSymbolKindType:
-    value_set: Optional[List["SymbolKind"]] = attrs.field(default=None)
+    value_set: Optional[List[SymbolKind]] = attrs.field(default=None)
     """The symbol kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -7820,7 +7805,7 @@ class DocumentSymbolClientCapabilitiesSymbolKindType:
 
 @attrs.define
 class DocumentSymbolClientCapabilitiesTagSupportType:
-    value_set: List["SymbolTag"] = attrs.field()
+    value_set: List[SymbolTag] = attrs.field()
     """The tags supported by the client."""
 
 
@@ -7869,7 +7854,7 @@ class DocumentSymbolClientCapabilities:
 
 @attrs.define
 class CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType:
-    value_set: List["CodeActionKind"] = attrs.field()
+    value_set: List[CodeActionKind] = attrs.field()
     """The code action kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -8059,7 +8044,7 @@ class RenameClientCapabilities:
     # Since: 3.12.0
 
     prepare_support_default_behavior: Optional[
-        "PrepareSupportDefaultBehavior"
+        PrepareSupportDefaultBehavior
     ] = attrs.field(default=None)
     """Client supports the default behavior result.
     
@@ -8085,7 +8070,7 @@ class RenameClientCapabilities:
 
 @attrs.define
 class FoldingRangeClientCapabilitiesFoldingRangeKindType:
-    value_set: Optional[List["FoldingRangeKind"]] = attrs.field(default=None)
+    value_set: Optional[List[FoldingRangeKind]] = attrs.field(default=None)
     """The folding range kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -8163,7 +8148,7 @@ class SelectionRangeClientCapabilities:
 
 @attrs.define
 class PublishDiagnosticsClientCapabilitiesTagSupportType:
-    value_set: List["DiagnosticTag"] = attrs.field()
+    value_set: List[DiagnosticTag] = attrs.field()
     """The tags supported by the client."""
 
 
@@ -8277,7 +8262,7 @@ class SemanticTokensClientCapabilities:
     token_modifiers: List[str] = attrs.field()
     """The token modifiers that the client supports."""
 
-    formats: List["TokenFormat"] = attrs.field()
+    formats: List[TokenFormat] = attrs.field()
     """The token formats the clients supports."""
 
     dynamic_registration: Optional[bool] = attrs.field(
@@ -8555,9 +8540,9 @@ class MarkdownClientCapabilities:
 
 @attrs.define
 class WorkspaceConfigurationParams:
-    items: List["ConfigurationItem"] = attrs.field()
+    items: List[ConfigurationItem] = attrs.field()
 
-    partial_result_token: Optional["ProgressToken"] = attrs.field(default=None)
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
 
@@ -8569,7 +8554,7 @@ class TextDocumentColorPresentationOptions:
         default=None,
     )
 
-    document_selector: Optional[Union["DocumentSelector", None]] = attrs.field(
+    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
     """A document selector to identify the scope of the registration. If set to null
@@ -8608,7 +8593,7 @@ class TextDocumentImplementationRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ImplementationParams" = attrs.field()
+    params: ImplementationParams = attrs.field()
     method: str = "textDocument/implementation"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8618,9 +8603,7 @@ class TextDocumentImplementationRequest:
 class TextDocumentImplementationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["Definition", List["DefinitionLink"], None] = attrs.field(
-        default=None
-    )
+    result: Union[Definition, List[DefinitionLink], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8636,7 +8619,7 @@ class TextDocumentTypeDefinitionRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "TypeDefinitionParams" = attrs.field()
+    params: TypeDefinitionParams = attrs.field()
     method: str = "textDocument/typeDefinition"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8646,9 +8629,7 @@ class TextDocumentTypeDefinitionRequest:
 class TextDocumentTypeDefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["Definition", List["DefinitionLink"], None] = attrs.field(
-        default=None
-    )
+    result: Union[Definition, List[DefinitionLink], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8669,7 +8650,7 @@ class WorkspaceWorkspaceFoldersRequest:
 class WorkspaceWorkspaceFoldersResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["WorkspaceFolder"], None] = attrs.field(default=None)
+    result: Union[List[WorkspaceFolder], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8698,7 +8679,7 @@ class WorkspaceConfigurationRequest:
 class WorkspaceConfigurationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: List["LSPAny"] = attrs.field(default=None)
+    result: List[LSPAny] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8712,7 +8693,7 @@ class TextDocumentDocumentColorRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentColorParams" = attrs.field()
+    params: DocumentColorParams = attrs.field()
     method: str = "textDocument/documentColor"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8722,7 +8703,7 @@ class TextDocumentDocumentColorRequest:
 class TextDocumentDocumentColorResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: List["ColorInformation"] = attrs.field(default=None)
+    result: List[ColorInformation] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8737,7 +8718,7 @@ class TextDocumentColorPresentationRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ColorPresentationParams" = attrs.field()
+    params: ColorPresentationParams = attrs.field()
     method: str = "textDocument/colorPresentation"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8747,7 +8728,7 @@ class TextDocumentColorPresentationRequest:
 class TextDocumentColorPresentationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: List["ColorPresentation"] = attrs.field(default=None)
+    result: List[ColorPresentation] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8761,7 +8742,7 @@ class TextDocumentFoldingRangeRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "FoldingRangeParams" = attrs.field()
+    params: FoldingRangeParams = attrs.field()
     method: str = "textDocument/foldingRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8771,7 +8752,7 @@ class TextDocumentFoldingRangeRequest:
 class TextDocumentFoldingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["FoldingRange"], None] = attrs.field(default=None)
+    result: Union[List[FoldingRange], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8788,7 +8769,7 @@ class TextDocumentDeclarationRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DeclarationParams" = attrs.field()
+    params: DeclarationParams = attrs.field()
     method: str = "textDocument/declaration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8798,9 +8779,7 @@ class TextDocumentDeclarationRequest:
 class TextDocumentDeclarationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["Declaration", List["DeclarationLink"], None] = attrs.field(
-        default=None
-    )
+    result: Union[Declaration, List[DeclarationLink], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8815,7 +8794,7 @@ class TextDocumentSelectionRangeRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "SelectionRangeParams" = attrs.field()
+    params: SelectionRangeParams = attrs.field()
     method: str = "textDocument/selectionRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8825,7 +8804,7 @@ class TextDocumentSelectionRangeRequest:
 class TextDocumentSelectionRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["SelectionRange"], None] = attrs.field(default=None)
+    result: Union[List[SelectionRange], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8836,7 +8815,7 @@ class WindowWorkDoneProgressCreateRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "WorkDoneProgressCreateParams" = attrs.field()
+    params: WorkDoneProgressCreateParams = attrs.field()
     method: str = "window/workDoneProgress/create"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8861,7 +8840,7 @@ class TextDocumentPrepareCallHierarchyRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CallHierarchyPrepareParams" = attrs.field()
+    params: CallHierarchyPrepareParams = attrs.field()
     method: str = "textDocument/prepareCallHierarchy"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8871,7 +8850,7 @@ class TextDocumentPrepareCallHierarchyRequest:
 class TextDocumentPrepareCallHierarchyResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["CallHierarchyItem"], None] = attrs.field(default=None)
+    result: Union[List[CallHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8884,7 +8863,7 @@ class CallHierarchyIncomingCallsRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CallHierarchyIncomingCallsParams" = attrs.field()
+    params: CallHierarchyIncomingCallsParams = attrs.field()
     method: str = "callHierarchy/incomingCalls"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8894,7 +8873,7 @@ class CallHierarchyIncomingCallsRequest:
 class CallHierarchyIncomingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["CallHierarchyIncomingCall"], None] = attrs.field(default=None)
+    result: Union[List[CallHierarchyIncomingCall], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8907,7 +8886,7 @@ class CallHierarchyOutgoingCallsRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CallHierarchyOutgoingCallsParams" = attrs.field()
+    params: CallHierarchyOutgoingCallsParams = attrs.field()
     method: str = "callHierarchy/outgoingCalls"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8917,7 +8896,7 @@ class CallHierarchyOutgoingCallsRequest:
 class CallHierarchyOutgoingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["CallHierarchyOutgoingCall"], None] = attrs.field(default=None)
+    result: Union[List[CallHierarchyOutgoingCall], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8927,7 +8906,7 @@ class TextDocumentSemanticTokensFullRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "SemanticTokensParams" = attrs.field()
+    params: SemanticTokensParams = attrs.field()
     method: str = "textDocument/semanticTokens/full"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8937,7 +8916,7 @@ class TextDocumentSemanticTokensFullRequest:
 class TextDocumentSemanticTokensFullResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["SemanticTokens", None] = attrs.field(default=None)
+    result: Union[SemanticTokens, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8947,7 +8926,7 @@ class TextDocumentSemanticTokensFullDeltaRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "SemanticTokensDeltaParams" = attrs.field()
+    params: SemanticTokensDeltaParams = attrs.field()
     method: str = "textDocument/semanticTokens/full/delta"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8957,9 +8936,7 @@ class TextDocumentSemanticTokensFullDeltaRequest:
 class TextDocumentSemanticTokensFullDeltaResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["SemanticTokens", "SemanticTokensDelta", None] = attrs.field(
-        default=None
-    )
+    result: Union[SemanticTokens, SemanticTokensDelta, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8969,7 +8946,7 @@ class TextDocumentSemanticTokensRangeRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "SemanticTokensRangeParams" = attrs.field()
+    params: SemanticTokensRangeParams = attrs.field()
     method: str = "textDocument/semanticTokens/range"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -8979,7 +8956,7 @@ class TextDocumentSemanticTokensRangeRequest:
 class TextDocumentSemanticTokensRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["SemanticTokens", None] = attrs.field(default=None)
+    result: Union[SemanticTokens, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9015,7 +8992,7 @@ class WindowShowDocumentRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ShowDocumentParams" = attrs.field()
+    params: ShowDocumentParams = attrs.field()
     method: str = "window/showDocument"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9025,7 +9002,7 @@ class WindowShowDocumentRequest:
 class WindowShowDocumentResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "ShowDocumentResult" = attrs.field(default=None)
+    result: ShowDocumentResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9038,7 +9015,7 @@ class TextDocumentLinkedEditingRangeRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "LinkedEditingRangeParams" = attrs.field()
+    params: LinkedEditingRangeParams = attrs.field()
     method: str = "textDocument/linkedEditingRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9048,7 +9025,7 @@ class TextDocumentLinkedEditingRangeRequest:
 class TextDocumentLinkedEditingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["LinkedEditingRanges", None] = attrs.field(default=None)
+    result: Union[LinkedEditingRanges, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9063,7 +9040,7 @@ class WorkspaceWillCreateFilesRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CreateFilesParams" = attrs.field()
+    params: CreateFilesParams = attrs.field()
     method: str = "workspace/willCreateFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9073,7 +9050,7 @@ class WorkspaceWillCreateFilesRequest:
 class WorkspaceWillCreateFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union[WorkspaceEdit, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9088,7 +9065,7 @@ class WorkspaceWillRenameFilesRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "RenameFilesParams" = attrs.field()
+    params: RenameFilesParams = attrs.field()
     method: str = "workspace/willRenameFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9098,7 +9075,7 @@ class WorkspaceWillRenameFilesRequest:
 class WorkspaceWillRenameFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union[WorkspaceEdit, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9112,7 +9089,7 @@ class WorkspaceWillDeleteFilesRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DeleteFilesParams" = attrs.field()
+    params: DeleteFilesParams = attrs.field()
     method: str = "workspace/willDeleteFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9122,7 +9099,7 @@ class WorkspaceWillDeleteFilesRequest:
 class WorkspaceWillDeleteFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union[WorkspaceEdit, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9137,7 +9114,7 @@ class TextDocumentMonikerRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "MonikerParams" = attrs.field()
+    params: MonikerParams = attrs.field()
     method: str = "textDocument/moniker"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9147,7 +9124,7 @@ class TextDocumentMonikerRequest:
 class TextDocumentMonikerResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["Moniker"], None] = attrs.field(default=None)
+    result: Union[List[Moniker], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9162,7 +9139,7 @@ class TextDocumentPrepareTypeHierarchyRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "TypeHierarchyPrepareParams" = attrs.field()
+    params: TypeHierarchyPrepareParams = attrs.field()
     method: str = "textDocument/prepareTypeHierarchy"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9172,7 +9149,7 @@ class TextDocumentPrepareTypeHierarchyRequest:
 class TextDocumentPrepareTypeHierarchyResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TypeHierarchyItem"], None] = attrs.field(default=None)
+    result: Union[List[TypeHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9185,7 +9162,7 @@ class TypeHierarchySupertypesRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "TypeHierarchySupertypesParams" = attrs.field()
+    params: TypeHierarchySupertypesParams = attrs.field()
     method: str = "typeHierarchy/supertypes"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9195,7 +9172,7 @@ class TypeHierarchySupertypesRequest:
 class TypeHierarchySupertypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TypeHierarchyItem"], None] = attrs.field(default=None)
+    result: Union[List[TypeHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9208,7 +9185,7 @@ class TypeHierarchySubtypesRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "TypeHierarchySubtypesParams" = attrs.field()
+    params: TypeHierarchySubtypesParams = attrs.field()
     method: str = "typeHierarchy/subtypes"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9218,7 +9195,7 @@ class TypeHierarchySubtypesRequest:
 class TypeHierarchySubtypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TypeHierarchyItem"], None] = attrs.field(default=None)
+    result: Union[List[TypeHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9234,7 +9211,7 @@ class TextDocumentInlineValueRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "InlineValueParams" = attrs.field()
+    params: InlineValueParams = attrs.field()
     method: str = "textDocument/inlineValue"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9244,7 +9221,7 @@ class TextDocumentInlineValueRequest:
 class TextDocumentInlineValueResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["InlineValue"], None] = attrs.field(default=None)
+    result: Union[List[InlineValue], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9280,7 +9257,7 @@ class TextDocumentInlayHintRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "InlayHintParams" = attrs.field()
+    params: InlayHintParams = attrs.field()
     method: str = "textDocument/inlayHint"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9290,7 +9267,7 @@ class TextDocumentInlayHintRequest:
 class TextDocumentInlayHintResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["InlayHint"], None] = attrs.field(default=None)
+    result: Union[List[InlayHint], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9305,7 +9282,7 @@ class InlayHintResolveRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "InlayHint" = attrs.field()
+    params: InlayHint = attrs.field()
     method: str = "inlayHint/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9315,7 +9292,7 @@ class InlayHintResolveRequest:
 class InlayHintResolveResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "InlayHint" = attrs.field(default=None)
+    result: InlayHint = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9348,7 +9325,7 @@ class TextDocumentDiagnosticRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentDiagnosticParams" = attrs.field()
+    params: DocumentDiagnosticParams = attrs.field()
     method: str = "textDocument/diagnostic"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9358,7 +9335,7 @@ class TextDocumentDiagnosticRequest:
 class TextDocumentDiagnosticResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "DocumentDiagnosticReport" = attrs.field(default=None)
+    result: DocumentDiagnosticReport = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9371,7 +9348,7 @@ class WorkspaceDiagnosticRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "WorkspaceDiagnosticParams" = attrs.field()
+    params: WorkspaceDiagnosticParams = attrs.field()
     method: str = "workspace/diagnostic"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9381,7 +9358,7 @@ class WorkspaceDiagnosticRequest:
 class WorkspaceDiagnosticResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "WorkspaceDiagnosticReport" = attrs.field(default=None)
+    result: WorkspaceDiagnosticReport = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9415,7 +9392,7 @@ class ClientRegisterCapabilityRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "RegistrationParams" = attrs.field()
+    params: RegistrationParams = attrs.field()
     method: str = "client/registerCapability"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9437,7 +9414,7 @@ class ClientUnregisterCapabilityRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "UnregistrationParams" = attrs.field()
+    params: UnregistrationParams = attrs.field()
     method: str = "client/unregisterCapability"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9462,7 +9439,7 @@ class InitializeRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "InitializeParams" = attrs.field()
+    params: InitializeParams = attrs.field()
     method: str = "initialize"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9472,7 +9449,7 @@ class InitializeRequest:
 class InitializeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "InitializeResult" = attrs.field(default=None)
+    result: InitializeResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9508,7 +9485,7 @@ class WindowShowMessageRequestRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ShowMessageRequestParams" = attrs.field()
+    params: ShowMessageRequestParams = attrs.field()
     method: str = "window/showMessageRequest"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9518,7 +9495,7 @@ class WindowShowMessageRequestRequest:
 class WindowShowMessageRequestResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["MessageActionItem", None] = attrs.field(default=None)
+    result: Union[MessageActionItem, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9536,7 +9513,7 @@ class TextDocumentWillSaveWaitUntilRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "WillSaveTextDocumentParams" = attrs.field()
+    params: WillSaveTextDocumentParams = attrs.field()
     method: str = "textDocument/willSaveWaitUntil"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9546,7 +9523,7 @@ class TextDocumentWillSaveWaitUntilRequest:
 class TextDocumentWillSaveWaitUntilResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9567,7 +9544,7 @@ class TextDocumentCompletionRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CompletionParams" = attrs.field()
+    params: CompletionParams = attrs.field()
     method: str = "textDocument/completion"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9577,7 +9554,7 @@ class TextDocumentCompletionRequest:
 class TextDocumentCompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["CompletionItem"], "CompletionList", None] = attrs.field(
+    result: Union[List[CompletionItem], CompletionList, None] = attrs.field(
         default=None
     )
     jsonrpc: str = attrs.field(default="2.0")
@@ -9591,7 +9568,7 @@ class CompletionItemResolveRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CompletionItem" = attrs.field()
+    params: CompletionItem = attrs.field()
     method: str = "completionItem/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9601,7 +9578,7 @@ class CompletionItemResolveRequest:
 class CompletionItemResolveResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "CompletionItem" = attrs.field(default=None)
+    result: CompletionItem = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9615,7 +9592,7 @@ class TextDocumentHoverRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "HoverParams" = attrs.field()
+    params: HoverParams = attrs.field()
     method: str = "textDocument/hover"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9625,7 +9602,7 @@ class TextDocumentHoverRequest:
 class TextDocumentHoverResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["Hover", None] = attrs.field(default=None)
+    result: Union[Hover, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9634,7 +9611,7 @@ class TextDocumentSignatureHelpRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "SignatureHelpParams" = attrs.field()
+    params: SignatureHelpParams = attrs.field()
     method: str = "textDocument/signatureHelp"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9644,7 +9621,7 @@ class TextDocumentSignatureHelpRequest:
 class TextDocumentSignatureHelpResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["SignatureHelp", None] = attrs.field(default=None)
+    result: Union[SignatureHelp, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9660,7 +9637,7 @@ class TextDocumentDefinitionRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DefinitionParams" = attrs.field()
+    params: DefinitionParams = attrs.field()
     method: str = "textDocument/definition"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9670,9 +9647,7 @@ class TextDocumentDefinitionRequest:
 class TextDocumentDefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["Definition", List["DefinitionLink"], None] = attrs.field(
-        default=None
-    )
+    result: Union[Definition, List[DefinitionLink], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9687,7 +9662,7 @@ class TextDocumentReferencesRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ReferenceParams" = attrs.field()
+    params: ReferenceParams = attrs.field()
     method: str = "textDocument/references"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9697,7 +9672,7 @@ class TextDocumentReferencesRequest:
 class TextDocumentReferencesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["Location"], None] = attrs.field(default=None)
+    result: Union[List[Location], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9714,7 +9689,7 @@ class TextDocumentDocumentHighlightRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentHighlightParams" = attrs.field()
+    params: DocumentHighlightParams = attrs.field()
     method: str = "textDocument/documentHighlight"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9724,7 +9699,7 @@ class TextDocumentDocumentHighlightRequest:
 class TextDocumentDocumentHighlightResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["DocumentHighlight"], None] = attrs.field(default=None)
+    result: Union[List[DocumentHighlight], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9739,7 +9714,7 @@ class TextDocumentDocumentSymbolRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentSymbolParams" = attrs.field()
+    params: DocumentSymbolParams = attrs.field()
     method: str = "textDocument/documentSymbol"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9749,9 +9724,9 @@ class TextDocumentDocumentSymbolRequest:
 class TextDocumentDocumentSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[
-        List["SymbolInformation"], List["DocumentSymbol"], None
-    ] = attrs.field(default=None)
+    result: Union[List[SymbolInformation], List[DocumentSymbol], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9761,7 +9736,7 @@ class TextDocumentCodeActionRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CodeActionParams" = attrs.field()
+    params: CodeActionParams = attrs.field()
     method: str = "textDocument/codeAction"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9771,9 +9746,7 @@ class TextDocumentCodeActionRequest:
 class TextDocumentCodeActionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[Union["Command", "CodeAction"]], None] = attrs.field(
-        default=None
-    )
+    result: Union[List[Union[Command, CodeAction]], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9785,7 +9758,7 @@ class CodeActionResolveRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CodeAction" = attrs.field()
+    params: CodeAction = attrs.field()
     method: str = "codeAction/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9795,7 +9768,7 @@ class CodeActionResolveRequest:
 class CodeActionResolveResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "CodeAction" = attrs.field(default=None)
+    result: CodeAction = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9812,7 +9785,7 @@ class WorkspaceSymbolRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "WorkspaceSymbolParams" = attrs.field()
+    params: WorkspaceSymbolParams = attrs.field()
     method: str = "workspace/symbol"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9822,9 +9795,9 @@ class WorkspaceSymbolRequest:
 class WorkspaceSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[
-        List["SymbolInformation"], List["WorkspaceSymbol"], None
-    ] = attrs.field(default=None)
+    result: Union[List[SymbolInformation], List[WorkspaceSymbol], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9837,7 +9810,7 @@ class WorkspaceSymbolResolveRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "WorkspaceSymbol" = attrs.field()
+    params: WorkspaceSymbol = attrs.field()
     method: str = "workspaceSymbol/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9847,7 +9820,7 @@ class WorkspaceSymbolResolveRequest:
 class WorkspaceSymbolResolveResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "WorkspaceSymbol" = attrs.field(default=None)
+    result: WorkspaceSymbol = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9857,7 +9830,7 @@ class TextDocumentCodeLensRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CodeLensParams" = attrs.field()
+    params: CodeLensParams = attrs.field()
     method: str = "textDocument/codeLens"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9867,7 +9840,7 @@ class TextDocumentCodeLensRequest:
 class TextDocumentCodeLensResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["CodeLens"], None] = attrs.field(default=None)
+    result: Union[List[CodeLens], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9877,7 +9850,7 @@ class CodeLensResolveRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "CodeLens" = attrs.field()
+    params: CodeLens = attrs.field()
     method: str = "codeLens/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9887,7 +9860,7 @@ class CodeLensResolveRequest:
 class CodeLensResolveResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "CodeLens" = attrs.field(default=None)
+    result: CodeLens = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9920,7 +9893,7 @@ class TextDocumentDocumentLinkRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentLinkParams" = attrs.field()
+    params: DocumentLinkParams = attrs.field()
     method: str = "textDocument/documentLink"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9930,7 +9903,7 @@ class TextDocumentDocumentLinkRequest:
 class TextDocumentDocumentLinkResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["DocumentLink"], None] = attrs.field(default=None)
+    result: Union[List[DocumentLink], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9944,7 +9917,7 @@ class DocumentLinkResolveRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentLink" = attrs.field()
+    params: DocumentLink = attrs.field()
     method: str = "documentLink/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9954,7 +9927,7 @@ class DocumentLinkResolveRequest:
 class DocumentLinkResolveResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "DocumentLink" = attrs.field(default=None)
+    result: DocumentLink = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9964,7 +9937,7 @@ class TextDocumentFormattingRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentFormattingParams" = attrs.field()
+    params: DocumentFormattingParams = attrs.field()
     method: str = "textDocument/formatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9974,7 +9947,7 @@ class TextDocumentFormattingRequest:
 class TextDocumentFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9984,7 +9957,7 @@ class TextDocumentRangeFormattingRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentRangeFormattingParams" = attrs.field()
+    params: DocumentRangeFormattingParams = attrs.field()
     method: str = "textDocument/rangeFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9994,7 +9967,7 @@ class TextDocumentRangeFormattingRequest:
 class TextDocumentRangeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10004,7 +9977,7 @@ class TextDocumentOnTypeFormattingRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "DocumentOnTypeFormattingParams" = attrs.field()
+    params: DocumentOnTypeFormattingParams = attrs.field()
     method: str = "textDocument/onTypeFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -10014,7 +9987,7 @@ class TextDocumentOnTypeFormattingRequest:
 class TextDocumentOnTypeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List["TextEdit"], None] = attrs.field(default=None)
+    result: Union[List[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10024,7 +9997,7 @@ class TextDocumentRenameRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "RenameParams" = attrs.field()
+    params: RenameParams = attrs.field()
     method: str = "textDocument/rename"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -10034,7 +10007,7 @@ class TextDocumentRenameRequest:
 class TextDocumentRenameResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["WorkspaceEdit", None] = attrs.field(default=None)
+    result: Union[WorkspaceEdit, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10047,7 +10020,7 @@ class TextDocumentPrepareRenameRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "PrepareRenameParams" = attrs.field()
+    params: PrepareRenameParams = attrs.field()
     method: str = "textDocument/prepareRename"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -10057,7 +10030,7 @@ class TextDocumentPrepareRenameRequest:
 class TextDocumentPrepareRenameResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["PrepareRenameResult", None] = attrs.field(default=None)
+    result: Union[PrepareRenameResult, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10071,7 +10044,7 @@ class WorkspaceExecuteCommandRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ExecuteCommandParams" = attrs.field()
+    params: ExecuteCommandParams = attrs.field()
     method: str = "workspace/executeCommand"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -10081,7 +10054,7 @@ class WorkspaceExecuteCommandRequest:
 class WorkspaceExecuteCommandResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union["LSPAny", None] = attrs.field(default=None)
+    result: Union[LSPAny, None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10092,7 +10065,7 @@ class WorkspaceApplyEditRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: "ApplyWorkspaceEditParams" = attrs.field()
+    params: ApplyWorkspaceEditParams = attrs.field()
     method: str = "workspace/applyEdit"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -10102,7 +10075,7 @@ class WorkspaceApplyEditRequest:
 class WorkspaceApplyEditResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: "ApplyWorkspaceEditResult" = attrs.field(default=None)
+    result: ApplyWorkspaceEditResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10111,7 +10084,7 @@ class WorkspaceDidChangeWorkspaceFoldersNotification:
     """The `workspace/didChangeWorkspaceFolders` notification is sent from the
     client to the server when the workspace folder configuration changes."""
 
-    params: "DidChangeWorkspaceFoldersParams" = attrs.field()
+    params: DidChangeWorkspaceFoldersParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeWorkspaceFolders"]),
         default="workspace/didChangeWorkspaceFolders",
@@ -10125,7 +10098,7 @@ class WindowWorkDoneProgressCancelNotification:
     """The `window/workDoneProgress/cancel` notification is sent from  the
     client to the server to cancel a progress initiated on the server side."""
 
-    params: "WorkDoneProgressCancelParams" = attrs.field()
+    params: WorkDoneProgressCancelParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["window/workDoneProgress/cancel"]),
         default="window/workDoneProgress/cancel",
@@ -10142,7 +10115,7 @@ class WorkspaceDidCreateFilesNotification:
     @since 3.16.0
     """
 
-    params: "CreateFilesParams" = attrs.field()
+    params: CreateFilesParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didCreateFiles"]),
         default="workspace/didCreateFiles",
@@ -10159,7 +10132,7 @@ class WorkspaceDidRenameFilesNotification:
     @since 3.16.0
     """
 
-    params: "RenameFilesParams" = attrs.field()
+    params: RenameFilesParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didRenameFiles"]),
         default="workspace/didRenameFiles",
@@ -10177,7 +10150,7 @@ class WorkspaceDidDeleteFilesNotification:
     @since 3.16.0
     """
 
-    params: "DeleteFilesParams" = attrs.field()
+    params: DeleteFilesParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didDeleteFiles"]),
         default="workspace/didDeleteFiles",
@@ -10193,7 +10166,7 @@ class NotebookDocumentDidOpenNotification:
     @since 3.17.0
     """
 
-    params: "DidOpenNotebookDocumentParams" = attrs.field()
+    params: DidOpenNotebookDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didOpen"]),
         default="notebookDocument/didOpen",
@@ -10205,7 +10178,7 @@ class NotebookDocumentDidOpenNotification:
 @attrs.define
 class NotebookDocumentDidChangeNotification:
 
-    params: "DidChangeNotebookDocumentParams" = attrs.field()
+    params: DidChangeNotebookDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didChange"]),
         default="notebookDocument/didChange",
@@ -10221,7 +10194,7 @@ class NotebookDocumentDidSaveNotification:
     @since 3.17.0
     """
 
-    params: "DidSaveNotebookDocumentParams" = attrs.field()
+    params: DidSaveNotebookDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didSave"]),
         default="notebookDocument/didSave",
@@ -10237,7 +10210,7 @@ class NotebookDocumentDidCloseNotification:
     @since 3.17.0
     """
 
-    params: "DidCloseNotebookDocumentParams" = attrs.field()
+    params: DidCloseNotebookDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didClose"]),
         default="notebookDocument/didClose",
@@ -10252,7 +10225,7 @@ class InitializedNotification:
     the client is fully initialized and the server is allowed to send requests
     from the server to the client."""
 
-    params: "InitializedParams" = attrs.field()
+    params: InitializedParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["initialized"]),
         default="initialized",
@@ -10284,7 +10257,7 @@ class WorkspaceDidChangeConfigurationNotification:
     the language client.
     """
 
-    params: "DidChangeConfigurationParams" = attrs.field()
+    params: DidChangeConfigurationParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeConfiguration"]),
         default="workspace/didChangeConfiguration",
@@ -10298,7 +10271,7 @@ class WindowShowMessageNotification:
     """The show message notification is sent from a server to a client to ask
     the client to display a particular message in the user interface."""
 
-    params: "ShowMessageParams" = attrs.field()
+    params: ShowMessageParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["window/showMessage"]),
         default="window/showMessage",
@@ -10312,7 +10285,7 @@ class WindowLogMessageNotification:
     """The log message notification is sent from the server to the client to
     ask the client to log a particular message."""
 
-    params: "LogMessageParams" = attrs.field()
+    params: LogMessageParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["window/logMessage"]),
         default="window/logMessage",
@@ -10326,7 +10299,7 @@ class TelemetryEventNotification:
     """The telemetry event notification is sent from the server to the client
     to ask the client to log telemetry data."""
 
-    params: "LSPAny" = attrs.field()
+    params: LSPAny = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["telemetry/event"]),
         default="telemetry/event",
@@ -10349,7 +10322,7 @@ class TextDocumentDidOpenNotification:
     notification must be balanced and the max open count is one.
     """
 
-    params: "DidOpenTextDocumentParams" = attrs.field()
+    params: DidOpenTextDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didOpen"]),
         default="textDocument/didOpen",
@@ -10363,7 +10336,7 @@ class TextDocumentDidChangeNotification:
     """The document change notification is sent from the client to the server
     to signal changes to a text document."""
 
-    params: "DidChangeTextDocumentParams" = attrs.field()
+    params: DidChangeTextDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didChange"]),
         default="textDocument/didChange",
@@ -10385,7 +10358,7 @@ class TextDocumentDidCloseNotification:
     notification requires a previous open notification to be sent.
     """
 
-    params: "DidCloseTextDocumentParams" = attrs.field()
+    params: DidCloseTextDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didClose"]),
         default="textDocument/didClose",
@@ -10399,7 +10372,7 @@ class TextDocumentDidSaveNotification:
     """The document save notification is sent from the client to the server
     when the document got saved in the client."""
 
-    params: "DidSaveTextDocumentParams" = attrs.field()
+    params: DidSaveTextDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/didSave"]),
         default="textDocument/didSave",
@@ -10413,7 +10386,7 @@ class TextDocumentWillSaveNotification:
     """A document will save notification is sent from the client to the server
     before the document is actually saved."""
 
-    params: "WillSaveTextDocumentParams" = attrs.field()
+    params: WillSaveTextDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/willSave"]),
         default="textDocument/willSave",
@@ -10427,7 +10400,7 @@ class WorkspaceDidChangeWatchedFilesNotification:
     """The watched files notification is sent from the client to the server
     when the client detects changes to file watched by the language client."""
 
-    params: "DidChangeWatchedFilesParams" = attrs.field()
+    params: DidChangeWatchedFilesParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeWatchedFiles"]),
         default="workspace/didChangeWatchedFiles",
@@ -10441,7 +10414,7 @@ class TextDocumentPublishDiagnosticsNotification:
     """Diagnostics notification are sent from the server to the client to
     signal results of validation runs."""
 
-    params: "PublishDiagnosticsParams" = attrs.field()
+    params: PublishDiagnosticsParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["textDocument/publishDiagnostics"]),
         default="textDocument/publishDiagnostics",
@@ -10453,7 +10426,7 @@ class TextDocumentPublishDiagnosticsNotification:
 @attrs.define
 class SetTraceNotification:
 
-    params: "SetTraceParams" = attrs.field()
+    params: SetTraceParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/setTrace"]),
         default="$/setTrace",
@@ -10465,7 +10438,7 @@ class SetTraceNotification:
 @attrs.define
 class LogTraceNotification:
 
-    params: "LogTraceParams" = attrs.field()
+    params: LogTraceParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/logTrace"]),
         default="$/logTrace",
@@ -10477,7 +10450,7 @@ class LogTraceNotification:
 @attrs.define
 class CancelRequestNotification:
 
-    params: "CancelParams" = attrs.field()
+    params: CancelParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/cancelRequest"]),
         default="$/cancelRequest",
@@ -10489,7 +10462,7 @@ class CancelRequestNotification:
 @attrs.define
 class ProgressNotification:
 
-    params: "ProgressParams" = attrs.field()
+    params: ProgressParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/progress"]),
         default="$/progress",
@@ -10500,9 +10473,9 @@ class ProgressNotification:
 
 @enum.unique
 class MessageDirection(enum.Enum):
-    ClientToServer = "clientToServer"
     ServerToClient = "serverToClient"
     Both = "both"
+    ClientToServer = "clientToServer"
 
 
 CALL_HIERARCHY_INCOMING_CALLS = "callHierarchy/incomingCalls"

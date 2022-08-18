@@ -47,96 +47,6 @@ def _generate_field_validator(
             return "attrs.field()"
 
 
-def _generate_type_name(
-    type_def: model.LSP_TYPE_SPEC, class_name: Optional[str] = None
-) -> str:
-    """Get typing wrapped type name based on LSP type definition."""
-
-    if type_def.kind == "stringLiteral":
-        # These are string constants used in some LSP types.
-        # TODO: Use this with python >= 3.8
-        # return f"Literal['{type_def.value}']"
-        return "str"
-
-    if type_def.kind == "literal":
-        # A general type 'Any' has no properties
-        if (
-            isinstance(type_def.value, model.LiteralValue)
-            and len(type_def.value.properties) == 0
-        ):
-            return "Any"
-
-        # The literal kind is a dynamically generated type and the
-        # name for it is generated as needed. It is expected that when
-        # this function is called name is set.
-        if type_def.name:
-            return f"'{type_def.name}'"
-
-        # If name is missing, and there are properties then it is a dynamic
-        # type. It should have already been generated.
-        raise ValueError(str(type_def))
-
-    if type_def.kind == "reference":
-        # The reference kind is a named type which is part of LSP.
-        return f"'{type_def.name}'"
-
-    if type_def.kind == "array":
-        # This is a linear collection type, LSP does not specify if
-        # this needs to be ordered. Also, usingList here because
-        # cattrs does not work well withIterable for some reason.
-        return f"List[{_generate_type_name(type_def.element)}]"
-
-    if type_def.kind == "or":
-        # This type means that you can have either of the types under `items`
-        # as the value. So, from typing point of view this is a union. The `or`
-        # type means it is going to be one of the types, never both (see `and`)
-        # Example:
-        # id :Union[str, int]
-        #     * This means that id can either be string or integer, cannot be both.
-        types = []
-        for item in type_def.items:
-            types.append(_generate_type_name(item))
-        return f"Union[{','.join(types)}]"
-
-    if type_def.kind == "and":
-        # This type means that the value has properties of all the types under
-        # `items`. This type is equivalent of `class C(A, B)`. Where A and B are
-        # defined in `items`. This type should be generated separately, here we
-        # return the optionally provided class for this.
-        if not class_name:
-            raise ValueError(str(type_def))
-        return class_name
-
-    if type_def.kind == "base":
-        # The `base` kind is used for primitive data types.
-        if type_def.name == "decimal":
-            return "float"
-        elif type_def.name == "boolean":
-            return "bool"
-        elif type_def.name in ["integer", "uinteger"]:
-            return "int"
-        elif type_def.name in ["string", "DocumentUri", "URI"]:
-            return "str"
-        elif type_def.name == "null":
-            return "None"
-        else:
-            # Unknown base kind.
-            raise ValueError(str(type_def))
-
-    if type_def.kind == "map":
-        # This kind defines a dictionary like object.
-        return f"Dict[{_generate_type_name(type_def.key)}, {_generate_type_name(type_def.value)}]"
-
-    if type_def.kind == "tuple":
-        # This kind defined a tuple like object.
-        types = []
-        for item in type_def.items:
-            types.append(_generate_type_name(item))
-        return f"Tuple[{','.join(types)}]"
-
-    raise ValueError(str(type_def))
-
-
 def _to_class_name(lsp_method_name: str) -> str:
     """Convert from LSP method name (e.g., textDocument/didSave) to python
     class name (e.g., TextDocumentDidSave)"""
@@ -270,6 +180,98 @@ class TypesCodeGenerator:
         )
         return lines_to_str(code_lines)
 
+    def _generate_type_name(
+        self, type_def: model.LSP_TYPE_SPEC, class_name: Optional[str] = None
+    ) -> str:
+        """Get typing wrapped type name based on LSP type definition."""
+
+        if type_def.kind == "stringLiteral":
+            # These are string constants used in some LSP types.
+            # TODO: Use this with python >= 3.8
+            # return f"Literal['{type_def.value}']"
+            return "str"
+
+        if type_def.kind == "literal":
+            # A general type 'Any' has no properties
+            if (
+                isinstance(type_def.value, model.LiteralValue)
+                and len(type_def.value.properties) == 0
+            ):
+                return "Any"
+
+            # The literal kind is a dynamically generated type and the
+            # name for it is generated as needed. It is expected that when
+            # this function is called name is set.
+            if type_def.name:
+                return f"'{type_def.name}'"
+
+            # If name is missing, and there are properties then it is a dynamic
+            # type. It should have already been generated.
+            raise ValueError(str(type_def))
+
+        if type_def.kind == "reference":
+            # The reference kind is a named type which is part of LSP.
+            if self._has_type(type_def.name):
+                return f"{type_def.name}"
+            # We don't have this type yet. Make it a forward reference.
+            return f"'{type_def.name}'"
+
+        if type_def.kind == "array":
+            # This is a linear collection type, LSP does not specify if
+            # this needs to be ordered. Also, usingList here because
+            # cattrs does not work well withIterable for some reason.
+            return f"List[{self._generate_type_name(type_def.element)}]"
+
+        if type_def.kind == "or":
+            # This type means that you can have either of the types under `items`
+            # as the value. So, from typing point of view this is a union. The `or`
+            # type means it is going to be one of the types, never both (see `and`)
+            # Example:
+            # id :Union[str, int]
+            #     * This means that id can either be string or integer, cannot be both.
+            types = []
+            for item in type_def.items:
+                types.append(self._generate_type_name(item))
+            return f"Union[{','.join(types)}]"
+
+        if type_def.kind == "and":
+            # This type means that the value has properties of all the types under
+            # `items`. This type is equivalent of `class C(A, B)`. Where A and B are
+            # defined in `items`. This type should be generated separately, here we
+            # return the optionally provided class for this.
+            if not class_name:
+                raise ValueError(str(type_def))
+            return class_name
+
+        if type_def.kind == "base":
+            # The `base` kind is used for primitive data types.
+            if type_def.name == "decimal":
+                return "float"
+            elif type_def.name == "boolean":
+                return "bool"
+            elif type_def.name in ["integer", "uinteger"]:
+                return "int"
+            elif type_def.name in ["string", "DocumentUri", "URI"]:
+                return "str"
+            elif type_def.name == "null":
+                return "None"
+            else:
+                # Unknown base kind.
+                raise ValueError(str(type_def))
+
+        if type_def.kind == "map":
+            # This kind defines a dictionary like object.
+            return f"Dict[{self._generate_type_name(type_def.key)}, {self._generate_type_name(type_def.value)}]"
+
+        if type_def.kind == "tuple":
+            # This kind defined a tuple like object.
+            types = []
+            for item in type_def.items:
+                types.append(self._generate_type_name(item))
+            return f"Tuple[{','.join(types)}]"
+
+        raise ValueError(str(type_def))
+
     def _add_special(self, class_name: str, properties: List[str]) -> None:
         if properties:
             self._special_classes.append(class_name)
@@ -398,7 +400,7 @@ class TypesCodeGenerator:
                 property_def.type, property_def.optional
             )
 
-            type_name = _generate_type_name(property_def.type)
+            type_name = self._generate_type_name(property_def.type)
             if property_def.optional:
                 type_name = f"Optional[{type_name}]"
 
@@ -482,7 +484,7 @@ class TypesCodeGenerator:
         doc = _get_indented_documentation(type_alias.documentation)
 
         code_lines = [
-            f"{type_alias.name} = {_generate_type_name(type_alias.type)}",
+            f"{type_alias.name} = {self._generate_type_name(type_alias.type)}",
             f'"""{doc}"""' if type_alias.documentation else "",
             f"# Since: {_sanitize_comment(type_alias.since)}"
             if type_alias.since
@@ -671,7 +673,9 @@ class TypesCodeGenerator:
             doc = _get_indented_documentation(request.documentation, indent)
 
             if request.params:
-                params_type = _generate_type_name(request.params, f"{class_name}Params")
+                params_type = self._generate_type_name(
+                    request.params, f"{class_name}Params"
+                )
                 if not self._has_type(params_type):
                     raise ValueError(f"{class_name}Params type definition is missing.")
                 params_field = "attrs.field()"
@@ -681,7 +685,7 @@ class TypesCodeGenerator:
 
             result_type = None
             if request.result:
-                result_type = _generate_type_name(request.result)
+                result_type = self._generate_type_name(request.result)
                 result_field = "attrs.field(default=None)"
             else:
                 result_type = "Optional[None]"
@@ -724,7 +728,7 @@ class TypesCodeGenerator:
             doc = _get_indented_documentation(notification.documentation, indent)
 
             if notification.params:
-                params_type = _generate_type_name(
+                params_type = self._generate_type_name(
                     notification.params, f"{class_name}Params"
                 )
                 if not self._has_type(params_type):
@@ -801,13 +805,13 @@ class TypesCodeGenerator:
 
             params_type = None
             if request.params:
-                params_type = _generate_type_name(
+                params_type = self._generate_type_name(
                     request.params, f"{class_name}Params"
                 ).strip("\"'")
 
             registration_type = None
             if request.registrationOptions:
-                registration_type = _generate_type_name(
+                registration_type = self._generate_type_name(
                     request.registrationOptions, f"{class_name}Options"
                 ).strip("\"'")
 
@@ -827,13 +831,13 @@ class TypesCodeGenerator:
 
             params_type = None
             if notification.params:
-                params_type = _generate_type_name(
+                params_type = self._generate_type_name(
                     notification.params, f"{class_name}Params"
                 ).strip("\"'")
 
             registration_type = None
             if notification.registrationOptions:
-                registration_type = _generate_type_name(
+                registration_type = self._generate_type_name(
                     notification.registrationOptions, f"{class_name}Options"
                 ).strip("\"'")
 

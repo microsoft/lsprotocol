@@ -139,6 +139,7 @@ class TypesCodeGenerator:
         self._types: OrderedDict[str, List[str]] = collections.OrderedDict()
         self._imports: List[str] = [
             "import enum",
+            "import functools",
             "from typing import Any, Dict, List, Optional, Tuple, Union",
             "import attrs",
             "from . import validators",
@@ -291,6 +292,41 @@ class TypesCodeGenerator:
         if type_name.startswith(('"', "'")):
             type_name = type_name[1:-1]
         return type_name in self._types
+
+    def _get_additional_methods(self, class_name: str) -> List[str]:
+        indent = " " * 4
+        if class_name == "Position":
+            return [
+                "def __eq__(self, o: 'Position') -> Union[bool, 'NotImplemented']:",
+                f"{indent}if not isinstance(o, Position):",
+                f"{indent}{indent}return NotImplemented",
+                f"{indent}return (self.line, self.character) == (o.line, o.character)",
+                "def __gt__(self, o: 'Position') -> Union[bool, 'NotImplemented']:",
+                f"{indent}if not isinstance(o, Position):",
+                f"{indent}{indent}return NotImplemented",
+                f"{indent}return (self.line, self.character) > (o.line, o.character)",
+                "def __repr__(self) -> str:",
+                f"{indent}" + "return f'{self.line}:{self.character}'",
+            ]
+        if class_name == "Range":
+            return [
+                "def __eq__(self, o: 'Range') -> Union[bool, 'NotImplemented']:",
+                f"{indent}if not isinstance(o, Range):",
+                f"{indent}{indent}return NotImplemented",
+                f"{indent}return (self.start == o.start) and (self.end == o.end)",
+                "def __repr__(self) -> str:",
+                f"{indent}" + "return f'{self.start!r}-{self.end!r}'",
+            ]
+        if class_name == "Location":
+            return [
+                "def __eq__(self, o:'Location') -> Union[bool, 'NotImplemented']:",
+                f"{indent}if not isinstance(o, Location):",
+                f"{indent}{indent}return NotImplemented",
+                f"{indent}return (self.uri == o.uri) and (self.range == o.range)",
+                "def __repr__(self) -> str:",
+                f"{indent}" + "return f'{self.uri}:{self.range!r}'",
+            ]
+        return None
 
     def _add_type_code(self, type_name: str, code: List[str]) -> None:
         if not self._has_type(type_name):
@@ -529,6 +565,7 @@ class TypesCodeGenerator:
 
         class_lines = [
             "" if class_name == "LSPObject" else "@attrs.define",
+            "@functools.total_ordering" if class_name == "Position" else "",
             f"class {class_name}:",
             f'{indent}"""{doc}"""' if struct_def.documentation else "",
             f"{indent}# Since: {_sanitize_comment(struct_def.since)}"
@@ -549,9 +586,14 @@ class TypesCodeGenerator:
             properties += copy.deepcopy(d.properties)
 
         code_lines += self._generate_properties(class_name, properties, indent)
+        methods = self._get_additional_methods(class_name)
+
         # If the class has no properties then add `pass`
-        if len(properties) == 0:
+        if len(properties) == 0 and not methods:
             code_lines += [f"{indent}pass"]
+
+        if methods:
+            code_lines += [f"{indent}{l}" for l in methods]
 
         # Detect if the class has properties that might be keywords.
         self._add_type_code(class_name, code_lines)
@@ -764,9 +806,9 @@ class TypesCodeGenerator:
             "@enum.unique",
             "class MessageDirection(enum.Enum):",
         ]
-        code_lines += [
-            f"{indent}{_capitalized_item_name(m)} = '{m}'" for m in directions
-        ]
+        code_lines += sorted(
+            [f"{indent}{_capitalized_item_name(m)} = '{m}'" for m in directions]
+        )
         self._add_type_code("MessageDirection", code_lines)
 
     def _generate_code(self, lsp_model: model.LSPModel) -> None:

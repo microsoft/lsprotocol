@@ -8,6 +8,7 @@
 # 3. Run command: `python -m nox --session build_lsp`
 
 import enum
+import functools
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import attrs
@@ -995,6 +996,14 @@ class Location:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
 
     range: "Range" = attrs.field()
+
+    def __eq__(self, o: "Location") -> Union[bool, "NotImplemented"]:
+        if not isinstance(o, Location):
+            return NotImplemented
+        return (self.uri == o.uri) and (self.range == o.range)
+
+    def __repr__(self) -> str:
+        return f"{self.uri}:{self.range!r}"
 
 
 @attrs.define
@@ -4772,6 +4781,14 @@ class Range:
     end: "Position" = attrs.field()
     """The range's end position."""
 
+    def __eq__(self, o: "Range") -> Union[bool, "NotImplemented"]:
+        if not isinstance(o, Range):
+            return NotImplemented
+        return (self.start == o.start) and (self.end == o.end)
+
+    def __repr__(self) -> str:
+        return f"{self.start!r}-{self.end!r}"
+
 
 @attrs.define
 class WorkspaceFoldersChangeEvent:
@@ -4826,6 +4843,7 @@ class Color:
 
 
 @attrs.define
+@functools.total_ordering
 class Position:
     """Position in a text document expressed as zero-based line and character
     offset. Prior to 3.17 the offsets were always based on a UTF-16 string
@@ -4875,6 +4893,19 @@ class Position:
     
     If the character value is greater than the line length it defaults back to the
     line length."""
+
+    def __eq__(self, o: "Position") -> Union[bool, "NotImplemented"]:
+        if not isinstance(o, Position):
+            return NotImplemented
+        return (self.line, self.character) == (o.line, o.character)
+
+    def __gt__(self, o: "Position") -> Union[bool, "NotImplemented"]:
+        if not isinstance(o, Position):
+            return NotImplemented
+        return (self.line, self.character) > (o.line, o.character)
+
+    def __repr__(self) -> str:
+        return f"{self.line}:{self.character}"
 
 
 @attrs.define
@@ -10473,9 +10504,9 @@ class ProgressNotification:
 
 @enum.unique
 class MessageDirection(enum.Enum):
-    ServerToClient = "serverToClient"
     Both = "both"
     ClientToServer = "clientToServer"
+    ServerToClient = "serverToClient"
 
 
 CALL_HIERARCHY_INCOMING_CALLS = "callHierarchy/incomingCalls"

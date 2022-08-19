@@ -34,6 +34,10 @@ def _generate_model(session: nox.Session):
     session.run("pip", "list")
 
     session.run("python", "-m", "generator", "--output", "./lsprotocol/types.py")
+    session.run("isort", "--profile", "black", "./lsprotocol/types.py")
+    session.run("black", "./lsprotocol/types.py")
+    session.run("docformatter", "--in-place", "./lsprotocol/types.py")
+
     session.run("isort", "--profile", "black", "./lsprotocol")
     session.run("black", "./lsprotocol")
     session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")

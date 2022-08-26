@@ -1056,6 +1056,11 @@ class ImplementationRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -1098,6 +1103,11 @@ class TypeDefinitionRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -1178,6 +1188,11 @@ class DocumentColorRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -1303,6 +1318,11 @@ class FoldingRangeRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -1339,6 +1359,11 @@ class DeclarationOptions:
 
 @attrs.define
 class DeclarationRegistrationOptions:
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -1398,6 +1423,11 @@ class SelectionRangeOptions:
 
 @attrs.define
 class SelectionRangeRegistrationOptions:
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -1515,6 +1545,11 @@ class CallHierarchyRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -1709,6 +1744,11 @@ class SemanticTokensRegistrationOptions:
     ] = attrs.field(default=None)
     """Server supports providing semantic tokens for a full document."""
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -1884,6 +1924,11 @@ class LinkedEditingRangeRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -2052,6 +2097,11 @@ class MonikerRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class TypeHierarchyPrepareParams:
@@ -2141,6 +2191,11 @@ class TypeHierarchyRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -2234,6 +2289,11 @@ class InlineValueRegistrationOptions:
     """
 
     # Since: 3.17.0
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -2362,6 +2422,11 @@ class InlayHintRegistrationOptions:
     )
     """The server provides support to resolve additional
     information for an inlay hint item."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -2504,6 +2569,11 @@ class DiagnosticRegistrationOptions:
     )
     """An optional identifier under which the diagnostics are
     managed by the client."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -2790,6 +2860,9 @@ class InitializeParams:
 
     trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
+
+    work_done_token: Optional[ProgressToken] = attrs.field(default=None)
+    """An optional token that a server can use to report work done progress."""
 
     workspace_folders: Optional[Union[List[WorkspaceFolder], None]] = attrs.field(
         default=None
@@ -3449,6 +3522,11 @@ class CompletionRegistrationOptions:
     @since 3.17.0"""
     # Since: 3.17.0
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class HoverParams:
@@ -3495,6 +3573,11 @@ class HoverRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -3598,6 +3681,11 @@ class SignatureHelpRegistrationOptions:
     @since 3.15.0"""
     # Since: 3.15.0
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class DefinitionParams:
@@ -3636,6 +3724,11 @@ class DefinitionRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -3677,6 +3770,11 @@ class ReferenceRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -3732,6 +3830,11 @@ class DocumentHighlightRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -3912,6 +4015,11 @@ class DocumentSymbolRegistrationOptions:
     @since 3.16.0"""
     # Since: 3.16.0
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class CodeActionParams:
@@ -4082,6 +4190,11 @@ class CodeActionRegistrationOptions:
     @since 3.16.0"""
     # Since: 3.16.0
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class WorkspaceSymbolParams:
@@ -4182,6 +4295,11 @@ class WorkspaceSymbolRegistrationOptions:
     @since 3.17.0"""
     # Since: 3.17.0
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class CodeLensParams:
@@ -4251,6 +4369,11 @@ class CodeLensRegistrationOptions:
         default=None,
     )
     """Code lens has a resolve provider as well."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -4332,6 +4455,11 @@ class DocumentLinkRegistrationOptions:
     )
     """Document links have a resolve provider as well."""
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class DocumentFormattingParams:
@@ -4366,6 +4494,11 @@ class DocumentFormattingRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -4404,6 +4537,11 @@ class DocumentRangeFormattingRegistrationOptions:
     )
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -4517,6 +4655,11 @@ class RenameRegistrationOptions:
     @since version 3.12.0"""
     # Since: version 3.12.0
 
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+
 
 @attrs.define
 class PrepareRenameParams:
@@ -4564,6 +4707,11 @@ class ExecuteCommandRegistrationOptions:
 
     commands: List[str] = attrs.field()
     """The commands to be executed on the server"""
+
+    work_done_progress: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
 
 
 @attrs.define

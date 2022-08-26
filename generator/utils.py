@@ -537,6 +537,31 @@ class TypesCodeGenerator:
         for type_def in lsp_model.typeAliases:
             self._add_type_alias(type_def)
 
+    def _get_dependent_types(
+        self,
+        struct_def: model.Structure,
+        lsp_model: model.LSPModel,
+    ) -> List[model.Structure]:
+        # `extends` and `mixins` both are used as classes from which the
+        # current class to derive from.
+        extends = struct_def.extends or []
+        mixins = struct_def.mixins or []
+
+        definitions: List[model.Structure] = []
+        for s in extends + mixins:
+            for t in lsp_model.structures:
+                if t.name == s.name and s.kind == "reference":
+                    definitions.append(t)
+                    definitions.extend(self._get_dependent_types(t, lsp_model))
+
+        result: List[model.Structure] = []
+        for d in definitions:
+            if d.name in [r.name for r in result]:
+                pass
+            else:
+                result.append(d)
+        return result
+
     def _add_structure(
         self,
         struct_def: model.Structure,
@@ -545,17 +570,7 @@ class TypesCodeGenerator:
         if self._has_type(struct_def.name):
             return
 
-        # `extends` and `mixins` both are used as classes from which the
-        # current class to derive from.
-        extends = struct_def.extends or []
-        mixins = struct_def.mixins or []
-
-        definitions = [
-            t
-            for s in extends + mixins
-            for t in lsp_model.structures
-            if t.name == s.name and s.kind == "reference"
-        ]
+        definitions = self._get_dependent_types(struct_def, lsp_model)
         for d in definitions:
             self._add_structure(d, lsp_model)
 

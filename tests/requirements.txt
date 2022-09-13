@@ -4,9 +4,6 @@
 #
 #    pip-compile --generate-hashes ./tests/requirements.in
 #
-atomicwrites==1.4.1 \
-    --hash=sha256:81b2c9071a49367a7f770170e5eec8cb66567cfbbc8c73d20ce5ca4a8d71cf11
-    # via pytest
 attrs==22.1.0 \
     --hash=sha256:29adc2665447e5191d0e7c568fde78b21f9672d344281d0c6e1ab085429b22b6 \
     --hash=sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c
@@ -23,9 +20,9 @@ colorama==0.4.5 \
     --hash=sha256:854bf444933e37f5824ae7bfc1e98d5bce2ebe4160d46b5edf346a89358e99da \
     --hash=sha256:e6c6b4334fc50988a639d9b98aa429a0b57da6e17b9a44f0451f930b6967b7a4
     # via pytest
-exceptiongroup==1.0.0rc8 \
-    --hash=sha256:6990c24f06b8d33c8065cfe43e5e8a4bfa384e0358be036af9cc60b6321bd11a \
-    --hash=sha256:ab0a968e1ef769e55d9a596f4a89f7be9ffedbc9fdefdb77cc68cf5c33ce1035
+exceptiongroup==1.0.0rc9 \
+    --hash=sha256:2e3c3fc1538a094aab74fad52d6c33fc94de3dfee3ee01f187c0e0c72aec5337 \
+    --hash=sha256:9086a4a21ef9b31c72181c77c040a074ba0889ee56a7b289ff0afb0d97655f96
     # via cattrs
 importlib-metadata==4.12.0 \
     --hash=sha256:637245b8bab2b6502fcbc752cc4b7a6f6243bb02b31c5c26156ad103d3d45670 \
@@ -42,9 +39,9 @@ iniconfig==1.1.1 \
     --hash=sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3 \
     --hash=sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32
     # via pytest
-jsonschema==4.14.0 \
-    --hash=sha256:15062f4cc6f591400cd528d2c355f2cfa6a57e44c820dc783aee5e23d36a831f \
-    --hash=sha256:9892b8d630a82990521a9ca630d3446bd316b5ad54dbe981338802787f3e0d2d
+jsonschema==4.16.0 \
+    --hash=sha256:165059f076eff6971bae5b742fc029a7b4ef3f9bcf04c14e4776a7605de14b23 \
+    --hash=sha256:9e74b8f9738d6a946d70705dc692b74b5429cd0960d58e79ffecfc43b2221eb9
     # via -r ./tests/requirements.in
 packaging==21.3 \
     --hash=sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb \
@@ -93,9 +90,9 @@ pyrsistent==0.18.1 \
     --hash=sha256:f87cc2863ef33c709e237d4b5f4502a62a00fab450c9e020892e8e2ede5847f5 \
     --hash=sha256:fd8da6d0124efa2f67d86fa70c851022f87c98e205f0594e1fae044e7119a5a6
     # via jsonschema
-pytest==7.1.2 \
-    --hash=sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c \
-    --hash=sha256:a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45
+pytest==7.1.3 \
+    --hash=sha256:1377bda3466d70b55e3f5cecfa55bb7cfcf219c7964629b967c37cf0bda818b7 \
+    --hash=sha256:4f365fec2dff9c1162f834d9f18af1ba13062db0c708bf7b946f8a5c76180c39
     # via -r ./tests/requirements.in
 tomli==2.0.1 \
     --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \

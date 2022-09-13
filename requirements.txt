@@ -14,9 +14,9 @@ cattrs==22.1.0 \
     --hash=sha256:94b67b64cf92c994f8784c40c082177dc916e0489a73a9a36b24eb18a9db40c6 \
     --hash=sha256:d55c477b4672f93606e992049f15d526dc7867e6c756cd6256d4af92e2b1e364
     # via -r ./requirements.in
-exceptiongroup==1.0.0rc8 \
-    --hash=sha256:6990c24f06b8d33c8065cfe43e5e8a4bfa384e0358be036af9cc60b6321bd11a \
-    --hash=sha256:ab0a968e1ef769e55d9a596f4a89f7be9ffedbc9fdefdb77cc68cf5c33ce1035
+exceptiongroup==1.0.0rc9 \
+    --hash=sha256:2e3c3fc1538a094aab74fad52d6c33fc94de3dfee3ee01f187c0e0c72aec5337 \
+    --hash=sha256:9086a4a21ef9b31c72181c77c040a074ba0889ee56a7b289ff0afb0d97655f96
     # via cattrs
 typing-extensions==4.3.0 \
     --hash=sha256:25642c956049920a5aa49edcdd6ab1e06d7e5d467fc00e0506c44ac86fbfca02 \

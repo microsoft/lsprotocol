@@ -100,6 +100,69 @@ def _register_required_structure_hooks(
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentFilter_Type3)
 
+    def _notebook_sync_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.NotebookDocumentSyncOptions,
+        lsp_types.NotebookDocumentSyncRegistrationOptions,
+    ]:
+        if not object_:
+            return object_
+        if "id" in object_:
+            return converter.structure(
+                object_, lsp_types.NotebookDocumentSyncRegistrationOptions
+            )
+        else:
+            return converter.structure(object_, lsp_types.NotebookDocumentSyncOptions)
+
+    def _semantic_token_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.SemanticTokensOptions, lsp_types.SemanticTokensRegistrationOptions
+    ]:
+        if not object_:
+            return object_
+        if "id" in object_:
+            return converter.structure(
+                object_, lsp_types.SemanticTokensRegistrationOptions
+            )
+        else:
+            return converter.structure(object_, lsp_types.SemanticTokensOptions)
+
+    def _diagnostic_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[lsp_types.DiagnosticOptions, lsp_types.DiagnosticRegistrationOptions]
+    ]:
+        if not object_:
+            return object_
+        if "id" in object_:
+            return converter.structure(object_, lsp_types.DiagnosticRegistrationOptions)
+        else:
+            return converter.structure(object_, lsp_types.DiagnosticOptions)
+
+    def _text_document_sync_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[lsp_types.TextDocumentSyncOptions, lsp_types.TextDocumentSyncKind]
+    ]:
+        if not object_:
+            return object_
+        if isinstance(object_, int):
+            return object_
+        else:
+            return converter.structure(object_, lsp_types.TextDocumentSyncOptions)
+
+    def _save_options_hook(
+        object_: Any, _: type
+    ) -> Optional[Union[bool, lsp_types.SaveOptions]]:
+        if not object_:
+            return object_
+        if isinstance(object_, bool):
+            return object_
+        else:
+            return converter.structure(object_, lsp_types.SaveOptions)
+
     NotebookSelectorItem = attrs.fields(
         lsp_types.NotebookCellTextDocumentFilter
     ).notebook.type
@@ -139,6 +202,39 @@ def _register_required_structure_hooks(
             ],
             _lsp_object_hook,
         ),
+        (
+            Optional[
+                Union[
+                    lsp_types.NotebookDocumentSyncOptions,
+                    lsp_types.NotebookDocumentSyncRegistrationOptions,
+                ]
+            ],
+            _notebook_sync_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    lsp_types.SemanticTokensOptions,
+                    lsp_types.SemanticTokensRegistrationOptions,
+                ]
+            ],
+            _semantic_token_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    lsp_types.DiagnosticOptions, lsp_types.DiagnosticRegistrationOptions
+                ]
+            ],
+            _diagnostic_hook,
+        ),
+        (
+            Optional[
+                Union[lsp_types.TextDocumentSyncOptions, lsp_types.TextDocumentSyncKind]
+            ],
+            _text_document_sync_hook,
+        ),
+        (Optional[Union[bool, lsp_types.SaveOptions]], _save_options_hook),
     ]
 
     if sys.version_info > (3, 8):

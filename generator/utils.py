@@ -6,7 +6,7 @@ import copy
 import itertools
 import keyword
 import re
-from typing import List, Optional, OrderedDict, Sequence, Tuple, Union
+from typing import Dict, List, Optional, OrderedDict, Sequence, Tuple, Union
 
 from . import model
 
@@ -168,7 +168,7 @@ class TypesCodeGenerator:
             "",
         ]
 
-    def get_code(self) -> str:
+    def get_code(self) -> Dict[str, str]:
         self._reset()
         self._generate_code(self._lsp_model)
 
@@ -179,7 +179,10 @@ class TypesCodeGenerator:
             + self._get_types_code()
             + self._get_utility_code(self._lsp_model)
         )
-        return lines_to_str(code_lines)
+        return {
+            "types.py": lines_to_str(code_lines),
+            "_hooks.py": lines_to_str(self._get_hooks_code()),
+        } 
 
     def _generate_type_name(
         self, type_def: model.LSP_TYPE_SPEC, class_name: Optional[str] = None
@@ -1006,3 +1009,54 @@ class TypesCodeGenerator:
 
     def _get_meta_data(self, lsp_model: model.LSPModel) -> List[str]:
         return [f"__lsp_version__ = '{lsp_model.metaData.version}'"]
+
+    def _get_hooks_code(self, lsp_model:model.LSPModel) -> List[str]:
+        pass
+
+    def _generate_hook(self, property_def:model.Property) -> List[str]:
+        if property_def.type.kind != 'or':
+            return []
+
+        hook_name = f"_{_to_snake_case(property_def.name)}_hook"
+        indent = " "*4
+        code_lines = [
+            f"def {hook_name}(object_: Any, _: type):",
+        ]
+
+        has_base_type = False
+        ref_types = []
+        if property_def.type.kind == 'or':
+            for prop_type in property_def.type.items:
+                if prop_type.kind == 'base':
+                    has_base_type = True
+                elif prop_type.kind == 'reference':
+                    ref_types.append(f"lsp_types.{self._generate_type_name(prop_type)}")
+
+        if  not ref_types or len(ref_types)>2:
+            return []
+
+        if property_def.optional:
+            code_lines += [
+                f"{indent}if object_ is None:",
+                f"{indent*2}return None",
+            ]
+
+        if has_base_type:
+            code_lines += [
+                        f"{indent}if isinstance(object_, (bool, int, str, float)):",
+                        f"{indent*2}return object_",
+                    ]
+
+        if len(ref_types) == 1:
+            code_lines += [
+                f"{indent}return converter.structure(object_, {ref_types[0]})",
+            ]
+        elif len(ref_types) == 2:
+            opt, reg_opt = (ref_types[0], ref_types[1]) if 'RegistrationOptions' in ref_types[1] else (ref_types[1], ref_types[0])
+            code_lines +=[
+                f"{indent}if 'id' in object_:",
+                f"{indent*2}return converter.structure(object_, {reg_opt})",
+                f"{indent}else:",
+                f"{indent*2}return converter.structure(object_, {opt})",
+           ]
+        return code_lines

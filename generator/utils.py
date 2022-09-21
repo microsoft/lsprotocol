@@ -181,11 +181,14 @@ class TypesCodeGenerator:
         )
         return {
             "types.py": lines_to_str(code_lines),
-            "_hooks.py": lines_to_str(self._get_hooks_code()),
-        } 
+            "_hooks.py": lines_to_str(self._get_hooks_code(self._lsp_model)),
+        }
 
     def _generate_type_name(
-        self, type_def: model.LSP_TYPE_SPEC, class_name: Optional[str] = None
+        self,
+        type_def: model.LSP_TYPE_SPEC,
+        class_name: Optional[str] = None,
+        prefix: str = "",
     ) -> str:
         """Get typing wrapped type name based on LSP type definition."""
 
@@ -216,15 +219,15 @@ class TypesCodeGenerator:
         if type_def.kind == "reference":
             # The reference kind is a named type which is part of LSP.
             if self._has_type(type_def.name):
-                return f"{type_def.name}"
+                return f"{prefix}{type_def.name}"
             # We don't have this type yet. Make it a forward reference.
-            return f"'{type_def.name}'"
+            return f"'{prefix}{type_def.name}'"
 
         if type_def.kind == "array":
             # This is a linear collection type, LSP does not specify if
             # this needs to be ordered. Also, usingList here because
             # cattrs does not work well withIterable for some reason.
-            return f"List[{self._generate_type_name(type_def.element)}]"
+            return f"List[{self._generate_type_name(type_def.element, class_name, prefix)}]"
 
         if type_def.kind == "or":
             # This type means that you can have either of the types under `items`
@@ -235,7 +238,7 @@ class TypesCodeGenerator:
             #     * This means that id can either be string or integer, cannot be both.
             types = []
             for item in type_def.items:
-                types.append(self._generate_type_name(item))
+                types.append(self._generate_type_name(item, class_name, prefix))
             return f"Union[{','.join(types)}]"
 
         if type_def.kind == "and":
@@ -265,13 +268,13 @@ class TypesCodeGenerator:
 
         if type_def.kind == "map":
             # This kind defines a dictionary like object.
-            return f"Dict[{self._generate_type_name(type_def.key)}, {self._generate_type_name(type_def.value)}]"
+            return f"Dict[{self._generate_type_name(type_def.key, class_name, prefix)}, {self._generate_type_name(type_def.value, class_name, prefix)}]"
 
         if type_def.kind == "tuple":
             # This kind defined a tuple like object.
             types = []
             for item in type_def.items:
-                types.append(self._generate_type_name(item))
+                types.append(self._generate_type_name(item, class_name, prefix))
             return f"Tuple[{','.join(types)}]"
 
         raise ValueError(str(type_def))
@@ -1010,29 +1013,68 @@ class TypesCodeGenerator:
     def _get_meta_data(self, lsp_model: model.LSPModel) -> List[str]:
         return [f"__lsp_version__ = '{lsp_model.metaData.version}'"]
 
-    def _get_hooks_code(self, lsp_model:model.LSPModel) -> List[str]:
-        pass
+    def _get_hooks_code(self, lsp_model: model.LSPModel) -> List[str]:
+        indent = " " * 4
+        code_lines = self._get_header()
 
-    def _generate_hook(self, property_def:model.Property) -> List[str]:
-        if property_def.type.kind != 'or':
+        code_lines += [
+            "import cattrs",
+            "from typing import Any, Optional, Union",
+            "from . import types as lsp_types",
+            "",
+        ]
+
+        code_lines += [
+            "def _register_generated_hooks(converter: cattrs.Converter) -> cattrs.Converter:",
+        ]
+
+        server_capabilities = [
+            s for s in lsp_model.structures if s.name == "ServerCapabilities"
+        ][0]
+        hook_properties = [
+            p for p in server_capabilities.properties if p.type.kind == "or"
+        ]
+
+        hooks = {}
+        for property_def in hook_properties:
+            type_name, hook_name, hook_code = self._generate_hook(property_def)
+            hooks[type_name] = hook_name
+            code_lines += [f"{indent}{h}" for h in hook_code]
+
+        code_lines += [f"{indent}structure_hooks = ["]
+        for key in hooks:
+            code_lines += [f"{indent*2}({key},{hooks[key]}),"]
+        code_lines += [f"{indent}]"]
+
+        code_lines += [
+            f"{indent}for type_, hook in structure_hooks:",
+            f"{indent*2}converter.register_structure_hook(type_, hook)",
+            f"{indent}return converter",
+        ]
+        return code_lines
+
+    def _generate_hook(
+        self, property_def: model.Property
+    ) -> Tuple[str, str, List[str]]:
+        if property_def.type.kind != "or":
             return []
 
         hook_name = f"_{_to_snake_case(property_def.name)}_hook"
-        indent = " "*4
+        indent = " " * 4
         code_lines = [
             f"def {hook_name}(object_: Any, _: type):",
         ]
 
         has_base_type = False
         ref_types = []
-        if property_def.type.kind == 'or':
+        if property_def.type.kind == "or":
             for prop_type in property_def.type.items:
-                if prop_type.kind == 'base':
+                if prop_type.kind == "base":
                     has_base_type = True
-                elif prop_type.kind == 'reference':
+                elif prop_type.kind == "reference":
                     ref_types.append(f"lsp_types.{self._generate_type_name(prop_type)}")
 
-        if  not ref_types or len(ref_types)>2:
+        if not ref_types or len(ref_types) > 2:
             return []
 
         if property_def.optional:
@@ -1043,20 +1085,28 @@ class TypesCodeGenerator:
 
         if has_base_type:
             code_lines += [
-                        f"{indent}if isinstance(object_, (bool, int, str, float)):",
-                        f"{indent*2}return object_",
-                    ]
+                f"{indent}if isinstance(object_, (bool, int, str, float)):",
+                f"{indent*2}return object_",
+            ]
 
         if len(ref_types) == 1:
             code_lines += [
                 f"{indent}return converter.structure(object_, {ref_types[0]})",
             ]
         elif len(ref_types) == 2:
-            opt, reg_opt = (ref_types[0], ref_types[1]) if 'RegistrationOptions' in ref_types[1] else (ref_types[1], ref_types[0])
-            code_lines +=[
+            opt, reg_opt = (
+                (ref_types[0], ref_types[1])
+                if "RegistrationOptions" in ref_types[1]
+                else (ref_types[1], ref_types[0])
+            )
+            code_lines += [
                 f"{indent}if 'id' in object_:",
                 f"{indent*2}return converter.structure(object_, {reg_opt})",
                 f"{indent}else:",
                 f"{indent*2}return converter.structure(object_, {opt})",
-           ]
-        return code_lines
+            ]
+
+        type_name = self._generate_type_name(property_def.type, None, "lsp_types.")
+        if property_def.optional:
+            type_name = f"Optional[{type_name}]"
+        return type_name, hook_name, code_lines

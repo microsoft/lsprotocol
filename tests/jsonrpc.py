@@ -30,9 +30,7 @@ def to_json(
     return json.dumps(converter.unstructure(obj, unstructure_as=obj_type))
 
 
-def from_json(
-    json_str: str, method: str = None, converter=None
-) -> types.MESSAGE_TYPES:
+def from_json(json_str: str, method: str = None, converter=None) -> types.MESSAGE_TYPES:
     """Parses and given JSON string and returns LSP message object using the
     provided converter."""
     if not converter:

@@ -7,7 +7,7 @@
 # 2. Install nox: `python -m pip install nox`
 # 3. Run command: `python -m nox --session build_lsp`
 
-from typing import Any, Optional, Union
+from typing import Any, List, Optional, Union
 
 import cattrs
 
@@ -18,10 +18,9 @@ def _register_generated_hooks(converter: cattrs.Converter) -> cattrs.Converter:
     def _text_document_sync_hook(object_: Any, _: type):
         if object_ is None:
             return None
-        if "id" in object_:
-            return converter.structure(object_, lsp_types.TextDocumentSyncOptions)
-        else:
-            return converter.structure(object_, lsp_types.TextDocumentSyncKind)
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.TextDocumentSyncOptions)
 
     def _notebook_document_sync_hook(object_: Any, _: type):
         if object_ is None:
@@ -261,6 +260,104 @@ def _register_generated_hooks(converter: cattrs.Converter) -> cattrs.Converter:
         else:
             return converter.structure(object_, lsp_types.DiagnosticOptions)
 
+    def _save_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.SaveOptions)
+
+    def _code_action_hook(object_: Any, _: type):
+        if "command" in object_:
+            return converter.structure(object_, lsp_types.Command)
+        else:
+            return converter.structure(object_, lsp_types.CodeAction)
+
+    def _completion_list_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, list):
+            return [
+                converter.structure(item, lsp_types.CompletionItem) for item in object_
+            ]
+        else:
+            return converter.structure(object_, lsp_types.CompletionList)
+
+    def _location_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, list):
+            return [
+                converter.structure(
+                    item,
+                    (
+                        lsp_types.LocationLink
+                        if "targetUri" in item
+                        else lsp_types.Location
+                    ),
+                )
+                for item in object_
+            ]
+        else:
+            return converter.structure(object_, lsp_types.Location)
+
+    def _symbol_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, list):
+            return [
+                converter.structure(
+                    item,
+                    (
+                        lsp_types.SymbolInformation
+                        if "location" in item
+                        else lsp_types.DocumentSymbol
+                    ),
+                )
+                for item in object_
+            ]
+
+    def _markup_content_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, str):
+            return object_
+        if isinstance(object_, list):
+            return [
+                (
+                    item
+                    if isinstance(item, str)
+                    else converter.structure(item, lsp_types.MarkedString_Type1)
+                )
+                for item in object_
+            ]
+        if "kind" in object_:
+            return converter.structure(object_, lsp_types.MarkupContent)
+        else:
+            return converter.structure(object_, lsp_types.MarkedString_Type1)
+
+    def _document_edit_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if "kind" in object_:
+            if object_["kind"] == "create":
+                return converter.structure(object_, lsp_types.CreateFile)
+            elif object_["kind"] == "rename":
+                return converter.structure(object_, lsp_types.RenameFile)
+            elif object_["kind"] == "delete":
+                return converter.structure(object_, lsp_types.DeleteFile)
+            else:
+                raise ValueError("Unknown edit kind: ", object_)
+        else:
+            return converter.structure(object_, lsp_types.TextDocumentEdit)
+
+    def _semantic_tokens_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.SemanticTokensOptionsFullType1)
+
     structure_hooks = [
         (
             Optional[
@@ -439,6 +536,56 @@ def _register_generated_hooks(converter: cattrs.Converter) -> cattrs.Converter:
                 ]
             ],
             _diagnostic_provider_hook,
+        ),
+        (
+            Optional[Union[lsp_types.SaveOptions, bool]],
+            _save_hook,
+        ),
+        (
+            Union[lsp_types.Command, lsp_types.CodeAction],
+            _code_action_hook,
+        ),
+        (
+            Optional[Union[List[lsp_types.CompletionItem], lsp_types.CompletionList]],
+            _completion_list_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    lsp_types.Location,
+                    List[lsp_types.Location],
+                    List[lsp_types.LocationLink],
+                ]
+            ],
+            _location_hook,
+        ),
+        (
+            Optional[
+                Union[List[lsp_types.SymbolInformation], List[lsp_types.DocumentSymbol]]
+            ],
+            _symbol_hook,
+        ),
+        (
+            Union[
+                lsp_types.MarkupContent,
+                str,
+                lsp_types.MarkedString_Type1,
+                List[Union[str, lsp_types.MarkedString_Type1]],
+            ],
+            _markup_content_hook,
+        ),
+        (
+            Union[
+                lsp_types.TextDocumentEdit,
+                lsp_types.CreateFile,
+                lsp_types.RenameFile,
+                lsp_types.DeleteFile,
+            ],
+            _document_edit_hook,
+        ),
+        (
+            Optional[Union[bool, lsp_types.SemanticTokensOptionsFullType1]],
+            _semantic_tokens_hook,
         ),
     ]
     for type_, hook in structure_hooks:

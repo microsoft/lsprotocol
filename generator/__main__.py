@@ -61,7 +61,10 @@ def main(argv: Sequence[str]) -> None:
     spec = model.create_lsp_model(json_model)
     code = utils.TypesCodeGenerator(spec).get_code()
     if args.output:
-        pathlib.Path(argv[1]).write_text(code, encoding="utf-8")
+        for file_name in code:
+            pathlib.Path(args.output, file_name).write_text(
+                code[file_name], encoding="utf-8"
+            )
     else:
         print(code)
 

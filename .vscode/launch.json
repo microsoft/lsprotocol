@@ -11,7 +11,10 @@
             "module": "generator",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--output", "lsprotocol/_types.py"]
+            "args": [
+                "--output",
+                "lsprotocol"
+            ]
         },
         {
             "name": "DON'T SELECT (test debug config)",
@@ -19,7 +22,9 @@
             "request": "launch",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "purpose": ["debug-test"]
+            "purpose": [
+                "debug-test"
+            ]
         }
     ]
 }

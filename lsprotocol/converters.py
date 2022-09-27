@@ -8,6 +8,7 @@ import attrs
 import cattrs
 import cattrs.gen
 
+from . import _hooks
 from . import types as lsp_types
 
 # Flag to ensure we only resolve forward references once.
@@ -30,6 +31,7 @@ def get_converter(
 ) -> cattrs.Converter:
     """Adds cattrs hooks for LSP lsp_types to the given converter."""
     resolve_forward_references()
+    converter = _hooks._register_generated_hooks(converter)
     converter = _register_required_structure_hooks(converter)
     return _register_custom_property_hooks(converter)
 
@@ -37,12 +39,6 @@ def get_converter(
 def _register_required_structure_hooks(
     converter: cattrs.Converter,
 ) -> cattrs.Converter:
-    def _optional_union_int_str(object_: Any, type_: type) -> Optional[Union[int, str]]:
-        return _union_int_str(object_, type_) if object_ else None
-
-    def _union_int_str(object_: Any, _: type) -> Union[int, str]:
-        return str(object_) if isinstance(object_, str) else int(object_)
-
     def _lsp_object_hook(
         object_: Any, type_: type
     ) -> Union[lsp_types.LSPObject, lsp_types.LSPArray, str, int, float, bool, None]:
@@ -54,12 +50,6 @@ def _register_required_structure_hooks(
                     return type_(object_)
             else:
                 return object_
-
-    def _optional_union_str_bool(object_: Any, _: type) -> Optional[Union[str, bool]]:
-        if object_:
-            return str(object_) if isinstance(object_, str) else bool(object_)
-        else:
-            return None
 
     def _text_document_filter_hook(
         object_: Any, _: type
@@ -100,78 +90,16 @@ def _register_required_structure_hooks(
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentFilter_Type3)
 
-    def _notebook_sync_hook(
-        object_: Any, _: type
-    ) -> Union[
-        lsp_types.NotebookDocumentSyncOptions,
-        lsp_types.NotebookDocumentSyncRegistrationOptions,
-    ]:
-        if not object_:
-            return object_
-        if "id" in object_:
-            return converter.structure(
-                object_, lsp_types.NotebookDocumentSyncRegistrationOptions
-            )
-        else:
-            return converter.structure(object_, lsp_types.NotebookDocumentSyncOptions)
-
-    def _semantic_token_hook(
-        object_: Any, _: type
-    ) -> Union[
-        lsp_types.SemanticTokensOptions, lsp_types.SemanticTokensRegistrationOptions
-    ]:
-        if not object_:
-            return object_
-        if "id" in object_:
-            return converter.structure(
-                object_, lsp_types.SemanticTokensRegistrationOptions
-            )
-        else:
-            return converter.structure(object_, lsp_types.SemanticTokensOptions)
-
-    def _diagnostic_hook(
-        object_: Any, _: type
-    ) -> Optional[
-        Union[lsp_types.DiagnosticOptions, lsp_types.DiagnosticRegistrationOptions]
-    ]:
-        if not object_:
-            return object_
-        if "id" in object_:
-            return converter.structure(object_, lsp_types.DiagnosticRegistrationOptions)
-        else:
-            return converter.structure(object_, lsp_types.DiagnosticOptions)
-
-    def _text_document_sync_hook(
-        object_: Any, _: type
-    ) -> Optional[
-        Union[lsp_types.TextDocumentSyncOptions, lsp_types.TextDocumentSyncKind]
-    ]:
-        if not object_:
-            return object_
-        if isinstance(object_, int):
-            return object_
-        else:
-            return converter.structure(object_, lsp_types.TextDocumentSyncOptions)
-
-    def _save_options_hook(
-        object_: Any, _: type
-    ) -> Optional[Union[bool, lsp_types.SaveOptions]]:
-        if not object_:
-            return object_
-        if isinstance(object_, bool):
-            return object_
-        else:
-            return converter.structure(object_, lsp_types.SaveOptions)
-
     NotebookSelectorItem = attrs.fields(
         lsp_types.NotebookCellTextDocumentFilter
     ).notebook.type
     STRUCTURE_HOOKS = [
-        (type(None), lambda _object, _type: None),
-        (Optional[Union[int, str]], _optional_union_int_str),
-        (Union[int, str], _union_int_str),
+        (type(None), lambda object_, _type: object_),
+        (Optional[Union[int, str]], lambda object_, _type: object_),
+        (Union[int, str], lambda object_, _type: object_),
         (lsp_types.LSPAny, _lsp_object_hook),
-        (Optional[Union[str, bool]], _optional_union_str_bool),
+        (Optional[Union[str, bool]], lambda object_, _type: object_),
+        (Optional[Union[bool, Any]], lambda object_, _type: object_),
         (
             Union[
                 lsp_types.TextDocumentFilter_Type1,
@@ -202,39 +130,6 @@ def _register_required_structure_hooks(
             ],
             _lsp_object_hook,
         ),
-        (
-            Optional[
-                Union[
-                    lsp_types.NotebookDocumentSyncOptions,
-                    lsp_types.NotebookDocumentSyncRegistrationOptions,
-                ]
-            ],
-            _notebook_sync_hook,
-        ),
-        (
-            Optional[
-                Union[
-                    lsp_types.SemanticTokensOptions,
-                    lsp_types.SemanticTokensRegistrationOptions,
-                ]
-            ],
-            _semantic_token_hook,
-        ),
-        (
-            Optional[
-                Union[
-                    lsp_types.DiagnosticOptions, lsp_types.DiagnosticRegistrationOptions
-                ]
-            ],
-            _diagnostic_hook,
-        ),
-        (
-            Optional[
-                Union[lsp_types.TextDocumentSyncOptions, lsp_types.TextDocumentSyncKind]
-            ],
-            _text_document_sync_hook,
-        ),
-        (Optional[Union[bool, lsp_types.SaveOptions]], _save_options_hook),
     ]
 
     if sys.version_info > (3, 8):
@@ -304,6 +199,3 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
     converter.register_unstructure_hook_factory(attrs.has, _with_custom_unstructure)
     converter.register_structure_hook_factory(attrs.has, _with_custom_structure)
     return converter
-
-
-DEFAULT_CONVERTER = get_converter()

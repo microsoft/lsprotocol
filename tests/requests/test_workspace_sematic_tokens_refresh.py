@@ -1,14 +1,12 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import hashlib
 import json
 import uuid
 
 import hamcrest
 import pytest
 from cattrs.errors import ClassValidationError
-
 from tests import jsonrpc
 
 ID = str(uuid.uuid4())

@@ -358,6 +358,15 @@ def _register_generated_hooks(converter: cattrs.Converter) -> cattrs.Converter:
             return object_
         return converter.structure(object_, lsp_types.SemanticTokensOptionsFullType1)
 
+    def _semantic_tokens_capabilities_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(
+            object_, lsp_types.SemanticTokensClientCapabilitiesRequestsTypeFullType1
+        )
+
     structure_hooks = [
         (
             Optional[
@@ -586,6 +595,15 @@ def _register_generated_hooks(converter: cattrs.Converter) -> cattrs.Converter:
         (
             Optional[Union[bool, lsp_types.SemanticTokensOptionsFullType1]],
             _semantic_tokens_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    bool,
+                    lsp_types.SemanticTokensClientCapabilitiesRequestsTypeFullType1,
+                ]
+            ],
+            _semantic_tokens_capabilities_hook,
         ),
     ]
     for type_, hook in structure_hooks:

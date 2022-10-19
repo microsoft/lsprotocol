@@ -49,4 +49,13 @@ exclude = [
   "SUPPORT.md",
 ]
 
-
+[tool.mypy]
+files = "lsprotocol"
+show_error_codes = true
+strict = true
+enable_error_code = [
+    "ignore-without-code",
+    "redundant-expr",
+    "truthy-bool",
+]
+enable_recursive_aliases = true

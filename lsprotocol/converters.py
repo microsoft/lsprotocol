@@ -27,7 +27,7 @@ def resolve_forward_references() -> None:
 
 
 def get_converter(
-    converter: Optional[cattrs.Converter] = cattrs.Converter(),
+    converter: cattrs.Converter = cattrs.Converter(),
 ) -> cattrs.Converter:
     """Adds cattrs hooks for LSP lsp_types to the given converter."""
     resolve_forward_references()
@@ -39,10 +39,8 @@ def get_converter(
 def _register_required_structure_hooks(
     converter: cattrs.Converter,
 ) -> cattrs.Converter:
-    def _lsp_object_hook(
-        object_: Any, type_: type
-    ) -> Union[lsp_types.LSPObject, lsp_types.LSPArray, str, int, float, bool, None]:
-        if not object_:
+    def _lsp_object_hook(object_: Any, type_: type) -> Any:
+        if object_ is None:
             return object_
         else:
             for type_ in [str, bool, int, float, list]:
@@ -165,7 +163,7 @@ def _register_required_structure_hooks(
 
 
 def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Converter:
-    def _to_camel_case(name: str):
+    def _to_camel_case(name: str) -> str:
         # TODO: when min Python becomes >= 3.9, then update this to:
         # `return name.removesuffix("_")`.
         new_name = name[:-1] if name.endswith("_") else name

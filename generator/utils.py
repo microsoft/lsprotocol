@@ -141,7 +141,6 @@ class TypesCodeGenerator:
             "import enum",
             "import functools",
             "from typing import Any, Dict, List, Optional, Tuple, Union",
-            "from typing_extensions import TypeAlias",
             "import attrs",
             "from . import validators",
         ]
@@ -527,7 +526,7 @@ class TypesCodeGenerator:
         doc = _get_indented_documentation(type_alias.documentation)
 
         code_lines = [
-            f"{type_alias.name}: TypeAlias = {self._generate_type_name(type_alias.type)}",
+            f"{type_alias.name} = {self._generate_type_name(type_alias.type)}",
             f'"""{doc}"""' if type_alias.documentation else "",
             f"# Since: {_sanitize_comment(type_alias.since)}"
             if type_alias.since

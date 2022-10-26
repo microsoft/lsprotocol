@@ -303,11 +303,11 @@ class TypesCodeGenerator:
         indent = " " * 4
         if class_name == "Position":
             return [
-                "def __eq__(self, o: 'Position') -> Union[bool, 'NotImplemented']:",
+                "def __eq__(self, o: object) -> bool:",
                 f"{indent}if not isinstance(o, Position):",
                 f"{indent}{indent}return NotImplemented",
                 f"{indent}return (self.line, self.character) == (o.line, o.character)",
-                "def __gt__(self, o: 'Position') -> Union[bool, 'NotImplemented']:",
+                "def __gt__(self, o: 'Position') -> bool:",
                 f"{indent}if not isinstance(o, Position):",
                 f"{indent}{indent}return NotImplemented",
                 f"{indent}return (self.line, self.character) > (o.line, o.character)",
@@ -316,7 +316,7 @@ class TypesCodeGenerator:
             ]
         if class_name == "Range":
             return [
-                "def __eq__(self, o: 'Range') -> Union[bool, 'NotImplemented']:",
+                "def __eq__(self, o: object) -> bool:",
                 f"{indent}if not isinstance(o, Range):",
                 f"{indent}{indent}return NotImplemented",
                 f"{indent}return (self.start == o.start) and (self.end == o.end)",
@@ -325,7 +325,7 @@ class TypesCodeGenerator:
             ]
         if class_name == "Location":
             return [
-                "def __eq__(self, o:'Location') -> Union[bool, 'NotImplemented']:",
+                "def __eq__(self, o: object) -> bool:",
                 f"{indent}if not isinstance(o, Location):",
                 f"{indent}{indent}return NotImplemented",
                 f"{indent}return (self.uri == o.uri) and (self.range == o.range)",
@@ -925,7 +925,7 @@ class TypesCodeGenerator:
             f"_KEYWORD_CLASSES = [{', '.join(sorted(set(self._keyword_classes)))}]"
         ]
         code_lines += [
-            "def is_keyword_class(cls) -> bool:",
+            "def is_keyword_class(cls: type) -> bool:",
             '    """Returns true if the class has a property that may be python keyword."""',
             "    return any(cls is c for c in _KEYWORD_CLASSES)",
             "",
@@ -938,7 +938,7 @@ class TypesCodeGenerator:
             f"_SPECIAL_CLASSES = [{', '.join(sorted(set(self._special_classes)))}]"
         ]
         code_lines += [
-            "def is_special_class(cls) -> bool:",
+            "def is_special_class(cls: type) -> bool:",
             '    """Returns true if the class or its properties require special handling."""',
             "    return any(cls is c for c in _SPECIAL_CLASSES)",
             "",
@@ -961,7 +961,7 @@ class TypesCodeGenerator:
             f"_SPECIAL_PROPERTIES = [{', '.join(sorted(set(self._special_properties)))}]"
         ]
         code_lines += [
-            "def is_special_property(cls, property_name:str) -> bool:",
+            "def is_special_property(cls: type, property_name:str) -> bool:",
             '    """Returns true if the class or its properties require special handling.',
             "    Example:",
             "      Consider RenameRegistrationOptions",
@@ -978,7 +978,7 @@ class TypesCodeGenerator:
             "",
         ]
 
-        code_lines += ["", "ALL_TYPES_MAP = {"]
+        code_lines += ["", "ALL_TYPES_MAP: Dict[str, type] = {"]
         code_lines += sorted([f"'{name}': {name}," for name in set(self._types.keys())])
         code_lines += ["}", ""]
 
@@ -1061,9 +1061,8 @@ class TypesCodeGenerator:
 
         hook_name = f"_{_to_snake_case(property_def.name)}_hook"
         indent = " " * 4
-        code_lines = [
-            f"def {hook_name}(object_: Any, _: type):",
-        ]
+        code_lines = []
+        return_types = []
 
         has_base_type = False
         ref_types = []
@@ -1078,16 +1077,20 @@ class TypesCodeGenerator:
             return []
 
         if property_def.optional:
+            return_types.append("None")
             code_lines += [
                 f"{indent}if object_ is None:",
                 f"{indent*2}return None",
             ]
 
         if has_base_type:
+            return_types += ["bool", "int", "str", "float"]
             code_lines += [
                 f"{indent}if isinstance(object_, (bool, int, str, float)):",
                 f"{indent*2}return object_",
             ]
+
+        return_types += ref_types
 
         if len(ref_types) == 1:
             code_lines += [
@@ -1105,6 +1108,9 @@ class TypesCodeGenerator:
                 f"{indent}else:",
                 f"{indent*2}return converter.structure(object_, {opt})",
             ]
+
+        declaration = f"def {hook_name}(object_: Any, _: type) -> Union[{', '.join(return_types)}]:"
+        code_lines.insert(0, declaration)
 
         type_name = self._generate_type_name(property_def.type, None, "lsp_types.")
         if property_def.optional:

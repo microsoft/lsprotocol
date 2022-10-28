@@ -383,6 +383,48 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             object_, lsp_types.SemanticTokensClientCapabilitiesRequestsTypeFullType1
         )
 
+    def _code_action_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.CodeActionKind)
+
+    def _position_encoding_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.PositionEncodingKind)
+
+    def _folding_range_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.FoldingRangeKind)
+
+    def _semantic_token_types_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.SemanticTokenTypes)
+    
+    def _semantic_token_modifiers_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.SemanticTokenModifiers)
+
+    def _watch_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.WatchKind)
+
     structure_hooks = [
         (
             Optional[
@@ -620,6 +662,46 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _semantic_tokens_capabilities_hook,
+        ),
+        (
+            Optional[Union[lsp_types.CodeActionKind, str]],
+            _code_action_kind_hook,
+        ),
+        (
+            Union[lsp_types.CodeActionKind, str],
+            _code_action_kind_hook,
+        ),
+        (
+            Union[lsp_types.PositionEncodingKind, str],
+            _position_encoding_kind_hook,
+        ),
+        (
+            Union[lsp_types.FoldingRangeKind, str],
+            _folding_range_kind_hook,
+        ),
+        (
+            Union[lsp_types.SemanticTokenTypes, str],
+            _semantic_token_types_hook,
+        ),
+        (
+            Optional[Union[lsp_types.SemanticTokenTypes, str]],
+            _semantic_token_types_hook,
+        ),
+        (
+            Union[lsp_types.SemanticTokenModifiers, str],
+            _semantic_token_modifiers_hook,
+        ),
+        (
+            Optional[Union[lsp_types.SemanticTokenModifiers, str]],
+            _semantic_token_modifiers_hook,
+        ),
+        (
+            Union[lsp_types.WatchKind, int],
+            _watch_kind_hook,
+        ),
+        (
+            Optional[Union[lsp_types.WatchKind, int]],
+            _watch_kind_hook,
         ),
     ]
     for type_, hook in structure_hooks:

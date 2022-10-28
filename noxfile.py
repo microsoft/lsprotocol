@@ -49,9 +49,14 @@ def _format_code(session: nox.Session):
     session.run("black", "./lsprotocol")
     session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
 
+    # Do it again because doc-formatter can move lines.
     session.run("isort", "--profile", "black", "./lsprotocol")
     session.run("black", "./lsprotocol")
     session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
+
+    session.run("isort", "--profile", "black", ".")
+    session.run("black", ".")
+    session.run("docformatter", "--in-place", "--recursive", ".")
 
 
 @nox.session()

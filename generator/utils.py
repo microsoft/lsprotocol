@@ -182,18 +182,20 @@ class TypesCodeGenerator:
         return {
             "types.py": lines_to_str(code_lines),
         }
-    
-    def _get_custom_value_type(self, ref_name:str) -> Optional[str]:
+
+    def _get_custom_value_type(self, ref_name: str) -> Optional[str]:
         """Returns the custom supported type."""
         try:
-            enum_def = [e for e in self._lsp_model.enumerations if e.name == ref_name][0]
+            enum_def = [e for e in self._lsp_model.enumerations if e.name == ref_name][
+                0
+            ]
         except IndexError:
             enum_def = None
         if enum_def and enum_def.supportsCustomValues:
-            if enum_def.type.name == 'string':
-                return 'str'
-            if enum_def.type.name in ['integer', 'uinteger']:
-                return 'int'
+            if enum_def.type.name == "string":
+                return "str"
+            if enum_def.type.name in ["integer", "uinteger"]:
+                return "int"
         return None
 
     def _generate_type_name(
@@ -234,7 +236,7 @@ class TypesCodeGenerator:
                 ref_type = f"{prefix}{type_def.name}"
             else:
                 # We don't have this type yet. Make it a forward reference.
-                ref_type =  f"'{prefix}{type_def.name}'"
+                ref_type = f"'{prefix}{type_def.name}'"
             custom_value_type = self._get_custom_value_type(type_def.name)
             if custom_value_type:
                 return f"Union[{ref_type}, {custom_value_type}]"

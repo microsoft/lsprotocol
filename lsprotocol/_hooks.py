@@ -410,7 +410,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.SemanticTokenTypes)
-    
+
     def _semantic_token_modifiers_hook(object_: Any, _: type):
         if object_ is None:
             return None

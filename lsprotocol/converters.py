@@ -9,7 +9,7 @@ from . import _hooks
 
 
 def get_converter(
-    converter: Optional[cattrs.Converter],
+    converter: Optional[cattrs.Converter] = None,
 ) -> cattrs.Converter:
     """Adds cattrs hooks for LSP lsp_types to the given converter."""
     if converter is None:

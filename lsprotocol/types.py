@@ -78,6 +78,22 @@ class SemanticTokenModifiers(enum.Enum):
     DefaultLibrary = "defaultLibrary"
 
 
+@enum.unique
+class DocumentDiagnosticReportKind(enum.Enum):
+    """The document diagnostic report kinds.
+
+    @since 3.17.0
+    """
+
+    # Since: 3.17.0
+    Full = "full"
+    """A diagnostic report with a full
+    set of problems."""
+    Unchanged = "unchanged"
+    """A report indicating that the last
+    returned report is still accurate."""
+
+
 class ErrorCodes(enum.Enum):
     """Predefined error codes."""
 
@@ -997,7 +1013,7 @@ class Location:
 
     range: "Range" = attrs.field()
 
-    def __eq__(self, o: "Location") -> Union[bool, "NotImplemented"]:
+    def __eq__(self, o: object) -> bool:
         if not isinstance(o, Location):
             return NotImplemented
         return (self.uri == o.uri) and (self.range == o.range)
@@ -1283,7 +1299,7 @@ class FoldingRange:
     )
     """The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line."""
 
-    kind: Optional[FoldingRangeKind] = attrs.field(default=None)
+    kind: Optional[Union[FoldingRangeKind, str]] = attrs.field(default=None)
     """Describes the kind of the folding range such as `comment' or 'region'. The kind
     is used to categorize folding ranges and used by commands like 'Fold all comments'.
     See FoldingRangeKind for an enumeration of standardized kinds."""
@@ -4083,7 +4099,7 @@ class CodeAction:
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A short, human-readable, title for this code action."""
 
-    kind: Optional[CodeActionKind] = attrs.field(default=None)
+    kind: Optional[Union[CodeActionKind, str]] = attrs.field(default=None)
     """The kind of the code action.
     
     Used to filter code actions."""
@@ -4142,7 +4158,9 @@ class CodeAction:
 class CodeActionOptions:
     """Provider options for a CodeActionRequest."""
 
-    code_action_kinds: Optional[List[CodeActionKind]] = attrs.field(default=None)
+    code_action_kinds: Optional[List[Union[CodeActionKind, str]]] = attrs.field(
+        default=None
+    )
     """CodeActionKinds that this server may return.
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
@@ -4174,7 +4192,9 @@ class CodeActionRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    code_action_kinds: Optional[List[CodeActionKind]] = attrs.field(default=None)
+    code_action_kinds: Optional[List[Union[CodeActionKind, str]]] = attrs.field(
+        default=None
+    )
     """CodeActionKinds that this server may return.
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
@@ -4929,7 +4949,7 @@ class Range:
     end: "Position" = attrs.field()
     """The range's end position."""
 
-    def __eq__(self, o: "Range") -> Union[bool, "NotImplemented"]:
+    def __eq__(self, o: object) -> bool:
         if not isinstance(o, Range):
             return NotImplemented
         return (self.start == o.start) and (self.end == o.end)
@@ -5042,12 +5062,12 @@ class Position:
     If the character value is greater than the line length it defaults back to the
     line length."""
 
-    def __eq__(self, o: "Position") -> Union[bool, "NotImplemented"]:
+    def __eq__(self, o: object) -> bool:
         if not isinstance(o, Position):
             return NotImplemented
         return (self.line, self.character) == (o.line, o.character)
 
-    def __gt__(self, o: "Position") -> Union[bool, "NotImplemented"]:
+    def __gt__(self, o: "Position") -> bool:
         if not isinstance(o, Position):
             return NotImplemented
         return (self.line, self.character) > (o.line, o.character)
@@ -5738,7 +5758,9 @@ class ServerCapabilitiesWorkspaceType:
 class ServerCapabilities:
     """Defines the capabilities provided by a language server."""
 
-    position_encoding: Optional[PositionEncodingKind] = attrs.field(default=None)
+    position_encoding: Optional[Union[PositionEncodingKind, str]] = attrs.field(
+        default=None
+    )
     """The position encoding the server picked from the encodings offered
     by the client via the client capability `general.positionEncodings`.
     
@@ -5970,7 +5992,7 @@ class FileSystemWatcher:
     @since 3.17.0 support for relative patterns."""
     # Since: 3.17.0 support for relative patterns.
 
-    kind: Optional[WatchKind] = attrs.field(default=None)
+    kind: Optional[Union[WatchKind, int]] = attrs.field(default=None)
     """The kind of events of interest. If omitted it defaults
     to WatchKind.Create | WatchKind.Change | WatchKind.Delete
     which is 7."""
@@ -6177,7 +6199,7 @@ class CodeActionContext:
     that these accurately reflect the error state of the resource. The primary parameter
     to compute code actions is the provided range."""
 
-    only: Optional[List[CodeActionKind]] = attrs.field(default=None)
+    only: Optional[List[Union[CodeActionKind, str]]] = attrs.field(default=None)
     """Requested kind of actions to return.
     
     Actions not of this kind are filtered out by the client before being shown. So servers
@@ -7213,7 +7235,9 @@ class GeneralClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    position_encodings: Optional[List[PositionEncodingKind]] = attrs.field(default=None)
+    position_encodings: Optional[List[Union[PositionEncodingKind, str]]] = attrs.field(
+        default=None
+    )
     """The position encodings supported by the client. Client and server
     have to agree on the same position encoding to ensure that offsets
     (e.g. character position in a line) are interpreted the same on both
@@ -8033,7 +8057,7 @@ class DocumentSymbolClientCapabilities:
 
 @attrs.define
 class CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType:
-    value_set: List[CodeActionKind] = attrs.field()
+    value_set: List[Union[CodeActionKind, str]] = attrs.field()
     """The code action kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -8249,7 +8273,7 @@ class RenameClientCapabilities:
 
 @attrs.define
 class FoldingRangeClientCapabilitiesFoldingRangeKindType:
-    value_set: Optional[List[FoldingRangeKind]] = attrs.field(default=None)
+    value_set: Optional[List[Union[FoldingRangeKind, str]]] = attrs.field(default=None)
     """The folding range kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -11402,7 +11426,7 @@ MESSAGE_TYPES = Union[REQUESTS, RESPONSES, NOTIFICATIONS, ResponseErrorMessage]
 _KEYWORD_CLASSES = [CallHierarchyIncomingCall]
 
 
-def is_keyword_class(cls) -> bool:
+def is_keyword_class(cls: type) -> bool:
     """Returns true if the class has a property that may be python keyword."""
     return any(cls is c for c in _KEYWORD_CLASSES)
 
@@ -11604,7 +11628,7 @@ _SPECIAL_CLASSES = [
 ]
 
 
-def is_special_class(cls) -> bool:
+def is_special_class(cls: type) -> bool:
     """Returns true if the class or its properties require special handling."""
     return any(cls is c for c in _SPECIAL_CLASSES)
 
@@ -11966,7 +11990,7 @@ _SPECIAL_PROPERTIES = [
 ]
 
 
-def is_special_property(cls, property_name: str) -> bool:
+def is_special_property(cls: type, property_name: str) -> bool:
     """Returns true if the class or its properties require special handling.
     Example:
       Consider RenameRegistrationOptions
@@ -11982,7 +12006,7 @@ def is_special_property(cls, property_name: str) -> bool:
     return qualified_name in _SPECIAL_PROPERTIES
 
 
-ALL_TYPES_MAP = {
+ALL_TYPES_MAP: Dict[str, type] = {
     "AnnotatedTextEdit": AnnotatedTextEdit,
     "ApplyWorkspaceEditParams": ApplyWorkspaceEditParams,
     "ApplyWorkspaceEditResult": ApplyWorkspaceEditResult,
@@ -12110,6 +12134,7 @@ ALL_TYPES_MAP = {
     "DocumentColorRegistrationOptions": DocumentColorRegistrationOptions,
     "DocumentDiagnosticParams": DocumentDiagnosticParams,
     "DocumentDiagnosticReport": DocumentDiagnosticReport,
+    "DocumentDiagnosticReportKind": DocumentDiagnosticReportKind,
     "DocumentDiagnosticReportPartialResult": DocumentDiagnosticReportPartialResult,
     "DocumentFilter": DocumentFilter,
     "DocumentFormattingClientCapabilities": DocumentFormattingClientCapabilities,

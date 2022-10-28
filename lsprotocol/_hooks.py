@@ -374,6 +374,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.SemanticTokensOptionsFullType1)
 
+    def _markup_content_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.MarkupContent)
+
     def _semantic_tokens_capabilities_hook(object_: Any, _: type):
         if object_ is None:
             return None
@@ -620,6 +627,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _semantic_tokens_capabilities_hook,
+        ),
+        (
+            Optional[Union[str, lsp_types.MarkupContent]],
+            _markup_content_hook,
         ),
     ]
     for type_, hook in structure_hooks:

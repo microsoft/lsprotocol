@@ -342,7 +342,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return [
                 (
                     item
-                    if isinstance(object_, (bool, int, str, float))
+                    if isinstance(item, (bool, int, str, float))
                     else converter.structure(item, lsp_types.MarkedString_Type1)
                 )
                 for item in object_

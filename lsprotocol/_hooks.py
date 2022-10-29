@@ -336,13 +336,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
     def _markup_content_hook(object_: Any, _: type):
         if object_ is None:
             return None
-        if isinstance(object_, str):
+        if isinstance(object_, (bool, int, str, float)):
             return object_
         if isinstance(object_, list):
             return [
                 (
                     item
-                    if isinstance(item, str)
+                    if isinstance(object_, (bool, int, str, float))
                     else converter.structure(item, lsp_types.MarkedString_Type1)
                 )
                 for item in object_
@@ -374,13 +374,6 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.SemanticTokensOptionsFullType1)
 
-    def _markup_content_hook(object_: Any, _: type):
-        if object_ is None:
-            return None
-        if isinstance(object_, (bool, int, str, float)):
-            return object_
-        return converter.structure(object_, lsp_types.MarkupContent)
-
     def _semantic_tokens_capabilities_hook(object_: Any, _: type):
         if object_ is None:
             return None
@@ -389,6 +382,48 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         return converter.structure(
             object_, lsp_types.SemanticTokensClientCapabilitiesRequestsTypeFullType1
         )
+
+    def _code_action_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.CodeActionKind)
+
+    def _position_encoding_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.PositionEncodingKind)
+
+    def _folding_range_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.FoldingRangeKind)
+
+    def _semantic_token_types_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.SemanticTokenTypes)
+
+    def _semantic_token_modifiers_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.SemanticTokenModifiers)
+
+    def _watch_kind_hook(object_: Any, _: type):
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.WatchKind)
 
     structure_hooks = [
         (
@@ -631,6 +666,46 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[Union[str, lsp_types.MarkupContent]],
             _markup_content_hook,
+        ),
+        (
+            Optional[Union[lsp_types.CodeActionKind, str]],
+            _code_action_kind_hook,
+        ),
+        (
+            Union[lsp_types.CodeActionKind, str],
+            _code_action_kind_hook,
+        ),
+        (
+            Union[lsp_types.PositionEncodingKind, str],
+            _position_encoding_kind_hook,
+        ),
+        (
+            Union[lsp_types.FoldingRangeKind, str],
+            _folding_range_kind_hook,
+        ),
+        (
+            Union[lsp_types.SemanticTokenTypes, str],
+            _semantic_token_types_hook,
+        ),
+        (
+            Optional[Union[lsp_types.SemanticTokenTypes, str]],
+            _semantic_token_types_hook,
+        ),
+        (
+            Union[lsp_types.SemanticTokenModifiers, str],
+            _semantic_token_modifiers_hook,
+        ),
+        (
+            Optional[Union[lsp_types.SemanticTokenModifiers, str]],
+            _semantic_token_modifiers_hook,
+        ),
+        (
+            Union[lsp_types.WatchKind, int],
+            _watch_kind_hook,
+        ),
+        (
+            Optional[Union[lsp_types.WatchKind, int]],
+            _watch_kind_hook,
         ),
     ]
     for type_, hook in structure_hooks:

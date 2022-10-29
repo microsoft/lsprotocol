@@ -26,21 +26,37 @@ def lint(session: nox.Session):
     session.run("black", "--check", ".")
 
 
+@nox.session()
+def format(session: nox.Session):
+    """Format all code."""
+    _format_code(session)
+
+
 def _generate_model(session: nox.Session):
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
-    session.install("isort", "black", "docformatter")
 
     session.run("pip", "list")
 
     session.run("python", "-m", "generator", "--output", "./lsprotocol")
-    session.run("isort", "--profile", "black", "./lsprotocol")
-    session.run("black", "./lsprotocol")
-    session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
+    _format_code(session)
+
+
+def _format_code(session: nox.Session):
+    session.install("isort", "black", "docformatter")
 
     session.run("isort", "--profile", "black", "./lsprotocol")
     session.run("black", "./lsprotocol")
     session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
+
+    # Do it again because doc-formatter can move lines.
+    session.run("isort", "--profile", "black", "./lsprotocol")
+    session.run("black", "./lsprotocol")
+    session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
+
+    session.run("isort", "--profile", "black", ".")
+    session.run("black", ".")
+    session.run("docformatter", "--in-place", "--recursive", ".")
 
 
 @nox.session()

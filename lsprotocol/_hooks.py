@@ -336,13 +336,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
     def _markup_content_hook(object_: Any, _: type):
         if object_ is None:
             return None
-        if isinstance(object_, str):
+        if isinstance(object_, (bool, int, str, float)):
             return object_
         if isinstance(object_, list):
             return [
                 (
                     item
-                    if isinstance(item, str)
+                    if isinstance(object_, (bool, int, str, float))
                     else converter.structure(item, lsp_types.MarkedString_Type1)
                 )
                 for item in object_
@@ -662,6 +662,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _semantic_tokens_capabilities_hook,
+        ),
+        (
+            Optional[Union[str, lsp_types.MarkupContent]],
+            _markup_content_hook,
         ),
         (
             Optional[Union[lsp_types.CodeActionKind, str]],

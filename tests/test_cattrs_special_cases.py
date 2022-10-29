@@ -194,3 +194,14 @@ def test_LSPAny(data):
         converter.unstructure(obj, lsp.DidChangeConfigurationParams),
         hamcrest.is_(data),
     )
+
+
+def test_completion_item():
+    data = dict(label="example", documentation="This is documented")
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.CompletionItem)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.CompletionItem))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.CompletionItem),
+        hamcrest.is_(data),
+    )

@@ -943,7 +943,7 @@ def _register_required_structure_hooks(
 
     # TODO: Remove the ignore after this issue with attrs is addressed in either attrs or mypy
     NotebookSelectorItem = attrs.fields(
-        lsp_types.NotebookCellTextDocumentFilter  # type: ignore[arg-type]
+        lsp_types.NotebookCellTextDocumentFilter
     ).notebook.type
     STRUCTURE_HOOKS = [
         (type(None), lambda object_, _type: object_),

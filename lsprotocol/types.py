@@ -19,7 +19,7 @@ __lsp_version__ = "3.17.0"
 
 
 @enum.unique
-class SemanticTokenTypes(enum.Enum):
+class SemanticTokenTypes(str, enum.Enum):
     """A set of predefined token types. This set is not fixed an clients can
     specify additional token types via the corresponding client capabilities.
 
@@ -57,7 +57,7 @@ class SemanticTokenTypes(enum.Enum):
 
 
 @enum.unique
-class SemanticTokenModifiers(enum.Enum):
+class SemanticTokenModifiers(str, enum.Enum):
     """A set of predefined token modifiers. This set is not fixed an clients
     can specify additional token types via the corresponding client
     capabilities.
@@ -79,7 +79,7 @@ class SemanticTokenModifiers(enum.Enum):
 
 
 @enum.unique
-class DocumentDiagnosticReportKind(enum.Enum):
+class DocumentDiagnosticReportKind(str, enum.Enum):
     """The document diagnostic report kinds.
 
     @since 3.17.0
@@ -94,7 +94,7 @@ class DocumentDiagnosticReportKind(enum.Enum):
     returned report is still accurate."""
 
 
-class ErrorCodes(enum.Enum):
+class ErrorCodes(int, enum.Enum):
     """Predefined error codes."""
 
     ParseError = -32700
@@ -108,7 +108,7 @@ class ErrorCodes(enum.Enum):
     UnknownErrorCode = -32001
 
 
-class LSPErrorCodes(enum.Enum):
+class LSPErrorCodes(int, enum.Enum):
     RequestFailed = -32803
     """A request failed but it was syntactically correct, e.g the
     method name was known and the parameters were valid. The error
@@ -139,7 +139,7 @@ class LSPErrorCodes(enum.Enum):
 
 
 @enum.unique
-class FoldingRangeKind(enum.Enum):
+class FoldingRangeKind(str, enum.Enum):
     """A set of predefined range kinds."""
 
     Comment = "comment"
@@ -151,7 +151,7 @@ class FoldingRangeKind(enum.Enum):
 
 
 @enum.unique
-class SymbolKind(enum.Enum):
+class SymbolKind(int, enum.Enum):
     """A symbol kind."""
 
     File = 1
@@ -183,7 +183,7 @@ class SymbolKind(enum.Enum):
 
 
 @enum.unique
-class SymbolTag(enum.Enum):
+class SymbolTag(int, enum.Enum):
     """Symbol tags are extra annotations that tweak the rendering of a symbol.
 
     @since 3.16
@@ -195,7 +195,7 @@ class SymbolTag(enum.Enum):
 
 
 @enum.unique
-class UniquenessLevel(enum.Enum):
+class UniquenessLevel(str, enum.Enum):
     """Moniker uniqueness level to define scope of the moniker.
 
     @since 3.16.0
@@ -215,7 +215,7 @@ class UniquenessLevel(enum.Enum):
 
 
 @enum.unique
-class MonikerKind(enum.Enum):
+class MonikerKind(str, enum.Enum):
     """The moniker kind.
 
     @since 3.16.0
@@ -232,7 +232,7 @@ class MonikerKind(enum.Enum):
 
 
 @enum.unique
-class InlayHintKind(enum.Enum):
+class InlayHintKind(int, enum.Enum):
     """Inlay hint kinds.
 
     @since 3.17.0
@@ -246,7 +246,7 @@ class InlayHintKind(enum.Enum):
 
 
 @enum.unique
-class MessageType(enum.Enum):
+class MessageType(int, enum.Enum):
     """The message type."""
 
     Error = 1
@@ -260,7 +260,7 @@ class MessageType(enum.Enum):
 
 
 @enum.unique
-class TextDocumentSyncKind(enum.Enum):
+class TextDocumentSyncKind(int, enum.Enum):
     """Defines how the host (editor) should sync document changes to the
     language server."""
 
@@ -276,7 +276,7 @@ class TextDocumentSyncKind(enum.Enum):
 
 
 @enum.unique
-class TextDocumentSaveReason(enum.Enum):
+class TextDocumentSaveReason(int, enum.Enum):
     """Represents reasons why a text document is saved."""
 
     Manual = 1
@@ -289,7 +289,7 @@ class TextDocumentSaveReason(enum.Enum):
 
 
 @enum.unique
-class CompletionItemKind(enum.Enum):
+class CompletionItemKind(int, enum.Enum):
     """The kind of a completion entry."""
 
     Text = 1
@@ -320,7 +320,7 @@ class CompletionItemKind(enum.Enum):
 
 
 @enum.unique
-class CompletionItemTag(enum.Enum):
+class CompletionItemTag(int, enum.Enum):
     """Completion item tags are extra annotations that tweak the rendering of a
     completion item.
 
@@ -333,7 +333,7 @@ class CompletionItemTag(enum.Enum):
 
 
 @enum.unique
-class InsertTextFormat(enum.Enum):
+class InsertTextFormat(int, enum.Enum):
     """Defines whether the insert text in a completion item should be
     interpreted as plain text or a snippet."""
 
@@ -351,7 +351,7 @@ class InsertTextFormat(enum.Enum):
 
 
 @enum.unique
-class InsertTextMode(enum.Enum):
+class InsertTextMode(int, enum.Enum):
     """How whitespace and indentation is handled during completion item
     insertion.
 
@@ -376,7 +376,7 @@ class InsertTextMode(enum.Enum):
 
 
 @enum.unique
-class DocumentHighlightKind(enum.Enum):
+class DocumentHighlightKind(int, enum.Enum):
     """A document highlight kind."""
 
     Text = 1
@@ -388,7 +388,7 @@ class DocumentHighlightKind(enum.Enum):
 
 
 @enum.unique
-class CodeActionKind(enum.Enum):
+class CodeActionKind(str, enum.Enum):
     """A set of predefined code action kinds."""
 
     Empty = ""
@@ -444,7 +444,7 @@ class CodeActionKind(enum.Enum):
 
 
 @enum.unique
-class TraceValues(enum.Enum):
+class TraceValues(str, enum.Enum):
     Off = "off"
     """Turn tracing off."""
     Messages = "messages"
@@ -454,7 +454,7 @@ class TraceValues(enum.Enum):
 
 
 @enum.unique
-class MarkupKind(enum.Enum):
+class MarkupKind(str, enum.Enum):
     """Describes the content type that a client supports in various result
     literals like `Hover`, `ParameterInfo` or `CompletionItem`.
 
@@ -469,7 +469,7 @@ class MarkupKind(enum.Enum):
 
 
 @enum.unique
-class PositionEncodingKind(enum.Enum):
+class PositionEncodingKind(str, enum.Enum):
     """A set of predefined position encoding kinds.
 
     @since 3.17.0
@@ -492,7 +492,7 @@ class PositionEncodingKind(enum.Enum):
 
 
 @enum.unique
-class FileChangeType(enum.Enum):
+class FileChangeType(int, enum.Enum):
     """The file event type."""
 
     Created = 1
@@ -504,7 +504,7 @@ class FileChangeType(enum.Enum):
 
 
 @enum.unique
-class WatchKind(enum.Enum):
+class WatchKind(int, enum.Enum):
     Create = 1
     """Interested in create events."""
     Change = 2
@@ -514,7 +514,7 @@ class WatchKind(enum.Enum):
 
 
 @enum.unique
-class DiagnosticSeverity(enum.Enum):
+class DiagnosticSeverity(int, enum.Enum):
     """The diagnostic's severity."""
 
     Error = 1
@@ -528,7 +528,7 @@ class DiagnosticSeverity(enum.Enum):
 
 
 @enum.unique
-class DiagnosticTag(enum.Enum):
+class DiagnosticTag(int, enum.Enum):
     """The diagnostic tags.
 
     @since 3.15.0
@@ -547,7 +547,7 @@ class DiagnosticTag(enum.Enum):
 
 
 @enum.unique
-class CompletionTriggerKind(enum.Enum):
+class CompletionTriggerKind(int, enum.Enum):
     """How a completion was triggered."""
 
     Invoked = 1
@@ -561,7 +561,7 @@ class CompletionTriggerKind(enum.Enum):
 
 
 @enum.unique
-class SignatureHelpTriggerKind(enum.Enum):
+class SignatureHelpTriggerKind(int, enum.Enum):
     """How a signature help was triggered.
 
     @since 3.15.0
@@ -577,7 +577,7 @@ class SignatureHelpTriggerKind(enum.Enum):
 
 
 @enum.unique
-class CodeActionTriggerKind(enum.Enum):
+class CodeActionTriggerKind(int, enum.Enum):
     """The reason why code actions were requested.
 
     @since 3.17.0
@@ -594,7 +594,7 @@ class CodeActionTriggerKind(enum.Enum):
 
 
 @enum.unique
-class FileOperationPatternKind(enum.Enum):
+class FileOperationPatternKind(str, enum.Enum):
     """A pattern kind describing if a glob pattern matches a file a folder or
     both.
 
@@ -609,7 +609,7 @@ class FileOperationPatternKind(enum.Enum):
 
 
 @enum.unique
-class NotebookCellKind(enum.Enum):
+class NotebookCellKind(int, enum.Enum):
     """A notebook cell kind.
 
     @since 3.17.0
@@ -623,7 +623,7 @@ class NotebookCellKind(enum.Enum):
 
 
 @enum.unique
-class ResourceOperationKind(enum.Enum):
+class ResourceOperationKind(str, enum.Enum):
     Create = "create"
     """Supports creating new files and folders."""
     Rename = "rename"
@@ -633,7 +633,7 @@ class ResourceOperationKind(enum.Enum):
 
 
 @enum.unique
-class FailureHandlingKind(enum.Enum):
+class FailureHandlingKind(str, enum.Enum):
     Abort = "abort"
     """Applying the workspace change is simply aborted if one of the changes provided
     fails. All operations executed before the failing operation stay executed."""
@@ -650,14 +650,14 @@ class FailureHandlingKind(enum.Enum):
 
 
 @enum.unique
-class PrepareSupportDefaultBehavior(enum.Enum):
+class PrepareSupportDefaultBehavior(int, enum.Enum):
     Identifier = 1
     """The client's default behavior is to select the identifier
     according the to language's syntax rule."""
 
 
 @enum.unique
-class TokenFormat(enum.Enum):
+class TokenFormat(str, enum.Enum):
     Relative = "relative"
 
 

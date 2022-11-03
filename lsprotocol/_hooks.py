@@ -680,6 +680,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             _position_encoding_kind_hook,
         ),
         (
+            Optional[Union[lsp_types.FoldingRangeKind, str]],
+            _folding_range_kind_hook,
+        ),
+        (
             Union[lsp_types.FoldingRangeKind, str],
             _folding_range_kind_hook,
         ),

@@ -362,8 +362,14 @@ class TypesCodeGenerator:
     def _add_enum(self, enum_def: model.Enum) -> None:
         code_lines = [
             "" if "ErrorCodes" in enum_def.name else "@enum.unique",
-            f"class {enum_def.name}(enum.Enum):",
         ]
+        if enum_def.type.name == "string":
+            code_lines += [f"class {enum_def.name}(str, enum.Enum):"]
+        elif enum_def.type.name in ["integer", "uinteger"]:
+            code_lines += [f"class {enum_def.name}(int, enum.Enum):"]
+        else:
+            code_lines += [f"class {enum_def.name}(enum.Enum):"]
+
         indent = " " * 4
         doc = _get_indented_documentation(enum_def.documentation, indent)
         code_lines += [

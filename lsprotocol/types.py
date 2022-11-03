@@ -668,7 +668,7 @@ defined.
 
 Servers should prefer returning `DefinitionLink` over `Definition` if supported
 by the client."""
-DefinitionLink = "LocationLink"
+DefinitionLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is defined.
 
 Provides additional metadata over normal location definitions, including the range of
@@ -687,7 +687,7 @@ optional as well.
 # Since: 3.17.0
 Declaration = Union["Location", List["Location"]]
 """The declaration of a symbol representation as one or many locations."""
-DeclarationLink = "LocationLink"
+DeclarationLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is declared.
 
 Provides additional metadata over normal location declarations, including the range of
@@ -4781,13 +4781,13 @@ class ApplyWorkspaceEditResult:
 @attrs.define
 class WorkDoneProgressBegin:
 
-    kind: str = attrs.field()
-
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """Mandatory title of the progress operation. Used to briefly inform about
     the kind of operation being performed.
     
     Examples: "Indexing" or "Linking dependencies"."""
+
+    kind: str = attrs.field(validator=attrs.validators.in_(["begin"]), default="begin")
 
     cancellable: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4821,7 +4821,9 @@ class WorkDoneProgressBegin:
 @attrs.define
 class WorkDoneProgressReport:
 
-    kind: str = attrs.field()
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["report"]), default="report"
+    )
 
     cancellable: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4856,7 +4858,7 @@ class WorkDoneProgressReport:
 @attrs.define
 class WorkDoneProgressEnd:
 
-    kind: str = attrs.field()
+    kind: str = attrs.field(validator=attrs.validators.in_(["end"]), default="end")
 
     message: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -5145,14 +5147,13 @@ class ResourceOperation:
 class CreateFile:
     """Create file operation."""
 
-    kind: str = attrs.field()
-    """A create"""
-
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The resource to create."""
 
-    kind: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The resource operation kind."""
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["create"]), default="create"
+    )
+    """A create"""
 
     options: Optional["CreateFileOptions"] = attrs.field(default=None)
     """Additional options"""
@@ -5168,17 +5169,16 @@ class CreateFile:
 class RenameFile:
     """Rename file operation."""
 
-    kind: str = attrs.field()
-    """A rename"""
-
     old_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The old (existing) location."""
 
     new_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The new location."""
 
-    kind: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The resource operation kind."""
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["rename"]), default="rename"
+    )
+    """A rename"""
 
     options: Optional["RenameFileOptions"] = attrs.field(default=None)
     """Rename options."""
@@ -5194,14 +5194,13 @@ class RenameFile:
 class DeleteFile:
     """Delete file operation."""
 
-    kind: str = attrs.field()
-    """A delete"""
-
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The file to delete."""
 
-    kind: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The resource operation kind."""
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["delete"]), default="delete"
+    )
+    """A delete"""
 
     options: Optional["DeleteFileOptions"] = attrs.field(default=None)
     """Delete options."""
@@ -5452,11 +5451,11 @@ class FullDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: str = attrs.field()
-    """A full document diagnostic report."""
-
     items: List["Diagnostic"] = attrs.field()
     """The actual items."""
+
+    kind: str = attrs.field(validator=attrs.validators.in_(["full"]), default="full")
+    """A full document diagnostic report."""
 
     result_id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -5476,9 +5475,6 @@ class RelatedFullDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: str = attrs.field()
-    """A full document diagnostic report."""
-
     items: List["Diagnostic"] = attrs.field()
     """The actual items."""
 
@@ -5496,6 +5492,9 @@ class RelatedFullDocumentDiagnosticReport:
     
     @since 3.17.0"""
     # Since: 3.17.0
+
+    kind: str = attrs.field(validator=attrs.validators.in_(["full"]), default="full")
+    """A full document diagnostic report."""
 
     result_id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -5516,15 +5515,17 @@ class UnchangedDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    kind: str = attrs.field()
+    result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """A result id which will be sent on the next
+    diagnostic request for the same document."""
+
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["unchanged"]), default="unchanged"
+    )
     """A document diagnostic report indicating
     no changes to the last result. A server can
     only return `unchanged` if result ids are
     provided."""
-
-    result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A result id which will be sent on the next
-    diagnostic request for the same document."""
 
 
 @attrs.define
@@ -5535,12 +5536,6 @@ class RelatedUnchangedDocumentDiagnosticReport:
     """
 
     # Since: 3.17.0
-
-    kind: str = attrs.field()
-    """A document diagnostic report indicating
-    no changes to the last result. A server can
-    only return `unchanged` if result ids are
-    provided."""
 
     result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A result id which will be sent on the next
@@ -5559,6 +5554,14 @@ class RelatedUnchangedDocumentDiagnosticReport:
     
     @since 3.17.0"""
     # Since: 3.17.0
+
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["unchanged"]), default="unchanged"
+    )
+    """A document diagnostic report indicating
+    no changes to the last result. A server can
+    only return `unchanged` if result ids are
+    provided."""
 
 
 @attrs.define
@@ -6391,15 +6394,15 @@ class WorkspaceFullDocumentDiagnosticReport:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    kind: str = attrs.field()
-    """A full document diagnostic report."""
-
     items: List[Diagnostic] = attrs.field()
     """The actual items."""
 
     version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number for which the diagnostics are reported.
     If the document is not marked as open `null` can be provided."""
+
+    kind: str = attrs.field(validator=attrs.validators.in_(["full"]), default="full")
+    """A full document diagnostic report."""
 
     result_id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -6423,12 +6426,6 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    kind: str = attrs.field()
-    """A document diagnostic report indicating
-    no changes to the last result. A server can
-    only return `unchanged` if result ids are
-    provided."""
-
     result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A result id which will be sent on the next
     diagnostic request for the same document."""
@@ -6436,6 +6433,14 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number for which the diagnostics are reported.
     If the document is not marked as open `null` can be provided."""
+
+    kind: str = attrs.field(
+        validator=attrs.validators.in_(["unchanged"]), default="unchanged"
+    )
+    """A document diagnostic report indicating
+    no changes to the last result. A server can
+    only return `unchanged` if result ids are
+    provided."""
 
 
 class LSPObject:
@@ -12006,7 +12011,7 @@ def is_special_property(cls: type, property_name: str) -> bool:
     return qualified_name in _SPECIAL_PROPERTIES
 
 
-ALL_TYPES_MAP: Dict[str, type] = {
+ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "AnnotatedTextEdit": AnnotatedTextEdit,
     "ApplyWorkspaceEditParams": ApplyWorkspaceEditParams,
     "ApplyWorkspaceEditResult": ApplyWorkspaceEditResult,

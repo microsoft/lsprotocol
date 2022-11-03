@@ -6,12 +6,16 @@ import urllib.request as url_lib
 import nox
 
 
-@nox.session()
-def tests(session: nox.Session):
-    """Run tests for lsprotocol and generator."""
+def _install_requirements(session: nox.Session):
     session.install("-r", "./requirements.txt")
     session.install("-r", "./generator/requirements.txt")
     session.install("-r", "./tests/requirements.txt")
+
+
+@nox.session()
+def tests(session: nox.Session):
+    """Run tests for lsprotocol and generator."""
+    _install_requirements(session)
 
     session.run("pip", "list")
     session.run("pytest", "./tests")
@@ -20,10 +24,14 @@ def tests(session: nox.Session):
 @nox.session()
 def lint(session: nox.Session):
     """Lint all packages."""
-    session.install("isort", "black", "docformatter")
+    _install_requirements(session)
+
+    session.install("isort", "black", "docformatter", "mypy")
     session.run("isort", "--profile", "black", "--check", ".")
     session.run("docformatter", "--check", "--recursive", ".")
     session.run("black", "--check", ".")
+
+    session.run("mypy", "--strict", "lsprotocol")
 
 
 @nox.session()

@@ -32,6 +32,8 @@ def _generate_field_validator(
             validator = "attrs.validators.instance_of(float)"
         else:
             validator = None
+    elif type_def.kind == "stringLiteral":
+        return f"attrs.field(validator=attrs.validators.in_(['{type_def.value}']), default='{type_def.value}')"
     else:
         validator = None
 
@@ -454,9 +456,9 @@ class TypesCodeGenerator:
                 p.optional = _has_null_base_type(p)
 
         # sort properties so that you have non-optional properties first then optional properties
-        properties = [p for p in properties if not p.optional] + [
-            p for p in properties if p.optional
-        ]
+        properties = [
+            p for p in properties if not (p.optional or p.type.kind == "stringLiteral")
+        ] + [p for p in properties if p.optional or p.type.kind == "stringLiteral"]
 
         for property_def in properties:
             self._process_literal_types(
@@ -551,8 +553,15 @@ class TypesCodeGenerator:
             # clean up the docstring for the class itself.
         doc = _get_indented_documentation(type_alias.documentation)
 
+        type_name = self._generate_type_name(type_alias.type)
+        if type_alias.type.kind == "reference" and not self._has_type(
+            type_alias.type.name
+        ):
+            # TODO: remove workaround for lack of TypeAlias in 3.7
+            type_name = f"Union[{type_name}, {type_name}]"
+
         code_lines = [
-            f"{type_alias.name} = {self._generate_type_name(type_alias.type)}",
+            f"{type_alias.name} = {type_name}",
             f'"""{doc}"""' if type_alias.documentation else "",
             f"# Since: {_sanitize_comment(type_alias.since)}"
             if type_alias.since
@@ -629,8 +638,14 @@ class TypesCodeGenerator:
         # Inheriting from multiple classes can cause problems especially when using
         # `attrs.define`.
         properties = copy.deepcopy(struct_def.properties)
+        extra_properties = []
         for d in definitions:
-            properties += copy.deepcopy(d.properties)
+            extra_properties += copy.deepcopy(d.properties)
+
+        for p in extra_properties:
+            prop_names = [prop.name for prop in properties]
+            if p.name not in prop_names:
+                properties += [copy.deepcopy(p)]
 
         code_lines += self._generate_properties(class_name, properties, indent)
         methods = self._get_additional_methods(class_name)
@@ -1004,7 +1019,7 @@ class TypesCodeGenerator:
             "",
         ]
 
-        code_lines += ["", "ALL_TYPES_MAP: Dict[str, type] = {"]
+        code_lines += ["", "ALL_TYPES_MAP: Dict[str, Union[type, object]] = {"]
         code_lines += sorted([f"'{name}': {name}," for name in set(self._types.keys())])
         code_lines += ["}", ""]
 

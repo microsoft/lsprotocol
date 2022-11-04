@@ -1,12 +1,15 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import sys
-from typing import Any, List, Optional, Union
+from typing import Any, List, Optional, Tuple, Union
 
 import attrs
 import cattrs
 
 from . import types as lsp_types
+
+LSPAny = lsp_types.LSPAny
+OptionalPrimitive = Optional[Union[bool, int, str, float]]
 
 # Flag to ensure we only resolve forward references once.
 _resolved_forward_references = False
@@ -16,10 +19,15 @@ def _resolve_forward_references() -> None:
     """Resolve forward references for faster processing with cattrs."""
     global _resolved_forward_references
     if not _resolved_forward_references:
+
+        def _filter(p: Tuple[str, Union[type, object]]) -> bool:
+            return isinstance(p[1], type) and attrs.has(p[1])
+
         # Creating a concrete list here because `resolve_types` mutates the provided map.
-        items = list(filter(lambda p: attrs.has(p[1]), lsp_types.ALL_TYPES_MAP.items()))
+        items = list(filter(_filter, lsp_types.ALL_TYPES_MAP.items()))
         for _, value in items:
-            attrs.resolve_types(value, lsp_types.ALL_TYPES_MAP, {})
+            if isinstance(value, type):
+                attrs.resolve_types(value, lsp_types.ALL_TYPES_MAP, {})
         _resolved_forward_references = True
 
 
@@ -31,14 +39,23 @@ def register_hooks(converter: cattrs.Converter) -> cattrs.Converter:
 
 
 def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converter:
-    def _text_document_sync_hook(object_: Any, _: type):
+    def _text_document_sync_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.TextDocumentSyncOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.TextDocumentSyncOptions)
 
-    def _notebook_document_sync_hook(object_: Any, _: type):
+    def _notebook_document_sync_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[
+            lsp_types.NotebookDocumentSyncRegistrationOptions,
+            lsp_types.NotebookDocumentSyncOptions,
+        ]
+    ]:
         if object_ is None:
             return None
         if "id" in object_:
@@ -48,14 +65,22 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentSyncOptions)
 
-    def _hover_provider_hook(object_: Any, _: type):
+    def _hover_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.HoverOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.HoverOptions)
 
-    def _declaration_provider_hook(object_: Any, _: type):
+    def _declaration_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.DeclarationRegistrationOptions,
+        lsp_types.DeclarationOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -67,14 +92,22 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.DeclarationOptions)
 
-    def _definition_provider_hook(object_: Any, _: type):
+    def _definition_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.DefinitionOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.DefinitionOptions)
 
-    def _type_definition_provider_hook(object_: Any, _: type):
+    def _type_definition_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.TypeDefinitionRegistrationOptions,
+        lsp_types.TypeDefinitionOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -86,7 +119,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.TypeDefinitionOptions)
 
-    def _implementation_provider_hook(object_: Any, _: type):
+    def _implementation_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.ImplementationRegistrationOptions,
+        lsp_types.ImplementationOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -98,35 +137,49 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.ImplementationOptions)
 
-    def _references_provider_hook(object_: Any, _: type):
+    def _references_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.ReferenceOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.ReferenceOptions)
 
-    def _document_highlight_provider_hook(object_: Any, _: type):
+    def _document_highlight_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.DocumentHighlightOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.DocumentHighlightOptions)
 
-    def _document_symbol_provider_hook(object_: Any, _: type):
+    def _document_symbol_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.DocumentSymbolOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.DocumentSymbolOptions)
 
-    def _code_action_provider_hook(object_: Any, _: type):
+    def _code_action_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.CodeActionOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.CodeActionOptions)
 
-    def _color_provider_hook(object_: Any, _: type):
+    def _color_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.DocumentColorRegistrationOptions,
+        lsp_types.DocumentColorOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -138,35 +191,49 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.DocumentColorOptions)
 
-    def _workspace_symbol_provider_hook(object_: Any, _: type):
+    def _workspace_symbol_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.WorkspaceSymbolOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.WorkspaceSymbolOptions)
 
-    def _document_formatting_provider_hook(object_: Any, _: type):
+    def _document_formatting_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.DocumentFormattingOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.DocumentFormattingOptions)
 
-    def _document_range_formatting_provider_hook(object_: Any, _: type):
+    def _document_range_formatting_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.DocumentRangeFormattingOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.DocumentRangeFormattingOptions)
 
-    def _rename_provider_hook(object_: Any, _: type):
+    def _rename_provider_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.RenameOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.RenameOptions)
 
-    def _folding_range_provider_hook(object_: Any, _: type):
+    def _folding_range_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.FoldingRangeRegistrationOptions,
+        lsp_types.FoldingRangeOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -178,7 +245,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.FoldingRangeOptions)
 
-    def _selection_range_provider_hook(object_: Any, _: type):
+    def _selection_range_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.SelectionRangeRegistrationOptions,
+        lsp_types.SelectionRangeOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -190,7 +263,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.SelectionRangeOptions)
 
-    def _call_hierarchy_provider_hook(object_: Any, _: type):
+    def _call_hierarchy_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.CallHierarchyRegistrationOptions,
+        lsp_types.CallHierarchyOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -202,7 +281,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.CallHierarchyOptions)
 
-    def _linked_editing_range_provider_hook(object_: Any, _: type):
+    def _linked_editing_range_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.LinkedEditingRangeRegistrationOptions,
+        lsp_types.LinkedEditingRangeOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -214,7 +299,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.LinkedEditingRangeOptions)
 
-    def _semantic_tokens_provider_hook(object_: Any, _: type):
+    def _semantic_tokens_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.SemanticTokensRegistrationOptions,
+        lsp_types.SemanticTokensOptions,
+    ]:
         if object_ is None:
             return None
         if "id" in object_:
@@ -224,7 +315,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.SemanticTokensOptions)
 
-    def _moniker_provider_hook(object_: Any, _: type):
+    def _moniker_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.MonikerRegistrationOptions,
+        lsp_types.MonikerOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -234,7 +331,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.MonikerOptions)
 
-    def _type_hierarchy_provider_hook(object_: Any, _: type):
+    def _type_hierarchy_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.TypeHierarchyRegistrationOptions,
+        lsp_types.TypeHierarchyOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -246,7 +349,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.TypeHierarchyOptions)
 
-    def _inline_value_provider_hook(object_: Any, _: type):
+    def _inline_value_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.InlineValueRegistrationOptions,
+        lsp_types.InlineValueOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -258,7 +367,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.InlineValueOptions)
 
-    def _inlay_hint_provider_hook(object_: Any, _: type):
+    def _inlay_hint_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.InlayHintRegistrationOptions,
+        lsp_types.InlayHintOptions,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -268,7 +383,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.InlayHintOptions)
 
-    def _diagnostic_provider_hook(object_: Any, _: type):
+    def _diagnostic_provider_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.DiagnosticRegistrationOptions,
+        lsp_types.DiagnosticOptions,
+    ]:
         if object_ is None:
             return None
         if "id" in object_:
@@ -276,20 +397,26 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.DiagnosticOptions)
 
-    def _save_hook(object_: Any, _: type):
+    def _save_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.SaveOptions]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.SaveOptions)
 
-    def _code_action_hook(object_: Any, _: type):
+    def _code_action_hook(
+        object_: Any, _: type
+    ) -> Union[lsp_types.Command, lsp_types.CodeAction]:
         if "command" in object_:
             return converter.structure(object_, lsp_types.Command)
         else:
             return converter.structure(object_, lsp_types.CodeAction)
 
-    def _completion_list_hook(object_: Any, _: type):
+    def _completion_list_hook(
+        object_: Any, _: type
+    ) -> Optional[Union[lsp_types.CompletionList, List[lsp_types.CompletionItem]]]:
         if object_ is None:
             return None
         if isinstance(object_, list):
@@ -299,41 +426,65 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.CompletionList)
 
-    def _location_hook(object_: Any, _: type):
+    def _location_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[
+            lsp_types.Location,
+            List[lsp_types.Location],
+            List[lsp_types.LocationLink],
+        ]
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, list):
-            return [
-                converter.structure(
-                    item,
-                    (
-                        lsp_types.LocationLink
-                        if "targetUri" in item
-                        else lsp_types.Location
-                    ),
-                )
-                for item in object_
-            ]
+            if len(object_) == 0:
+                return []  # type: ignore[return-value]
+            if "targetUri" in object_[0]:
+                return [
+                    converter.structure(item, lsp_types.LocationLink)
+                    for item in object_
+                ]
+            else:
+                return [
+                    converter.structure(item, lsp_types.Location) for item in object_
+                ]
         else:
             return converter.structure(object_, lsp_types.Location)
 
-    def _symbol_hook(object_: Any, _: type):
+    def _symbol_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[List[lsp_types.DocumentSymbol], List[lsp_types.SymbolInformation]]
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, list):
-            return [
-                converter.structure(
-                    item,
-                    (
-                        lsp_types.SymbolInformation
-                        if "location" in item
-                        else lsp_types.DocumentSymbol
-                    ),
-                )
-                for item in object_
-            ]
+            if len(object_) == 0:
+                return []  # type: ignore[return-value]
+            if "location" in object_[0]:
+                return [
+                    converter.structure(item, lsp_types.SymbolInformation)
+                    for item in object_
+                ]
+            else:
+                return [
+                    converter.structure(item, lsp_types.DocumentSymbol)
+                    for item in object_
+                ]
+        else:
+            return None
 
-    def _markup_content_hook(object_: Any, _: type):
+    def _markup_content_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[
+            OptionalPrimitive,
+            lsp_types.MarkupContent,
+            lsp_types.MarkedString_Type1,
+            List[Union[OptionalPrimitive, lsp_types.MarkedString_Type1]],
+        ]
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -352,7 +503,16 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.MarkedString_Type1)
 
-    def _document_edit_hook(object_: Any, _: type):
+    def _document_edit_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[
+            lsp_types.TextDocumentEdit,
+            lsp_types.CreateFile,
+            lsp_types.RenameFile,
+            lsp_types.DeleteFile,
+        ]
+    ]:
         if object_ is None:
             return None
         if "kind" in object_:
@@ -367,14 +527,21 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.TextDocumentEdit)
 
-    def _semantic_tokens_hook(object_: Any, _: type):
+    def _semantic_tokens_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.SemanticTokensOptionsFullType1]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.SemanticTokensOptionsFullType1)
 
-    def _semantic_tokens_capabilities_hook(object_: Any, _: type):
+    def _semantic_tokens_capabilities_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.SemanticTokensClientCapabilitiesRequestsTypeFullType1,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -383,42 +550,54 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             object_, lsp_types.SemanticTokensClientCapabilitiesRequestsTypeFullType1
         )
 
-    def _code_action_kind_hook(object_: Any, _: type):
+    def _code_action_kind_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.CodeActionKind]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.CodeActionKind)
 
-    def _position_encoding_kind_hook(object_: Any, _: type):
+    def _position_encoding_kind_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.PositionEncodingKind]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.PositionEncodingKind)
 
-    def _folding_range_kind_hook(object_: Any, _: type):
+    def _folding_range_kind_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.FoldingRangeKind]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.FoldingRangeKind)
 
-    def _semantic_token_types_hook(object_: Any, _: type):
+    def _semantic_token_types_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.SemanticTokenTypes]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.SemanticTokenTypes)
 
-    def _semantic_token_modifiers_hook(object_: Any, _: type):
+    def _semantic_token_modifiers_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.SemanticTokenModifiers]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.SemanticTokenModifiers)
 
-    def _watch_kind_hook(object_: Any, _: type):
+    def _watch_kind_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.WatchKind]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):
@@ -721,14 +900,7 @@ def _register_required_structure_hooks(
     converter: cattrs.Converter,
 ) -> cattrs.Converter:
     def _lsp_object_hook(object_: Any, type_: type) -> Any:
-        if object_ is None:
-            return object_
-        else:
-            for type_ in [str, bool, int, float, list]:
-                if isinstance(object_, type_):
-                    return type_(object_)
-            else:
-                return object_
+        return object_
 
     def _text_document_filter_hook(
         object_: Any, _: type
@@ -769,6 +941,7 @@ def _register_required_structure_hooks(
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentFilter_Type3)
 
+    # TODO: Remove the ignore after this issue with attrs is addressed in either attrs or mypy
     NotebookSelectorItem = attrs.fields(
         lsp_types.NotebookCellTextDocumentFilter
     ).notebook.type

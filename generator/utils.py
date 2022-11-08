@@ -615,14 +615,16 @@ class TypesCodeGenerator:
         for d in definitions:
             self._add_structure(d, lsp_model)
 
-        indent = " " * 4
+        indent = "" if struct_def.name == "LSPObject" else " " * 4
         doc = _get_indented_documentation(struct_def.documentation, indent)
         class_name = struct_def.name
 
         class_lines = [
             "" if class_name == "LSPObject" else "@attrs.define",
             "@functools.total_ordering" if class_name == "Position" else "",
-            f"class {class_name}:",
+            f"{class_name} = object"
+            if class_name == "LSPObject"
+            else f"class {class_name}:",
             f'{indent}"""{doc}"""' if struct_def.documentation else "",
             f"{indent}# Since: {_sanitize_comment(struct_def.since)}"
             if struct_def.since
@@ -651,7 +653,7 @@ class TypesCodeGenerator:
         methods = self._get_additional_methods(class_name)
 
         # If the class has no properties then add `pass`
-        if len(properties) == 0 and not methods:
+        if len(properties) == 0 and not methods and class_name != "LSPObject":
             code_lines += [f"{indent}pass"]
 
         if methods:

@@ -6443,15 +6443,10 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     provided."""
 
 
-class LSPObject:
-    """LSP object definition.
-
-    @since 3.17.0
-    """
-
-    # Since: 3.17.0
-
-    pass
+LSPObject = object
+"""LSP object definition.
+@since 3.17.0"""
+# Since: 3.17.0
 
 
 @attrs.define

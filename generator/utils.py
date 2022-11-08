@@ -69,6 +69,11 @@ def _sanitize_comment(text: str) -> str:
     return text.replace("\r", "").replace("\n", "")
 
 
+def _is_special_field(prop: model.Property) -> bool:
+    """Detect if the field requires special handling when serialising."""
+    return prop.type.kind == "stringLiteral" or _has_null_base_type(prop)
+
+
 def _has_null_base_type(prop: model.Property) -> bool:
     """Detect if the type is indirectly optional."""
     if prop.type.kind == "or":
@@ -530,7 +535,7 @@ class TypesCodeGenerator:
             [
                 _to_snake_case(p.name)
                 for p in literal_def.value.properties
-                if _has_null_base_type(p)
+                if _is_special_field(p)
             ],
         )
 
@@ -667,7 +672,7 @@ class TypesCodeGenerator:
 
         self._add_special(
             class_name,
-            [_to_snake_case(p.name) for p in properties if _has_null_base_type(p)],
+            [_to_snake_case(p.name) for p in properties if _is_special_field(p)],
         )
 
     def _add_structures(self, lsp_model: model.LSPModel) -> None:
@@ -708,7 +713,7 @@ class TypesCodeGenerator:
 
         self._add_special(
             class_name,
-            [_to_snake_case(p.name) for p in properties if _has_null_base_type(p)],
+            [_to_snake_case(p.name) for p in properties if _is_special_field(p)],
         )
 
     def _add_and_types(self, lsp_model: model.LSPModel) -> None:

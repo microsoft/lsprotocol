@@ -1,5 +1,6 @@
 out
 dist
+docs/_build
 .venv*/
 .nox/
 **/__pycache__

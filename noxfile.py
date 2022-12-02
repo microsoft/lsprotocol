@@ -13,6 +13,16 @@ def _install_requirements(session: nox.Session):
 
 
 @nox.session()
+def docs(session: nox.Session):
+    """Build documentation for lsprotocol."""
+    session.install("-r", "./requirements.txt")
+    session.install("-r", "./docs/requirements.txt")
+
+    # -Ea to force sphinx to re-read the contents of Python files.
+    session.run("sphinx-build", "-M", "html", "./docs", "./docs/_build", "-Ea")
+
+
+@nox.session()
 def tests(session: nox.Session):
     """Run tests for lsprotocol and generator."""
     _install_requirements(session)

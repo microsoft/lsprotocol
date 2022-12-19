@@ -906,9 +906,9 @@ def _register_required_structure_hooks(
         object_: Any, type: type
     ) -> Union[str, Tuple[int, int]]:
         if isinstance(object_, str):
-            return str(object_)
+            return object_
         else:
-            return converter.structure(object_, Tuple[int, int])
+            return (int(object_[0]), int(object_[1]))
 
     def _text_document_filter_hook(
         object_: Any, _: type

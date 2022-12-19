@@ -29,8 +29,11 @@ class SemanticTokenTypes(str, enum.Enum):
     # Since: 3.16.0
     Namespace = "namespace"
     Type = "type"
-    """Represents a generic type. Acts as a fallback for types which can't be mapped to
-    a specific type like class or enum."""
+    """Represents a generic type.
+
+    Acts as a fallback for types which can't be mapped to a specific
+    type like class or enum.
+    """
     Class = "class"
     Enum = "enum"
     Interface = "interface"
@@ -87,11 +90,9 @@ class DocumentDiagnosticReportKind(str, enum.Enum):
 
     # Since: 3.17.0
     Full = "full"
-    """A diagnostic report with a full
-    set of problems."""
+    """A diagnostic report with a full set of problems."""
     Unchanged = "unchanged"
-    """A report indicating that the last
-    returned report is still accurate."""
+    """A report indicating that the last returned report is still accurate."""
 
 
 class ErrorCodes(int, enum.Enum):
@@ -103,39 +104,39 @@ class ErrorCodes(int, enum.Enum):
     InvalidParams = -32602
     InternalError = -32603
     ServerNotInitialized = -32002
-    """Error code indicating that a server received a notification or
-    request before the server has received the `initialize` request."""
+    """Error code indicating that a server received a notification or request
+    before the server has received the `initialize` request."""
     UnknownErrorCode = -32001
 
 
 class LSPErrorCodes(int, enum.Enum):
     RequestFailed = -32803
-    """A request failed but it was syntactically correct, e.g the
-    method name was known and the parameters were valid. The error
-    message should contain human readable information about why
-    the request failed.
-    
-    @since 3.17.0"""
+    """A request failed but it was syntactically correct, e.g the method name
+    was known and the parameters were valid. The error message should contain
+    human readable information about why the request failed.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
     ServerCancelled = -32802
-    """The server cancelled the request. This error code should
-    only be used for requests that explicitly support being
-    server cancellable.
-    
-    @since 3.17.0"""
+    """The server cancelled the request. This error code should only be used
+    for requests that explicitly support being server cancellable.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
     ContentModified = -32801
-    """The server detected that the content of a document got
-    modified outside normal conditions. A server should
-    NOT send this error code if it detects a content change
-    in it unprocessed messages. The result even computed
-    on an older state might still be useful for the client.
-    
-    If a client decides that a result is not of any use anymore
-    the client should cancel the request."""
+    """The server detected that the content of a document got modified outside
+    normal conditions. A server should NOT send this error code if it detects a
+    content change in it unprocessed messages. The result even computed on an
+    older state might still be useful for the client.
+
+    If a client decides that a result is not of any use anymore the
+    client should cancel the request.
+    """
     RequestCancelled = -32800
-    """The client has canceled a request and a server as detected
-    the cancel."""
+    """The client has canceled a request and a server as detected the
+    cancel."""
 
 
 @enum.unique
@@ -143,9 +144,9 @@ class FoldingRangeKind(str, enum.Enum):
     """A set of predefined range kinds."""
 
     Comment = "comment"
-    """Folding range for a comment"""
+    """Folding range for a comment."""
     Imports = "imports"
-    """Folding range for an import or include"""
+    """Folding range for an import or include."""
     Region = "region"
     """Folding range for a region (e.g. `#region`)"""
 
@@ -203,15 +204,15 @@ class UniquenessLevel(str, enum.Enum):
 
     # Since: 3.16.0
     Document = "document"
-    """The moniker is only unique inside a document"""
+    """The moniker is only unique inside a document."""
     Project = "project"
-    """The moniker is unique inside a project for which a dump got created"""
+    """The moniker is unique inside a project for which a dump got created."""
     Group = "group"
-    """The moniker is unique inside the group to which a project belongs"""
+    """The moniker is unique inside the group to which a project belongs."""
     Scheme = "scheme"
     """The moniker is unique inside the moniker scheme."""
     Global = "global"
-    """The moniker is globally unique"""
+    """The moniker is globally unique."""
 
 
 @enum.unique
@@ -223,9 +224,9 @@ class MonikerKind(str, enum.Enum):
 
     # Since: 3.16.0
     Import = "import"
-    """The moniker represent a symbol that is imported into a project"""
+    """The moniker represent a symbol that is imported into a project."""
     Export = "export"
-    """The moniker represents a symbol that is exported from a project"""
+    """The moniker represents a symbol that is exported from a project."""
     Local = "local"
     """The moniker represents a symbol that is local to a project (e.g. a local
     variable of a function, a class not visible outside the project, ...)"""
@@ -267,12 +268,13 @@ class TextDocumentSyncKind(int, enum.Enum):
     None_ = 0
     """Documents should not be synced at all."""
     Full = 1
-    """Documents are synced by always sending the full content
-    of the document."""
+    """Documents are synced by always sending the full content of the
+    document."""
     Incremental = 2
     """Documents are synced by sending the full content on open.
-    After that only incremental updates to the document are
-    send."""
+
+    After that only incremental updates to the document are send.
+    """
 
 
 @enum.unique
@@ -280,8 +282,8 @@ class TextDocumentSaveReason(int, enum.Enum):
     """Represents reasons why a text document is saved."""
 
     Manual = 1
-    """Manually triggered, e.g. by the user pressing save, by starting debugging,
-    or by an API call."""
+    """Manually triggered, e.g. by the user pressing save, by starting
+    debugging, or by an API call."""
     AfterDelay = 2
     """Automatic after a delay."""
     FocusOut = 3
@@ -341,13 +343,14 @@ class InsertTextFormat(int, enum.Enum):
     """The primary text to be inserted is treated as a plain string."""
     Snippet = 2
     """The primary text to be inserted is treated as a snippet.
-    
+
     A snippet can define tab stops and placeholders with `$1`, `$2`
     and `${3:foo}`. `$0` defines the final tab stop, it defaults to
     the end of the snippet. Placeholders with equal identifiers are linked,
     that is typing in one will update others too.
-    
-    See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax"""
+
+    See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax
+    """
 
 
 @enum.unique
@@ -360,19 +363,21 @@ class InsertTextMode(int, enum.Enum):
 
     # Since: 3.16.0
     AsIs = 1
-    """The insertion or replace strings is taken as it is. If the
-    value is multi line the lines below the cursor will be
-    inserted using the indentation defined in the string value.
-    The client will not apply any kind of adjustments to the
-    string."""
+    """The insertion or replace strings is taken as it is.
+
+    If the value is multi line the lines below the cursor will be
+    inserted using the indentation defined in the string value. The
+    client will not apply any kind of adjustments to the string.
+    """
     AdjustIndentation = 2
-    """The editor adjusts leading whitespace of new lines so that
-    they match the indentation up to the cursor of the line for
-    which the item is accepted.
-    
+    """The editor adjusts leading whitespace of new lines so that they match
+    the indentation up to the cursor of the line for which the item is
+    accepted.
+
     Consider a line like this: <2tabs><cursor><3tabs>foo. Accepting a
     multi line completion item is indented using 2 tabs and all
-    following lines inserted will be indented using 2 tabs as well."""
+    following lines inserted will be indented using 2 tabs as well.
+    """
 
 
 @enum.unique
@@ -394,52 +399,58 @@ class CodeActionKind(str, enum.Enum):
     Empty = ""
     """Empty kind."""
     QuickFix = "quickfix"
-    """Base kind for quickfix actions: 'quickfix'"""
+    """Base kind for quickfix actions: 'quickfix'."""
     Refactor = "refactor"
-    """Base kind for refactoring actions: 'refactor'"""
+    """Base kind for refactoring actions: 'refactor'."""
     RefactorExtract = "refactor.extract"
-    """Base kind for refactoring extraction actions: 'refactor.extract'
-    
+    """Base kind for refactoring extraction actions: 'refactor.extract'.
+
     Example extract actions:
-    
+
     - Extract method
     - Extract function
     - Extract variable
     - Extract interface from class
-    - ..."""
+    - ...
+    """
     RefactorInline = "refactor.inline"
-    """Base kind for refactoring inline actions: 'refactor.inline'
-    
+    """Base kind for refactoring inline actions: 'refactor.inline'.
+
     Example inline actions:
-    
+
     - Inline function
     - Inline variable
     - Inline constant
-    - ..."""
+    - ...
+    """
     RefactorRewrite = "refactor.rewrite"
-    """Base kind for refactoring rewrite actions: 'refactor.rewrite'
-    
+    """Base kind for refactoring rewrite actions: 'refactor.rewrite'.
+
     Example rewrite actions:
-    
+
     - Convert JavaScript function to class
     - Add or remove parameter
     - Encapsulate field
     - Make method static
     - Move method to base class
-    - ..."""
+    - ...
+    """
     Source = "source"
     """Base kind for source actions: `source`
-    
-    Source code actions apply to the entire file."""
+
+    Source code actions apply to the entire file.
+    """
     SourceOrganizeImports = "source.organizeImports"
-    """Base kind for an organize imports source action: `source.organizeImports`"""
+    """Base kind for an organize imports source action:
+    `source.organizeImports`"""
     SourceFixAll = "source.fixAll"
     """Base kind for auto-fix source actions: `source.fixAll`.
-    
+
     Fix all actions automatically fix errors that have a clear fix that do not require user input.
     They should not suppress errors or perform unsafe fixes such as generating new types or classes.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
 
@@ -463,9 +474,9 @@ class MarkupKind(str, enum.Enum):
     """
 
     PlainText = "plaintext"
-    """Plain text is supported as a content format"""
+    """Plain text is supported as a content format."""
     Markdown = "markdown"
-    """Markdown is supported as a content format"""
+    """Markdown is supported as a content format."""
 
 
 @enum.unique
@@ -480,15 +491,16 @@ class PositionEncodingKind(str, enum.Enum):
     """Character offsets count UTF-8 code units."""
     Utf16 = "utf-16"
     """Character offsets count UTF-16 code units.
-    
-    This is the default and must always be supported
-    by servers"""
+
+    This is the default and must always be supported by servers
+    """
     Utf32 = "utf-32"
     """Character offsets count UTF-32 code units.
-    
-    Implementation note: these are the same as Unicode code points,
-    so this `PositionEncodingKind` may also be used for an
-    encoding-agnostic representation of character offsets."""
+
+    Implementation note: these are the same as Unicode code points, so
+    this `PositionEncodingKind` may also be used for an encoding-
+    agnostic representation of character offsets.
+    """
 
 
 @enum.unique
@@ -508,9 +520,9 @@ class WatchKind(int, enum.Enum):
     Create = 1
     """Interested in create events."""
     Change = 2
-    """Interested in change events"""
+    """Interested in change events."""
     Delete = 4
-    """Interested in delete events"""
+    """Interested in delete events."""
 
 
 @enum.unique
@@ -537,13 +549,16 @@ class DiagnosticTag(int, enum.Enum):
     # Since: 3.15.0
     Unnecessary = 1
     """Unused or unnecessary code.
-    
-    Clients are allowed to render diagnostics with this tag faded out instead of having
-    an error squiggle."""
+
+    Clients are allowed to render diagnostics with this tag faded out
+    instead of having an error squiggle.
+    """
     Deprecated = 2
     """Deprecated or obsolete code.
-    
-    Clients are allowed to rendered diagnostics with this tag strike through."""
+
+    Clients are allowed to rendered diagnostics with this tag strike
+    through.
+    """
 
 
 @enum.unique
@@ -551,13 +566,13 @@ class CompletionTriggerKind(int, enum.Enum):
     """How a completion was triggered."""
 
     Invoked = 1
-    """Completion was triggered by typing an identifier (24x7 code
-    complete), manual invocation (e.g Ctrl+Space) or via API."""
+    """Completion was triggered by typing an identifier (24x7 code complete),
+    manual invocation (e.g Ctrl+Space) or via API."""
     TriggerCharacter = 2
-    """Completion was triggered by a trigger character specified by
-    the `triggerCharacters` properties of the `CompletionRegistrationOptions`."""
+    """Completion was triggered by a trigger character specified by the
+    `triggerCharacters` properties of the `CompletionRegistrationOptions`."""
     TriggerForIncompleteCompletions = 3
-    """Completion was re-triggered as current completion list is incomplete"""
+    """Completion was re-triggered as current completion list is incomplete."""
 
 
 @enum.unique
@@ -573,7 +588,8 @@ class SignatureHelpTriggerKind(int, enum.Enum):
     TriggerCharacter = 2
     """Signature help was triggered by a trigger character."""
     ContentChange = 3
-    """Signature help was triggered by the cursor moving or by the document content changing."""
+    """Signature help was triggered by the cursor moving or by the document
+    content changing."""
 
 
 @enum.unique
@@ -585,12 +601,14 @@ class CodeActionTriggerKind(int, enum.Enum):
 
     # Since: 3.17.0
     Invoked = 1
-    """Code actions were explicitly requested by the user or by an extension."""
+    """Code actions were explicitly requested by the user or by an
+    extension."""
     Automatic = 2
     """Code actions were requested automatically.
-    
-    This typically happens when current selection in a file changes, but can
-    also be triggered when file content changes."""
+
+    This typically happens when current selection in a file changes, but
+    can also be triggered when file content changes.
+    """
 
 
 @enum.unique
@@ -635,25 +653,36 @@ class ResourceOperationKind(str, enum.Enum):
 @enum.unique
 class FailureHandlingKind(str, enum.Enum):
     Abort = "abort"
-    """Applying the workspace change is simply aborted if one of the changes provided
-    fails. All operations executed before the failing operation stay executed."""
+    """Applying the workspace change is simply aborted if one of the changes
+    provided fails.
+
+    All operations executed before the failing operation stay executed.
+    """
     Transactional = "transactional"
-    """All operations are executed transactional. That means they either all
-    succeed or no changes at all are applied to the workspace."""
+    """All operations are executed transactional.
+
+    That means they either all succeed or no changes at all are applied
+    to the workspace.
+    """
     TextOnlyTransactional = "textOnlyTransactional"
-    """If the workspace edit contains only textual file changes they are executed transactional.
-    If resource changes (create, rename or delete file) are part of the change the failure
-    handling strategy is abort."""
+    """If the workspace edit contains only textual file changes they are
+    executed transactional.
+
+    If resource changes (create, rename or delete file) are part of the
+    change the failure handling strategy is abort.
+    """
     Undo = "undo"
-    """The client tries to undo the operations already executed. But there is no
-    guarantee that this is succeeding."""
+    """The client tries to undo the operations already executed.
+
+    But there is no guarantee that this is succeeding.
+    """
 
 
 @enum.unique
 class PrepareSupportDefaultBehavior(int, enum.Enum):
     Identifier = 1
-    """The client's default behavior is to select the identifier
-    according the to language's syntax rule."""
+    """The client's default behavior is to select the identifier according the
+    to language's syntax rule."""
 
 
 @enum.unique
@@ -662,28 +691,32 @@ class TokenFormat(str, enum.Enum):
 
 
 Definition = Union["Location", List["Location"]]
-"""The definition of a symbol represented as one or many locations.
-For most programming languages there is only one location at which a symbol is
-defined.
+"""The definition of a symbol represented as one or many locations. For most
+programming languages there is only one location at which a symbol is defined.
 
-Servers should prefer returning `DefinitionLink` over `Definition` if supported
-by the client."""
+Servers should prefer returning `DefinitionLink` over `Definition` if
+supported by the client.
+"""
 DefinitionLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is defined.
 
-Provides additional metadata over normal location definitions, including the range of
-the defining symbol"""
+Provides additional metadata over normal location definitions, including
+the range of the defining symbol
+"""
 LSPArray = List["LSPAny"]
 """LSP arrays.
-@since 3.17.0"""
+
+@since 3.17.0
+"""
 # Since: 3.17.0
 LSPAny = Union["LSPObject", LSPArray, str, int, int, float, bool, None]
-"""The LSP any type.
-Please note that strictly speaking a property with the value `undefined`
-can't be converted into JSON preserving the property name. However for
-convenience it is allowed and assumed that all these properties are
+"""The LSP any type. Please note that strictly speaking a property with the
+value `undefined` can't be converted into JSON preserving the property name.
+However for convenience it is allowed and assumed that all these properties are
 optional as well.
-@since 3.17.0"""
+
+@since 3.17.0
+"""
 # Since: 3.17.0
 Declaration = Union["Location", List["Location"]]
 """The declaration of a symbol representation as one or many locations."""
@@ -694,28 +727,31 @@ Provides additional metadata over normal location declarations, including the ra
 the declaring symbol.
 
 Servers should prefer returning `DeclarationLink` over `Declaration` if supported
-by the client."""
+by the client.
+"""
 InlineValue = Union[
     "InlineValueText", "InlineValueVariableLookup", "InlineValueEvaluatableExpression"
 ]
 """Inline value information can be provided by different means:
+
 - directly as a text value (class InlineValueText).
 - as a name to use for a variable lookup (class InlineValueVariableLookup)
 - as an evaluatable expression (class InlineValueEvaluatableExpression)
 The InlineValue types combines all inline value types into one type.
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 DocumentDiagnosticReport = Union[
     "RelatedFullDocumentDiagnosticReport", "RelatedUnchangedDocumentDiagnosticReport"
 ]
-"""The result of a document diagnostic pull request. A report can
-either be a full report containing all diagnostics for the
-requested document or an unchanged report indicating that nothing
-has changed in terms of diagnostics in comparison to the last
-pull request.
+"""The result of a document diagnostic pull request. A report can either be a
+full report containing all diagnostics for the requested document or an
+unchanged report indicating that nothing has changed in terms of diagnostics in
+comparison to the last pull request.
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 @attrs.define
 class PrepareRenameResult_Type1:
@@ -738,17 +774,20 @@ DocumentSelector = List["DocumentFilter"]
 
 @sample `let sel:DocumentSelector = [{ language: 'typescript' }, { language: 'json', pattern: '**/tsconfig.json' }]`;
 
-The use of a string as a document filter is deprecated @since 3.16.0."""
+The use of a string as a document filter is deprecated @since 3.16.0.
+"""
 # Since: 3.16.0.
 ChangeAnnotationIdentifier = str
-"""An identifier to refer to a change annotation stored with a workspace edit."""
+"""An identifier to refer to a change annotation stored with a workspace
+edit."""
 WorkspaceDocumentDiagnosticReport = Union[
     "WorkspaceFullDocumentDiagnosticReport",
     "WorkspaceUnchangedDocumentDiagnosticReport",
 ]
 """A workspace diagnostic document report.
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 @attrs.define
 class TextDocumentContentChangeEvent_Type1:
@@ -762,8 +801,9 @@ class TextDocumentContentChangeEvent_Type1:
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The optional length of the range that got replaced.
-    
-    @deprecated use range instead."""
+
+    @deprecated use range instead.
+    """
 
 
 @attrs.define
@@ -775,8 +815,11 @@ class TextDocumentContentChangeEvent_Type2:
 TextDocumentContentChangeEvent = Union[
     "TextDocumentContentChangeEvent_Type1", "TextDocumentContentChangeEvent_Type2"
 ]
-"""An event describing a change to a text document. If only a text is provided
-it is considered to be the full content of the document."""
+"""An event describing a change to a text document.
+
+If only a text is provided it is considered to be the full content of
+the document.
+"""
 
 
 @attrs.define
@@ -787,10 +830,12 @@ class MarkedString_Type1:
 
 
 MarkedString = Union[str, "MarkedString_Type1"]
-"""MarkedString can be used to render human readable text. It is either a markdown string
-or a code-block that provides a language and a code snippet. The language identifier
-is semantically equal to the optional language identifier in fenced code blocks in GitHub
-issues. See https://help.github.com/articles/creating-and-highlighting-code-blocks/#syntax-highlighting
+"""MarkedString can be used to render human readable text. It is either a
+markdown string or a code-block that provides a language and a code snippet.
+The language identifier is semantically equal to the optional language
+identifier in fenced code blocks in GitHub issues. See
+https://help.github.com/articles/creating-and-highlighting-code-blocks/#syntax-
+highlighting.
 
 The pair of a language and a value is an equivalent to markdown:
 ```${language}
@@ -798,17 +843,20 @@ ${value}
 ```
 
 Note that markdown strings will be sanitized - that means html will be escaped.
-@deprecated use MarkupContent instead."""
+@deprecated use MarkupContent instead.
+"""
 DocumentFilter = Union["TextDocumentFilter", "NotebookCellTextDocumentFilter"]
-"""A document filter describes a top level text document or
-a notebook cell document.
+"""A document filter describes a top level text document or a notebook cell
+document.
 
-@since 3.17.0 - proposed support for NotebookCellTextDocumentFilter."""
+@since 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
+"""
 # Since: 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
 GlobPattern = Union["Pattern", "RelativePattern"]
 """The glob pattern. Either a string pattern or a relative pattern.
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 @attrs.define
 class TextDocumentFilter_Type1:
@@ -867,9 +915,9 @@ class TextDocumentFilter_Type3:
 TextDocumentFilter = Union[
     "TextDocumentFilter_Type1", "TextDocumentFilter_Type2", "TextDocumentFilter_Type3"
 ]
-"""A document filter denotes a document by different properties like
-the language, the scheme of
-its resource, or a glob-pattern that is applied to the path.
+"""A document filter denotes a document by different properties like the
+language, the scheme of its resource, or a glob-pattern that is applied to the
+path.
 
 Glob patterns can have the following syntax:
 - `*` to match one or more characters in a path segment
@@ -882,7 +930,8 @@ Glob patterns can have the following syntax:
 @sample A language filter that applies to typescript files on disk: `{ language: 'typescript', scheme: 'file' }`
 @sample A language filter that applies to all package.json paths: `{ language: 'json', pattern: '**package.json' }`
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 @attrs.define
 class NotebookDocumentFilter_Type1:
@@ -943,14 +992,17 @@ NotebookDocumentFilter = Union[
     "NotebookDocumentFilter_Type2",
     "NotebookDocumentFilter_Type3",
 ]
-"""A notebook document filter denotes a notebook document by
-different properties. The properties will be match
-against the notebook's URI (same as with documents)
+"""A notebook document filter denotes a notebook document by different
+properties. The properties will be match against the notebook's URI (same as
+with documents)
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 Pattern = str
-"""The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
+"""The glob pattern to watch relative to the base path. Glob patterns can have
+the following syntax:
+
 - `*` to match one or more characters in a path segment
 - `?` to match on one character in a path segment
 - `**` to match any number of path segments, including none
@@ -958,7 +1010,8 @@ Pattern = str
 - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
 - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
 
-@since 3.17.0"""
+@since 3.17.0
+"""
 # Since: 3.17.0
 @attrs.define
 class TextDocumentPositionParams:
@@ -974,22 +1027,19 @@ class TextDocumentPositionParams:
 
 @attrs.define
 class WorkDoneProgressParams:
-
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
 
 @attrs.define
 class PartialResultParams:
-
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
 class ImplementationParams:
-
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
@@ -1000,8 +1050,8 @@ class ImplementationParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1029,13 +1079,15 @@ class TextDocumentRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
 
 @attrs.define
 class WorkDoneProgressOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1044,7 +1096,6 @@ class WorkDoneProgressOptions:
 
 @attrs.define
 class ImplementationOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1059,18 +1110,23 @@ class StaticRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
 class ImplementationRegistrationOptions:
-
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -1081,13 +1137,15 @@ class ImplementationRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
 class TypeDefinitionParams:
-
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
@@ -1098,13 +1156,12 @@ class TypeDefinitionParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
 class TypeDefinitionOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1113,12 +1170,14 @@ class TypeDefinitionOptions:
 
 @attrs.define
 class TypeDefinitionRegistrationOptions:
-
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -1129,8 +1188,11 @@ class TypeDefinitionRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -1141,8 +1203,10 @@ class WorkspaceFolder:
     """The associated URI for this workspace folder."""
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The name of the workspace folder. Used to refer to this
-    workspace folder in the user interface."""
+    """The name of the workspace folder.
+
+    Used to refer to this workspace folder in the user interface.
+    """
 
 
 @attrs.define
@@ -1172,8 +1236,8 @@ class DocumentColorParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1189,7 +1253,6 @@ class ColorInformation:
 
 @attrs.define
 class DocumentColorOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1198,12 +1261,14 @@ class DocumentColorOptions:
 
 @attrs.define
 class DocumentColorRegistrationOptions:
-
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -1214,8 +1279,11 @@ class DocumentColorRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -1229,32 +1297,41 @@ class ColorPresentationParams:
     """The color to request presentations for."""
 
     range: "Range" = attrs.field()
-    """The range where the color would be inserted. Serves as a context."""
+    """The range where the color would be inserted.
+
+    Serves as a context.
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
 class ColorPresentation:
-
     label: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The label of this color presentation. It will be shown on the color
-    picker header. By default this is also the text that is inserted when selecting
-    this color presentation."""
+    """The label of this color presentation.
+
+    It will be shown on the color picker header. By default this is also
+    the text that is inserted when selecting this color presentation.
+    """
 
     text_edit: Optional["TextEdit"] = attrs.field(default=None)
-    """An edit which is applied to a document when selecting
-    this presentation for the color.  When `falsy` the label
-    is used."""
+    """An edit which is applied to a document when selecting this presentation
+    for the color.
+
+    When `falsy` the label is used.
+    """
 
     additional_text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
     """An optional array of additional text edits that are applied when
-    selecting this color presentation. Edits must not overlap with the main edit nor with themselves."""
+    selecting this color presentation.
+
+    Edits must not overlap with the main edit nor with themselves.
+    """
 
 
 @attrs.define
@@ -1268,8 +1345,8 @@ class FoldingRangeParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1282,43 +1359,60 @@ class FoldingRange:
     """
 
     start_line: int = attrs.field(validator=validators.uinteger_validator)
-    """The zero-based start line of the range to fold. The folded area starts after the line's last character.
-    To be valid, the end must be zero or larger and smaller than the number of lines in the document."""
+    """The zero-based start line of the range to fold.
+
+    The folded area starts after the line's last character. To be valid,
+    the end must be zero or larger and smaller than the number of lines
+    in the document.
+    """
 
     end_line: int = attrs.field(validator=validators.uinteger_validator)
-    """The zero-based end line of the range to fold. The folded area ends with the line's last character.
-    To be valid, the end must be zero or larger and smaller than the number of lines in the document."""
+    """The zero-based end line of the range to fold.
+
+    The folded area ends with the line's last character. To be valid,
+    the end must be zero or larger and smaller than the number of lines
+    in the document.
+    """
 
     start_character: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
-    """The zero-based character offset from where the folded range starts. If not defined, defaults to the length of the start line."""
+    """The zero-based character offset from where the folded range starts.
+
+    If not defined, defaults to the length of the start line.
+    """
 
     end_character: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
-    """The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line."""
+    """The zero-based character offset before the folded range ends.
+
+    If not defined, defaults to the length of the end line.
+    """
 
     kind: Optional[Union[FoldingRangeKind, str]] = attrs.field(default=None)
-    """Describes the kind of the folding range such as `comment' or 'region'. The kind
-    is used to categorize folding ranges and used by commands like 'Fold all comments'.
-    See FoldingRangeKind for an enumeration of standardized kinds."""
+    """Describes the kind of the folding range such as `comment' or 'region'.
+
+    The kind is used to categorize folding ranges and used by commands
+    like 'Fold all comments'. See FoldingRangeKind for an enumeration of
+    standardized kinds.
+    """
 
     collapsed_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The text that the client should show when the specified range is
-    collapsed. If not defined or not supported by the client, a default
-    will be chosen by the client.
-    
-    @since 3.17.0"""
+    collapsed. If not defined or not supported by the client, a default will be
+    chosen by the client.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class FoldingRangeOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1327,12 +1421,14 @@ class FoldingRangeOptions:
 
 @attrs.define
 class FoldingRangeRegistrationOptions:
-
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -1343,13 +1439,15 @@ class FoldingRangeRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
 class DeclarationParams:
-
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
@@ -1360,13 +1458,12 @@ class DeclarationParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
 class DeclarationOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1375,7 +1472,6 @@ class DeclarationOptions:
 
 @attrs.define
 class DeclarationRegistrationOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1384,15 +1480,21 @@ class DeclarationRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -1409,8 +1511,8 @@ class SelectionRangeParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1425,12 +1527,14 @@ class SelectionRange:
     """The range of this selection range."""
 
     parent: Optional["SelectionRange"] = attrs.field(default=None)
-    """The parent selection range containing this range. Therefore `parent.range` must contain `this.range`."""
+    """The parent selection range containing this range.
+
+    Therefore `parent.range` must contain `this.range`.
+    """
 
 
 @attrs.define
 class SelectionRangeOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1439,7 +1543,6 @@ class SelectionRangeOptions:
 
 @attrs.define
 class SelectionRangeRegistrationOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1448,27 +1551,31 @@ class SelectionRangeRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
 class WorkDoneProgressCreateParams:
-
     token: ProgressToken = attrs.field()
     """The token to be used to report progress."""
 
 
 @attrs.define
 class WorkDoneProgressCancelParams:
-
     token: ProgressToken = attrs.field()
     """The token to be used to report progress."""
 
@@ -1512,11 +1619,15 @@ class CallHierarchyItem:
     """The resource identifier of this item."""
 
     range: "Range" = attrs.field()
-    """The range enclosing this symbol not including leading/trailing whitespace but everything else, e.g. comments and code."""
+    """The range enclosing this symbol not including leading/trailing
+    whitespace but everything else, e.g. comments and code."""
 
     selection_range: "Range" = attrs.field()
-    """The range that should be selected and revealed when this symbol is being picked, e.g. the name of a function.
-    Must be contained by the [`range`](#CallHierarchyItem.range)."""
+    """The range that should be selected and revealed when this symbol is being
+    picked, e.g. the name of a function.
+
+    Must be contained by the [`range`](#CallHierarchyItem.range).
+    """
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
@@ -1528,8 +1639,8 @@ class CallHierarchyItem:
     """More detail for this item, e.g. the signature of a function."""
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved between a call hierarchy prepare and
-    incoming calls or outgoing calls requests."""
+    """A data entry field that is preserved between a call hierarchy prepare
+    and incoming calls or outgoing calls requests."""
 
 
 @attrs.define
@@ -1559,8 +1670,11 @@ class CallHierarchyRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -1571,8 +1685,11 @@ class CallHierarchyRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -1590,8 +1707,8 @@ class CallHierarchyIncomingCallsParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1607,8 +1724,11 @@ class CallHierarchyIncomingCall:
     """The item that makes the call."""
 
     from_ranges: List["Range"] = attrs.field()
-    """The ranges at which the calls appear. This is relative to the caller
-    denoted by [`this.from`](#CallHierarchyIncomingCall.from)."""
+    """The ranges at which the calls appear.
+
+    This is relative to the caller denoted by
+    [`this.from`](#CallHierarchyIncomingCall.from).
+    """
 
 
 @attrs.define
@@ -1626,8 +1746,8 @@ class CallHierarchyOutgoingCallsParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1644,9 +1764,12 @@ class CallHierarchyOutgoingCall:
     """The item that is called."""
 
     from_ranges: List["Range"] = attrs.field()
-    """The range at which this item is called. This is the range relative to the caller, e.g the item
+    """The range at which this item is called.
+
+    This is the range relative to the caller, e.g the item
     passed to [`provideCallHierarchyOutgoingCalls`](#CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls)
-    and not [`this.to`](#CallHierarchyOutgoingCall.to)."""
+    and not [`this.to`](#CallHierarchyOutgoingCall.to).
+    """
 
 
 @attrs.define
@@ -1662,8 +1785,8 @@ class SemanticTokensParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1679,10 +1802,13 @@ class SemanticTokens:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional result id. If provided and clients support delta updating
-    the client will include the result id in the next semantic token request.
-    A server can then instead of computing all semantic tokens again simply
-    send a delta."""
+    """An optional result id.
+
+    If provided and clients support delta updating the client will
+    include the result id in the next semantic token request. A server
+    can then instead of computing all semantic tokens again simply send
+    a delta.
+    """
 
 
 @attrs.define
@@ -1710,11 +1836,11 @@ class SemanticTokensOptions:
     # Since: 3.16.0
 
     legend: "SemanticTokensLegend" = attrs.field()
-    """The legend used by the server"""
+    """The legend used by the server."""
 
     range: Optional[Union[bool, Any]] = attrs.field(default=None)
-    """Server supports providing semantic tokens for a specific range
-    of a document."""
+    """Server supports providing semantic tokens for a specific range of a
+    document."""
 
     full: Optional[Union[bool, "SemanticTokensOptionsFullType1"]] = attrs.field(
         default=None
@@ -1743,17 +1869,20 @@ class SemanticTokensRegistrationOptions:
     # Since: 3.16.0
 
     legend: "SemanticTokensLegend" = attrs.field()
-    """The legend used by the server"""
+    """The legend used by the server."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     range: Optional[Union[bool, Any]] = attrs.field(default=None)
-    """Server supports providing semantic tokens for a specific range
-    of a document."""
+    """Server supports providing semantic tokens for a specific range of a
+    document."""
 
     full: Optional[
         Union[bool, "SemanticTokensRegistrationOptionsFullType1"]
@@ -1769,8 +1898,11 @@ class SemanticTokensRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -1783,15 +1915,18 @@ class SemanticTokensDeltaParams:
     """The text document."""
 
     previous_result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The result id of a previous response. The result Id can either point to a full response
-    or a delta response depending on what was received last."""
+    """The result id of a previous response.
+
+    The result Id can either point to a full response or a delta
+    response depending on what was received last.
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1801,7 +1936,8 @@ class SemanticTokensDelta:
     # Since: 3.16.0
 
     edits: List["SemanticTokensEdit"] = attrs.field()
-    """The semantic token edits to transform a previous result into a new result."""
+    """The semantic token edits to transform a previous result into a new
+    result."""
 
     result_id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -1834,8 +1970,8 @@ class SemanticTokensRangeParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -1855,23 +1991,28 @@ class ShowDocumentParams:
         default=None,
     )
     """Indicates to show the resource in an external program.
-    To show for example `https://code.visualstudio.com/`
-    in the default WEB browser set `external` to `true`."""
+
+    To show for example `https://code.visualstudio.com/` in the default
+    WEB browser set `external` to `true`.
+    """
 
     take_focus: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """An optional property to indicate whether the editor
-    showing the document should take focus or not.
-    Clients might ignore this property if an external
-    program is started."""
+    """An optional property to indicate whether the editor showing the document
+    should take focus or not.
+
+    Clients might ignore this property if an external program is
+    started.
+    """
 
     selection: Optional["Range"] = attrs.field(default=None)
-    """An optional selection range if the document is a text
-    document. Clients might ignore the property if an
-    external program is started or the file is not a text
-    file."""
+    """An optional selection range if the document is a text document.
+
+    Clients might ignore the property if an external program is started
+    or the file is not a text file.
+    """
 
 
 @attrs.define
@@ -1889,7 +2030,6 @@ class ShowDocumentResult:
 
 @attrs.define
 class LinkedEditingRangeParams:
-
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
@@ -1910,21 +2050,26 @@ class LinkedEditingRanges:
     # Since: 3.16.0
 
     ranges: List["Range"] = attrs.field()
-    """A list of ranges that can be edited together. The ranges must have
-    identical length and contain identical text content. The ranges cannot overlap."""
+    """A list of ranges that can be edited together.
+
+    The ranges must have identical length and contain identical text
+    content. The ranges cannot overlap.
+    """
 
     word_pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional word pattern (regular expression) that describes valid contents for
-    the given ranges. If no pattern is provided, the client configuration's word
-    pattern will be used."""
+    """An optional word pattern (regular expression) that describes valid
+    contents for the given ranges.
+
+    If no pattern is provided, the client configuration's word pattern
+    will be used.
+    """
 
 
 @attrs.define
 class LinkedEditingRangeOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -1933,12 +2078,14 @@ class LinkedEditingRangeOptions:
 
 @attrs.define
 class LinkedEditingRangeRegistrationOptions:
-
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -1949,8 +2096,11 @@ class LinkedEditingRangeRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -1990,26 +2140,30 @@ class WorkspaceEdit:
     document_changes: Optional[
         List[Union["TextDocumentEdit", "CreateFile", "RenameFile", "DeleteFile"]]
     ] = attrs.field(default=None)
-    """Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes
-    are either an array of `TextDocumentEdit`s to express changes to n different text documents
-    where each text document edit addresses a specific version of a text document. Or it can contain
-    above `TextDocumentEdit`s mixed with create, rename and delete file / folder operations.
-    
+    """Depending on the client capability
+    `workspace.workspaceEdit.resourceOperations` document changes are either an
+    array of `TextDocumentEdit`s to express changes to n different text
+    documents where each text document edit addresses a specific version of a
+    text document. Or it can contain above `TextDocumentEdit`s mixed with
+    create, rename and delete file / folder operations.
+
     Whether a client supports versioned document edits is expressed via
     `workspace.workspaceEdit.documentChanges` client capability.
-    
+
     If a client neither supports `documentChanges` nor `workspace.workspaceEdit.resourceOperations` then
-    only plain `TextEdit`s using the `changes` property are supported."""
+    only plain `TextEdit`s using the `changes` property are supported.
+    """
 
     change_annotations: Optional[
         Dict[ChangeAnnotationIdentifier, "ChangeAnnotation"]
     ] = attrs.field(default=None)
-    """A map of change annotations that can be referenced in `AnnotatedTextEdit`s or create, rename and
-    delete file / folder operations.
-    
+    """A map of change annotations that can be referenced in
+    `AnnotatedTextEdit`s or create, rename and delete file / folder operations.
+
     Whether clients honor this property depends on the client capability `workspace.changeAnnotationSupport`.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -2037,8 +2191,11 @@ class RenameFilesParams:
     # Since: 3.16.0
 
     files: List["FileRename"] = attrs.field()
-    """An array of all files/folders renamed in this operation. When a folder is renamed, only
-    the folder will be included, and not its children."""
+    """An array of all files/folders renamed in this operation.
+
+    When a folder is renamed, only the folder will be included, and not
+    its children.
+    """
 
 
 @attrs.define
@@ -2057,7 +2214,6 @@ class DeleteFilesParams:
 
 @attrs.define
 class MonikerParams:
-
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
@@ -2068,8 +2224,8 @@ class MonikerParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -2082,14 +2238,20 @@ class Moniker:
     # Since: 3.16.0
 
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The scheme of the moniker. For example tsc or .Net"""
+    """The scheme of the moniker.
+
+    For example tsc or .Net
+    """
 
     identifier: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The identifier of the moniker. The value is opaque in LSIF however
-    schema owners are allowed to define the structure if they want."""
+    """The identifier of the moniker.
+
+    The value is opaque in LSIF however schema owners are allowed to
+    define the structure if they want.
+    """
 
     unique: UniquenessLevel = attrs.field()
-    """The scope in which the moniker is unique"""
+    """The scope in which the moniker is unique."""
 
     kind: Optional[MonikerKind] = attrs.field(default=None)
     """The moniker kind if known."""
@@ -2097,7 +2259,6 @@ class Moniker:
 
 @attrs.define
 class MonikerOptions:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -2106,12 +2267,14 @@ class MonikerOptions:
 
 @attrs.define
 class MonikerRegistrationOptions:
-
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2154,13 +2317,15 @@ class TypeHierarchyItem:
     """The resource identifier of this item."""
 
     range: "Range" = attrs.field()
-    """The range enclosing this symbol not including leading/trailing whitespace
-    but everything else, e.g. comments and code."""
+    """The range enclosing this symbol not including leading/trailing
+    whitespace but everything else, e.g. comments and code."""
 
     selection_range: "Range" = attrs.field()
     """The range that should be selected and revealed when this symbol is being
-    picked, e.g. the name of a function. Must be contained by the
-    [`range`](#TypeHierarchyItem.range)."""
+    picked, e.g. the name of a function. Must be contained by the.
+
+    [`range`](#TypeHierarchyItem.range).
+    """
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
@@ -2172,10 +2337,13 @@ class TypeHierarchyItem:
     """More detail for this item, e.g. the signature of a function."""
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved between a type hierarchy prepare and
-    supertypes or subtypes requests. It could also be used to identify the
-    type hierarchy in the server, helping improve the performance on
-    resolving supertypes and subtypes."""
+    """A data entry field that is preserved between a type hierarchy prepare
+    and supertypes or subtypes requests.
+
+    It could also be used to identify the type hierarchy in the server,
+    helping improve the performance on resolving supertypes and
+    subtypes.
+    """
 
 
 @attrs.define
@@ -2205,8 +2373,11 @@ class TypeHierarchyRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2217,8 +2388,11 @@ class TypeHierarchyRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -2236,8 +2410,8 @@ class TypeHierarchySupertypesParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -2255,8 +2429,8 @@ class TypeHierarchySubtypesParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -2314,15 +2488,21 @@ class InlineValueRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -2359,19 +2539,24 @@ class InlayHint:
     label: Union[str, List["InlayHintLabelPart"]] = attrs.field()
     """The label of this hint. A human readable string or an array of
     InlayHintLabelPart label parts.
-    
-    *Note* that neither the string nor the label part can be empty."""
+
+    *Note* that neither the string nor the label part can be empty.
+    """
 
     kind: Optional[InlayHintKind] = attrs.field(default=None)
-    """The kind of this hint. Can be omitted in which case the client
-    should fall back to a reasonable default."""
+    """The kind of this hint.
+
+    Can be omitted in which case the client should fall back to a
+    reasonable default.
+    """
 
     text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
     """Optional text edits that are performed when accepting this inlay hint.
-    
+
     *Note* that edits are expected to change the document so that the inlay
     hint (or its nearest variant) is now part of the document and the inlay
-    hint itself is now obsolete."""
+    hint itself is now obsolete.
+    """
 
     tooltip: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """The tooltip text when you hover over this item."""
@@ -2381,24 +2566,26 @@ class InlayHint:
         default=None,
     )
     """Render padding before the hint.
-    
+
     Note: Padding should use the editor's background color, not the
     background color of the hint itself. That means padding can be used
-    to visually align/separate an inlay hint."""
+    to visually align/separate an inlay hint.
+    """
 
     padding_right: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Render padding after the hint.
-    
+
     Note: Padding should use the editor's background color, not the
     background color of the hint itself. That means padding can be used
-    to visually align/separate an inlay hint."""
+    to visually align/separate an inlay hint.
+    """
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on an inlay hint between
-    a `textDocument/inlayHint` and a `inlayHint/resolve` request."""
+    """A data entry field that is preserved on an inlay hint between a
+    `textDocument/inlayHint` and a `inlayHint/resolve` request."""
 
 
 @attrs.define
@@ -2414,8 +2601,8 @@ class InlayHintOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for an inlay hint item."""
+    """The server provides support to resolve additional information for an
+    inlay hint item."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2436,8 +2623,8 @@ class InlayHintRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for an inlay hint item."""
+    """The server provides support to resolve additional information for an
+    inlay hint item."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2447,15 +2634,21 @@ class InlayHintRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -2486,8 +2679,8 @@ class DocumentDiagnosticParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -2528,10 +2721,12 @@ class DiagnosticOptions:
     inter_file_dependencies: bool = attrs.field(
         validator=attrs.validators.instance_of(bool)
     )
-    """Whether the language has inter file dependencies meaning that
-    editing code in one file can result in a different diagnostic
-    set in another file. Inter file dependencies are common for
-    most programming languages and typically uncommon for linters."""
+    """Whether the language has inter file dependencies meaning that editing
+    code in one file can result in a different diagnostic set in another file.
+
+    Inter file dependencies are common for most programming languages
+    and typically uncommon for linters.
+    """
 
     workspace_diagnostics: bool = attrs.field(
         validator=attrs.validators.instance_of(bool)
@@ -2542,8 +2737,8 @@ class DiagnosticOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional identifier under which the diagnostics are
-    managed by the client."""
+    """An optional identifier under which the diagnostics are managed by the
+    client."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2563,10 +2758,12 @@ class DiagnosticRegistrationOptions:
     inter_file_dependencies: bool = attrs.field(
         validator=attrs.validators.instance_of(bool)
     )
-    """Whether the language has inter file dependencies meaning that
-    editing code in one file can result in a different diagnostic
-    set in another file. Inter file dependencies are common for
-    most programming languages and typically uncommon for linters."""
+    """Whether the language has inter file dependencies meaning that editing
+    code in one file can result in a different diagnostic set in another file.
+
+    Inter file dependencies are common for most programming languages
+    and typically uncommon for linters.
+    """
 
     workspace_diagnostics: bool = attrs.field(
         validator=attrs.validators.instance_of(bool)
@@ -2576,15 +2773,18 @@ class DiagnosticRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     identifier: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional identifier under which the diagnostics are
-    managed by the client."""
+    """An optional identifier under which the diagnostics are managed by the
+    client."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2595,8 +2795,11 @@ class DiagnosticRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
@@ -2609,8 +2812,8 @@ class WorkspaceDiagnosticParams:
     # Since: 3.17.0
 
     previous_result_ids: List["PreviousResultId"] = attrs.field()
-    """The currently known diagnostic reports with their
-    previous result ids."""
+    """The currently known diagnostic reports with their previous result
+    ids."""
 
     identifier: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -2622,8 +2825,8 @@ class WorkspaceDiagnosticParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -2663,8 +2866,7 @@ class DidOpenNotebookDocumentParams:
     """The notebook document that got opened."""
 
     cell_text_documents: List["TextDocumentItem"] = attrs.field()
-    """The text documents that represent the content
-    of a notebook cell."""
+    """The text documents that represent the content of a notebook cell."""
 
 
 @attrs.define
@@ -2677,25 +2879,28 @@ class DidChangeNotebookDocumentParams:
     # Since: 3.17.0
 
     notebook_document: "VersionedNotebookDocumentIdentifier" = attrs.field()
-    """The notebook document that did change. The version number points
-    to the version after all provided changes have been applied. If
-    only the text document content of a cell changes the notebook version
-    doesn't necessarily have to change."""
+    """The notebook document that did change.
+
+    The version number points to the version after all provided changes
+    have been applied. If only the text document content of a cell
+    changes the notebook version doesn't necessarily have to change.
+    """
 
     change: "NotebookDocumentChangeEvent" = attrs.field()
     """The actual changes to the notebook document.
-    
+
     The changes describe single state changes to the notebook document.
     So if there are two changes c1 (at array index 0) and c2 (at array
     index 1) for a notebook in state S then c1 moves the notebook from
     S to S' and c2 from S' to S''. So c1 is computed on the state S and
     c2 is computed on the state S'.
-    
+
     To mirror the content of a notebook using change events use the following approach:
     - start with the same initial content
     - apply the 'notebookDocument/didChange' notifications in the order you receive them.
     - apply the `NotebookChangeEvent`s in a single notification in the order
-      you receive them."""
+      you receive them.
+    """
 
 
 @attrs.define
@@ -2724,19 +2929,17 @@ class DidCloseNotebookDocumentParams:
     """The notebook document that got closed."""
 
     cell_text_documents: List["TextDocumentIdentifier"] = attrs.field()
-    """The text documents that represent the content
-    of a notebook cell that got closed."""
+    """The text documents that represent the content of a notebook cell that
+    got closed."""
 
 
 @attrs.define
 class RegistrationParams:
-
     registrations: List["Registration"] = attrs.field()
 
 
 @attrs.define
 class UnregistrationParams:
-
     unregisterations: List["Unregistration"] = attrs.field()
 
 
@@ -2760,50 +2963,54 @@ class _InitializeParams:
     """The capabilities provided by the client (editor or tool)"""
 
     process_id: Optional[Union[int, None]] = attrs.field(default=None)
-    """The process Id of the parent process that started
-    the server.
-    
-    Is `null` if the process has not been started by another process.
-    If the parent process is not alive then the server should exit."""
+    """The process Id of the parent process that started the server.
+
+    Is `null` if the process has not been started by another process. If
+    the parent process is not alive then the server should exit.
+    """
 
     client_info: Optional["InitializeParamsClientInfoType"] = attrs.field(default=None)
-    """Information about the client
-    
-    @since 3.15.0"""
+    """Information about the client.
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     locale: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The locale the client is currently showing the user interface
-    in. This must not necessarily be the locale of the operating
-    system.
-    
+    """The locale the client is currently showing the user interface in. This
+    must not necessarily be the locale of the operating system.
+
     Uses IETF language tags as the value's syntax
     (See https://en.wikipedia.org/wiki/IETF_language_tag)
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     root_path: Optional[Union[str, None]] = attrs.field(default=None)
-    """The rootPath of the workspace. Is null
-    if no folder is open.
-    
-    @deprecated in favour of rootUri."""
+    """The rootPath of the workspace. Is null if no folder is open.
+
+    @deprecated in favour of rootUri.
+    """
 
     root_uri: Optional[Union[str, None]] = attrs.field(default=None)
-    """The rootUri of the workspace. Is null if no
-    folder is open. If both `rootPath` and `rootUri` are set
-    `rootUri` wins.
-    
-    @deprecated in favour of workspaceFolders."""
+    """The rootUri of the workspace. Is null if no folder is open. If both
+    `rootPath` and `rootUri` are set `rootUri` wins.
+
+    @deprecated in favour of workspaceFolders.
+    """
 
     initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
     trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
-    """The initial trace setting. If omitted trace is disabled ('off')."""
+    """The initial trace setting.
+
+    If omitted trace is disabled ('off').
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
@@ -2811,71 +3018,74 @@ class _InitializeParams:
 
 @attrs.define
 class WorkspaceFoldersInitializeParams:
-
     workspace_folders: Optional[Union[List[WorkspaceFolder], None]] = attrs.field(
         default=None
     )
     """The workspace folders configured in the client when the server starts.
-    
+
     This property is only available if the client supports workspace folders.
     It can be `null` if the client supports workspace folders but none are
     configured.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
 
 @attrs.define
 class InitializeParams:
-
     capabilities: "ClientCapabilities" = attrs.field()
     """The capabilities provided by the client (editor or tool)"""
 
     process_id: Optional[Union[int, None]] = attrs.field(default=None)
-    """The process Id of the parent process that started
-    the server.
-    
-    Is `null` if the process has not been started by another process.
-    If the parent process is not alive then the server should exit."""
+    """The process Id of the parent process that started the server.
+
+    Is `null` if the process has not been started by another process. If
+    the parent process is not alive then the server should exit.
+    """
 
     client_info: Optional["InitializeParamsClientInfoType"] = attrs.field(default=None)
-    """Information about the client
-    
-    @since 3.15.0"""
+    """Information about the client.
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     locale: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The locale the client is currently showing the user interface
-    in. This must not necessarily be the locale of the operating
-    system.
-    
+    """The locale the client is currently showing the user interface in. This
+    must not necessarily be the locale of the operating system.
+
     Uses IETF language tags as the value's syntax
     (See https://en.wikipedia.org/wiki/IETF_language_tag)
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     root_path: Optional[Union[str, None]] = attrs.field(default=None)
-    """The rootPath of the workspace. Is null
-    if no folder is open.
-    
-    @deprecated in favour of rootUri."""
+    """The rootPath of the workspace. Is null if no folder is open.
+
+    @deprecated in favour of rootUri.
+    """
 
     root_uri: Optional[Union[str, None]] = attrs.field(default=None)
-    """The rootUri of the workspace. Is null if no
-    folder is open. If both `rootPath` and `rootUri` are set
-    `rootUri` wins.
-    
-    @deprecated in favour of workspaceFolders."""
+    """The rootUri of the workspace. Is null if no folder is open. If both
+    `rootPath` and `rootUri` are set `rootUri` wins.
+
+    @deprecated in favour of workspaceFolders.
+    """
 
     initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
     trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
-    """The initial trace setting. If omitted trace is disabled ('off')."""
+    """The initial trace setting.
+
+    If omitted trace is disabled ('off').
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
@@ -2884,12 +3094,13 @@ class InitializeParams:
         default=None
     )
     """The workspace folders configured in the client when the server starts.
-    
+
     This property is only available if the client supports workspace folders.
     It can be `null` if the client supports workspace folders but none are
     configured.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
 
@@ -2914,8 +3125,9 @@ class InitializeResult:
 
     server_info: Optional["InitializeResultServerInfoType"] = attrs.field(default=None)
     """Information about the server.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
 
@@ -2924,15 +3136,14 @@ class InitializeError:
     """The data type of the ResponseError if the initialize request fails."""
 
     retry: bool = attrs.field(validator=attrs.validators.instance_of(bool))
-    """Indicates whether the client execute the following retry logic:
-    (1) show the message provided by the ResponseError to the user
-    (2) user selects retry or cancel
-    (3) if user selected retry the initialize method is sent again."""
+    """Indicates whether the client execute the following retry logic: (1) show
+    the message provided by the ResponseError to the user (2) user selects
+    retry or cancel (3) if user selected retry the initialize method is sent
+    again."""
 
 
 @attrs.define
 class InitializedParams:
-
     pass
 
 
@@ -2941,12 +3152,11 @@ class DidChangeConfigurationParams:
     """The parameters of a change configuration notification."""
 
     settings: LSPAny = attrs.field()
-    """The actual changed settings"""
+    """The actual changed settings."""
 
 
 @attrs.define
 class DidChangeConfigurationRegistrationOptions:
-
     section: Optional[Union[str, List[str]]] = attrs.field(default=None)
 
 
@@ -2955,7 +3165,10 @@ class ShowMessageParams:
     """The parameters of a notification message."""
 
     type: MessageType = attrs.field()
-    """The message type. See {@link MessageType}"""
+    """The message type.
+
+    See {@link MessageType}
+    """
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The actual message."""
@@ -2963,9 +3176,11 @@ class ShowMessageParams:
 
 @attrs.define
 class ShowMessageRequestParams:
-
     type: MessageType = attrs.field()
-    """The message type. See {@link MessageType}"""
+    """The message type.
+
+    See {@link MessageType}
+    """
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The actual message."""
@@ -2976,7 +3191,6 @@ class ShowMessageRequestParams:
 
 @attrs.define
 class MessageActionItem:
-
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A short title like 'Retry', 'Open Log' etc."""
 
@@ -2986,7 +3200,10 @@ class LogMessageParams:
     """The log message parameters."""
 
     type: MessageType = attrs.field()
-    """The message type. See {@link MessageType}"""
+    """The message type.
+
+    See {@link MessageType}
+    """
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The actual message."""
@@ -3005,22 +3222,25 @@ class DidChangeTextDocumentParams:
     """The change text document notification's parameters."""
 
     text_document: "VersionedTextDocumentIdentifier" = attrs.field()
-    """The document that did change. The version number points
-    to the version after all provided content changes have
-    been applied."""
+    """The document that did change.
+
+    The version number points to the version after all provided content
+    changes have been applied.
+    """
 
     content_changes: List[TextDocumentContentChangeEvent] = attrs.field()
-    """The actual content changes. The content changes describe single state changes
-    to the document. So if there are two content changes c1 (at array index 0) and
-    c2 (at array index 1) for a document in state S then c1 moves the document from
-    S to S' and c2 from S' to S''. So c1 is computed on the state S and c2 is computed
-    on the state S'.
-    
+    """The actual content changes. The content changes describe single state
+    changes to the document. So if there are two content changes c1 (at array
+    index 0) and c2 (at array index 1) for a document in state S then c1 moves
+    the document from S to S' and c2 from S' to S''. So c1 is computed on the
+    state S and c2 is computed on the state S'.
+
     To mirror the content of a document using change events use the following approach:
     - start with the same initial content
     - apply the 'textDocument/didChange' notifications in the order you receive them.
     - apply the `TextDocumentContentChangeEvent`s in a single notification in the order
-      you receive them."""
+      you receive them.
+    """
 
 
 @attrs.define
@@ -3034,8 +3254,11 @@ class TextDocumentChangeRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
 
 @attrs.define
@@ -3057,8 +3280,11 @@ class DidSaveTextDocumentParams:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """Optional the content when saved. Depends on the includeText value
-    when the save notification was requested."""
+    """Optional the content when saved.
+
+    Depends on the includeText value when the save notification was
+    requested.
+    """
 
 
 @attrs.define
@@ -3079,8 +3305,11 @@ class TextDocumentSaveRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     include_text: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -3105,12 +3334,16 @@ class TextEdit:
     """A text edit applicable to a text document."""
 
     range: "Range" = attrs.field()
-    """The range of the text document to be manipulated. To insert
-    text into a document create a range where start === end."""
+    """The range of the text document to be manipulated.
+
+    To insert text into a document create a range where start === end.
+    """
 
     new_text: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The string to be inserted. For delete operations use an
-    empty string."""
+    """The string to be inserted.
+
+    For delete operations use an empty string.
+    """
 
 
 @attrs.define
@@ -3143,9 +3376,11 @@ class PublishDiagnosticsParams:
     version: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.integer_validator), default=None
     )
-    """Optional the version number of the document the diagnostics are published for.
-    
-    @since 3.15.0"""
+    """Optional the version number of the document the diagnostics are
+    published for.
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
 
@@ -3160,15 +3395,19 @@ class CompletionParams:
     """The position inside the text document."""
 
     context: Optional["CompletionContext"] = attrs.field(default=None)
-    """The completion context. This is only available it the client specifies
-    to send this using the client capability `textDocument.completion.contextSupport === true`"""
+    """The completion context.
+
+    This is only available it the client specifies to send this using
+    the client capability `textDocument.completion.contextSupport ===
+    true`
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -3178,35 +3417,40 @@ class CompletionItem:
 
     label: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The label of this completion item.
-    
+
     The label property is also by default the text that
     is inserted when selecting this completion.
-    
+
     If label details are provided the label itself should
-    be an unqualified name of the completion item."""
+    be an unqualified name of the completion item.
+    """
 
     label_details: Optional["CompletionItemLabelDetails"] = attrs.field(default=None)
-    """Additional details for the label
-    
-    @since 3.17.0"""
+    """Additional details for the label.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     kind: Optional[CompletionItemKind] = attrs.field(default=None)
-    """The kind of this completion item. Based of the kind
-    an icon is chosen by the editor."""
+    """The kind of this completion item.
+
+    Based of the kind an icon is chosen by the editor.
+    """
 
     tags: Optional[List[CompletionItemTag]] = attrs.field(default=None)
     """Tags for this completion item.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A human-readable string with additional information
-    about this item, like type or symbol information."""
+    """A human-readable string with additional information about this item,
+    like type or symbol information."""
 
     documentation: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
     """A human-readable string that represents a doc-comment."""
@@ -3216,73 +3460,79 @@ class CompletionItem:
         default=None,
     )
     """Indicates if this item is deprecated.
-    @deprecated Use `tags` instead."""
+
+    @deprecated Use `tags` instead.
+    """
 
     preselect: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Select this item when showing.
-    
+
     *Note* that only one completion item can be selected and that the
     tool / client decides which item that is. The rule is that the *first*
-    item of those that match best is selected."""
+    item of those that match best is selected.
+    """
 
     sort_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A string that should be used when comparing this item
-    with other items. When `falsy` the label
-    is used."""
+    """A string that should be used when comparing this item with other items.
+
+    When `falsy` the label is used.
+    """
 
     filter_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A string that should be used when filtering a set of
-    completion items. When `falsy` the label
-    is used."""
+    """A string that should be used when filtering a set of completion items.
+
+    When `falsy` the label is used.
+    """
 
     insert_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A string that should be inserted into a document when selecting
-    this completion. When `falsy` the label
-    is used.
-    
+    """A string that should be inserted into a document when selecting this
+    completion. When `falsy` the label is used.
+
     The `insertText` is subject to interpretation by the client side.
-    Some tools might not take the string literally. For example
-    VS Code when code complete is requested in this example
-    `con<cursor position>` and a completion item with an `insertText` of
-    `console` is provided it will only insert `sole`. Therefore it is
-    recommended to use `textEdit` instead since it avoids additional client
-    side interpretation."""
+    Some tools might not take the string literally. For example VS Code
+    when code complete is requested in this example `con<cursor
+    position>` and a completion item with an `insertText` of `console`
+    is provided it will only insert `sole`. Therefore it is recommended
+    to use `textEdit` instead since it avoids additional client side
+    interpretation.
+    """
 
     insert_text_format: Optional[InsertTextFormat] = attrs.field(default=None)
     """The format of the insert text. The format applies to both the
-    `insertText` property and the `newText` property of a provided
-    `textEdit`. If omitted defaults to `InsertTextFormat.PlainText`.
-    
+    `insertText` property and the `newText` property of a provided `textEdit`.
+    If omitted defaults to `InsertTextFormat.PlainText`.
+
     Please note that the insertTextFormat doesn't apply to
-    `additionalTextEdits`."""
+    `additionalTextEdits`.
+    """
 
     insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
-    """How whitespace and indentation is handled during completion
-    item insertion. If not provided the clients default value depends on
-    the `textDocument.completion.insertTextMode` client capability.
-    
-    @since 3.16.0"""
+    """How whitespace and indentation is handled during completion item
+    insertion. If not provided the clients default value depends on the
+    `textDocument.completion.insertTextMode` client capability.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     text_edit: Optional[Union[TextEdit, "InsertReplaceEdit"]] = attrs.field(
         default=None
     )
-    """An edit which is applied to a document when selecting
-    this completion. When an edit is provided the value of
-    insertText is ignored.
-    
+    """An edit which is applied to a document when selecting this completion.
+    When an edit is provided the value of insertText is ignored.
+
     Most editors support two different operations when accepting a completion
     item. One is to insert a completion text and the other is to replace an
     existing text with a completion text. Since this can usually not be
@@ -3290,51 +3540,61 @@ class CompletionItem:
     signal support for `InsertReplaceEdits` via the
     `textDocument.completion.insertReplaceSupport` client capability
     property.
-    
+
     *Note 1:* The text edit's range as well as both ranges from an insert
     replace edit must be a [single line] and they must contain the position
     at which completion has been requested.
     *Note 2:* If an `InsertReplaceEdit` is returned the edit's insert range
     must be a prefix of the edit's replace range, that means it must be
     contained and starting at the same position.
-    
-    @since 3.16.0 additional type `InsertReplaceEdit`"""
+
+    @since 3.16.0 additional type `InsertReplaceEdit`
+    """
     # Since: 3.16.0 additional type `InsertReplaceEdit`
 
     text_edit_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The edit text used if the completion item is part of a CompletionList and
-    CompletionList defines an item default for the text edit range.
-    
+    """The edit text used if the completion item is part of a CompletionList
+    and CompletionList defines an item default for the text edit range.
+
     Clients will only honor this property if they opt into completion list
     item defaults using the capability `completionList.itemDefaults`.
-    
+
     If not provided and a list's default range is provided the label
     property is used as a text.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     additional_text_edits: Optional[List[TextEdit]] = attrs.field(default=None)
     """An optional array of additional text edits that are applied when
-    selecting this completion. Edits must not overlap (including the same insert position)
-    with the main edit nor with themselves.
-    
-    Additional text edits should be used to change text unrelated to the current cursor position
-    (for example adding an import statement at the top of the file if the completion item will
-    insert an unqualified type)."""
+    selecting this completion. Edits must not overlap (including the same
+    insert position) with the main edit nor with themselves.
+
+    Additional text edits should be used to change text unrelated to the
+    current cursor position (for example adding an import statement at
+    the top of the file if the completion item will insert an
+    unqualified type).
+    """
 
     commit_characters: Optional[List[str]] = attrs.field(default=None)
-    """An optional set of characters that when pressed while this completion is active will accept it first and
-    then type that character. *Note* that all commit characters should have `length=1` and that superfluous
-    characters will be ignored."""
+    """An optional set of characters that when pressed while this completion is
+    active will accept it first and then type that character.
+
+    *Note* that all commit characters should have `length=1` and that superfluous
+    characters will be ignored.
+    """
 
     command: Optional["Command"] = attrs.field(default=None)
-    """An optional command that is executed *after* inserting this completion. *Note* that
+    """An optional command that is executed *after* inserting this completion.
+
+    *Note* that
     additional modifications to the current document should be described with the
-    additionalTextEdits-property."""
+    additionalTextEdits-property.
+    """
 
     data: Optional[LSPAny] = attrs.field(default=None)
     """A data entry field that is preserved on a completion item between a
@@ -3352,34 +3612,39 @@ class CompletionListItemDefaultsTypeEditRangeType1:
 class CompletionListItemDefaultsType:
     commit_characters: Optional[List[str]] = attrs.field(default=None)
     """A default commit character set.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     edit_range: Optional[
         Union["Range", "CompletionListItemDefaultsTypeEditRangeType1"]
     ] = attrs.field(default=None)
     """A default edit range.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     insert_text_format: Optional[InsertTextFormat] = attrs.field(default=None)
     """A default insert text format.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
     """A default insert text mode.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     data: Optional[LSPAny] = attrs.field(default=None)
     """A default data value.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -3389,10 +3654,12 @@ class CompletionList:
     editor."""
 
     is_incomplete: bool = attrs.field(validator=attrs.validators.instance_of(bool))
-    """This list it not complete. Further typing results in recomputing this list.
-    
+    """This list it not complete. Further typing results in recomputing this
+    list.
+
     Recomputed lists have all their items replaced (not appended) in the
-    incomplete completion sessions."""
+    incomplete completion sessions.
+    """
 
     items: List[CompletionItem] = attrs.field()
     """The completion items."""
@@ -3401,18 +3668,19 @@ class CompletionList:
         default=None
     )
     """In many cases the items of an actual completion result share the same
-    value for properties like `commitCharacters` or the range of a text
-    edit. A completion list can therefore define item defaults which will
-    be used if a completion item itself doesn't specify the value.
-    
+    value for properties like `commitCharacters` or the range of a text edit. A
+    completion list can therefore define item defaults which will be used if a
+    completion item itself doesn't specify the value.
+
     If a completion list specifies a default value and a completion item
     also specifies a corresponding value the one from the item is used.
-    
+
     Servers are only allowed to return default values if the client
     signals support for this via the `completionList.itemDefaults`
     capability.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -3422,11 +3690,12 @@ class CompletionOptionsCompletionItemType:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server has support for completion item label
-    details (see also `CompletionItemLabelDetails`) when
-    receiving a completion item in a resolve call.
-    
-    @since 3.17.0"""
+    """The server has support for completion item label details (see also
+    `CompletionItemLabelDetails`) when receiving a completion item in a resolve
+    call.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -3435,40 +3704,46 @@ class CompletionOptions:
     """Completion options."""
 
     trigger_characters: Optional[List[str]] = attrs.field(default=None)
-    """Most tools trigger completion request automatically without explicitly requesting
-    it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
-    starts to type an identifier. For example if the user types `c` in a JavaScript file
-    code complete will automatically pop up present `console` besides others as a
-    completion item. Characters that make up identifiers don't need to be listed here.
-    
-    If code complete should automatically be trigger on characters not being valid inside
-    an identifier (for example `.` in JavaScript) list them in `triggerCharacters`."""
+    """Most tools trigger completion request automatically without explicitly
+    requesting it using a keyboard shortcut (e.g. Ctrl+Space). Typically they
+    do so when the user starts to type an identifier. For example if the user
+    types `c` in a JavaScript file code complete will automatically pop up
+    present `console` besides others as a completion item. Characters that make
+    up identifiers don't need to be listed here.
+
+    If code complete should automatically be trigger on characters not
+    being valid inside an identifier (for example `.` in JavaScript)
+    list them in `triggerCharacters`.
+    """
 
     all_commit_characters: Optional[List[str]] = attrs.field(default=None)
-    """The list of all possible characters that commit a completion. This field can be used
-    if clients don't support individual commit characters per completion item. See
-    `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
-    
+    """The list of all possible characters that commit a completion. This field
+    can be used if clients don't support individual commit characters per
+    completion item. See `ClientCapabilities.textDocument.completion.completion
+    Item.commitCharactersSupport`
+
     If a server provides both `allCommitCharacters` and commit characters on an individual
     completion item the ones on the completion item win.
-    
-    @since 3.2.0"""
+
+    @since 3.2.0
+    """
     # Since: 3.2.0
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for a completion item."""
+    """The server provides support to resolve additional information for a
+    completion item."""
 
     completion_item: Optional["CompletionOptionsCompletionItemType"] = attrs.field(
         default=None
     )
     """The server supports the following `CompletionItem` specific
     capabilities.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -3483,11 +3758,12 @@ class CompletionRegistrationOptionsCompletionItemType:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server has support for completion item label
-    details (see also `CompletionItemLabelDetails`) when
-    receiving a completion item in a resolve call.
-    
-    @since 3.17.0"""
+    """The server has support for completion item label details (see also
+    `CompletionItemLabelDetails`) when receiving a completion item in a resolve
+    call.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -3498,44 +3774,53 @@ class CompletionRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     trigger_characters: Optional[List[str]] = attrs.field(default=None)
-    """Most tools trigger completion request automatically without explicitly requesting
-    it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
-    starts to type an identifier. For example if the user types `c` in a JavaScript file
-    code complete will automatically pop up present `console` besides others as a
-    completion item. Characters that make up identifiers don't need to be listed here.
-    
-    If code complete should automatically be trigger on characters not being valid inside
-    an identifier (for example `.` in JavaScript) list them in `triggerCharacters`."""
+    """Most tools trigger completion request automatically without explicitly
+    requesting it using a keyboard shortcut (e.g. Ctrl+Space). Typically they
+    do so when the user starts to type an identifier. For example if the user
+    types `c` in a JavaScript file code complete will automatically pop up
+    present `console` besides others as a completion item. Characters that make
+    up identifiers don't need to be listed here.
+
+    If code complete should automatically be trigger on characters not
+    being valid inside an identifier (for example `.` in JavaScript)
+    list them in `triggerCharacters`.
+    """
 
     all_commit_characters: Optional[List[str]] = attrs.field(default=None)
-    """The list of all possible characters that commit a completion. This field can be used
-    if clients don't support individual commit characters per completion item. See
-    `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
-    
+    """The list of all possible characters that commit a completion. This field
+    can be used if clients don't support individual commit characters per
+    completion item. See `ClientCapabilities.textDocument.completion.completion
+    Item.commitCharactersSupport`
+
     If a server provides both `allCommitCharacters` and commit characters on an individual
     completion item the ones on the completion item win.
-    
-    @since 3.2.0"""
+
+    @since 3.2.0
+    """
     # Since: 3.2.0
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for a completion item."""
+    """The server provides support to resolve additional information for a
+    completion item."""
 
     completion_item: Optional[
         "CompletionRegistrationOptionsCompletionItemType"
     ] = attrs.field(default=None)
     """The server supports the following `CompletionItem` specific
     capabilities.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -3563,11 +3848,11 @@ class Hover:
     """The result of a hover request."""
 
     contents: Union["MarkupContent", MarkedString, List[MarkedString]] = attrs.field()
-    """The hover's content"""
+    """The hover's content."""
 
     range: Optional["Range"] = attrs.field(default=None)
-    """An optional range inside the text document that is used to
-    visualize the hover, e.g. by changing the background color."""
+    """An optional range inside the text document that is used to visualize the
+    hover, e.g. by changing the background color."""
 
 
 @attrs.define
@@ -3587,8 +3872,11 @@ class HoverRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -3607,10 +3895,12 @@ class SignatureHelpParams:
     """The position inside the text document."""
 
     context: Optional["SignatureHelpContext"] = attrs.field(default=None)
-    """The signature help context. This is only available if the client specifies
-    to send this using the client capability `textDocument.signatureHelp.contextSupport === true`
-    
-    @since 3.15.0"""
+    """The signature help context. This is only available if the client
+    specifies to send this using the client capability
+    `textDocument.signatureHelp.contextSupport === true`
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
@@ -3631,26 +3921,29 @@ class SignatureHelp:
     active_signature: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
-    """The active signature. If omitted or the value lies outside the
-    range of `signatures` the value defaults to zero or is ignored if
-    the `SignatureHelp` has no signatures.
-    
+    """The active signature. If omitted or the value lies outside the range of
+    `signatures` the value defaults to zero or is ignored if the
+    `SignatureHelp` has no signatures.
+
     Whenever possible implementors should make an active decision about
     the active signature and shouldn't rely on a default value.
-    
+
     In future version of the protocol this property might become
-    mandatory to better express this."""
+    mandatory to better express this.
+    """
 
     active_parameter: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
-    """The active parameter of the active signature. If omitted or the value
-    lies outside the range of `signatures[activeSignature].parameters`
-    defaults to 0 if the active signature has parameters. If
-    the active signature has no parameters it is ignored.
-    In future version of the protocol this property might become
-    mandatory to better express the active parameter if the
-    active signature does have any."""
+    """The active parameter of the active signature.
+
+    If omitted or the value lies outside the range of
+    `signatures[activeSignature].parameters` defaults to 0 if the active
+    signature has parameters. If the active signature has no parameters
+    it is ignored. In future version of the protocol this property might
+    become mandatory to better express the active parameter if the
+    active signature does have any.
+    """
 
 
 @attrs.define
@@ -3662,11 +3955,12 @@ class SignatureHelpOptions:
 
     retrigger_characters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that re-trigger signature help.
-    
+
     These trigger characters are only active when signature help is already showing. All trigger characters
     are also counted as re-trigger characters.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -3682,19 +3976,23 @@ class SignatureHelpRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     trigger_characters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that trigger signature help automatically."""
 
     retrigger_characters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that re-trigger signature help.
-    
+
     These trigger characters are only active when signature help is already showing. All trigger characters
     are also counted as re-trigger characters.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -3717,8 +4015,8 @@ class DefinitionParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -3738,8 +4036,11 @@ class DefinitionRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -3763,8 +4064,8 @@ class ReferenceParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -3784,8 +4085,11 @@ class ReferenceRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -3807,8 +4111,8 @@ class DocumentHighlightParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -3844,8 +4148,11 @@ class DocumentHighlightRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -3864,8 +4171,8 @@ class DocumentSymbolParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -3880,18 +4187,21 @@ class BaseSymbolInformation:
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     container_name: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The name of the symbol containing this symbol. This information is for
-    user interface purposes (e.g. to render a qualifier in the user interface
-    if necessary). It can't be used to re-infer a hierarchy for the document
-    symbols."""
+    """The name of the symbol containing this symbol.
+
+    This information is for user interface purposes (e.g. to render a
+    qualifier in the user interface if necessary). It can't be used to
+    re-infer a hierarchy for the document symbols.
+    """
 
 
 @attrs.define
@@ -3900,15 +4210,16 @@ class SymbolInformation:
     classes, interfaces etc."""
 
     location: Location = attrs.field()
-    """The location of this symbol. The location's range is used by a tool
-    to reveal the location in the editor. If the symbol is selected in the
-    tool the range's start information is used to position the cursor. So
-    the range usually spans more than the actual symbol's name and does
-    normally include things like visibility modifiers.
-    
-    The range doesn't have to denote a node range in the sense of an abstract
-    syntax tree. It can therefore not be used to re-construct a hierarchy of
-    the symbols."""
+    """The location of this symbol. The location's range is used by a tool to
+    reveal the location in the editor. If the symbol is selected in the tool
+    the range's start information is used to position the cursor. So the range
+    usually spans more than the actual symbol's name and does normally include
+    things like visibility modifiers.
+
+    The range doesn't have to denote a node range in the sense of an
+    abstract syntax tree. It can therefore not be used to re-construct a
+    hierarchy of the symbols.
+    """
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this symbol."""
@@ -3921,23 +4232,27 @@ class SymbolInformation:
         default=None,
     )
     """Indicates if this symbol is deprecated.
-    
-    @deprecated Use tags instead"""
+
+    @deprecated Use tags instead
+    """
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     container_name: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The name of the symbol containing this symbol. This information is for
-    user interface purposes (e.g. to render a qualifier in the user interface
-    if necessary). It can't be used to re-infer a hierarchy for the document
-    symbols."""
+    """The name of the symbol containing this symbol.
+
+    This information is for user interface purposes (e.g. to render a
+    qualifier in the user interface if necessary). It can't be used to
+    re-infer a hierarchy for the document symbols.
+    """
 
 
 @attrs.define
@@ -3952,20 +4267,29 @@ class DocumentSymbol:
     """
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The name of this symbol. Will be displayed in the user interface and therefore must not be
-    an empty string or a string only consisting of white spaces."""
+    """The name of this symbol.
+
+    Will be displayed in the user interface and therefore must not be an
+    empty string or a string only consisting of white spaces.
+    """
 
     kind: SymbolKind = attrs.field()
     """The kind of this symbol."""
 
     range: "Range" = attrs.field()
-    """The range enclosing this symbol not including leading/trailing whitespace but everything else
-    like comments. This information is typically used to determine if the clients cursor is
-    inside the symbol to reveal in the symbol in the UI."""
+    """The range enclosing this symbol not including leading/trailing
+    whitespace but everything else like comments.
+
+    This information is typically used to determine if the clients
+    cursor is inside the symbol to reveal in the symbol in the UI.
+    """
 
     selection_range: "Range" = attrs.field()
-    """The range that should be selected and revealed when this symbol is being picked, e.g the name of a function.
-    Must be contained by the `range`."""
+    """The range that should be selected and revealed when this symbol is being
+    picked, e.g the name of a function.
+
+    Must be contained by the `range`.
+    """
 
     detail: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -3975,8 +4299,9 @@ class DocumentSymbol:
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this document symbol.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     deprecated: Optional[bool] = attrs.field(
@@ -3984,8 +4309,9 @@ class DocumentSymbol:
         default=None,
     )
     """Indicates if this symbol is deprecated.
-    
-    @deprecated Use tags instead"""
+
+    @deprecated Use tags instead
+    """
 
     children: Optional[List["DocumentSymbol"]] = attrs.field(default=None)
     """Children of this symbol, e.g. properties of a class."""
@@ -3999,10 +4325,11 @@ class DocumentSymbolOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A human-readable string that is shown when multiple outlines trees
-    are shown for the same document.
-    
-    @since 3.16.0"""
+    """A human-readable string that is shown when multiple outlines trees are
+    shown for the same document.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4018,17 +4345,21 @@ class DocumentSymbolRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     label: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A human-readable string that is shown when multiple outlines trees
-    are shown for the same document.
-    
-    @since 3.16.0"""
+    """A human-readable string that is shown when multiple outlines trees are
+    shown for the same document.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4054,8 +4385,8 @@ class CodeActionParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -4074,16 +4405,16 @@ class Command:
     """The identifier of the actual command handler."""
 
     arguments: Optional[List[LSPAny]] = attrs.field(default=None)
-    """Arguments that the command handler should be
-    invoked with."""
+    """Arguments that the command handler should be invoked with."""
 
 
 @attrs.define
 class CodeActionDisabledType:
     reason: str = attrs.field(validator=attrs.validators.instance_of(str))
     """Human readable description of why the code action is currently disabled.
-    
-    This is displayed in the code actions UI."""
+
+    This is displayed in the code actions UI.
+    """
 
 
 @attrs.define
@@ -4101,8 +4432,9 @@ class CodeAction:
 
     kind: Optional[Union[CodeActionKind, str]] = attrs.field(default=None)
     """The kind of the code action.
-    
-    Used to filter code actions."""
+
+    Used to filter code actions.
+    """
 
     diagnostics: Optional[List["Diagnostic"]] = attrs.field(default=None)
     """The diagnostics that this code action resolves."""
@@ -4111,46 +4443,51 @@ class CodeAction:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Marks this as a preferred action. Preferred actions are used by the `auto fix` command and can be targeted
-    by keybindings.
-    
+    """Marks this as a preferred action. Preferred actions are used by the
+    `auto fix` command and can be targeted by keybindings.
+
     A quick fix should be marked preferred if it properly addresses the underlying error.
     A refactoring should be marked preferred if it is the most reasonable choice of actions to take.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     disabled: Optional["CodeActionDisabledType"] = attrs.field(default=None)
     """Marks that the code action cannot currently be applied.
-    
+
     Clients should follow the following guidelines regarding disabled code actions:
-    
+
       - Disabled code actions are not shown in automatic [lightbulbs](https://code.visualstudio.com/docs/editor/editingevolved#_code-action)
         code action menus.
-    
+
       - Disabled actions are shown as faded out in the code action menu when the user requests a more specific type
         of code action, such as refactorings.
-    
+
       - If the user has a [keybinding](https://code.visualstudio.com/docs/editor/refactoring#_keybindings-for-code-actions)
         that auto applies a code action and only disabled code actions are returned, the client should show the user an
         error message with `reason` in the editor.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     edit: Optional[WorkspaceEdit] = attrs.field(default=None)
     """The workspace edit this code action performs."""
 
     command: Optional[Command] = attrs.field(default=None)
-    """A command this code action executes. If a code action
-    provides an edit and a command, first the edit is
-    executed and then the command."""
+    """A command this code action executes.
+
+    If a code action provides an edit and a command, first the edit is
+    executed and then the command.
+    """
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on a code action between
-    a `textDocument/codeAction` and a `codeAction/resolve` request.
-    
-    @since 3.16.0"""
+    """A data entry field that is preserved on a code action between a
+    `textDocument/codeAction` and a `codeAction/resolve` request.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -4162,18 +4499,20 @@ class CodeActionOptions:
         default=None
     )
     """CodeActionKinds that this server may return.
-    
-    The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
-    may list out every specific kind they provide."""
+
+    The list of kinds may be generic, such as `CodeActionKind.Refactor`,
+    or the server may list out every specific kind they provide.
+    """
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for a code action.
-    
-    @since 3.16.0"""
+    """The server provides support to resolve additional information for a code
+    action.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4189,25 +4528,30 @@ class CodeActionRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     code_action_kinds: Optional[List[Union[CodeActionKind, str]]] = attrs.field(
         default=None
     )
     """CodeActionKinds that this server may return.
-    
-    The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
-    may list out every specific kind they provide."""
+
+    The list of kinds may be generic, such as `CodeActionKind.Refactor`,
+    or the server may list out every specific kind they provide.
+    """
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for a code action.
-    
-    @since 3.16.0"""
+    """The server provides support to resolve additional information for a code
+    action.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4221,15 +4565,17 @@ class WorkspaceSymbolParams:
     """The parameters of a WorkspaceSymbolRequest."""
 
     query: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A query string to filter symbols by. Clients may send an empty
-    string here to request all symbols."""
+    """A query string to filter symbols by.
+
+    Clients may send an empty string here to request all symbols.
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -4249,11 +4595,12 @@ class WorkspaceSymbol:
     # Since: 3.17.0
 
     location: Union[Location, "WorkspaceSymbolLocationType1"] = attrs.field()
-    """The location of the symbol. Whether a server is allowed to
-    return a location without a range depends on the client
-    capability `workspace.symbol.resolveSupport`.
-    
-    See SymbolInformation#location for more details."""
+    """The location of the symbol. Whether a server is allowed to return a
+    location without a range depends on the client capability
+    `workspace.symbol.resolveSupport`.
+
+    See SymbolInformation#location for more details.
+    """
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this symbol."""
@@ -4267,18 +4614,21 @@ class WorkspaceSymbol:
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     container_name: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The name of the symbol containing this symbol. This information is for
-    user interface purposes (e.g. to render a qualifier in the user interface
-    if necessary). It can't be used to re-infer a hierarchy for the document
-    symbols."""
+    """The name of the symbol containing this symbol.
+
+    This information is for user interface purposes (e.g. to render a
+    qualifier in the user interface if necessary). It can't be used to
+    re-infer a hierarchy for the document symbols.
+    """
 
 
 @attrs.define
@@ -4289,10 +4639,11 @@ class WorkspaceSymbolOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for a workspace symbol.
-    
-    @since 3.17.0"""
+    """The server provides support to resolve additional information for a
+    workspace symbol.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4309,10 +4660,11 @@ class WorkspaceSymbolRegistrationOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server provides support to resolve additional
-    information for a workspace symbol.
-    
-    @since 3.17.0"""
+    """The server provides support to resolve additional information for a
+    workspace symbol.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4332,8 +4684,8 @@ class CodeLensParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -4347,15 +4699,17 @@ class CodeLens:
     """
 
     range: "Range" = attrs.field()
-    """The range in which this code lens is valid. Should only span a single line."""
+    """The range in which this code lens is valid.
+
+    Should only span a single line.
+    """
 
     command: Optional[Command] = attrs.field(default=None)
     """The command this code lens represents."""
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on a code lens item between
-    a CodeLensRequest and a [CodeLensResolveRequest]
-    (#CodeLensResolveRequest)"""
+    """A data entry field that is preserved on a code lens item between a
+    CodeLensRequest and a [CodeLensResolveRequest] (#CodeLensResolveRequest)"""
 
 
 @attrs.define
@@ -4381,8 +4735,11 @@ class CodeLensRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4407,8 +4764,8 @@ class DocumentLinkParams:
     """An optional token that a server can use to report work done progress."""
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -4423,19 +4780,23 @@ class DocumentLink:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The uri this link points to. If missing a resolve request is sent later."""
+    """The uri this link points to.
+
+    If missing a resolve request is sent later.
+    """
 
     tooltip: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """The tooltip text when you hover over this link.
-    
+
     If a tooltip is provided, is will be displayed in a string that includes instructions on how to
     trigger the link, such as `{0} (ctrl + click)`. The specific instructions vary depending on OS,
     user settings, and localization.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     data: Optional[LSPAny] = attrs.field(default=None)
@@ -4466,8 +4827,11 @@ class DocumentLinkRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4512,8 +4876,11 @@ class DocumentFormattingRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4529,10 +4896,10 @@ class DocumentRangeFormattingParams:
     """The document to format."""
 
     range: "Range" = attrs.field()
-    """The range to format"""
+    """The range to format."""
 
     options: "FormattingOptions" = attrs.field()
-    """The format options"""
+    """The format options."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
@@ -4555,8 +4922,11 @@ class DocumentRangeFormattingRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4573,14 +4943,19 @@ class DocumentOnTypeFormattingParams:
 
     position: "Position" = attrs.field()
     """The position around which the on type formatting should happen.
-    This is not necessarily the exact position where the character denoted
-    by the property `ch` got typed."""
+
+    This is not necessarily the exact position where the character
+    denoted by the property `ch` got typed.
+    """
 
     ch: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The character that has been typed that triggered the formatting
-    on type request. That is not necessarily the last character that
-    got inserted into the document since the client could auto insert
-    characters as well (e.g. like automatic brace completion)."""
+    """The character that has been typed that triggered the formatting on type
+    request.
+
+    That is not necessarily the last character that got inserted into
+    the document since the client could auto insert characters as well
+    (e.g. like automatic brace completion).
+    """
 
     options: "FormattingOptions" = attrs.field()
     """The formatting options."""
@@ -4611,8 +4986,11 @@ class DocumentOnTypeFormattingRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     more_trigger_character: Optional[List[str]] = attrs.field(default=None)
     """More trigger characters."""
@@ -4629,9 +5007,11 @@ class RenameParams:
     """The position at which this request was sent."""
 
     new_name: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The new name of the symbol. If the given name is not valid the
-    request must return a ResponseError with an
-    appropriate message set."""
+    """The new name of the symbol.
+
+    If the given name is not valid the request must return a
+    ResponseError with an appropriate message set.
+    """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
@@ -4646,8 +5026,9 @@ class RenameOptions:
         default=None,
     )
     """Renames should be checked and tested before being executed.
-    
-    @since version 3.12.0"""
+
+    @since version 3.12.0
+    """
     # Since: version 3.12.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4663,16 +5044,20 @@ class RenameRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
     prepare_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Renames should be checked and tested before being executed.
-    
-    @since version 3.12.0"""
+
+    @since version 3.12.0
+    """
     # Since: version 3.12.0
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4683,7 +5068,6 @@ class RenameRegistrationOptions:
 
 @attrs.define
 class PrepareRenameParams:
-
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
@@ -4713,7 +5097,7 @@ class ExecuteCommandOptions:
     """The server capabilities of a ExecuteCommandRequest."""
 
     commands: List[str] = attrs.field()
-    """The commands to be executed on the server"""
+    """The commands to be executed on the server."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4726,7 +5110,7 @@ class ExecuteCommandRegistrationOptions:
     """Registration options for a ExecuteCommandRequest."""
 
     commands: List[str] = attrs.field()
-    """The commands to be executed on the server"""
+    """The commands to be executed on the server."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4745,9 +5129,11 @@ class ApplyWorkspaceEditParams:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional label of the workspace edit. This label is
-    presented in the user interface for example on an undo
-    stack to undo the workspace edit."""
+    """An optional label of the workspace edit.
+
+    This label is presented in the user interface for example on an undo
+    stack to undo the workspace edit.
+    """
 
 
 @attrs.define
@@ -4767,25 +5153,30 @@ class ApplyWorkspaceEditResult:
         default=None,
     )
     """An optional textual description for why the edit was not applied.
+
     This may be used by the server for diagnostic logging or to provide
-    a suitable error for a request that triggered the edit."""
+    a suitable error for a request that triggered the edit.
+    """
 
     failed_change: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """Depending on the client's failure handling strategy `failedChange` might
-    contain the index of the change that failed. This property is only available
-    if the client signals a `failureHandlingStrategy` in its client capabilities."""
+    contain the index of the change that failed.
+
+    This property is only available if the client signals a
+    `failureHandlingStrategy` in its client capabilities.
+    """
 
 
 @attrs.define
 class WorkDoneProgressBegin:
-
     title: str = attrs.field(validator=attrs.validators.instance_of(str))
     """Mandatory title of the progress operation. Used to briefly inform about
     the kind of operation being performed.
-    
-    Examples: "Indexing" or "Linking dependencies"."""
+
+    Examples: "Indexing" or "Linking dependencies".
+    """
 
     kind: str = attrs.field(validator=attrs.validators.in_(["begin"]), default="begin")
 
@@ -4794,8 +5185,11 @@ class WorkDoneProgressBegin:
         default=None,
     )
     """Controls if a cancel button should show to allow the user to cancel the
-    long running operation. Clients that don't support cancellation are allowed
-    to ignore the setting."""
+    long running operation.
+
+    Clients that don't support cancellation are allowed to ignore the
+    setting.
+    """
 
     message: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -4803,24 +5197,26 @@ class WorkDoneProgressBegin:
     )
     """Optional, more detailed associated progress message. Contains
     complementary information to the `title`.
-    
+
     Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
-    If unset, the previous progress message (if any) is still valid."""
+    If unset, the previous progress message (if any) is still valid.
+    """
 
     percentage: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """Optional progress percentage to display (value 100 is considered 100%).
-    If not provided infinite progress is assumed and clients are allowed
-    to ignore the `percentage` value in subsequent in report notifications.
-    
-    The value should be steadily rising. Clients are free to ignore values
-    that are not following this rule. The value range is [0, 100]."""
+    If not provided infinite progress is assumed and clients are allowed to
+    ignore the `percentage` value in subsequent in report notifications.
+
+    The value should be steadily rising. Clients are free to ignore
+    values that are not following this rule. The value range is [0,
+    100].
+    """
 
 
 @attrs.define
 class WorkDoneProgressReport:
-
     kind: str = attrs.field(
         validator=attrs.validators.in_(["report"]), default="report"
     )
@@ -4830,9 +5226,10 @@ class WorkDoneProgressReport:
         default=None,
     )
     """Controls enablement state of a cancel button.
-    
-    Clients that don't support cancellation or don't support controlling the button's
-    enablement state are allowed to ignore the property."""
+
+    Clients that don't support cancellation or don't support controlling
+    the button's enablement state are allowed to ignore the property.
+    """
 
     message: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -4840,24 +5237,25 @@ class WorkDoneProgressReport:
     )
     """Optional, more detailed associated progress message. Contains
     complementary information to the `title`.
-    
+
     Examples: "3/25 files", "project/src/module2", "node_modules/some_dep".
-    If unset, the previous progress message (if any) is still valid."""
+    If unset, the previous progress message (if any) is still valid.
+    """
 
     percentage: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """Optional progress percentage to display (value 100 is considered 100%).
-    If not provided infinite progress is assumed and clients are allowed
-    to ignore the `percentage` value in subsequent in report notifications.
-    
-    The value should be steadily rising. Clients are free to ignore values
-    that are not following this rule. The value range is [0, 100]"""
+    If not provided infinite progress is assumed and clients are allowed to
+    ignore the `percentage` value in subsequent in report notifications.
+
+    The value should be steadily rising. Clients are free to ignore
+    values that are not following this rule. The value range is [0, 100]
+    """
 
 
 @attrs.define
 class WorkDoneProgressEnd:
-
     kind: str = attrs.field(validator=attrs.validators.in_(["end"]), default="end")
 
     message: Optional[str] = attrs.field(
@@ -4870,13 +5268,11 @@ class WorkDoneProgressEnd:
 
 @attrs.define
 class SetTraceParams:
-
     value: TraceValues = attrs.field()
 
 
 @attrs.define
 class LogTraceParams:
-
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
 
     verbose: Optional[str] = attrs.field(
@@ -4887,14 +5283,12 @@ class LogTraceParams:
 
 @attrs.define
 class CancelParams:
-
     id: Union[int, str] = attrs.field()
     """The request id to cancel."""
 
 
 @attrs.define
 class ProgressParams:
-
     token: ProgressToken = attrs.field()
     """The progress token provided by the client or server."""
 
@@ -4914,19 +5308,28 @@ class LocationLink:
     """The target resource identifier of this link."""
 
     target_range: "Range" = attrs.field()
-    """The full target range of this link. If the target for example is a symbol then target range is the
-    range enclosing this symbol not including leading/trailing whitespace but everything else
-    like comments. This information is typically used to highlight the range in the editor."""
+    """The full target range of this link.
+
+    If the target for example is a symbol then target range is the range
+    enclosing this symbol not including leading/trailing whitespace but
+    everything else like comments. This information is typically used to
+    highlight the range in the editor.
+    """
 
     target_selection_range: "Range" = attrs.field()
-    """The range that should be selected and revealed when this link is being followed, e.g the name of a function.
-    Must be contained by the `targetRange`. See also `DocumentSymbol#range`"""
+    """The range that should be selected and revealed when this link is being
+    followed, e.g the name of a function.
+
+    Must be contained by the `targetRange`. See also
+    `DocumentSymbol#range`
+    """
 
     origin_selection_range: Optional["Range"] = attrs.field(default=None)
     """Span of the origin of this link.
-    
-    Used as the underlined span for mouse interaction. Defaults to the word range at
-    the definition position."""
+
+    Used as the underlined span for mouse interaction. Defaults to the
+    word range at the definition position.
+    """
 
 
 @attrs.define
@@ -4965,15 +5368,14 @@ class WorkspaceFoldersChangeEvent:
     """The workspace folder change event."""
 
     added: List[WorkspaceFolder] = attrs.field()
-    """The array of added workspace folders"""
+    """The array of added workspace folders."""
 
     removed: List[WorkspaceFolder] = attrs.field()
-    """The array of the removed workspace folders"""
+    """The array of the removed workspace folders."""
 
 
 @attrs.define
 class ConfigurationItem:
-
     scope_uri: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -5051,18 +5453,21 @@ class Position:
 
     line: int = attrs.field(validator=validators.uinteger_validator)
     """Line position in a document (zero-based).
-    
-    If a line number is greater than the number of lines in a document, it defaults back to the number of lines in the document.
-    If a line number is negative, it defaults to 0."""
+
+    If a line number is greater than the number of lines in a document,
+    it defaults back to the number of lines in the document. If a line
+    number is negative, it defaults to 0.
+    """
 
     character: int = attrs.field(validator=validators.uinteger_validator)
     """Character offset on a line in a document (zero-based).
-    
+
     The meaning of this offset is determined by the negotiated
     `PositionEncodingKind`.
-    
+
     If the character value is greater than the line length it defaults back to the
-    line length."""
+    line length.
+    """
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Position):
@@ -5123,9 +5528,10 @@ class TextDocumentEdit:
 
     edits: List[Union[TextEdit, "AnnotatedTextEdit"]] = attrs.field()
     """The edits to be applied.
-    
+
     @since 3.16.0 - support for AnnotatedTextEdit. This is guarded using a
-    client capability."""
+    client capability.
+    """
     # Since: 3.16.0 - support for AnnotatedTextEdit. This is guarded using aclient capability.
 
 
@@ -5138,8 +5544,9 @@ class ResourceOperation:
 
     annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -5153,15 +5560,16 @@ class CreateFile:
     kind: str = attrs.field(
         validator=attrs.validators.in_(["create"]), default="create"
     )
-    """A create"""
+    """A create."""
 
     options: Optional["CreateFileOptions"] = attrs.field(default=None)
-    """Additional options"""
+    """Additional options."""
 
     annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -5178,15 +5586,16 @@ class RenameFile:
     kind: str = attrs.field(
         validator=attrs.validators.in_(["rename"]), default="rename"
     )
-    """A rename"""
+    """A rename."""
 
     options: Optional["RenameFileOptions"] = attrs.field(default=None)
     """Rename options."""
 
     annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -5200,15 +5609,16 @@ class DeleteFile:
     kind: str = attrs.field(
         validator=attrs.validators.in_(["delete"]), default="delete"
     )
-    """A delete"""
+    """A delete."""
 
     options: Optional["DeleteFileOptions"] = attrs.field(default=None)
     """Delete options."""
 
     annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
     """An optional annotation identifier describing the operation.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -5222,22 +5632,24 @@ class ChangeAnnotation:
     # Since: 3.16.0
 
     label: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A human-readable string describing the actual change. The string
-    is rendered prominent in the user interface."""
+    """A human-readable string describing the actual change.
+
+    The string is rendered prominent in the user interface.
+    """
 
     needs_confirmation: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """A flag which indicates that user confirmation is needed
-    before applying the change."""
+    """A flag which indicates that user confirmation is needed before applying
+    the change."""
 
     description: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A human-readable string which is rendered less prominent in
-    the user interface."""
+    """A human-readable string which is rendered less prominent in the user
+    interface."""
 
 
 @attrs.define
@@ -5270,7 +5682,8 @@ class FileRename:
     # Since: 3.16.0
 
     old_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A file:// URI for the original location of the file/folder being renamed."""
+    """A file:// URI for the original location of the file/folder being
+    renamed."""
 
     new_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A file:// URI for the new location of the file/folder being renamed."""
@@ -5300,7 +5713,10 @@ class InlineValueContext:
 
     stopped_location: Range = attrs.field()
     """The document range where execution has stopped.
-    Typically the end position of the range denotes the line where the inline values are shown."""
+
+    Typically the end position of the range denotes the line where the
+    inline values are shown.
+    """
 
 
 @attrs.define
@@ -5333,7 +5749,10 @@ class InlineValueVariableLookup:
 
     range: Range = attrs.field()
     """The document range for which the inline value applies.
-    The range is used to extract the variable name from the underlying document."""
+
+    The range is used to extract the variable name from the underlying
+    document.
+    """
 
     case_sensitive_lookup: bool = attrs.field(
         validator=attrs.validators.instance_of(bool)
@@ -5361,7 +5780,10 @@ class InlineValueEvaluatableExpression:
 
     range: Range = attrs.field()
     """The document range for which the inline value applies.
-    The range is used to extract the evaluatable expression from the underlying document."""
+
+    The range is used to extract the evaluatable expression from the
+    underlying document.
+    """
 
     expression: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -5384,28 +5806,31 @@ class InlayHintLabelPart:
     """The value of this label part."""
 
     tooltip: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
-    """The tooltip text when you hover over this label part. Depending on
-    the client capability `inlayHint.resolveSupport` clients might resolve
-    this property late using the resolve request."""
+    """The tooltip text when you hover over this label part.
+
+    Depending on the client capability `inlayHint.resolveSupport`
+    clients might resolve this property late using the resolve request.
+    """
 
     location: Optional[Location] = attrs.field(default=None)
-    """An optional source code location that represents this
-    label part.
-    
+    """An optional source code location that represents this label part.
+
     The editor will use this location for the hover and for code navigation
     features: This part will become a clickable link that resolves to the
     definition of the symbol at the given location (not necessarily the
     location itself), it shows the hover that shows at the given location,
     and it shows a context menu with further code navigation commands.
-    
+
     Depending on the client capability `inlayHint.resolveSupport` clients
-    might resolve this property late using the resolve request."""
+    might resolve this property late using the resolve request.
+    """
 
     command: Optional[Command] = attrs.field(default=None)
     """An optional command for this label part.
-    
-    Depending on the client capability `inlayHint.resolveSupport` clients
-    might resolve this property late using the resolve request."""
+
+    Depending on the client capability `inlayHint.resolveSupport`
+    clients might resolve this property late using the resolve request.
+    """
 
 
 @attrs.define
@@ -5436,10 +5861,10 @@ class MarkupContent:
     """
 
     kind: MarkupKind = attrs.field()
-    """The type of the Markup"""
+    """The type of the Markup."""
 
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The content itself"""
+    """The content itself."""
 
 
 @attrs.define
@@ -5461,9 +5886,11 @@ class FullDocumentDiagnosticReport:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional result id. If provided it will
-    be sent on the next diagnostic request for the
-    same document."""
+    """An optional result id.
+
+    If provided it will be sent on the next diagnostic request for the
+    same document.
+    """
 
 
 @attrs.define
@@ -5484,13 +5911,14 @@ class RelatedFullDocumentDiagnosticReport:
             Union[FullDocumentDiagnosticReport, "UnchangedDocumentDiagnosticReport"],
         ]
     ] = attrs.field(default=None)
-    """Diagnostics of related documents. This information is useful
-    in programming languages where code in a file A can generate
-    diagnostics in a file B which A depends on. An example of
-    such a language is C/C++ where marco definitions in a file
-    a.cpp and result in errors in a header file b.hpp.
-    
-    @since 3.17.0"""
+    """Diagnostics of related documents. This information is useful in
+    programming languages where code in a file A can generate diagnostics in a
+    file B which A depends on. An example of such a language is C/C++ where
+    marco definitions in a file a.cpp and result in errors in a header file
+    b.hpp.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     kind: str = attrs.field(validator=attrs.validators.in_(["full"]), default="full")
@@ -5500,9 +5928,11 @@ class RelatedFullDocumentDiagnosticReport:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional result id. If provided it will
-    be sent on the next diagnostic request for the
-    same document."""
+    """An optional result id.
+
+    If provided it will be sent on the next diagnostic request for the
+    same document.
+    """
 
 
 @attrs.define
@@ -5516,16 +5946,16 @@ class UnchangedDocumentDiagnosticReport:
     # Since: 3.17.0
 
     result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A result id which will be sent on the next
-    diagnostic request for the same document."""
+    """A result id which will be sent on the next diagnostic request for the
+    same document."""
 
     kind: str = attrs.field(
         validator=attrs.validators.in_(["unchanged"]), default="unchanged"
     )
-    """A document diagnostic report indicating
-    no changes to the last result. A server can
-    only return `unchanged` if result ids are
-    provided."""
+    """A document diagnostic report indicating no changes to the last result.
+
+    A server can only return `unchanged` if result ids are provided.
+    """
 
 
 @attrs.define
@@ -5538,30 +5968,31 @@ class RelatedUnchangedDocumentDiagnosticReport:
     # Since: 3.17.0
 
     result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A result id which will be sent on the next
-    diagnostic request for the same document."""
+    """A result id which will be sent on the next diagnostic request for the
+    same document."""
 
     related_documents: Optional[
         Dict[
             str, Union[FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport]
         ]
     ] = attrs.field(default=None)
-    """Diagnostics of related documents. This information is useful
-    in programming languages where code in a file A can generate
-    diagnostics in a file B which A depends on. An example of
-    such a language is C/C++ where marco definitions in a file
-    a.cpp and result in errors in a header file b.hpp.
-    
-    @since 3.17.0"""
+    """Diagnostics of related documents. This information is useful in
+    programming languages where code in a file A can generate diagnostics in a
+    file B which A depends on. An example of such a language is C/C++ where
+    marco definitions in a file a.cpp and result in errors in a header file
+    b.hpp.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     kind: str = attrs.field(
         validator=attrs.validators.in_(["unchanged"]), default="unchanged"
     )
-    """A document diagnostic report indicating
-    no changes to the last result. A server can
-    only return `unchanged` if result ids are
-    provided."""
+    """A document diagnostic report indicating no changes to the last result.
+
+    A server can only return `unchanged` if result ids are provided.
+    """
 
 
 @attrs.define
@@ -5574,8 +6005,7 @@ class PreviousResultId:
     # Since: 3.17.0
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The URI for which the client knowns a
-    result id."""
+    """The URI for which the client knowns a result id."""
 
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The value of the previous result id."""
@@ -5597,17 +6027,17 @@ class NotebookDocument:
     """The type of the notebook."""
 
     version: int = attrs.field(validator=validators.integer_validator)
-    """The version number of this document (it will increase after each
-    change, including undo/redo)."""
+    """The version number of this document (it will increase after each change,
+    including undo/redo)."""
 
     cells: List["NotebookCell"] = attrs.field()
     """The cells of a notebook."""
 
     metadata: Optional["LSPObject"] = attrs.field(default=None)
-    """Additional metadata stored with the notebook
-    document.
-    
-    Note: should always be an object literal (e.g. LSPObject)"""
+    """Additional metadata stored with the notebook document.
+
+    Note: should always be an object literal (e.g. LSPObject)
+    """
 
 
 @attrs.define
@@ -5621,8 +6051,8 @@ class TextDocumentItem:
     """The text document's language identifier."""
 
     version: int = attrs.field(validator=validators.integer_validator)
-    """The version number of this document (it will increase after each
-    change, including undo/redo)."""
+    """The version number of this document (it will increase after each change,
+    including undo/redo)."""
 
     text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The content of the opened text document."""
@@ -5668,12 +6098,11 @@ class NotebookDocumentChangeEventCellsType:
     structure: Optional[
         "NotebookDocumentChangeEventCellsTypeStructureType"
     ] = attrs.field(default=None)
-    """Changes to the cell structure to add or
-    remove cells."""
+    """Changes to the cell structure to add or remove cells."""
 
     data: Optional[List["NotebookCell"]] = attrs.field(default=None)
-    """Changes to notebook cells properties like its
-    kind, execution summary or metadata."""
+    """Changes to notebook cells properties like its kind, execution summary or
+    metadata."""
 
     text_content: Optional[
         List["NotebookDocumentChangeEventCellsTypeTextContentType"]
@@ -5692,11 +6121,12 @@ class NotebookDocumentChangeEvent:
 
     metadata: Optional["LSPObject"] = attrs.field(default=None)
     """The changed meta data if any.
-    
-    Note: should always be an object literal (e.g. LSPObject)"""
+
+    Note: should always be an object literal (e.g. LSPObject)
+    """
 
     cells: Optional["NotebookDocumentChangeEventCellsType"] = attrs.field(default=None)
-    """Changes to cells"""
+    """Changes to cells."""
 
 
 @attrs.define
@@ -5718,8 +6148,10 @@ class Registration:
     provider."""
 
     id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The id used to register the request. The id can be used to deregister
-    the request again."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again.
+    """
 
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The method / capability to register for."""
@@ -5733,8 +6165,10 @@ class Unregistration:
     """General parameters to unregister a request or notification."""
 
     id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The id used to unregister the request or notification. Usually an id
-    provided during the register request."""
+    """The id used to unregister the request or notification.
+
+    Usually an id provided during the register request.
+    """
 
     method: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The method to unregister for."""
@@ -5746,14 +6180,17 @@ class ServerCapabilitiesWorkspaceType:
         default=None
     )
     """The server supports workspace folder.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
     file_operations: Optional["FileOperationOptions"] = attrs.field(default=None)
-    """The server is interested in notifications/requests for operations on files.
-    
-    @since 3.16.0"""
+    """The server is interested in notifications/requests for operations on
+    files.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -5764,30 +6201,34 @@ class ServerCapabilities:
     position_encoding: Optional[Union[PositionEncodingKind, str]] = attrs.field(
         default=None
     )
-    """The position encoding the server picked from the encodings offered
-    by the client via the client capability `general.positionEncodings`.
-    
+    """The position encoding the server picked from the encodings offered by
+    the client via the client capability `general.positionEncodings`.
+
     If the client didn't provide any position encodings the only valid
     value that a server can return is 'utf-16'.
-    
+
     If omitted it defaults to 'utf-16'.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     text_document_sync: Optional[
         Union["TextDocumentSyncOptions", TextDocumentSyncKind]
     ] = attrs.field(default=None)
-    """Defines how text documents are synced. Is either a detailed structure
-    defining each notification or for backwards compatibility the
-    TextDocumentSyncKind number."""
+    """Defines how text documents are synced.
+
+    Is either a detailed structure defining each notification or for
+    backwards compatibility the TextDocumentSyncKind number.
+    """
 
     notebook_document_sync: Optional[
         Union["NotebookDocumentSyncOptions", "NotebookDocumentSyncRegistrationOptions"]
     ] = attrs.field(default=None)
     """Defines how notebook documents are synced.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     completion_provider: Optional[CompletionOptions] = attrs.field(default=None)
@@ -5837,9 +6278,12 @@ class ServerCapabilities:
     code_action_provider: Optional[Union[bool, CodeActionOptions]] = attrs.field(
         default=None
     )
-    """The server provides code actions. CodeActionOptions may only be
-    specified if the client states that it supports
-    `codeActionLiteralSupport` in its initial `initialize` request."""
+    """The server provides code actions.
+
+    CodeActionOptions may only be specified if the client states that it
+    supports `codeActionLiteralSupport` in its initial `initialize`
+    request.
+    """
 
     code_lens_provider: Optional[CodeLensOptions] = attrs.field(default=None)
     """The server provides code lens."""
@@ -5873,9 +6317,11 @@ class ServerCapabilities:
     """The server provides document formatting on typing."""
 
     rename_provider: Optional[Union[bool, RenameOptions]] = attrs.field(default=None)
-    """The server provides rename support. RenameOptions may only be
-    specified if the client states that it supports
-    `prepareSupport` in its initial `initialize` request."""
+    """The server provides rename support.
+
+    RenameOptions may only be specified if the client states that it
+    supports `prepareSupport` in its initial `initialize` request.
+    """
 
     folding_range_provider: Optional[
         Union[bool, FoldingRangeOptions, FoldingRangeRegistrationOptions]
@@ -5896,64 +6342,72 @@ class ServerCapabilities:
         Union[bool, CallHierarchyOptions, CallHierarchyRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides call hierarchy support.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     linked_editing_range_provider: Optional[
         Union[bool, LinkedEditingRangeOptions, LinkedEditingRangeRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides linked editing range support.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     semantic_tokens_provider: Optional[
         Union[SemanticTokensOptions, SemanticTokensRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides semantic tokens support.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     moniker_provider: Optional[
         Union[bool, MonikerOptions, MonikerRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides moniker support.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     type_hierarchy_provider: Optional[
         Union[bool, TypeHierarchyOptions, TypeHierarchyRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides type hierarchy support.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     inline_value_provider: Optional[
         Union[bool, InlineValueOptions, InlineValueRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides inline values.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     inlay_hint_provider: Optional[
         Union[bool, InlayHintOptions, InlayHintRegistrationOptions]
     ] = attrs.field(default=None)
     """The server provides inlay hints.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     diagnostic_provider: Optional[
         Union[DiagnosticOptions, DiagnosticRegistrationOptions]
     ] = attrs.field(default=None)
     """The server has support for pull model diagnostics.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     workspace: Optional["ServerCapabilitiesWorkspaceType"] = attrs.field(default=None)
@@ -5988,17 +6442,20 @@ class FileEvent:
 
 @attrs.define
 class FileSystemWatcher:
-
     glob_pattern: GlobPattern = attrs.field()
-    """The glob pattern to watch. See {@link GlobPattern glob pattern} for more detail.
-    
-    @since 3.17.0 support for relative patterns."""
+    """The glob pattern to watch. See {@link GlobPattern glob pattern} for more
+    detail.
+
+    @since 3.17.0 support for relative patterns.
+    """
     # Since: 3.17.0 support for relative patterns.
 
     kind: Optional[Union[WatchKind, int]] = attrs.field(default=None)
-    """The kind of events of interest. If omitted it defaults
-    to WatchKind.Create | WatchKind.Change | WatchKind.Delete
-    which is 7."""
+    """The kind of events of interest.
+
+    If omitted it defaults to WatchKind.Create | WatchKind.Change |
+    WatchKind.Delete which is 7.
+    """
 
 
 @attrs.define
@@ -6009,50 +6466,62 @@ class Diagnostic:
     """
 
     range: Range = attrs.field()
-    """The range at which the message applies"""
+    """The range at which the message applies."""
 
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The diagnostic's message. It usually appears in the user interface"""
+    """The diagnostic's message.
+
+    It usually appears in the user interface
+    """
 
     severity: Optional[DiagnosticSeverity] = attrs.field(default=None)
-    """The diagnostic's severity. Can be omitted. If omitted it is up to the
-    client to interpret diagnostics as error, warning, info or hint."""
+    """The diagnostic's severity.
+
+    Can be omitted. If omitted it is up to the client to interpret
+    diagnostics as error, warning, info or hint.
+    """
 
     code: Optional[Union[int, str]] = attrs.field(default=None)
     """The diagnostic's code, which usually appear in the user interface."""
 
     code_description: Optional["CodeDescription"] = attrs.field(default=None)
-    """An optional property to describe the error code.
-    Requires the code field (above) to be present/not null.
-    
-    @since 3.16.0"""
+    """An optional property to describe the error code. Requires the code field
+    (above) to be present/not null.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     source: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A human-readable string describing the source of this
-    diagnostic, e.g. 'typescript' or 'super lint'. It usually
-    appears in the user interface."""
+    """A human-readable string describing the source of this diagnostic, e.g.
+    'typescript' or 'super lint'.
+
+    It usually appears in the user interface.
+    """
 
     tags: Optional[List[DiagnosticTag]] = attrs.field(default=None)
     """Additional metadata about the diagnostic.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     related_information: Optional[List["DiagnosticRelatedInformation"]] = attrs.field(
         default=None
     )
-    """An array of related diagnostic information, e.g. when symbol-names within
-    a scope collide all definitions can be marked via this property."""
+    """An array of related diagnostic information, e.g. when symbol-names
+    within a scope collide all definitions can be marked via this property."""
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved between a `textDocument/publishDiagnostics`
-    notification and `textDocument/codeAction` request.
-    
-    @since 3.16.0"""
+    """A data entry field that is preserved between a
+    `textDocument/publishDiagnostics` notification and
+    `textDocument/codeAction` request.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -6068,8 +6537,12 @@ class CompletionContext:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The trigger character (a single character) that has trigger code complete.
-    Is undefined if `triggerKind !== CompletionTriggerKind.TriggerCharacter`"""
+    """The trigger character (a single character) that has trigger code
+    complete.
+
+    Is undefined if `triggerKind !==
+    CompletionTriggerKind.TriggerCharacter`
+    """
 
 
 @attrs.define
@@ -6085,15 +6558,22 @@ class CompletionItemLabelDetails:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional string which is rendered less prominently directly after {@link CompletionItem.label label},
-    without any spacing. Should be used for function signatures and type annotations."""
+    """An optional string which is rendered less prominently directly after.
+
+    {@link CompletionItem.label label}, without any spacing.
+
+    Should be used for function signatures and type annotations.
+    """
 
     description: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional string which is rendered less prominently after {@link CompletionItem.detail}. Should be used
-    for fully qualified names and file paths."""
+    """An optional string which is rendered less prominently after {@link
+    CompletionItem.detail}.
+
+    Should be used for fully qualified names and file paths.
+    """
 
 
 @attrs.define
@@ -6109,7 +6589,7 @@ class InsertReplaceEdit:
     """The string to be inserted."""
 
     insert: Range = attrs.field()
-    """The range if the insert is requested"""
+    """The range if the insert is requested."""
 
     replace: Range = attrs.field()
     """The range if the replace is requested."""
@@ -6130,23 +6610,29 @@ class SignatureHelpContext:
 
     is_retrigger: bool = attrs.field(validator=attrs.validators.instance_of(bool))
     """`true` if signature help was already showing when it was triggered.
-    
-    Retriggers occurs when the signature help is already active and can be caused by actions such as
-    typing a trigger character, a cursor move, or document content changes."""
+
+    Retriggers occurs when the signature help is already active and can
+    be caused by actions such as typing a trigger character, a cursor
+    move, or document content changes.
+    """
 
     trigger_character: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """Character that caused signature help to be triggered.
-    
-    This is undefined when `triggerKind !== SignatureHelpTriggerKind.TriggerCharacter`"""
+
+    This is undefined when `triggerKind !==
+    SignatureHelpTriggerKind.TriggerCharacter`
+    """
 
     active_signature_help: Optional[SignatureHelp] = attrs.field(default=None)
     """The currently active `SignatureHelp`.
-    
-    The `activeSignatureHelp` has its `SignatureHelp.activeSignature` field updated based on
-    the user navigating through available signatures."""
+
+    The `activeSignatureHelp` has its `SignatureHelp.activeSignature`
+    field updated based on the user navigating through available
+    signatures.
+    """
 
 
 @attrs.define
@@ -6158,12 +6644,16 @@ class SignatureInformation:
     """
 
     label: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The label of this signature. Will be shown in
-    the UI."""
+    """The label of this signature.
+
+    Will be shown in the UI.
+    """
 
     documentation: Optional[Union[str, MarkupContent]] = attrs.field(default=None)
-    """The human-readable doc-comment of this signature. Will be shown
-    in the UI but can be omitted."""
+    """The human-readable doc-comment of this signature.
+
+    Will be shown in the UI but can be omitted.
+    """
 
     parameters: Optional[List["ParameterInformation"]] = attrs.field(default=None)
     """The parameters of this signature."""
@@ -6172,10 +6662,11 @@ class SignatureInformation:
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The index of the active parameter.
-    
+
     If provided, this is used in place of `SignatureHelp.activeParameter`.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -6196,22 +6687,28 @@ class CodeActionContext:
     code action is run."""
 
     diagnostics: List[Diagnostic] = attrs.field()
-    """An array of diagnostics known on the client side overlapping the range provided to the
-    `textDocument/codeAction` request. They are provided so that the server knows which
-    errors are currently presented to the user for the given range. There is no guarantee
-    that these accurately reflect the error state of the resource. The primary parameter
-    to compute code actions is the provided range."""
+    """An array of diagnostics known on the client side overlapping the range
+    provided to the `textDocument/codeAction` request.
+
+    They are provided so that the server knows which errors are
+    currently presented to the user for the given range. There is no
+    guarantee that these accurately reflect the error state of the
+    resource. The primary parameter to compute code actions is the
+    provided range.
+    """
 
     only: Optional[List[Union[CodeActionKind, str]]] = attrs.field(default=None)
     """Requested kind of actions to return.
-    
-    Actions not of this kind are filtered out by the client before being shown. So servers
-    can omit computing them."""
+
+    Actions not of this kind are filtered out by the client before being
+    shown. So servers can omit computing them.
+    """
 
     trigger_kind: Optional[CodeActionTriggerKind] = attrs.field(default=None)
     """The reason why code actions were requested.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -6230,8 +6727,9 @@ class FormattingOptions:
         default=None,
     )
     """Trim trailing whitespace on a line.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     insert_final_newline: Optional[bool] = attrs.field(
@@ -6239,8 +6737,9 @@ class FormattingOptions:
         default=None,
     )
     """Insert a newline character at the end of the file if one does not exist.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     trim_final_newlines: Optional[bool] = attrs.field(
@@ -6248,8 +6747,9 @@ class FormattingOptions:
         default=None,
     )
     """Trim all newlines after the final newline at the end of the file.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
 
@@ -6275,11 +6775,14 @@ class OptionalVersionedTextDocumentIdentifier:
     """The text document's uri."""
 
     version: Optional[Union[int, None]] = attrs.field(default=None)
-    """The version number of this document. If a versioned text document identifier
-    is sent from the server to the client and the file is not open in the editor
-    (the server has not received an open notification before) the server can send
-    `null` to indicate that the version is unknown and the content on disk is the
-    truth (as specified with document content ownership)."""
+    """The version number of this document.
+
+    If a versioned text document identifier is sent from the server to
+    the client and the file is not open in the editor (the server has
+    not received an open notification before) the server can send `null`
+    to indicate that the version is unknown and the content on disk is
+    the truth (as specified with document content ownership).
+    """
 
 
 @attrs.define
@@ -6292,15 +6795,19 @@ class AnnotatedTextEdit:
     # Since: 3.16.0.
 
     annotation_id: ChangeAnnotationIdentifier = attrs.field()
-    """The actual identifier of the change annotation"""
+    """The actual identifier of the change annotation."""
 
     range: Range = attrs.field()
-    """The range of the text document to be manipulated. To insert
-    text into a document create a range where start === end."""
+    """The range of the text document to be manipulated.
+
+    To insert text into a document create a range where start === end.
+    """
 
     new_text: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The string to be inserted. For delete operations use an
-    empty string."""
+    """The string to be inserted.
+
+    For delete operations use an empty string.
+    """
 
 
 @attrs.define
@@ -6311,7 +6818,10 @@ class CreateFileOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Overwrite existing file. Overwrite wins over `ignoreIfExists`"""
+    """Overwrite existing file.
+
+    Overwrite wins over `ignoreIfExists`
+    """
 
     ignore_if_exists: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -6328,7 +6838,10 @@ class RenameFileOptions:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Overwrite target if existing. Overwrite wins over `ignoreIfExists`"""
+    """Overwrite target if existing.
+
+    Overwrite wins over `ignoreIfExists`
+    """
 
     ignore_if_exists: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -6366,17 +6879,20 @@ class FileOperationPattern:
 
     glob: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The glob pattern to match. Glob patterns can have the following syntax:
+
     - `*` to match one or more characters in a path segment
     - `?` to match on one character in a path segment
     - `**` to match any number of path segments, including none
     - `{}` to group sub patterns into an OR expression. (e.g. `**/*.{ts,js}` matches all TypeScript and JavaScript files)
     - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
-    - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)"""
+    - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
+    """
 
     matches: Optional[FileOperationPatternKind] = attrs.field(default=None)
     """Whether to match files or folders with this pattern.
-    
-    Matches both if undefined."""
+
+    Matches both if undefined.
+    """
 
     options: Optional["FileOperationPatternOptions"] = attrs.field(default=None)
     """Additional options used during matching."""
@@ -6399,7 +6915,9 @@ class WorkspaceFullDocumentDiagnosticReport:
 
     version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number for which the diagnostics are reported.
-    If the document is not marked as open `null` can be provided."""
+
+    If the document is not marked as open `null` can be provided.
+    """
 
     kind: str = attrs.field(validator=attrs.validators.in_(["full"]), default="full")
     """A full document diagnostic report."""
@@ -6408,9 +6926,11 @@ class WorkspaceFullDocumentDiagnosticReport:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional result id. If provided it will
-    be sent on the next diagnostic request for the
-    same document."""
+    """An optional result id.
+
+    If provided it will be sent on the next diagnostic request for the
+    same document.
+    """
 
 
 @attrs.define
@@ -6427,25 +6947,29 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     """The URI for which diagnostic information is reported."""
 
     result_id: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A result id which will be sent on the next
-    diagnostic request for the same document."""
+    """A result id which will be sent on the next diagnostic request for the
+    same document."""
 
     version: Optional[Union[int, None]] = attrs.field(default=None)
     """The version number for which the diagnostics are reported.
-    If the document is not marked as open `null` can be provided."""
+
+    If the document is not marked as open `null` can be provided.
+    """
 
     kind: str = attrs.field(
         validator=attrs.validators.in_(["unchanged"]), default="unchanged"
     )
-    """A document diagnostic report indicating
-    no changes to the last result. A server can
-    only return `unchanged` if result ids are
-    provided."""
+    """A document diagnostic report indicating no changes to the last result.
+
+    A server can only return `unchanged` if result ids are provided.
+    """
 
 
 LSPObject = object
 """LSP object definition.
-@since 3.17.0"""
+
+@since 3.17.0
+"""
 # Since: 3.17.0
 
 
@@ -6463,20 +6987,19 @@ class NotebookCell:
     # Since: 3.17.0
 
     kind: NotebookCellKind = attrs.field()
-    """The cell's kind"""
+    """The cell's kind."""
 
     document: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The URI of the cell's text document
-    content."""
+    """The URI of the cell's text document content."""
 
     metadata: Optional[LSPObject] = attrs.field(default=None)
     """Additional metadata stored with the cell.
-    
-    Note: should always be an object literal (e.g. LSPObject)"""
+
+    Note: should always be an object literal (e.g. LSPObject)
+    """
 
     execution_summary: Optional["ExecutionSummary"] = attrs.field(default=None)
-    """Additional execution summary information
-    if supported by the client."""
+    """Additional execution summary information if supported by the client."""
 
 
 @attrs.define
@@ -6493,10 +7016,10 @@ class NotebookCellArrayChange:
     """The start oftest of the cell that changed."""
 
     delete_count: int = attrs.field(validator=validators.uinteger_validator)
-    """The deleted cells"""
+    """The deleted cells."""
 
     cells: Optional[List[NotebookCell]] = attrs.field(default=None)
-    """The new cells, if any"""
+    """The new cells, if any."""
 
 
 @attrs.define
@@ -6515,8 +7038,9 @@ class ClientCapabilities:
         default=None
     )
     """Capabilities specific to the notebook document support.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     window: Optional["WindowClientCapabilities"] = attrs.field(default=None)
@@ -6524,8 +7048,9 @@ class ClientCapabilities:
 
     general: Optional["GeneralClientCapabilities"] = attrs.field(default=None)
     """General client capabilities.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     experimental: Optional[LSPAny] = attrs.field(default=None)
@@ -6534,35 +7059,46 @@ class ClientCapabilities:
 
 @attrs.define
 class TextDocumentSyncOptions:
-
     open_close: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Open and close notifications are sent to the server. If omitted open close notification should not
-    be sent."""
+    """Open and close notifications are sent to the server.
+
+    If omitted open close notification should not be sent.
+    """
 
     change: Optional[TextDocumentSyncKind] = attrs.field(default=None)
-    """Change notifications are sent to the server. See TextDocumentSyncKind.None, TextDocumentSyncKind.Full
-    and TextDocumentSyncKind.Incremental. If omitted it defaults to TextDocumentSyncKind.None."""
+    """Change notifications are sent to the server.
+
+    See TextDocumentSyncKind.None, TextDocumentSyncKind.Full and
+    TextDocumentSyncKind.Incremental. If omitted it defaults to
+    TextDocumentSyncKind.None.
+    """
 
     will_save: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """If present will save notifications are sent to the server. If omitted the notification should not be
-    sent."""
+    """If present will save notifications are sent to the server.
+
+    If omitted the notification should not be sent.
+    """
 
     will_save_wait_until: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """If present will save wait until requests are sent to the server. If omitted the request should not be
-    sent."""
+    """If present will save wait until requests are sent to the server.
+
+    If omitted the request should not be sent.
+    """
 
     save: Optional[Union[bool, SaveOptions]] = attrs.field(default=None)
-    """If present save notifications are sent to the server. If omitted the notification should not be
-    sent."""
+    """If present save notifications are sent to the server.
+
+    If omitted the notification should not be sent.
+    """
 
 
 @attrs.define
@@ -6573,9 +7109,11 @@ class NotebookDocumentSyncOptionsNotebookSelectorType1CellsType:
 @attrs.define
 class NotebookDocumentSyncOptionsNotebookSelectorType1:
     notebook: Union[str, NotebookDocumentFilter] = attrs.field()
-    """The notebook to be synced If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
+    """The notebook to be synced If a string value is provided it matches
+    against the notebook type.
+
+    '*' matches every notebook.
+    """
 
     cells: Optional[
         List["NotebookDocumentSyncOptionsNotebookSelectorType1CellsType"]
@@ -6596,9 +7134,11 @@ class NotebookDocumentSyncOptionsNotebookSelectorType2:
     """The cells of the matching notebook to be synced."""
 
     notebook: Optional[Union[str, NotebookDocumentFilter]] = attrs.field(default=None)
-    """The notebook to be synced If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
+    """The notebook to be synced If a string value is provided it matches
+    against the notebook type.
+
+    '*' matches every notebook.
+    """
 
 
 @attrs.define
@@ -6626,14 +7166,16 @@ class NotebookDocumentSyncOptions:
             "NotebookDocumentSyncOptionsNotebookSelectorType2",
         ]
     ] = attrs.field()
-    """The notebooks to be synced"""
+    """The notebooks to be synced."""
 
     save: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether save notification should be forwarded to
-    the server. Will only be honored if mode === `notebook`."""
+    """Whether save notification should be forwarded to the server.
+
+    Will only be honored if mode === `notebook`.
+    """
 
 
 @attrs.define
@@ -6644,9 +7186,11 @@ class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType:
 @attrs.define
 class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1:
     notebook: Union[str, NotebookDocumentFilter] = attrs.field()
-    """The notebook to be synced If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
+    """The notebook to be synced If a string value is provided it matches
+    against the notebook type.
+
+    '*' matches every notebook.
+    """
 
     cells: Optional[
         List["NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType"]
@@ -6667,9 +7211,11 @@ class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2:
     """The cells of the matching notebook to be synced."""
 
     notebook: Optional[Union[str, NotebookDocumentFilter]] = attrs.field(default=None)
-    """The notebook to be synced If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
+    """The notebook to be synced If a string value is provided it matches
+    against the notebook type.
+
+    '*' matches every notebook.
+    """
 
 
 @attrs.define
@@ -6687,40 +7233,45 @@ class NotebookDocumentSyncRegistrationOptions:
             "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2",
         ]
     ] = attrs.field()
-    """The notebooks to be synced"""
+    """The notebooks to be synced."""
 
     save: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether save notification should be forwarded to
-    the server. Will only be honored if mode === `notebook`."""
+    """Whether save notification should be forwarded to the server.
+
+    Will only be honored if mode === `notebook`.
+    """
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
+    """The id used to register the request.
+
+    The id can be used to deregister the request again. See also
+    Registration#id.
+    """
 
 
 @attrs.define
 class WorkspaceFoldersServerCapabilities:
-
     supported: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The server has support for workspace folders"""
+    """The server has support for workspace folders."""
 
     change_notifications: Optional[Union[str, bool]] = attrs.field(default=None)
-    """Whether the server wants to receive workspace folder
-    change notifications.
-    
-    If a string is provided the string is treated as an ID
-    under which the notification is registered on the client
-    side. The ID can be used to unregister for these events
-    using the `client/unregisterCapability` request."""
+    """Whether the server wants to receive workspace folder change
+    notifications.
+
+    If a string is provided the string is treated as an ID under which
+    the notification is registered on the client side. The ID can be
+    used to unregister for these events using the
+    `client/unregisterCapability` request.
+    """
 
 
 @attrs.define
@@ -6745,7 +7296,8 @@ class FileOperationOptions:
     """The server is interested in receiving willRenameFiles requests."""
 
     did_delete: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
-    """The server is interested in receiving didDeleteFiles file notifications."""
+    """The server is interested in receiving didDeleteFiles file
+    notifications."""
 
     will_delete: Optional[FileOperationRegistrationOptions] = attrs.field(default=None)
     """The server is interested in receiving willDeleteFiles file requests."""
@@ -6788,17 +7340,20 @@ class ParameterInformation:
 
     label: Union[str, Tuple[int, int]] = attrs.field()
     """The label of this parameter information.
-    
+
     Either a string or an inclusive start and exclusive end offsets within its containing
     signature label. (see SignatureInformation.label). The offsets are based on a UTF-16
     string representation as `Position` and `Range` does.
-    
+
     *Note*: a label of type string should be a substring of its containing signature label.
-    Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`."""
+    Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`.
+    """
 
     documentation: Optional[Union[str, MarkupContent]] = attrs.field(default=None)
-    """The human-readable doc-comment of this parameter. Will be shown
-    in the UI but can be omitted."""
+    """The human-readable doc-comment of this parameter.
+
+    Will be shown in the UI but can be omitted.
+    """
 
 
 @attrs.define
@@ -6812,19 +7367,21 @@ class NotebookCellTextDocumentFilter:
     # Since: 3.17.0
 
     notebook: Union[str, NotebookDocumentFilter] = attrs.field()
-    """A filter that matches against the notebook
-    containing the notebook cell. If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
+    """A filter that matches against the notebook containing the notebook cell.
+
+    If a string value is provided it matches against the notebook type.
+    '*' matches every notebook.
+    """
 
     language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     """A language id like `python`.
-    
-    Will be matched against the language id of the
-    notebook cell document. '*' matches every language."""
+
+    Will be matched against the language id of the notebook cell
+    document. '*' matches every language.
+    """
 
 
 @attrs.define
@@ -6845,18 +7402,15 @@ class FileOperationPatternOptions:
 
 @attrs.define
 class ExecutionSummary:
-
     execution_order: int = attrs.field(validator=validators.uinteger_validator)
-    """A strict monotonically increasing value
-    indicating the execution order of a cell
-    inside a notebook."""
+    """A strict monotonically increasing value indicating the execution order
+    of a cell inside a notebook."""
 
     success: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the execution was successful or
-    not if known by the client."""
+    """Whether the execution was successful or not if known by the client."""
 
 
 @attrs.define
@@ -6867,9 +7421,8 @@ class WorkspaceClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client supports applying batch edits
-    to the workspace by supporting the request
-    'workspace/applyEdit'"""
+    """The client supports applying batch edits to the workspace by supporting
+    the request 'workspace/applyEdit'."""
 
     workspace_edit: Optional["WorkspaceEditClientCapabilities"] = attrs.field(
         default=None
@@ -6879,12 +7432,14 @@ class WorkspaceClientCapabilities:
     did_change_configuration: Optional[
         "DidChangeConfigurationClientCapabilities"
     ] = attrs.field(default=None)
-    """Capabilities specific to the `workspace/didChangeConfiguration` notification."""
+    """Capabilities specific to the `workspace/didChangeConfiguration`
+    notification."""
 
     did_change_watched_files: Optional[
         "DidChangeWatchedFilesClientCapabilities"
     ] = attrs.field(default=None)
-    """Capabilities specific to the `workspace/didChangeWatchedFiles` notification."""
+    """Capabilities specific to the `workspace/didChangeWatchedFiles`
+    notification."""
 
     symbol: Optional["WorkspaceSymbolClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `workspace/symbol` request."""
@@ -6899,8 +7454,9 @@ class WorkspaceClientCapabilities:
         default=None,
     )
     """The client has support for workspace folders.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
     configuration: Optional[bool] = attrs.field(
@@ -6908,8 +7464,9 @@ class WorkspaceClientCapabilities:
         default=None,
     )
     """The client supports `workspace/configuration` requests.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
     semantic_tokens: Optional[
@@ -6917,33 +7474,37 @@ class WorkspaceClientCapabilities:
     ] = attrs.field(default=None)
     """Capabilities specific to the semantic token requests scoped to the
     workspace.
-    
-    @since 3.16.0."""
+
+    @since 3.16.0.
+    """
     # Since: 3.16.0.
 
     code_lens: Optional["CodeLensWorkspaceClientCapabilities"] = attrs.field(
         default=None
     )
-    """Capabilities specific to the code lens requests scoped to the
-    workspace.
-    
-    @since 3.16.0."""
+    """Capabilities specific to the code lens requests scoped to the workspace.
+
+    @since 3.16.0.
+    """
     # Since: 3.16.0.
 
     file_operations: Optional["FileOperationClientCapabilities"] = attrs.field(
         default=None
     )
-    """The client has support for file notifications/requests for user operations on files.
-    
-    Since 3.16.0"""
+    """The client has support for file notifications/requests for user
+    operations on files.
+
+    Since 3.16.0
+    """
 
     inline_value: Optional["InlineValueWorkspaceClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the inline values requests scoped to the
     workspace.
-    
-    @since 3.17.0."""
+
+    @since 3.17.0.
+    """
     # Since: 3.17.0.
 
     inlay_hint: Optional["InlayHintWorkspaceClientCapabilities"] = attrs.field(
@@ -6951,8 +7512,9 @@ class WorkspaceClientCapabilities:
     )
     """Capabilities specific to the inlay hint requests scoped to the
     workspace.
-    
-    @since 3.17.0."""
+
+    @since 3.17.0.
+    """
     # Since: 3.17.0.
 
     diagnostics: Optional["DiagnosticWorkspaceClientCapabilities"] = attrs.field(
@@ -6960,8 +7522,9 @@ class WorkspaceClientCapabilities:
     )
     """Capabilities specific to the diagnostic requests scoped to the
     workspace.
-    
-    @since 3.17.0."""
+
+    @since 3.17.0.
+    """
     # Since: 3.17.0.
 
 
@@ -6987,8 +7550,9 @@ class TextDocumentClientCapabilities:
 
     declaration: Optional["DeclarationClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/declaration` request.
-    
-    @since 3.14.0"""
+
+    @since 3.14.0
+    """
     # Since: 3.14.0
 
     definition: Optional["DefinitionClientCapabilities"] = attrs.field(default=None)
@@ -6998,16 +7562,18 @@ class TextDocumentClientCapabilities:
         default=None
     )
     """Capabilities specific to the `textDocument/typeDefinition` request.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
     implementation: Optional["ImplementationClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/implementation` request.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
     references: Optional["ReferenceClientCapabilities"] = attrs.field(default=None)
@@ -7016,7 +7582,8 @@ class TextDocumentClientCapabilities:
     document_highlight: Optional["DocumentHighlightClientCapabilities"] = attrs.field(
         default=None
     )
-    """Capabilities specific to the `textDocument/documentHighlight` request."""
+    """Capabilities specific to the `textDocument/documentHighlight`
+    request."""
 
     document_symbol: Optional["DocumentSymbolClientCapabilities"] = attrs.field(
         default=None
@@ -7039,8 +7606,9 @@ class TextDocumentClientCapabilities:
     )
     """Capabilities specific to the `textDocument/documentColor` and the
     `textDocument/colorPresentation` request.
-    
-    @since 3.6.0"""
+
+    @since 3.6.0
+    """
     # Since: 3.6.0
 
     formatting: Optional["DocumentFormattingClientCapabilities"] = attrs.field(
@@ -7065,77 +7633,88 @@ class TextDocumentClientCapabilities:
         default=None
     )
     """Capabilities specific to the `textDocument/foldingRange` request.
-    
-    @since 3.10.0"""
+
+    @since 3.10.0
+    """
     # Since: 3.10.0
 
     selection_range: Optional["SelectionRangeClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the `textDocument/selectionRange` request.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     publish_diagnostics: Optional["PublishDiagnosticsClientCapabilities"] = attrs.field(
         default=None
     )
-    """Capabilities specific to the `textDocument/publishDiagnostics` notification."""
+    """Capabilities specific to the `textDocument/publishDiagnostics`
+    notification."""
 
     call_hierarchy: Optional["CallHierarchyClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the various call hierarchy requests.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     semantic_tokens: Optional["SemanticTokensClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the various semantic token request.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     linked_editing_range: Optional[
         "LinkedEditingRangeClientCapabilities"
     ] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/linkedEditingRange` request.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     moniker: Optional["MonikerClientCapabilities"] = attrs.field(default=None)
     """Client capabilities specific to the `textDocument/moniker` request.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     type_hierarchy: Optional["TypeHierarchyClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the various type hierarchy requests.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     inline_value: Optional["InlineValueClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/inlineValue` request.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     inlay_hint: Optional["InlayHintClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the `textDocument/inlayHint` request.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     diagnostic: Optional["DiagnosticClientCapabilities"] = attrs.field(default=None)
     """Capabilities specific to the diagnostic pull model.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -7149,44 +7728,47 @@ class NotebookDocumentClientCapabilities:
     # Since: 3.17.0
 
     synchronization: "NotebookDocumentSyncClientCapabilities" = attrs.field()
-    """Capabilities specific to notebook document synchronization
-    
-    @since 3.17.0"""
+    """Capabilities specific to notebook document synchronization.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class WindowClientCapabilities:
-
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """It indicates whether the client supports server initiated
-    progress using the `window/workDoneProgress/create` request.
-    
+    """It indicates whether the client supports server initiated progress using
+    the `window/workDoneProgress/create` request.
+
     The capability also controls Whether client supports handling
     of progress notifications. If set servers are allowed to report a
     `workDoneProgress` property in the request specific server
     capabilities.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     show_message: Optional["ShowMessageRequestClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the showMessage request.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     show_document: Optional["ShowDocumentClientCapabilities"] = attrs.field(
         default=None
     )
     """Capabilities specific to the showDocument request.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -7196,9 +7778,8 @@ class GeneralClientCapabilitiesStaleRequestSupportType:
     """The client will actively cancel the request."""
 
     retry_on_content_modified: List[str] = attrs.field()
-    """The list of requests for which the client
-    will retry the request if it receives a
-    response with error code `ContentModified`"""
+    """The list of requests for which the client will retry the request if it
+    receives a response with error code `ContentModified`"""
 
 
 @attrs.define
@@ -7213,49 +7794,51 @@ class GeneralClientCapabilities:
     stale_request_support: Optional[
         "GeneralClientCapabilitiesStaleRequestSupportType"
     ] = attrs.field(default=None)
-    """Client capability that signals how the client
-    handles stale requests (e.g. a request
-    for which the client will not process the response
-    anymore since the information is outdated).
-    
-    @since 3.17.0"""
+    """Client capability that signals how the client handles stale requests
+    (e.g. a request for which the client will not process the response anymore
+    since the information is outdated).
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     regular_expressions: Optional["RegularExpressionsClientCapabilities"] = attrs.field(
         default=None
     )
     """Client capabilities specific to regular expressions.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     markdown: Optional["MarkdownClientCapabilities"] = attrs.field(default=None)
     """Client capabilities specific to the client's markdown parser.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     position_encodings: Optional[List[Union[PositionEncodingKind, str]]] = attrs.field(
         default=None
     )
-    """The position encodings supported by the client. Client and server
-    have to agree on the same position encoding to ensure that offsets
-    (e.g. character position in a line) are interpreted the same on both
-    sides.
-    
+    """The position encodings supported by the client. Client and server have
+    to agree on the same position encoding to ensure that offsets (e.g.
+    character position in a line) are interpreted the same on both sides.
+
     To keep the protocol backwards compatible the following applies: if
     the value 'utf-16' is missing from the array of position encodings
     servers can assume that the client supports UTF-16. UTF-16 is
     therefore a mandatory encoding.
-    
+
     If omitted it defaults to ['utf-16'].
-    
+
     Implementation considerations: since the conversion from one encoding
     into another requires the content of the file / line the conversion
     is best done where the file is read which is usually on the server
     side.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -7284,34 +7867,35 @@ class WorkspaceEditClientCapabilitiesChangeAnnotationSupportType:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client groups edits with equal labels into tree nodes,
-    for instance all edits labelled with "Changes in Strings" would
-    be a tree node."""
+    """Whether the client groups edits with equal labels into tree nodes, for
+    instance all edits labelled with "Changes in Strings" would be a tree
+    node."""
 
 
 @attrs.define
 class WorkspaceEditClientCapabilities:
-
     document_changes: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client supports versioned document changes in `WorkspaceEdit`s"""
+    """The client supports versioned document changes in `WorkspaceEdit`s."""
 
     resource_operations: Optional[List[ResourceOperationKind]] = attrs.field(
         default=None
     )
     """The resource operations the client supports. Clients should at least
     support 'create', 'rename' and 'delete' files and folders.
-    
-    @since 3.13.0"""
+
+    @since 3.13.0
+    """
     # Since: 3.13.0
 
     failure_handling: Optional[FailureHandlingKind] = attrs.field(default=None)
     """The failure handling strategy of a client if applying the workspace edit
     fails.
-    
-    @since 3.13.0"""
+
+    @since 3.13.0
+    """
     # Since: 3.13.0
 
     normalizes_line_endings: Optional[bool] = attrs.field(
@@ -7319,12 +7903,11 @@ class WorkspaceEditClientCapabilities:
         default=None,
     )
     """Whether the client normalizes line endings to the client specific
-    setting.
-    If set to `true` the client will normalize line ending characters
-    in a workspace edit to the client-specified new line
-    character.
-    
-    @since 3.16.0"""
+    setting. If set to `true` the client will normalize line ending characters
+    in a workspace edit to the client-specified new line character.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     change_annotation_support: Optional[
@@ -7332,14 +7915,14 @@ class WorkspaceEditClientCapabilities:
     ] = attrs.field(default=None)
     """Whether the client in general supports change annotations on text edits,
     create file, rename file and delete file changes.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
 @attrs.define
 class DidChangeConfigurationClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -7349,37 +7932,39 @@ class DidChangeConfigurationClientCapabilities:
 
 @attrs.define
 class DidChangeWatchedFilesClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Did change watched files notification supports dynamic registration. Please note
-    that the current protocol doesn't support static configuration for file changes
-    from the server side."""
+    """Did change watched files notification supports dynamic registration.
+
+    Please note that the current protocol doesn't support static
+    configuration for file changes from the server side.
+    """
 
     relative_pattern_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client has support for {@link  RelativePattern relative pattern}
-    or not.
-    
-    @since 3.17.0"""
+    """Whether the client has support for {@link  RelativePattern relative
+    pattern} or not.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesSymbolKindType:
     value_set: Optional[List[SymbolKind]] = attrs.field(default=None)
-    """The symbol kind values the client supports. When this
-    property exists the client also guarantees that it will
-    handle values outside its set gracefully and falls back
-    to a default value when unknown.
-    
-    If this property is not present the client only supports
-    the symbol kinds from `File` to `Array` as defined in
-    the initial version of the protocol."""
+    """The symbol kind values the client supports. When this property exists
+    the client also guarantees that it will handle values outside its set
+    gracefully and falls back to a default value when unknown.
+
+    If this property is not present the client only supports the symbol
+    kinds from `File` to `Array` as defined in the initial version of
+    the protocol.
+    """
 
 
 @attrs.define
@@ -7391,8 +7976,10 @@ class WorkspaceSymbolClientCapabilitiesTagSupportType:
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesResolveSupportType:
     properties: List[str] = attrs.field()
-    """The properties that a client can resolve lazily. Usually
-    `location.range`"""
+    """The properties that a client can resolve lazily.
+
+    Usually `location.range`
+    """
 
 
 @attrs.define
@@ -7408,15 +7995,17 @@ class WorkspaceSymbolClientCapabilities:
     symbol_kind: Optional[
         "WorkspaceSymbolClientCapabilitiesSymbolKindType"
     ] = attrs.field(default=None)
-    """Specific capabilities for the `SymbolKind` in the `workspace/symbol` request."""
+    """Specific capabilities for the `SymbolKind` in the `workspace/symbol`
+    request."""
 
     tag_support: Optional[
         "WorkspaceSymbolClientCapabilitiesTagSupportType"
     ] = attrs.field(default=None)
-    """The client supports tags on `SymbolInformation`.
-    Clients supporting tags have to handle unknown tags gracefully.
-    
-    @since 3.16.0"""
+    """The client supports tags on `SymbolInformation`. Clients supporting tags
+    have to handle unknown tags gracefully.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     resolve_support: Optional[
@@ -7425,8 +8014,9 @@ class WorkspaceSymbolClientCapabilities:
     """The client support partial workspace symbols. The client will send the
     request `workspaceSymbol/resolve` to the server to resolve additional
     properties.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -7453,11 +8043,12 @@ class SemanticTokensWorkspaceClientCapabilities:
     )
     """Whether the client implementation supports a refresh request sent from
     the server to the client.
-    
-    Note that this event is global and will force the client to refresh all
-    semantic tokens currently shown. It should be used with absolute care
-    and is useful for situation where a server for example detects a project
-    wide change that requires such a calculation."""
+
+    Note that this event is global and will force the client to refresh
+    all semantic tokens currently shown. It should be used with absolute
+    care and is useful for situation where a server for example detects
+    a project wide change that requires such a calculation.
+    """
 
 
 @attrs.define
@@ -7470,13 +8061,14 @@ class CodeLensWorkspaceClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client implementation supports a refresh request sent from the
-    server to the client.
-    
-    Note that this event is global and will force the client to refresh all
-    code lenses currently shown. It should be used with absolute care and is
-    useful for situation where a server for example detect a project wide
-    change that requires such a calculation."""
+    """Whether the client implementation supports a refresh request sent from
+    the server to the client.
+
+    Note that this event is global and will force the client to refresh
+    all code lenses currently shown. It should be used with absolute
+    care and is useful for situation where a server for example detect a
+    project wide change that requires such a calculation.
+    """
 
 
 @attrs.define
@@ -7496,7 +8088,8 @@ class FileOperationClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client supports dynamic registration for file requests/notifications."""
+    """Whether the client supports dynamic registration for file
+    requests/notifications."""
 
     did_create: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -7548,13 +8141,14 @@ class InlineValueWorkspaceClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client implementation supports a refresh request sent from the
-    server to the client.
-    
-    Note that this event is global and will force the client to refresh all
-    inline values currently shown. It should be used with absolute care and is
-    useful for situation where a server for example detects a project wide
-    change that requires such a calculation."""
+    """Whether the client implementation supports a refresh request sent from
+    the server to the client.
+
+    Note that this event is global and will force the client to refresh
+    all inline values currently shown. It should be used with absolute
+    care and is useful for situation where a server for example detects
+    a project wide change that requires such a calculation.
+    """
 
 
 @attrs.define
@@ -7572,11 +8166,12 @@ class InlayHintWorkspaceClientCapabilities:
     )
     """Whether the client implementation supports a refresh request sent from
     the server to the client.
-    
-    Note that this event is global and will force the client to refresh all
-    inlay hints currently shown. It should be used with absolute care and
-    is useful for situation where a server for example detects a project wide
-    change that requires such a calculation."""
+
+    Note that this event is global and will force the client to refresh
+    all inlay hints currently shown. It should be used with absolute
+    care and is useful for situation where a server for example detects
+    a project wide change that requires such a calculation.
+    """
 
 
 @attrs.define
@@ -7594,16 +8189,16 @@ class DiagnosticWorkspaceClientCapabilities:
     )
     """Whether the client implementation supports a refresh request sent from
     the server to the client.
-    
-    Note that this event is global and will force the client to refresh all
-    pulled diagnostics currently shown. It should be used with absolute care and
-    is useful for situation where a server for example detects a project wide
-    change that requires such a calculation."""
+
+    Note that this event is global and will force the client to refresh
+    all pulled diagnostics currently shown. It should be used with
+    absolute care and is useful for situation where a server for example
+    detects a project wide change that requires such a calculation.
+    """
 
 
 @attrs.define
 class TextDocumentSyncClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -7620,9 +8215,9 @@ class TextDocumentSyncClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client supports sending a will save request and
-    waits for a response providing text edits which will
-    be applied to the document before it is saved."""
+    """The client supports sending a will save request and waits for a response
+    providing text edits which will be applied to the document before it is
+    saved."""
 
     did_save: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -7655,11 +8250,12 @@ class CompletionClientCapabilitiesCompletionItemType:
         default=None,
     )
     """Client supports snippets as insert text.
-    
-    A snippet can define tab stops and placeholders with `$1`, `$2`
-    and `${3:foo}`. `$0` defines the final tab stop, it defaults to
-    the end of the snippet. Placeholders with equal identifiers are linked,
-    that is typing in one will update others too."""
+
+    A snippet can define tab stops and placeholders with `$1`, `$2` and
+    `${3:foo}`. `$0` defines the final tab stop, it defaults to the end
+    of the snippet. Placeholders with equal identifiers are linked, that
+    is typing in one will update others too.
+    """
 
     commit_characters_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -7669,7 +8265,10 @@ class CompletionClientCapabilitiesCompletionItemType:
 
     documentation_format: Optional[List[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
-    property. The order describes the preferred format of the client."""
+    property.
+
+    The order describes the preferred format of the client.
+    """
 
     deprecated_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -7686,12 +8285,13 @@ class CompletionClientCapabilitiesCompletionItemType:
     tag_support: Optional[
         "CompletionClientCapabilitiesCompletionItemTypeTagSupportType"
     ] = attrs.field(default=None)
-    """Client supports the tag property on a completion item. Clients supporting
-    tags have to handle unknown tags gracefully. Clients especially need to
-    preserve unknown tags when sending a completion item back to the server in
-    a resolve call.
-    
-    @since 3.15.0"""
+    """Client supports the tag property on a completion item. Clients
+    supporting tags have to handle unknown tags gracefully. Clients especially
+    need to preserve unknown tags when sending a completion item back to the
+    server in a resolve call.
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     insert_replace_support: Optional[bool] = attrs.field(
@@ -7700,8 +8300,9 @@ class CompletionClientCapabilitiesCompletionItemType:
     )
     """Client support insert replace edit to control different behavior if a
     completion item is inserted in the text or should replace text.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     resolve_support: Optional[
@@ -7710,55 +8311,58 @@ class CompletionClientCapabilitiesCompletionItemType:
     """Indicates which properties a client can resolve lazily on a completion
     item. Before version 3.16.0 only the predefined properties `documentation`
     and `details` could be resolved lazily.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     insert_text_mode_support: Optional[
         "CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType"
     ] = attrs.field(default=None)
-    """The client supports the `insertTextMode` property on
-    a completion item to override the whitespace handling mode
-    as defined by the client (see `insertTextMode`).
-    
-    @since 3.16.0"""
+    """The client supports the `insertTextMode` property on a completion item
+    to override the whitespace handling mode as defined by the client (see
+    `insertTextMode`).
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     label_details_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client has support for completion item label
-    details (see also `CompletionItemLabelDetails`).
-    
-    @since 3.17.0"""
+    """The client has support for completion item label details (see also
+    `CompletionItemLabelDetails`).
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemKindType:
     value_set: Optional[List[CompletionItemKind]] = attrs.field(default=None)
-    """The completion item kind values the client supports. When this
-    property exists the client also guarantees that it will
-    handle values outside its set gracefully and falls back
-    to a default value when unknown.
-    
-    If this property is not present the client only supports
-    the completion items kinds from `Text` to `Reference` as defined in
-    the initial version of the protocol."""
+    """The completion item kind values the client supports. When this property
+    exists the client also guarantees that it will handle values outside its
+    set gracefully and falls back to a default value when unknown.
+
+    If this property is not present the client only supports the
+    completion items kinds from `Text` to `Reference` as defined in the
+    initial version of the protocol.
+    """
 
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionListType:
     item_defaults: Optional[List[str]] = attrs.field(default=None)
-    """The client supports the following itemDefaults on
-    a completion list.
-    
+    """The client supports the following itemDefaults on a completion list.
+
     The value lists the supported property names of the
     `CompletionList.itemDefaults` object. If omitted
     no properties are supported.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -7783,11 +8387,12 @@ class CompletionClientCapabilities:
     ] = attrs.field(default=None)
 
     insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
-    """Defines how the client handles whitespace and indentation
-    when accepting a completion item that uses multi line
-    text in either `insertText` or `textEdit`.
-    
-    @since 3.17.0"""
+    """Defines how the client handles whitespace and indentation when accepting
+    a completion item that uses multi line text in either `insertText` or
+    `textEdit`.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     context_support: Optional[bool] = attrs.field(
@@ -7802,14 +8407,14 @@ class CompletionClientCapabilities:
     ] = attrs.field(default=None)
     """The client supports the following `CompletionList` specific
     capabilities.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class HoverClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -7817,8 +8422,10 @@ class HoverClientCapabilities:
     """Whether hover supports dynamic registration."""
 
     content_format: Optional[List[MarkupKind]] = attrs.field(default=None)
-    """Client supports the following content formats for the content
-    property. The order describes the preferred format of the client."""
+    """Client supports the following content formats for the content property.
+
+    The order describes the preferred format of the client.
+    """
 
 
 @attrs.define
@@ -7827,10 +8434,11 @@ class SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformatio
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client supports processing label offsets instead of a
-    simple label string.
-    
-    @since 3.14.0"""
+    """The client supports processing label offsets instead of a simple label
+    string.
+
+    @since 3.14.0
+    """
     # Since: 3.14.0
 
 
@@ -7838,7 +8446,10 @@ class SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformatio
 class SignatureHelpClientCapabilitiesSignatureInformationType:
     documentation_format: Optional[List[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
-    property. The order describes the preferred format of the client."""
+    property.
+
+    The order describes the preferred format of the client.
+    """
 
     parameter_information: Optional[
         "SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformationType"
@@ -7849,10 +8460,11 @@ class SignatureHelpClientCapabilitiesSignatureInformationType:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client supports the `activeParameter` property on `SignatureInformation`
-    literal.
-    
-    @since 3.16.0"""
+    """The client supports the `activeParameter` property on
+    `SignatureInformation` literal.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -7869,8 +8481,8 @@ class SignatureHelpClientCapabilities:
     signature_information: Optional[
         "SignatureHelpClientCapabilitiesSignatureInformationType"
     ] = attrs.field(default=None)
-    """The client supports the following `SignatureInformation`
-    specific properties."""
+    """The client supports the following `SignatureInformation` specific
+    properties."""
 
     context_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -7880,8 +8492,9 @@ class SignatureHelpClientCapabilities:
     `textDocument/signatureHelp` request. A client that opts into
     contextSupport will also support the `retriggerCharacters` on
     `SignatureHelpOptions`.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
 
@@ -7895,15 +8508,19 @@ class DeclarationClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether declaration supports dynamic registration. If this is set to `true`
-    the client supports the new `DeclarationRegistrationOptions` return value
-    for the corresponding server capability as well."""
+    """Whether declaration supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `DeclarationRegistrationOptions` return value for the corresponding
+    server capability as well.
+    """
 
     link_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client supports additional metadata in the form of declaration links."""
+    """The client supports additional metadata in the form of declaration
+    links."""
 
 
 @attrs.define
@@ -7921,8 +8538,9 @@ class DefinitionClientCapabilities:
         default=None,
     )
     """The client supports additional metadata in the form of definition links.
-    
-    @since 3.14.0"""
+
+    @since 3.14.0
+    """
     # Since: 3.14.0
 
 
@@ -7934,17 +8552,21 @@ class TypeDefinitionClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `TypeDefinitionRegistrationOptions` return value
-    for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `TypeDefinitionRegistrationOptions` return value for the
+    corresponding server capability as well.
+    """
 
     link_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client supports additional metadata in the form of definition links.
-    
-    Since 3.14.0"""
+
+    Since 3.14.0
+    """
 
 
 @attrs.define
@@ -7957,17 +8579,21 @@ class ImplementationClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `ImplementationRegistrationOptions` return value
-    for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `ImplementationRegistrationOptions` return value for the
+    corresponding server capability as well.
+    """
 
     link_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """The client supports additional metadata in the form of definition links.
-    
-    @since 3.14.0"""
+
+    @since 3.14.0
+    """
     # Since: 3.14.0
 
 
@@ -7996,14 +8622,14 @@ class DocumentHighlightClientCapabilities:
 @attrs.define
 class DocumentSymbolClientCapabilitiesSymbolKindType:
     value_set: Optional[List[SymbolKind]] = attrs.field(default=None)
-    """The symbol kind values the client supports. When this
-    property exists the client also guarantees that it will
-    handle values outside its set gracefully and falls back
-    to a default value when unknown.
-    
-    If this property is not present the client only supports
-    the symbol kinds from `File` to `Array` as defined in
-    the initial version of the protocol."""
+    """The symbol kind values the client supports. When this property exists
+    the client also guarantees that it will handle values outside its set
+    gracefully and falls back to a default value when unknown.
+
+    If this property is not present the client only supports the symbol
+    kinds from `File` to `Array` as defined in the initial version of
+    the protocol.
+    """
 
 
 @attrs.define
@@ -8040,8 +8666,9 @@ class DocumentSymbolClientCapabilities:
     """The client supports tags on `SymbolInformation`. Tags are supported on
     `DocumentSymbol` if `hierarchicalDocumentSymbolSupport` is set to true.
     Clients supporting tags have to handle unknown tags gracefully.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     label_support: Optional[bool] = attrs.field(
@@ -8050,18 +8677,21 @@ class DocumentSymbolClientCapabilities:
     )
     """The client supports an additional label presented in the UI when
     registering a document symbol provider.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
 @attrs.define
 class CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType:
     value_set: List[Union[CodeActionKind, str]] = attrs.field()
-    """The code action kind values the client supports. When this
-    property exists the client also guarantees that it will
-    handle values outside its set gracefully and falls back
-    to a default value when unknown."""
+    """The code action kind values the client supports.
+
+    When this property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back to a default
+    value when unknown.
+    """
 
 
 @attrs.define
@@ -8069,8 +8699,7 @@ class CodeActionClientCapabilitiesCodeActionLiteralSupportType:
     code_action_kind: "CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType" = (
         attrs.field()
     )
-    """The code action kind is support with the following value
-    set."""
+    """The code action kind is support with the following value set."""
 
 
 @attrs.define
@@ -8095,8 +8724,9 @@ class CodeActionClientCapabilities:
     """The client support code action literals of type `CodeAction` as a valid
     response of the `textDocument/codeAction` request. If the property is not
     set the request can only return `Command` literals.
-    
-    @since 3.8.0"""
+
+    @since 3.8.0
+    """
     # Since: 3.8.0
 
     is_preferred_support: Optional[bool] = attrs.field(
@@ -8104,8 +8734,9 @@ class CodeActionClientCapabilities:
         default=None,
     )
     """Whether code action supports the `isPreferred` property.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     disabled_support: Optional[bool] = attrs.field(
@@ -8113,41 +8744,43 @@ class CodeActionClientCapabilities:
         default=None,
     )
     """Whether code action supports the `disabled` property.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     data_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether code action supports the `data` property which is
-    preserved between a `textDocument/codeAction` and a
-    `codeAction/resolve` request.
-    
-    @since 3.16.0"""
+    """Whether code action supports the `data` property which is preserved
+    between a `textDocument/codeAction` and a `codeAction/resolve` request.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     resolve_support: Optional[
         "CodeActionClientCapabilitiesResolveSupportType"
     ] = attrs.field(default=None)
-    """Whether the client supports resolving additional code action
-    properties via a separate `codeAction/resolve` request.
-    
-    @since 3.16.0"""
+    """Whether the client supports resolving additional code action properties
+    via a separate `codeAction/resolve` request.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     honors_change_annotations: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client honors the change annotations in
-    text edits and resource operations returned via the
-    `CodeAction#edit` property by for example presenting
-    the workspace edit in the user interface and asking
-    for confirmation.
-    
-    @since 3.16.0"""
+    """Whether the client honors the change annotations in text edits and
+    resource operations returned via the `CodeAction#edit` property by for
+    example presenting the workspace edit in the user interface and asking for
+    confirmation.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -8177,21 +8810,24 @@ class DocumentLinkClientCapabilities:
         default=None,
     )
     """Whether the client supports the `tooltip` property on `DocumentLink`.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
 
 @attrs.define
 class DocumentColorClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `DocumentColorRegistrationOptions` return value
-    for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `DocumentColorRegistrationOptions` return value for the
+    corresponding server capability as well.
+    """
 
 
 @attrs.define
@@ -8229,7 +8865,6 @@ class DocumentOnTypeFormattingClientCapabilities:
 
 @attrs.define
 class RenameClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -8240,44 +8875,48 @@ class RenameClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Client supports testing for validity of rename operations
-    before execution.
-    
-    @since 3.12.0"""
+    """Client supports testing for validity of rename operations before
+    execution.
+
+    @since 3.12.0
+    """
     # Since: 3.12.0
 
     prepare_support_default_behavior: Optional[
         PrepareSupportDefaultBehavior
     ] = attrs.field(default=None)
     """Client supports the default behavior result.
-    
+
     The value indicates the default behavior used by the
     client.
-    
-    @since 3.16.0"""
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     honors_change_annotations: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client honors the change annotations in
-    text edits and resource operations returned via the
-    rename request's workspace edit by for example presenting
-    the workspace edit in the user interface and asking
-    for confirmation.
-    
-    @since 3.16.0"""
+    """Whether the client honors the change annotations in text edits and
+    resource operations returned via the rename request's workspace edit by for
+    example presenting the workspace edit in the user interface and asking for
+    confirmation.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
 @attrs.define
 class FoldingRangeClientCapabilitiesFoldingRangeKindType:
     value_set: Optional[List[Union[FoldingRangeKind, str]]] = attrs.field(default=None)
-    """The folding range kind values the client supports. When this
-    property exists the client also guarantees that it will
-    handle values outside its set gracefully and falls back
-    to a default value when unknown."""
+    """The folding range kind values the client supports.
+
+    When this property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back to a default
+    value when unknown.
+    """
 
 
 @attrs.define
@@ -8288,65 +8927,77 @@ class FoldingRangeClientCapabilitiesFoldingRangeType:
     )
     """If set, the client signals that it supports setting collapsedText on
     folding ranges to display custom labels instead of the default text.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class FoldingRangeClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether implementation supports dynamic registration for folding range
-    providers. If this is set to `true` the client supports the new
+    providers.
+
+    If this is set to `true` the client supports the new
     `FoldingRangeRegistrationOptions` return value for the corresponding
-    server capability as well."""
+    server capability as well.
+    """
 
     range_limit: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
     )
     """The maximum number of folding ranges that the client prefers to receive
-    per document. The value serves as a hint, servers are free to follow the
-    limit."""
+    per document.
+
+    The value serves as a hint, servers are free to follow the limit.
+    """
 
     line_folding_only: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """If set, the client signals that it only supports folding complete lines.
-    If set, client will ignore specified `startCharacter` and `endCharacter`
-    properties in a FoldingRange."""
+
+    If set, client will ignore specified `startCharacter` and
+    `endCharacter` properties in a FoldingRange.
+    """
 
     folding_range_kind: Optional[
         "FoldingRangeClientCapabilitiesFoldingRangeKindType"
     ] = attrs.field(default=None)
     """Specific options for the folding range kind.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     folding_range: Optional[
         "FoldingRangeClientCapabilitiesFoldingRangeType"
     ] = attrs.field(default=None)
     """Specific options for the folding range.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
 @attrs.define
 class SelectionRangeClientCapabilities:
-
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration for selection range providers. If this is set to `true`
-    the client supports the new `SelectionRangeRegistrationOptions` return value for the corresponding server
-    capability as well."""
+    """Whether implementation supports dynamic registration for selection range
+    providers.
+
+    If this is set to `true` the client supports the new
+    `SelectionRangeRegistrationOptions` return value for the
+    corresponding server capability as well.
+    """
 
 
 @attrs.define
@@ -8368,10 +9019,11 @@ class PublishDiagnosticsClientCapabilities:
     tag_support: Optional[
         "PublishDiagnosticsClientCapabilitiesTagSupportType"
     ] = attrs.field(default=None)
-    """Client supports the tag property to provide meta data about a diagnostic.
-    Clients supporting tags have to handle unknown tags gracefully.
-    
-    @since 3.15.0"""
+    """Client supports the tag property to provide meta data about a
+    diagnostic. Clients supporting tags have to handle unknown tags gracefully.
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     version_support: Optional[bool] = attrs.field(
@@ -8380,28 +9032,31 @@ class PublishDiagnosticsClientCapabilities:
     )
     """Whether the client interprets the version property of the
     `textDocument/publishDiagnostics` notification's parameter.
-    
-    @since 3.15.0"""
+
+    @since 3.15.0
+    """
     # Since: 3.15.0
 
     code_description_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Client supports a codeDescription property
-    
-    @since 3.16.0"""
+    """Client supports a codeDescription property.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
     data_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether code action supports the `data` property which is
-    preserved between a `textDocument/publishDiagnostics` and
-    `textDocument/codeAction` request.
-    
-    @since 3.16.0"""
+    """Whether code action supports the `data` property which is preserved
+    between a `textDocument/publishDiagnostics` and `textDocument/codeAction`
+    request.
+
+    @since 3.16.0
+    """
     # Since: 3.16.0
 
 
@@ -8415,9 +9070,12 @@ class CallHierarchyClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+    return value for the corresponding server capability as well.
+    """
 
 
 @attrs.define
@@ -8426,8 +9084,8 @@ class SemanticTokensClientCapabilitiesRequestsTypeFullType1:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """The client will send the `textDocument/semanticTokens/full/delta` request if
-    the server provides a corresponding handler."""
+    """The client will send the `textDocument/semanticTokens/full/delta`
+    request if the server provides a corresponding handler."""
 
 
 @attrs.define
@@ -8451,13 +9109,16 @@ class SemanticTokensClientCapabilities:
 
     requests: "SemanticTokensClientCapabilitiesRequestsType" = attrs.field()
     """Which requests the client supports and might send to the server
-    depending on the server's capability. Please note that clients might not
-    show semantic tokens or degrade some of the user experience if a range
-    or full request is advertised by the client but not provided by the
-    server. If for example the client capability `requests.full` and
-    `request.range` are both set to true but the server only provides a
-    range provider the client might not render a minimap correctly or might
-    even decide to not show any semantic tokens at all."""
+    depending on the server's capability.
+
+    Please note that clients might not show semantic tokens or degrade
+    some of the user experience if a range or full request is advertised
+    by the client but not provided by the server. If for example the
+    client capability `requests.full` and `request.range` are both set
+    to true but the server only provides a range provider the client
+    might not render a minimap correctly or might even decide to not
+    show any semantic tokens at all.
+    """
 
     token_types: List[str] = attrs.field()
     """The token types that the client supports."""
@@ -8472,9 +9133,12 @@ class SemanticTokensClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+    return value for the corresponding server capability as well.
+    """
 
     overlapping_token_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8492,28 +9156,28 @@ class SemanticTokensClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client allows the server to actively cancel a
-    semantic token request, e.g. supports returning
-    LSPErrorCodes.ServerCancelled. If a server does the client
-    needs to retrigger the request.
-    
-    @since 3.17.0"""
+    """Whether the client allows the server to actively cancel a semantic token
+    request, e.g. supports returning LSPErrorCodes.ServerCancelled. If a server
+    does the client needs to retrigger the request.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
     augments_syntax_tokens: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client uses semantic tokens to augment existing
-    syntax tokens. If set to `true` client side created syntax
-    tokens and semantic tokens are both used for colorization. If
-    set to `false` the client only uses the returned semantic tokens
-    for colorization.
-    
+    """Whether the client uses semantic tokens to augment existing syntax
+    tokens. If set to `true` client side created syntax tokens and semantic
+    tokens are both used for colorization. If set to `false` the client only
+    uses the returned semantic tokens for colorization.
+
     If the value is `undefined` then the client behavior is not
     specified.
-    
-    @since 3.17.0"""
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -8530,9 +9194,12 @@ class LinkedEditingRangeClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+    return value for the corresponding server capability as well.
+    """
 
 
 @attrs.define
@@ -8548,9 +9215,12 @@ class MonikerClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether moniker supports dynamic registration. If this is set to `true`
-    the client supports the new `MonikerRegistrationOptions` return value
-    for the corresponding server capability as well."""
+    """Whether moniker supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `MonikerRegistrationOptions` return value for the corresponding
+    server capability as well.
+    """
 
 
 @attrs.define
@@ -8563,9 +9233,12 @@ class TypeHierarchyClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+    return value for the corresponding server capability as well.
+    """
 
 
 @attrs.define
@@ -8581,7 +9254,8 @@ class InlineValueClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration for inline value providers."""
+    """Whether implementation supports dynamic registration for inline value
+    providers."""
 
 
 @attrs.define
@@ -8625,15 +9299,19 @@ class DiagnosticClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well."""
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
+    `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
+    return value for the corresponding server capability as well.
+    """
 
     related_document_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the clients supports related documents for document diagnostic pulls."""
+    """Whether the clients supports related documents for document diagnostic
+    pulls."""
 
 
 @attrs.define
@@ -8649,10 +9327,12 @@ class NotebookDocumentSyncClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration. If this is
-    set to `true` the client supports the new
+    """Whether implementation supports dynamic registration.
+
+    If this is set to `true` the client supports the new
     `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well."""
+    return value for the corresponding server capability as well.
+    """
 
     execution_summary_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8667,9 +9347,8 @@ class ShowMessageRequestClientCapabilitiesMessageActionItemType:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether the client supports additional attributes which
-    are preserved and send back to the server in the
-    request's response."""
+    """Whether the client supports additional attributes which are preserved
+    and send back to the server in the request's response."""
 
 
 @attrs.define
@@ -8692,8 +9371,7 @@ class ShowDocumentClientCapabilities:
     # Since: 3.16.0
 
     support: bool = attrs.field(validator=attrs.validators.instance_of(bool))
-    """The client has support for the showDocument
-    request."""
+    """The client has support for the showDocument request."""
 
 
 @attrs.define
@@ -8734,10 +9412,10 @@ class MarkdownClientCapabilities:
     """The version of the parser."""
 
     allowed_tags: Optional[List[str]] = attrs.field(default=None)
-    """A list of HTML tags that the client allows / supports in
-    Markdown.
-    
-    @since 3.17.0"""
+    """A list of HTML tags that the client allows / supports in Markdown.
+
+    @since 3.17.0
+    """
     # Since: 3.17.0
 
 
@@ -8746,8 +9424,8 @@ class WorkspaceConfigurationParams:
     items: List[ConfigurationItem] = attrs.field()
 
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g. streaming) to
-    the client."""
+    """An optional token that a server can use to report partial results (e.g.
+    streaming) to the client."""
 
 
 @attrs.define
@@ -8760,8 +9438,11 @@ class TextDocumentColorPresentationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
+    """A document selector to identify the scope of the registration.
+
+    If set to null the document selector provided on the client side
+    will be used.
+    """
 
 
 @attrs.define
@@ -8772,7 +9453,10 @@ class ResponseError:
     """A string providing a short description of the error."""
     data: Optional[LSPAny] = attrs.field(default=None)
     """A primitive or structured value that contains additional information
-    about the error. Can be omitted."""
+    about the error.
+
+    Can be omitted.
+    """
 
 
 @attrs.define
@@ -9811,7 +10495,6 @@ class TextDocumentHoverResponse:
 
 @attrs.define
 class TextDocumentSignatureHelpRequest:
-
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: SignatureHelpParams = attrs.field()
@@ -10380,7 +11063,6 @@ class NotebookDocumentDidOpenNotification:
 
 @attrs.define
 class NotebookDocumentDidChangeNotification:
-
     params: DidChangeNotebookDocumentParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didChange"]),
@@ -10628,7 +11310,6 @@ class TextDocumentPublishDiagnosticsNotification:
 
 @attrs.define
 class SetTraceNotification:
-
     params: SetTraceParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/setTrace"]),
@@ -10640,7 +11321,6 @@ class SetTraceNotification:
 
 @attrs.define
 class LogTraceNotification:
-
     params: LogTraceParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/logTrace"]),
@@ -10652,7 +11332,6 @@ class LogTraceNotification:
 
 @attrs.define
 class CancelRequestNotification:
-
     params: CancelParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/cancelRequest"]),
@@ -10664,7 +11343,6 @@ class CancelRequestNotification:
 
 @attrs.define
 class ProgressNotification:
-
     params: ProgressParams = attrs.field()
     method: str = attrs.field(
         validator=attrs.validators.in_(["$/progress"]),

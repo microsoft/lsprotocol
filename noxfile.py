@@ -28,7 +28,7 @@ def lint(session: nox.Session):
 
     session.install("isort", "black", "docformatter", "mypy")
     session.run("isort", "--profile", "black", "--check", ".")
-    session.run("docformatter", "--check", "--recursive", "./lsprotocol")
+    # session.run("docformatter", "--check", "--recursive", "./lsprotocol")
     session.run("black", "--check", ".")
 
     session.run("mypy", "--strict", "--no-incremental", "lsprotocol")

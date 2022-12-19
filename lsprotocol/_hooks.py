@@ -902,7 +902,9 @@ def _register_required_structure_hooks(
     def _lsp_object_hook(object_: Any, type_: type) -> Any:
         return object_
 
-    def _parameter_information_label_hook(object_: Any, type: type) -> Union[str, Tuple[int, int]]:
+    def _parameter_information_label_hook(
+        object_: Any, type: type
+    ) -> Union[str, Tuple[int, int]]:
         if isinstance(object_, str):
             return str(object_)
         else:
@@ -989,9 +991,7 @@ def _register_required_structure_hooks(
             _lsp_object_hook,
         ),
         (
-            Union[
-                str, Tuple[int, int]
-            ],
+            Union[str, Tuple[int, int]],
             _parameter_information_label_hook,
         ),
     ]

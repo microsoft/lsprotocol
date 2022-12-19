@@ -213,7 +213,6 @@ def test_ParameterInformation(data):
     )
 
 
-
 def test_completion_item():
     data = dict(label="example", documentation="This is documented")
     converter = cv.get_converter()

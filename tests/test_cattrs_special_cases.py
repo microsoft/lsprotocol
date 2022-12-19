@@ -196,6 +196,24 @@ def test_LSPAny(data):
     )
 
 
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"label": "hi"},
+        {"label": [0, 42]},
+    ],
+)
+def test_ParameterInformation(data):
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.ParameterInformation)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.ParameterInformation))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.ParameterInformation),
+        hamcrest.is_(data),
+    )
+
+
+
 def test_completion_item():
     data = dict(label="example", documentation="This is documented")
     converter = cv.get_converter()

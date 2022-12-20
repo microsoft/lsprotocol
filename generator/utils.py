@@ -540,7 +540,6 @@ class TypesCodeGenerator:
         )
 
     def _add_type_alias(self, type_alias: model.TypeAlias) -> None:
-
         # TypeAlias definition can contain anonymous types as a part of its
         # definition. We generate them here first before we get to defile the
         # TypeAlias.

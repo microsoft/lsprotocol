@@ -902,6 +902,14 @@ def _register_required_structure_hooks(
     def _lsp_object_hook(object_: Any, type_: type) -> Any:
         return object_
 
+    def _parameter_information_label_hook(
+        object_: Any, type: type
+    ) -> Union[str, Tuple[int, int]]:
+        if isinstance(object_, str):
+            return object_
+        else:
+            return (int(object_[0]), int(object_[1]))
+
     def _text_document_filter_hook(
         object_: Any, _: type
     ) -> Union[
@@ -981,6 +989,10 @@ def _register_required_structure_hooks(
                 lsp_types.LSPObject, List[lsp_types.LSPAny], str, int, float, bool, None
             ],
             _lsp_object_hook,
+        ),
+        (
+            Union[str, Tuple[int, int]],
+            _parameter_information_label_hook,
         ),
     ]
 

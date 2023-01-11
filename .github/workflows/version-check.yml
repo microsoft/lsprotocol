@@ -5,8 +5,8 @@ on:
 
 jobs:
     version-check:
-       name: Ensure Version is as expected
-       runs-on: ubuntu-latest
+        name: Ensure Version is as expected
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v3

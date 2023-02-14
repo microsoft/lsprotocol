@@ -61,9 +61,9 @@ typing-extensions==4.4.0 \
     # via
     #   importlib-metadata
     #   jsonschema
-zipp==3.11.0 \
-    --hash=sha256:83a28fcb75844b5c0cdaf5aa4003c2d728c77e05f5aeabe8e95e56727005fbaa \
-    --hash=sha256:a7a22e05929290a67401440b39690ae6563279bced5f314609d9d03798f56766
+zipp==3.13.0 \
+    --hash=sha256:23f70e964bc11a34cef175bc90ba2914e1e4545ea1e3e2f67c079671883f9cb6 \
+    --hash=sha256:e8b2a36ea17df80ffe9e2c4fda3f693c3dad6df1697d3cd3af232db680950b0b
     # via
     #   importlib-metadata
     #   importlib-resources

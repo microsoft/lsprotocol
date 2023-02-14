@@ -752,6 +752,8 @@ comparison to the last pull request.
 
 @since 3.17.0
 """
+
+
 # Since: 3.17.0
 @attrs.define
 class PrepareRenameResult_Type1:
@@ -788,6 +790,8 @@ WorkspaceDocumentDiagnosticReport = Union[
 
 @since 3.17.0
 """
+
+
 # Since: 3.17.0
 @attrs.define
 class TextDocumentContentChangeEvent_Type1:
@@ -857,6 +861,8 @@ GlobPattern = Union["Pattern", "RelativePattern"]
 
 @since 3.17.0
 """
+
+
 # Since: 3.17.0
 @attrs.define
 class TextDocumentFilter_Type1:
@@ -932,6 +938,8 @@ Glob patterns can have the following syntax:
 
 @since 3.17.0
 """
+
+
 # Since: 3.17.0
 @attrs.define
 class NotebookDocumentFilter_Type1:
@@ -1012,6 +1020,8 @@ the following syntax:
 
 @since 3.17.0
 """
+
+
 # Since: 3.17.0
 @attrs.define
 class TextDocumentPositionParams:

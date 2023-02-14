@@ -697,19 +697,25 @@ programming languages there is only one location at which a symbol is defined.
 Servers should prefer returning `DefinitionLink` over `Definition` if
 supported by the client.
 """
+
+
 DefinitionLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is defined.
 
 Provides additional metadata over normal location definitions, including
 the range of the defining symbol
 """
+
+
 LSPArray = List["LSPAny"]
 """LSP arrays.
 
 @since 3.17.0
 """
 # Since: 3.17.0
-LSPAny = Union["LSPObject", LSPArray, str, int, int, float, bool, None]
+
+
+LSPAny = Union[Any, None]
 """The LSP any type. Please note that strictly speaking a property with the
 value `undefined` can't be converted into JSON preserving the property name.
 However for convenience it is allowed and assumed that all these properties are
@@ -718,8 +724,12 @@ optional as well.
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 Declaration = Union["Location", List["Location"]]
 """The declaration of a symbol representation as one or many locations."""
+
+
 DeclarationLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is declared.
 
@@ -729,6 +739,8 @@ the declaring symbol.
 Servers should prefer returning `DeclarationLink` over `Declaration` if supported
 by the client.
 """
+
+
 InlineValue = Union[
     "InlineValueText", "InlineValueVariableLookup", "InlineValueEvaluatableExpression"
 ]
@@ -742,6 +754,8 @@ The InlineValue types combines all inline value types into one type.
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 DocumentDiagnosticReport = Union[
     "RelatedFullDocumentDiagnosticReport", "RelatedUnchangedDocumentDiagnosticReport"
 ]
@@ -753,6 +767,8 @@ comparison to the last pull request.
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 @attrs.define
 class PrepareRenameResult_Type1:
     range: "Range" = attrs.field()
@@ -768,7 +784,11 @@ class PrepareRenameResult_Type2:
 PrepareRenameResult = Union[
     "Range", "PrepareRenameResult_Type1", "PrepareRenameResult_Type2"
 ]
+
+
 ProgressToken = Union[int, str]
+
+
 DocumentSelector = List["DocumentFilter"]
 """A document selector is the combination of one or many document filters.
 
@@ -777,9 +797,13 @@ DocumentSelector = List["DocumentFilter"]
 The use of a string as a document filter is deprecated @since 3.16.0.
 """
 # Since: 3.16.0.
+
+
 ChangeAnnotationIdentifier = str
 """An identifier to refer to a change annotation stored with a workspace
 edit."""
+
+
 WorkspaceDocumentDiagnosticReport = Union[
     "WorkspaceFullDocumentDiagnosticReport",
     "WorkspaceUnchangedDocumentDiagnosticReport",
@@ -789,6 +813,8 @@ WorkspaceDocumentDiagnosticReport = Union[
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 @attrs.define
 class TextDocumentContentChangeEvent_Type1:
     range: "Range" = attrs.field()
@@ -845,6 +871,8 @@ ${value}
 Note that markdown strings will be sanitized - that means html will be escaped.
 @deprecated use MarkupContent instead.
 """
+
+
 DocumentFilter = Union["TextDocumentFilter", "NotebookCellTextDocumentFilter"]
 """A document filter describes a top level text document or a notebook cell
 document.
@@ -852,12 +880,16 @@ document.
 @since 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
 """
 # Since: 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
+
+
 GlobPattern = Union["Pattern", "RelativePattern"]
 """The glob pattern. Either a string pattern or a relative pattern.
 
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 @attrs.define
 class TextDocumentFilter_Type1:
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -933,6 +965,8 @@ Glob patterns can have the following syntax:
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 @attrs.define
 class NotebookDocumentFilter_Type1:
     notebook_type: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -999,6 +1033,8 @@ with documents)
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
 Pattern = str
 """The glob pattern to watch relative to the base path. Glob patterns can have
 the following syntax:
@@ -1013,6 +1049,16 @@ the following syntax:
 @since 3.17.0
 """
 # Since: 3.17.0
+
+
+LSPObject = object
+"""LSP object definition.
+
+@since 3.17.0
+"""
+# Since: 3.17.0
+
+
 @attrs.define
 class TextDocumentPositionParams:
     """A parameter literal used in requests to pass a text document and a
@@ -6033,7 +6079,7 @@ class NotebookDocument:
     cells: List["NotebookCell"] = attrs.field()
     """The cells of a notebook."""
 
-    metadata: Optional["LSPObject"] = attrs.field(default=None)
+    metadata: Optional[LSPObject] = attrs.field(default=None)
     """Additional metadata stored with the notebook document.
 
     Note: should always be an object literal (e.g. LSPObject)
@@ -6119,7 +6165,7 @@ class NotebookDocumentChangeEvent:
 
     # Since: 3.17.0
 
-    metadata: Optional["LSPObject"] = attrs.field(default=None)
+    metadata: Optional[LSPObject] = attrs.field(default=None)
     """The changed meta data if any.
 
     Note: should always be an object literal (e.g. LSPObject)
@@ -6963,14 +7009,6 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
 
     A server can only return `unchanged` if result ids are provided.
     """
-
-
-LSPObject = object
-"""LSP object definition.
-
-@since 3.17.0
-"""
-# Since: 3.17.0
 
 
 @attrs.define

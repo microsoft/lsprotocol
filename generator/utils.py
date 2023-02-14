@@ -315,6 +315,9 @@ class TypesCodeGenerator:
         code_lines = []
         for v in self._types.values():
             code_lines.extend(v)
+            # Add blank lines between types
+            code_lines.extend(["", ""])
+
         return code_lines
 
     def _add_import(self, import_line: str) -> None:
@@ -557,7 +560,10 @@ class TypesCodeGenerator:
             # clean up the docstring for the class itself.
         doc = _get_indented_documentation(type_alias.documentation)
 
-        type_name = self._generate_type_name(type_alias.type)
+        if type_alias.name == "LSPAny":
+            type_name = "Union[Any, None]"
+        else:
+            type_name = self._generate_type_name(type_alias.type)
         if type_alias.type.kind == "reference" and not self._has_type(
             type_alias.type.name
         ):
@@ -675,6 +681,12 @@ class TypesCodeGenerator:
         )
 
     def _add_structures(self, lsp_model: model.LSPModel) -> None:
+        # Ensure LSPObject gets added first.
+        lsp_object = list(
+            filter(lambda s: s.name == "LSPObject", lsp_model.structures)
+        )[0]
+        self._add_structure(lsp_object, lsp_model)
+
         for struct_def in lsp_model.structures:
             self._add_structure(struct_def, lsp_model)
 

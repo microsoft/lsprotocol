@@ -562,6 +562,8 @@ class TypesCodeGenerator:
 
         if type_alias.name == "LSPAny":
             type_name = "Union[Any, None]"
+        elif type_alias.name == "LSPObject":
+            type_name = "object"
         else:
             type_name = self._generate_type_name(type_alias.type)
         if type_alias.type.kind == "reference" and not self._has_type(
@@ -681,12 +683,6 @@ class TypesCodeGenerator:
         )
 
     def _add_structures(self, lsp_model: model.LSPModel) -> None:
-        # Ensure LSPObject gets added first.
-        lsp_object = list(
-            filter(lambda s: s.name == "LSPObject", lsp_model.structures)
-        )[0]
-        self._add_structure(lsp_object, lsp_model)
-
         for struct_def in lsp_model.structures:
             self._add_structure(struct_def, lsp_model)
 
@@ -891,8 +887,31 @@ class TypesCodeGenerator:
         )
         self._add_type_code("MessageDirection", code_lines)
 
+    def _add_special_types(self, lsp_model: model.LSPModel) -> None:
+        # Ensure LSPObject gets added first.
+        # Try and find it in the type aliases
+        lsp_object = list(
+            filter(
+                lambda s: s.name == "LSPObject",
+                [*lsp_model.typeAliases, *lsp_model.structures],
+            )
+        )
+
+        if len(lsp_object) == 0:
+            raise ValueError("LSPObject type definition is missing.")
+        elif len(lsp_object) > 1:
+            raise ValueError("LSPObject type definition is duplicated.")
+        else:
+            if isinstance(lsp_object[0], model.TypeAlias):
+                self._add_type_alias(lsp_object[0])
+            elif isinstance(lsp_object[0], model.Structure):
+                self._add_structure(lsp_object[0], lsp_model)
+            else:
+                raise ValueError("LSPObject type definition is invalid.")
+
     def _generate_code(self, lsp_model: model.LSPModel) -> None:
         self._add_enums(lsp_model)
+        self._add_special_types(lsp_model)
         self._add_type_aliases(lsp_model)
         self._add_structures(lsp_model)
         self._add_and_types(lsp_model)

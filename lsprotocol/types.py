@@ -690,9 +690,18 @@ class TokenFormat(str, enum.Enum):
     Relative = "relative"
 
 
+LSPObject = object
+"""LSP object definition.
+
+@since 3.17.0
+"""
+# Since: 3.17.0
+
+
 Definition = Union["Location", List["Location"]]
-"""The definition of a symbol represented as one or many locations. For most
-programming languages there is only one location at which a symbol is defined.
+"""The definition of a symbol represented as one or many {@link Location
+locations}. For most programming languages there is only one location at which
+a symbol is defined.
 
 Servers should prefer returning `DefinitionLink` over `Definition` if
 supported by the client.
@@ -702,8 +711,8 @@ supported by the client.
 DefinitionLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is defined.
 
-Provides additional metadata over normal location definitions, including
-the range of the defining symbol
+Provides additional metadata over normal {@link Location location}
+definitions, including the range of the defining symbol
 """
 
 
@@ -727,13 +736,14 @@ optional as well.
 
 
 Declaration = Union["Location", List["Location"]]
-"""The declaration of a symbol representation as one or many locations."""
+"""The declaration of a symbol representation as one or many {@link Location
+locations}."""
 
 
 DeclarationLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is declared.
 
-Provides additional metadata over normal location declarations, including the range of
+Provides additional metadata over normal {@link Location location} declarations, including the range of
 the declaring symbol.
 
 Servers should prefer returning `DeclarationLink` over `Declaration` if supported
@@ -766,8 +776,6 @@ comparison to the last pull request.
 
 @since 3.17.0
 """
-
-
 # Since: 3.17.0
 
 
@@ -788,9 +796,6 @@ PrepareRenameResult = Union[
 ]
 
 
-ProgressToken = Union[int, str]
-
-
 DocumentSelector = List["DocumentFilter"]
 """A document selector is the combination of one or many document filters.
 
@@ -799,6 +804,9 @@ DocumentSelector = List["DocumentFilter"]
 The use of a string as a document filter is deprecated @since 3.16.0.
 """
 # Since: 3.16.0.
+
+
+ProgressToken = Union[int, str]
 
 
 ChangeAnnotationIdentifier = str
@@ -814,8 +822,6 @@ WorkspaceDocumentDiagnosticReport = Union[
 
 @since 3.17.0
 """
-
-
 # Since: 3.17.0
 
 
@@ -891,8 +897,6 @@ GlobPattern = Union["Pattern", "RelativePattern"]
 
 @since 3.17.0
 """
-
-
 # Since: 3.17.0
 
 
@@ -905,7 +909,7 @@ class TextDocumentFilter_Type1:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A Uri scheme, like `file` or `untitled`."""
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
     pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -917,7 +921,7 @@ class TextDocumentFilter_Type1:
 @attrs.define
 class TextDocumentFilter_Type2:
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A Uri scheme, like `file` or `untitled`."""
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
     language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -947,15 +951,16 @@ class TextDocumentFilter_Type3:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A Uri scheme, like `file` or `untitled`."""
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
 
 TextDocumentFilter = Union[
     "TextDocumentFilter_Type1", "TextDocumentFilter_Type2", "TextDocumentFilter_Type3"
 ]
-"""A document filter denotes a document by different properties like the
-language, the scheme of its resource, or a glob-pattern that is applied to the
-path.
+"""A document filter denotes a document by different properties like the {@link
+TextDocument.languageId language}, the {@link Uri.scheme scheme} of its
+resource, or a glob-pattern that is applied to the {@link TextDocument.fileName
+path}.
 
 Glob patterns can have the following syntax:
 - `*` to match one or more characters in a path segment
@@ -970,8 +975,6 @@ Glob patterns can have the following syntax:
 
 @since 3.17.0
 """
-
-
 # Since: 3.17.0
 
 
@@ -984,7 +987,7 @@ class NotebookDocumentFilter_Type1:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A Uri scheme, like `file` or `untitled`."""
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
     pattern: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -996,7 +999,7 @@ class NotebookDocumentFilter_Type1:
 @attrs.define
 class NotebookDocumentFilter_Type2:
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A Uri scheme, like `file` or `untitled`."""
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
     notebook_type: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -1026,7 +1029,7 @@ class NotebookDocumentFilter_Type3:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A Uri scheme, like `file` or `untitled`."""
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
 
 NotebookDocumentFilter = Union[
@@ -1053,16 +1056,6 @@ the following syntax:
 - `{}` to group conditions (e.g. `**/*.{ts,js}` matches all TypeScript and JavaScript files)
 - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
 - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
-
-@since 3.17.0
-"""
-
-
-# Since: 3.17.0
-
-
-LSPObject = object
-"""LSP object definition.
 
 @since 3.17.0
 """
@@ -1283,7 +1276,7 @@ class ConfigurationParams:
 
 @attrs.define
 class DocumentColorParams:
-    """Parameters for a DocumentColorRequest."""
+    """Parameters for a {@link DocumentColorRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -1344,7 +1337,7 @@ class DocumentColorRegistrationOptions:
 
 @attrs.define
 class ColorPresentationParams:
-    """Parameters for a ColorPresentationRequest."""
+    """Parameters for a {@link ColorPresentationRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -1376,23 +1369,24 @@ class ColorPresentation:
     """
 
     text_edit: Optional["TextEdit"] = attrs.field(default=None)
-    """An edit which is applied to a document when selecting this presentation
-    for the color.
+    """An {@link TextEdit edit} which is applied to a document when selecting
+    this presentation for the color.
 
-    When `falsy` the label is used.
+    When `falsy` the {@link ColorPresentation.label label} is used.
     """
 
     additional_text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
-    """An optional array of additional text edits that are applied when
-    selecting this color presentation.
+    """An optional array of additional {@link TextEdit text edits} that are
+    applied when selecting this color presentation.
 
-    Edits must not overlap with the main edit nor with themselves.
+    Edits must not overlap with the main {@link
+    ColorPresentation.textEdit edit} nor with themselves.
     """
 
 
 @attrs.define
 class FoldingRangeParams:
-    """Parameters for a FoldingRangeRequest."""
+    """Parameters for a {@link FoldingRangeRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -1450,8 +1444,8 @@ class FoldingRange:
     """Describes the kind of the folding range such as `comment' or 'region'.
 
     The kind is used to categorize folding ranges and used by commands
-    like 'Fold all comments'. See FoldingRangeKind for an enumeration of
-    standardized kinds.
+    like 'Fold all comments'. See {@link FoldingRangeKind} for an
+    enumeration of standardized kinds.
     """
 
     collapsed_text: Optional[str] = attrs.field(
@@ -1580,7 +1574,7 @@ class SelectionRange:
     """
 
     range: "Range" = attrs.field()
-    """The range of this selection range."""
+    """The {@link Range range} of this selection range."""
 
     parent: Optional["SelectionRange"] = attrs.field(default=None)
     """The parent selection range containing this range.
@@ -1682,7 +1676,7 @@ class CallHierarchyItem:
     """The range that should be selected and revealed when this symbol is being
     picked, e.g. the name of a function.
 
-    Must be contained by the [`range`](#CallHierarchyItem.range).
+    Must be contained by the {@link CallHierarchyItem.range `range`}.
     """
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
@@ -1782,8 +1776,8 @@ class CallHierarchyIncomingCall:
     from_ranges: List["Range"] = attrs.field()
     """The ranges at which the calls appear.
 
-    This is relative to the caller denoted by
-    [`this.from`](#CallHierarchyIncomingCall.from).
+    This is relative to the caller denoted by {@link
+    CallHierarchyIncomingCall.from `this.from`}.
     """
 
 
@@ -1823,8 +1817,8 @@ class CallHierarchyOutgoingCall:
     """The range at which this item is called.
 
     This is the range relative to the caller, e.g the item
-    passed to [`provideCallHierarchyOutgoingCalls`](#CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls)
-    and not [`this.to`](#CallHierarchyOutgoingCall.to).
+    passed to {@link CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls `provideCallHierarchyOutgoingCalls`}
+    and not {@link CallHierarchyOutgoingCall.to `this.to`}.
     """
 
 
@@ -2380,7 +2374,7 @@ class TypeHierarchyItem:
     """The range that should be selected and revealed when this symbol is being
     picked, e.g. the name of a function. Must be contained by the.
 
-    [`range`](#TypeHierarchyItem.range).
+    {@link TypeHierarchyItem.range `range`}.
     """
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
@@ -3062,7 +3056,7 @@ class _InitializeParams:
     initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
-    trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
+    trace: Optional[TraceValues] = attrs.field(default=None)
     """The initial trace setting.
 
     If omitted trace is disabled ('off').
@@ -3137,7 +3131,7 @@ class InitializeParams:
     initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
-    trace: Optional[Union[str, str, str, str]] = attrs.field(default=None)
+    trace: Optional[TraceValues] = attrs.field(default=None)
     """The initial trace setting.
 
     If omitted trace is disabled ('off').
@@ -3537,7 +3531,7 @@ class CompletionItem:
     )
     """A string that should be used when comparing this item with other items.
 
-    When `falsy` the label is used.
+    When `falsy` the {@link CompletionItem.label label} is used.
     """
 
     filter_text: Optional[str] = attrs.field(
@@ -3546,7 +3540,7 @@ class CompletionItem:
     )
     """A string that should be used when filtering a set of completion items.
 
-    When `falsy` the label is used.
+    When `falsy` the {@link CompletionItem.label label} is used.
     """
 
     insert_text: Optional[str] = attrs.field(
@@ -3554,7 +3548,7 @@ class CompletionItem:
         default=None,
     )
     """A string that should be inserted into a document when selecting this
-    completion. When `falsy` the label is used.
+    completion. When `falsy` the {@link CompletionItem.label label} is used.
 
     The `insertText` is subject to interpretation by the client side.
     Some tools might not take the string literally. For example VS Code
@@ -3586,8 +3580,10 @@ class CompletionItem:
     text_edit: Optional[Union[TextEdit, "InsertReplaceEdit"]] = attrs.field(
         default=None
     )
-    """An edit which is applied to a document when selecting this completion.
-    When an edit is provided the value of insertText is ignored.
+    """An {@link TextEdit edit} which is applied to a document when selecting
+    this completion. When an edit is provided the value of.
+
+    {@link CompletionItem.insertText insertText} is ignored.
 
     Most editors support two different operations when accepting a completion
     item. One is to insert a completion text and the other is to replace an
@@ -3626,9 +3622,10 @@ class CompletionItem:
     # Since: 3.17.0
 
     additional_text_edits: Optional[List[TextEdit]] = attrs.field(default=None)
-    """An optional array of additional text edits that are applied when
-    selecting this completion. Edits must not overlap (including the same
-    insert position) with the main edit nor with themselves.
+    """An optional array of additional {@link TextEdit text edits} that are
+    applied when selecting this completion. Edits must not overlap (including
+    the same insert position) with the main {@link CompletionItem.textEdit
+    edit} nor with themselves.
 
     Additional text edits should be used to change text unrelated to the
     current cursor position (for example adding an import statement at
@@ -3645,16 +3642,19 @@ class CompletionItem:
     """
 
     command: Optional["Command"] = attrs.field(default=None)
-    """An optional command that is executed *after* inserting this completion.
+    """An optional {@link Command command} that is executed *after* inserting
+    this completion. *Note* that additional modifications to the current
+    document should be described with the.
 
-    *Note* that
-    additional modifications to the current document should be described with the
-    additionalTextEdits-property.
+    {@link CompletionItem.additionalTextEdits
+    additionalTextEdits}-property.
     """
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on a completion item between a
-    CompletionRequest and a CompletionResolveRequest."""
+    """A data entry field that is preserved on a completion item between a.
+
+    {@link CompletionRequest} and a {@link CompletionResolveRequest}.
+    """
 
 
 @attrs.define
@@ -3706,8 +3706,8 @@ class CompletionListItemDefaultsType:
 
 @attrs.define
 class CompletionList:
-    """Represents a collection of completion items to be presented in the
-    editor."""
+    """Represents a collection of {@link CompletionItem completion items} to be
+    presented in the editor."""
 
     is_incomplete: bool = attrs.field(validator=attrs.validators.instance_of(bool))
     """This list it not complete. Further typing results in recomputing this
@@ -3825,7 +3825,7 @@ class CompletionRegistrationOptionsCompletionItemType:
 
 @attrs.define
 class CompletionRegistrationOptions:
-    """Registration options for a CompletionRequest."""
+    """Registration options for a {@link CompletionRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -3887,7 +3887,7 @@ class CompletionRegistrationOptions:
 
 @attrs.define
 class HoverParams:
-    """Parameters for a HoverRequest."""
+    """Parameters for a {@link HoverRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -3923,7 +3923,7 @@ class HoverOptions:
 
 @attrs.define
 class HoverRegistrationOptions:
-    """Registration options for a HoverRequest."""
+    """Registration options for a {@link HoverRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -3942,7 +3942,7 @@ class HoverRegistrationOptions:
 
 @attrs.define
 class SignatureHelpParams:
-    """Parameters for a SignatureHelpRequest."""
+    """Parameters for a {@link SignatureHelpRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -4004,7 +4004,7 @@ class SignatureHelp:
 
 @attrs.define
 class SignatureHelpOptions:
-    """Server Capabilities for a SignatureHelpRequest."""
+    """Server Capabilities for a {@link SignatureHelpRequest}."""
 
     trigger_characters: Optional[List[str]] = attrs.field(default=None)
     """List of characters that trigger signature help automatically."""
@@ -4027,7 +4027,7 @@ class SignatureHelpOptions:
 
 @attrs.define
 class SignatureHelpRegistrationOptions:
-    """Registration options for a SignatureHelpRequest."""
+    """Registration options for a {@link SignatureHelpRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4059,7 +4059,7 @@ class SignatureHelpRegistrationOptions:
 
 @attrs.define
 class DefinitionParams:
-    """Parameters for a DefinitionRequest."""
+    """Parameters for a {@link DefinitionRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -4077,7 +4077,7 @@ class DefinitionParams:
 
 @attrs.define
 class DefinitionOptions:
-    """Server Capabilities for a DefinitionRequest."""
+    """Server Capabilities for a {@link DefinitionRequest}."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4087,7 +4087,7 @@ class DefinitionOptions:
 
 @attrs.define
 class DefinitionRegistrationOptions:
-    """Registration options for a DefinitionRequest."""
+    """Registration options for a {@link DefinitionRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4106,7 +4106,7 @@ class DefinitionRegistrationOptions:
 
 @attrs.define
 class ReferenceParams:
-    """Parameters for a ReferencesRequest."""
+    """Parameters for a {@link ReferencesRequest}."""
 
     context: "ReferenceContext" = attrs.field()
 
@@ -4136,7 +4136,7 @@ class ReferenceOptions:
 
 @attrs.define
 class ReferenceRegistrationOptions:
-    """Registration options for a ReferencesRequest."""
+    """Registration options for a {@link ReferencesRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4155,7 +4155,7 @@ class ReferenceRegistrationOptions:
 
 @attrs.define
 class DocumentHighlightParams:
-    """Parameters for a DocumentHighlightRequest."""
+    """Parameters for a {@link DocumentHighlightRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -4184,12 +4184,13 @@ class DocumentHighlight:
     """The range this highlight applies to."""
 
     kind: Optional[DocumentHighlightKind] = attrs.field(default=None)
-    """The highlight kind, default is text."""
+    """The highlight kind, default is {@link DocumentHighlightKind.Text
+    text}."""
 
 
 @attrs.define
 class DocumentHighlightOptions:
-    """Provider options for a DocumentHighlightRequest."""
+    """Provider options for a {@link DocumentHighlightRequest}."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4199,7 +4200,7 @@ class DocumentHighlightOptions:
 
 @attrs.define
 class DocumentHighlightRegistrationOptions:
-    """Registration options for a DocumentHighlightRequest."""
+    """Registration options for a {@link DocumentHighlightRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4218,7 +4219,7 @@ class DocumentHighlightRegistrationOptions:
 
 @attrs.define
 class DocumentSymbolParams:
-    """Parameters for a DocumentSymbolRequest."""
+    """Parameters for a {@link DocumentSymbolRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
@@ -4375,7 +4376,7 @@ class DocumentSymbol:
 
 @attrs.define
 class DocumentSymbolOptions:
-    """Provider options for a DocumentSymbolRequest."""
+    """Provider options for a {@link DocumentSymbolRequest}."""
 
     label: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -4396,7 +4397,7 @@ class DocumentSymbolOptions:
 
 @attrs.define
 class DocumentSymbolRegistrationOptions:
-    """Registration options for a DocumentSymbolRequest."""
+    """Registration options for a {@link DocumentSymbolRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4426,7 +4427,7 @@ class DocumentSymbolRegistrationOptions:
 
 @attrs.define
 class CodeActionParams:
-    """The parameters of a CodeActionRequest."""
+    """The parameters of a {@link CodeActionRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document in which the command was invoked."""
@@ -4549,7 +4550,7 @@ class CodeAction:
 
 @attrs.define
 class CodeActionOptions:
-    """Provider options for a CodeActionRequest."""
+    """Provider options for a {@link CodeActionRequest}."""
 
     code_action_kinds: Optional[List[Union[CodeActionKind, str]]] = attrs.field(
         default=None
@@ -4579,7 +4580,7 @@ class CodeActionOptions:
 
 @attrs.define
 class CodeActionRegistrationOptions:
-    """Registration options for a CodeActionRequest."""
+    """Registration options for a {@link CodeActionRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4618,7 +4619,7 @@ class CodeActionRegistrationOptions:
 
 @attrs.define
 class WorkspaceSymbolParams:
-    """The parameters of a WorkspaceSymbolRequest."""
+    """The parameters of a {@link WorkspaceSymbolRequest}."""
 
     query: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A query string to filter symbols by.
@@ -4689,7 +4690,7 @@ class WorkspaceSymbol:
 
 @attrs.define
 class WorkspaceSymbolOptions:
-    """Server capabilities for a WorkspaceSymbolRequest."""
+    """Server capabilities for a {@link WorkspaceSymbolRequest}."""
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4710,7 +4711,7 @@ class WorkspaceSymbolOptions:
 
 @attrs.define
 class WorkspaceSymbolRegistrationOptions:
-    """Registration options for a WorkspaceSymbolRequest."""
+    """Registration options for a {@link WorkspaceSymbolRequest}."""
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4731,7 +4732,7 @@ class WorkspaceSymbolRegistrationOptions:
 
 @attrs.define
 class CodeLensParams:
-    """The parameters of a CodeLensRequest."""
+    """The parameters of a {@link CodeLensRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to request code lens for."""
@@ -4746,8 +4747,9 @@ class CodeLensParams:
 
 @attrs.define
 class CodeLens:
-    """A code lens represents a command that should be shown along with source
-    text, like the number of references, a way to run tests, etc.
+    """A code lens represents a {@link Command command} that should be shown
+    along with source text, like the number of references, a way to run tests,
+    etc.
 
     A code lens is _unresolved_ when no command is associated to it. For
     performance reasons the creation of a code lens and resolving should
@@ -4764,13 +4766,16 @@ class CodeLens:
     """The command this code lens represents."""
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on a code lens item between a
-    CodeLensRequest and a [CodeLensResolveRequest] (#CodeLensResolveRequest)"""
+    """A data entry field that is preserved on a code lens item between a.
+
+    {@link CodeLensRequest} and a [CodeLensResolveRequest]
+    (#CodeLensResolveRequest)
+    """
 
 
 @attrs.define
 class CodeLensOptions:
-    """Code Lens provider options of a CodeLensRequest."""
+    """Code Lens provider options of a {@link CodeLensRequest}."""
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4786,7 +4791,7 @@ class CodeLensOptions:
 
 @attrs.define
 class CodeLensRegistrationOptions:
-    """Registration options for a CodeLensRequest."""
+    """Registration options for a {@link CodeLensRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4811,7 +4816,7 @@ class CodeLensRegistrationOptions:
 
 @attrs.define
 class DocumentLinkParams:
-    """The parameters of a DocumentLinkRequest."""
+    """The parameters of a {@link DocumentLinkRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to provide document links for."""
@@ -4862,7 +4867,7 @@ class DocumentLink:
 
 @attrs.define
 class DocumentLinkOptions:
-    """Provider options for a DocumentLinkRequest."""
+    """Provider options for a {@link DocumentLinkRequest}."""
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4878,7 +4883,7 @@ class DocumentLinkOptions:
 
 @attrs.define
 class DocumentLinkRegistrationOptions:
-    """Registration options for a DocumentLinkRequest."""
+    """Registration options for a {@link DocumentLinkRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4903,7 +4908,7 @@ class DocumentLinkRegistrationOptions:
 
 @attrs.define
 class DocumentFormattingParams:
-    """The parameters of a DocumentFormattingRequest."""
+    """The parameters of a {@link DocumentFormattingRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to format."""
@@ -4917,7 +4922,7 @@ class DocumentFormattingParams:
 
 @attrs.define
 class DocumentFormattingOptions:
-    """Provider options for a DocumentFormattingRequest."""
+    """Provider options for a {@link DocumentFormattingRequest}."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4927,7 +4932,7 @@ class DocumentFormattingOptions:
 
 @attrs.define
 class DocumentFormattingRegistrationOptions:
-    """Registration options for a DocumentFormattingRequest."""
+    """Registration options for a {@link DocumentFormattingRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4946,7 +4951,7 @@ class DocumentFormattingRegistrationOptions:
 
 @attrs.define
 class DocumentRangeFormattingParams:
-    """The parameters of a DocumentRangeFormattingRequest."""
+    """The parameters of a {@link DocumentRangeFormattingRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to format."""
@@ -4963,7 +4968,7 @@ class DocumentRangeFormattingParams:
 
 @attrs.define
 class DocumentRangeFormattingOptions:
-    """Provider options for a DocumentRangeFormattingRequest."""
+    """Provider options for a {@link DocumentRangeFormattingRequest}."""
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4973,7 +4978,7 @@ class DocumentRangeFormattingOptions:
 
 @attrs.define
 class DocumentRangeFormattingRegistrationOptions:
-    """Registration options for a DocumentRangeFormattingRequest."""
+    """Registration options for a {@link DocumentRangeFormattingRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -4992,7 +4997,7 @@ class DocumentRangeFormattingRegistrationOptions:
 
 @attrs.define
 class DocumentOnTypeFormattingParams:
-    """The parameters of a DocumentOnTypeFormattingRequest."""
+    """The parameters of a {@link DocumentOnTypeFormattingRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to format."""
@@ -5019,7 +5024,7 @@ class DocumentOnTypeFormattingParams:
 
 @attrs.define
 class DocumentOnTypeFormattingOptions:
-    """Provider options for a DocumentOnTypeFormattingRequest."""
+    """Provider options for a {@link DocumentOnTypeFormattingRequest}."""
 
     first_trigger_character: str = attrs.field(
         validator=attrs.validators.instance_of(str)
@@ -5032,7 +5037,7 @@ class DocumentOnTypeFormattingOptions:
 
 @attrs.define
 class DocumentOnTypeFormattingRegistrationOptions:
-    """Registration options for a DocumentOnTypeFormattingRequest."""
+    """Registration options for a {@link DocumentOnTypeFormattingRequest}."""
 
     first_trigger_character: str = attrs.field(
         validator=attrs.validators.instance_of(str)
@@ -5054,7 +5059,7 @@ class DocumentOnTypeFormattingRegistrationOptions:
 
 @attrs.define
 class RenameParams:
-    """The parameters of a RenameRequest."""
+    """The parameters of a {@link RenameRequest}."""
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to rename."""
@@ -5065,8 +5070,8 @@ class RenameParams:
     new_name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The new name of the symbol.
 
-    If the given name is not valid the request must return a
-    ResponseError with an appropriate message set.
+    If the given name is not valid the request must return a {@link
+    ResponseError} with an appropriate message set.
     """
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
@@ -5075,7 +5080,7 @@ class RenameParams:
 
 @attrs.define
 class RenameOptions:
-    """Provider options for a RenameRequest."""
+    """Provider options for a {@link RenameRequest}."""
 
     prepare_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -5095,7 +5100,7 @@ class RenameOptions:
 
 @attrs.define
 class RenameRegistrationOptions:
-    """Registration options for a RenameRequest."""
+    """Registration options for a {@link RenameRequest}."""
 
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
@@ -5136,7 +5141,7 @@ class PrepareRenameParams:
 
 @attrs.define
 class ExecuteCommandParams:
-    """The parameters of a ExecuteCommandRequest."""
+    """The parameters of a {@link ExecuteCommandRequest}."""
 
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
@@ -5150,7 +5155,7 @@ class ExecuteCommandParams:
 
 @attrs.define
 class ExecuteCommandOptions:
-    """The server capabilities of a ExecuteCommandRequest."""
+    """The server capabilities of a {@link ExecuteCommandRequest}."""
 
     commands: List[str] = attrs.field()
     """The commands to be executed on the server."""
@@ -5163,7 +5168,7 @@ class ExecuteCommandOptions:
 
 @attrs.define
 class ExecuteCommandRegistrationOptions:
-    """Registration options for a ExecuteCommandRequest."""
+    """Registration options for a {@link ExecuteCommandRequest}."""
 
     commands: List[str] = attrs.field()
     """The commands to be executed on the server."""
@@ -5356,8 +5361,8 @@ class ProgressParams:
 class LocationLink:
     """Represents the connection of two locations.
 
-    Provides additional metadata over normal locations, including an
-    origin range.
+    Provides additional metadata over normal {@link Location locations},
+    including an origin range.
     """
 
     target_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -6739,8 +6744,10 @@ class ReferenceContext:
 
 @attrs.define
 class CodeActionContext:
-    """Contains additional diagnostic information about the context in which a
-    code action is run."""
+    """Contains additional diagnostic information about the context in which a.
+
+    {@link CodeActionProvider.provideCodeActions code action} is run.
+    """
 
     diagnostics: List[Diagnostic] = attrs.field()
     """An array of diagnostics known on the client side overlapping the range
@@ -8032,7 +8039,7 @@ class WorkspaceSymbolClientCapabilitiesResolveSupportType:
 
 @attrs.define
 class WorkspaceSymbolClientCapabilities:
-    """Client capabilities for a WorkspaceSymbolRequest."""
+    """Client capabilities for a {@link WorkspaceSymbolRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8070,7 +8077,7 @@ class WorkspaceSymbolClientCapabilities:
 
 @attrs.define
 class ExecuteCommandClientCapabilities:
-    """The client capabilities of a ExecuteCommandRequest."""
+    """The client capabilities of a {@link ExecuteCommandRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8518,7 +8525,7 @@ class SignatureHelpClientCapabilitiesSignatureInformationType:
 
 @attrs.define
 class SignatureHelpClientCapabilities:
-    """Client Capabilities for a SignatureHelpRequest."""
+    """Client Capabilities for a {@link SignatureHelpRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8573,7 +8580,7 @@ class DeclarationClientCapabilities:
 
 @attrs.define
 class DefinitionClientCapabilities:
-    """Client Capabilities for a DefinitionRequest."""
+    """Client Capabilities for a {@link DefinitionRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8647,7 +8654,7 @@ class ImplementationClientCapabilities:
 
 @attrs.define
 class ReferenceClientCapabilities:
-    """Client Capabilities for a ReferencesRequest."""
+    """Client Capabilities for a {@link ReferencesRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8658,7 +8665,7 @@ class ReferenceClientCapabilities:
 
 @attrs.define
 class DocumentHighlightClientCapabilities:
-    """Client Capabilities for a DocumentHighlightRequest."""
+    """Client Capabilities for a {@link DocumentHighlightRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8688,7 +8695,7 @@ class DocumentSymbolClientCapabilitiesTagSupportType:
 
 @attrs.define
 class DocumentSymbolClientCapabilities:
-    """Client Capabilities for a DocumentSymbolRequest."""
+    """Client Capabilities for a {@link DocumentSymbolRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8758,7 +8765,7 @@ class CodeActionClientCapabilitiesResolveSupportType:
 
 @attrs.define
 class CodeActionClientCapabilities:
-    """The Client Capabilities of a CodeActionRequest."""
+    """The Client Capabilities of a {@link CodeActionRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8834,7 +8841,7 @@ class CodeActionClientCapabilities:
 
 @attrs.define
 class CodeLensClientCapabilities:
-    """The client capabilities  of a CodeLensRequest."""
+    """The client capabilities  of a {@link CodeLensRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8845,7 +8852,7 @@ class CodeLensClientCapabilities:
 
 @attrs.define
 class DocumentLinkClientCapabilities:
-    """The client capabilities of a DocumentLinkRequest."""
+    """The client capabilities of a {@link DocumentLinkRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8880,7 +8887,7 @@ class DocumentColorClientCapabilities:
 
 @attrs.define
 class DocumentFormattingClientCapabilities:
-    """Client capabilities of a DocumentFormattingRequest."""
+    """Client capabilities of a {@link DocumentFormattingRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8891,7 +8898,7 @@ class DocumentFormattingClientCapabilities:
 
 @attrs.define
 class DocumentRangeFormattingClientCapabilities:
-    """Client capabilities of a DocumentRangeFormattingRequest."""
+    """Client capabilities of a {@link DocumentRangeFormattingRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8902,7 +8909,7 @@ class DocumentRangeFormattingClientCapabilities:
 
 @attrs.define
 class DocumentOnTypeFormattingClientCapabilities:
-    """Client capabilities of a DocumentOnTypeFormattingRequest."""
+    """Client capabilities of a {@link DocumentOnTypeFormattingRequest}."""
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9468,15 +9475,6 @@ class MarkdownClientCapabilities:
 
 
 @attrs.define
-class WorkspaceConfigurationParams:
-    items: List[ConfigurationItem] = attrs.field()
-
-    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
-    """An optional token that a server can use to report partial results (e.g.
-    streaming) to the client."""
-
-
-@attrs.define
 class TextDocumentColorPresentationOptions:
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9522,8 +9520,8 @@ class TextDocumentImplementationRequest:
     text document position.
 
     The request's parameter is of type [TextDocumentPositionParams]
-    (#TextDocumentPositionParams) the response is of type Definition or
-    a Thenable that resolves to such.
+    (#TextDocumentPositionParams) the response is of type {@link
+    Definition} or a Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -9548,8 +9546,8 @@ class TextDocumentTypeDefinitionRequest:
     given text document position.
 
     The request's parameter is of type [TextDocumentPositionParams]
-    (#TextDocumentPositionParams) the response is of type Definition or
-    a Thenable that resolves to such.
+    (#TextDocumentPositionParams) the response is of type {@link
+    Definition} or a Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -9604,7 +9602,7 @@ class WorkspaceConfigurationRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: WorkspaceConfigurationParams = attrs.field()
+    params: ConfigurationParams = attrs.field()
     method: str = "workspace/configuration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -9622,8 +9620,9 @@ class WorkspaceConfigurationResponse:
 class TextDocumentDocumentColorRequest:
     """A request to list all color symbols found in a given text document.
 
-    The request's parameter is of type DocumentColorParams the response
-    is of type ColorInformation[] or a Thenable that resolves to such.
+    The request's parameter is of type {@link DocumentColorParams} the
+    response is of type {@link ColorInformation ColorInformation[]} or a
+    Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -9646,9 +9645,9 @@ class TextDocumentDocumentColorResponse:
 class TextDocumentColorPresentationRequest:
     """A request to list all presentation for a color.
 
-    The request's parameter is of type ColorPresentationParams the
-    response is of type ColorInformation[] or a Thenable that resolves
-    to such.
+    The request's parameter is of type {@link ColorPresentationParams}
+    the response is of type {@link ColorInformation ColorInformation[]}
+    or a Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -9671,8 +9670,9 @@ class TextDocumentColorPresentationResponse:
 class TextDocumentFoldingRangeRequest:
     """A request to provide folding ranges in a document.
 
-    The request's parameter is of type FoldingRangeParams, the response
-    is of type FoldingRangeList or a Thenable that resolves to such.
+    The request's parameter is of type {@link FoldingRangeParams}, the
+    response is of type {@link FoldingRangeList} or a Thenable that
+    resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -9697,9 +9697,9 @@ class TextDocumentDeclarationRequest:
     given text document position.
 
     The request's parameter is of type [TextDocumentPositionParams]
-    (#TextDocumentPositionParams) the response is of type Declaration or
-    a typed array of DeclarationLink or a Thenable that resolves to
-    such.
+    (#TextDocumentPositionParams) the response is of type {@link
+    Declaration} or a typed array of {@link DeclarationLink} or a
+    Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -9722,8 +9722,8 @@ class TextDocumentDeclarationResponse:
 class TextDocumentSelectionRangeRequest:
     """A request to provide selection ranges in a document.
 
-    The request's parameter is of type SelectionRangeParams, the
-    response is of type [SelectionRange[]](#SelectionRange[]) or a
+    The request's parameter is of type {@link SelectionRangeParams}, the
+    response is of type {@link SelectionRange SelectionRange[]} or a
     Thenable that resolves to such.
     """
 
@@ -10043,8 +10043,8 @@ class TextDocumentMonikerRequest:
     """A request to get the moniker of a symbol at a given text document
     position.
 
-    The request parameter is of type TextDocumentPositionParams. The
-    response is of type [Moniker[]](#Moniker[]) or `null`.
+    The request parameter is of type {@link TextDocumentPositionParams}.
+    The response is of type {@link Moniker Moniker[]} or `null`.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10137,9 +10137,9 @@ class TypeHierarchySubtypesResponse:
 @attrs.define
 class TextDocumentInlineValueRequest:
     """A request to provide inline values in a document. The request's
-    parameter is of type InlineValueParams, the response is of type.
+    parameter is of type {@link InlineValueParams}, the response is of type.
 
-    [InlineValue[]](#InlineValue[]) or a Thenable that resolves to such.
+    {@link InlineValue InlineValue[]} or a Thenable that resolves to such.
 
     @since 3.17.0
     """
@@ -10183,9 +10183,9 @@ class WorkspaceInlineValueRefreshResponse:
 @attrs.define
 class TextDocumentInlayHintRequest:
     """A request to provide inlay hints in a document. The request's parameter
-    is of type InlayHintsParams, the response is of type.
+    is of type {@link InlayHintsParams}, the response is of type.
 
-    [InlayHint[]](#InlayHint[]) or a Thenable that resolves to such.
+    {@link InlayHint InlayHint[]} or a Thenable that resolves to such.
 
     @since 3.17.0
     """
@@ -10209,8 +10209,9 @@ class TextDocumentInlayHintResponse:
 @attrs.define
 class InlayHintResolveRequest:
     """A request to resolve additional properties for an inlay hint. The
-    request's parameter is of type InlayHint, the response is of type InlayHint
-    or a Thenable that resolves to such.
+    request's parameter is of type {@link InlayHint}, the response is of type.
+
+    {@link InlayHint} or a Thenable that resolves to such.
 
     @since 3.17.0
     """
@@ -10368,8 +10369,9 @@ class InitializeRequest:
     """The initialize request is sent from the client to the server.
 
     It is sent once as the request after starting up the server. The
-    requests parameter is of type InitializeParams the response if of
-    type InitializeResult of a Thenable that resolves to such.
+    requests parameter is of type {@link InitializeParams} the response
+    if of type {@link InitializeResult} of a Thenable that resolves to
+    such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10465,12 +10467,13 @@ class TextDocumentWillSaveWaitUntilResponse:
 @attrs.define
 class TextDocumentCompletionRequest:
     """Request to request completion at a given text document position. The
-    request's parameter is of type TextDocumentPosition the response is of type
-    CompletionItem[] or CompletionList or a Thenable that resolves to such.
+    request's parameter is of type {@link TextDocumentPosition} the response is
+    of type {@link CompletionItem CompletionItem[]} or {@link CompletionList}
+    or a Thenable that resolves to such.
 
-    The request can delay the computation of the
-    [`detail`](#CompletionItem.detail) and
-    [`documentation`](#CompletionItem.documentation) properties to the
+    The request can delay the computation of the {@link
+    CompletionItem.detail `detail`} and {@link
+    CompletionItem.documentation `documentation`} properties to the
     `completionItem/resolve` request. However, properties that are
     needed for the initial sorting and filtering, like `sortText`,
     `filterText`, `insertText`, and `textEdit`, must not be changed
@@ -10498,8 +10501,8 @@ class TextDocumentCompletionResponse:
 @attrs.define
 class CompletionItemResolveRequest:
     """Request to resolve additional information for a given completion
-    item.The request's parameter is of type CompletionItem the response is of
-    type CompletionItem or a Thenable that resolves to such."""
+    item.The request's parameter is of type {@link CompletionItem} the response
+    is of type {@link CompletionItem} or a Thenable that resolves to such."""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10521,8 +10524,9 @@ class CompletionItemResolveResponse:
 class TextDocumentHoverRequest:
     """Request to request hover information at a given text document position.
 
-    The request's parameter is of type TextDocumentPosition the response
-    is of type Hover or a Thenable that resolves to such.
+    The request's parameter is of type {@link TextDocumentPosition} the
+    response is of type {@link Hover} or a Thenable that resolves to
+    such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10565,8 +10569,9 @@ class TextDocumentDefinitionRequest:
     document position.
 
     The request's parameter is of type [TextDocumentPosition]
-    (#TextDocumentPosition) the response is of either type Definition or
-    a typed array of DefinitionLink or a Thenable that resolves to such.
+    (#TextDocumentPosition) the response is of either type {@link
+    Definition} or a typed array of {@link DefinitionLink} or a Thenable
+    that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10588,10 +10593,10 @@ class TextDocumentDefinitionResponse:
 @attrs.define
 class TextDocumentReferencesRequest:
     """A request to resolve project-wide references for the symbol denoted by
-    the given text document position.
+    the given text document position. The request's parameter is of type {@link
+    ReferenceParams} the response is of type.
 
-    The request's parameter is of type ReferenceParams the response is
-    of type Location[] or a Thenable that resolves to such.
+    {@link Location Location[]} or a Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10612,7 +10617,7 @@ class TextDocumentReferencesResponse:
 
 @attrs.define
 class TextDocumentDocumentHighlightRequest:
-    """Request to resolve a DocumentHighlight for a given text document
+    """Request to resolve a {@link DocumentHighlight} for a given text document
     position.
 
     The request's parameter is of type [TextDocumentPosition]
@@ -10641,9 +10646,9 @@ class TextDocumentDocumentHighlightResponse:
 class TextDocumentDocumentSymbolRequest:
     """A request to list all symbols found in a given text document.
 
-    The request's parameter is of type TextDocumentIdentifier the
-    response is of type SymbolInformation[] or a Thenable that resolves
-    to such.
+    The request's parameter is of type {@link TextDocumentIdentifier}
+    the response is of type {@link SymbolInformation
+    SymbolInformation[]} or a Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10687,8 +10692,10 @@ class TextDocumentCodeActionResponse:
 @attrs.define
 class CodeActionResolveRequest:
     """Request to resolve additional information for a given code action.The
-    request's parameter is of type CodeAction the response is of type
-    CodeAction or a Thenable that resolves to such."""
+    request's parameter is of type {@link CodeAction} the response is of type.
+
+    {@link CodeAction} or a Thenable that resolves to such.
+    """
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10709,8 +10716,8 @@ class CodeActionResolveResponse:
 @attrs.define
 class WorkspaceSymbolRequest:
     """A request to list project-wide symbols matching the query string given
-    by the WorkspaceSymbolParams. The response is of type SymbolInformation[]
-    or a Thenable that resolves to such.
+    by the {@link WorkspaceSymbolParams}. The response is of type {@link
+    SymbolInformation SymbolInformation[]} or a Thenable that resolves to such.
 
     @since 3.17.0 - support for WorkspaceSymbol in the returned data. Clients
      need to advertise support for WorkspaceSymbols via the client capability
@@ -10845,8 +10852,8 @@ class TextDocumentDocumentLinkResponse:
 class DocumentLinkResolveRequest:
     """Request to resolve additional information for a given document link.
 
-    The request's parameter is of type DocumentLink the response is of
-    type DocumentLink or a Thenable that resolves to such.
+    The request's parameter is of type {@link DocumentLink} the response
+    is of type {@link DocumentLink} or a Thenable that resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -11799,7 +11806,7 @@ METHOD_TO_TYPES = {
     WORKSPACE_CONFIGURATION: (
         WorkspaceConfigurationRequest,
         WorkspaceConfigurationResponse,
-        WorkspaceConfigurationParams,
+        ConfigurationParams,
         None,
     ),
     WORKSPACE_DIAGNOSTIC: (
@@ -13286,7 +13293,6 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "WorkspaceClientCapabilities": WorkspaceClientCapabilities,
     "WorkspaceCodeLensRefreshRequest": WorkspaceCodeLensRefreshRequest,
     "WorkspaceCodeLensRefreshResponse": WorkspaceCodeLensRefreshResponse,
-    "WorkspaceConfigurationParams": WorkspaceConfigurationParams,
     "WorkspaceConfigurationRequest": WorkspaceConfigurationRequest,
     "WorkspaceConfigurationResponse": WorkspaceConfigurationResponse,
     "WorkspaceDiagnosticParams": WorkspaceDiagnosticParams,
@@ -13399,11 +13405,11 @@ _MESSAGE_DIRECTION: Dict[str, str] = {
     WORKSPACE_CODE_LENS_REFRESH: "serverToClient",
     WORKSPACE_CONFIGURATION: "serverToClient",
     WORKSPACE_DIAGNOSTIC: "clientToServer",
-    WORKSPACE_DIAGNOSTIC_REFRESH: "clientToServer",
+    WORKSPACE_DIAGNOSTIC_REFRESH: "serverToClient",
     WORKSPACE_EXECUTE_COMMAND: "clientToServer",
-    WORKSPACE_INLAY_HINT_REFRESH: "clientToServer",
-    WORKSPACE_INLINE_VALUE_REFRESH: "clientToServer",
-    WORKSPACE_SEMANTIC_TOKENS_REFRESH: "clientToServer",
+    WORKSPACE_INLAY_HINT_REFRESH: "serverToClient",
+    WORKSPACE_INLINE_VALUE_REFRESH: "serverToClient",
+    WORKSPACE_SEMANTIC_TOKENS_REFRESH: "serverToClient",
     WORKSPACE_SYMBOL: "clientToServer",
     WORKSPACE_SYMBOL_RESOLVE: "clientToServer",
     WORKSPACE_WILL_CREATE_FILES: "clientToServer",

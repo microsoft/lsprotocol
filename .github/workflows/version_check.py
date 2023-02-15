@@ -2,7 +2,12 @@ import datetime
 import pathlib
 import sys
 
-pyproject = pathlib.Path(__file__).parent.parent.parent / "pyproject.toml"
+pyproject = (
+    pathlib.Path(__file__).parent.parent.parent
+    / "packages"
+    / "python"
+    / "pyproject.toml"
+)
 
 content = pyproject.read_text(encoding="utf-8")
 

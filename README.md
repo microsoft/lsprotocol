@@ -1,40 +1,66 @@
-# Language Server Protocol implementation for Python
+# Language Server Protocol types code generator
 
-`lsprotocol` is a python implementation of object types used in the Language Server Protocol (LSP). This repository contains the code generator and the generated types for LSP.
+This repository contains code to generate Language Server Protocol types and classes for various languages.
 
-## Overview
-
-LSP is used by editors to communicate with various tools to enables services like code completion, documentation on hover, formatting, code analysis, etc. The intent of this library is to allow you to build on top of the types used by LSP. This repository will be kept up to date with the latest version of LSP as it is updated.
-
-## Installation
-
-`python -m pip install lsprotocol`
+# Code Generator usage
 
 ## Usage
 
-### Using LSP types
+### Command line
 
-```python
-from lsprotocol import types
-
-position = types.Position(line=10, character=3)
-```
-
-### Using built-in type converters
-
-```python
-# test.py
-import json
-from lsprotocol import converters, types
-
-position = types.Position(line=10, character=3)
-converter = converters.get_converter()
-print(json.dumps(converter.unstructure(position, unstructure_as=types.Position)))
-```
-
-Output:
+Clone this repository and run `generator` like a module.
 
 ```console
-> python test.py
-{"line": 10, "character": 3}
+>python -m generator --help
+usage: __main__.py [-h] [--schema SCHEMA] [--model MODEL]
+
+Generate types from LSP JSON model.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --schema SCHEMA, -s SCHEMA
+                        Path to a model schema file. By default uses packaged
+                        schema.
+  --model MODEL, -m MODEL
+                        Path to a model JSON file. By default uses packaged
+                        model file.
 ```
+
+### using `nox`
+
+This project uses `nox` as a task runner to run the code generator. You can install `nox` and run `build_lsp` session to generate code from spec available in the repo.
+
+```console
+> python -m pip install nox
+> nox --session build_lsp
+```
+
+# Contributing plugins
+
+You can contribute plugins by adding your code generator under `generator-plugins` directory. The `generator` module will load the plugin (`myplugin`), and call `myplugin.generate()` on it. See, the `python` plugin for layout.
+
+This is the expected signature of generate:
+
+```python
+def (spec: model.LSPModel, output_dir: str) -> None: ...
+```
+
+Expected directory structure:
+
+```
+generator-plugins
+├───myplugin
+│      __init__.py (required)
+│      <your code files>
+│
+└───python
+       utils.py
+       __init__.py
+
+```
+
+# Supported plugins
+
+| Language | Plugin                  | Package                                                            | Notes  |
+| -------- | ----------------------- | ------------------------------------------------------------------ | ------ |
+| Python   | generator-plugin.python | ![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol) | Active |

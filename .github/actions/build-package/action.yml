@@ -40,7 +40,7 @@ runs:
           with:
               name: pypi-packages
               path: |
-                  dist/*.gz
-                  dist/*.whl
+                  packages/python/dist/*.gz
+                  packages/python/dist/*.whl
               if-no-files-found: error
               retention-days: 7

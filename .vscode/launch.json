@@ -10,11 +10,7 @@
             "request": "launch",
             "module": "generator",
             "console": "integratedTerminal",
-            "justMyCode": true,
-            "args": [
-                "--output",
-                "lsprotocol"
-            ]
+            "justMyCode": true
         },
         {
             "name": "DON'T SELECT (test debug config)",
@@ -22,9 +18,12 @@
             "request": "launch",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "purpose": [
-                "debug-test"
-            ]
+            "purpose": ["debug-test"],
+            "presentation": {
+                "hidden": true,
+                "group": "",
+                "order": 4
+            }
         }
     ]
 }

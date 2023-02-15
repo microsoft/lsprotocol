@@ -3,7 +3,10 @@
 
 
 import argparse
+import importlib
 import json
+import logging
+import os
 import pathlib
 import sys
 from typing import Sequence
@@ -11,7 +14,19 @@ from typing import Sequence
 import importlib_resources as ir
 import jsonschema
 
-from . import model, utils
+from . import model
+
+PACKAGES_ROOT = pathlib.Path(__file__).parent.parent / "packages"
+LOGGER = logging.getLogger("generator")
+
+
+def setup_logging() -> None:
+    logging.basicConfig(
+        stream=sys.stdout,
+        level=logging.DEBUG,
+        format="[%(levelname)s][%(asctime)s]  %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -28,13 +43,6 @@ def get_parser() -> argparse.ArgumentParser:
         help="Path to a model JSON file. By default uses packaged model file.",
         type=str,
     )
-    parser.add_argument(
-        "--output",
-        "-o",
-        help="Path to a where the types should be written. By default uses stdout.",
-        type=str,
-        default="-",
-    )
     return parser
 
 
@@ -43,31 +51,54 @@ def main(argv: Sequence[str]) -> None:
     args = parser.parse_args(argv)
 
     # Validate against LSP model JSON schema.
+
     if args.schema:
-        schema = json.load(pathlib.Path(args.schema).open("rb"))
+        schema_file = pathlib.Path(args.schema)
     else:
         schema_file = ir.files("generator") / "lsp.schema.json"
-        schema = json.load(schema_file.open("rb"))
+
+    LOGGER.info("Using schema file %s", os.fspath(schema_file))
+    schema = json.load(schema_file.open("rb"))
 
     if args.model:
-        json_model = json.load(pathlib.Path(args.model).open("rb"))
+        model_file = pathlib.Path(args.model)
     else:
         model_file = ir.files("generator") / "lsp.json"
-        json_model = json.load(model_file.open("rb"))
 
+    LOGGER.info("Using model file %s", os.fspath(model_file))
+    json_model = json.load(model_file.open("rb"))
+
+    LOGGER.info("Validating model.")
     jsonschema.validate(json_model, schema)
 
-    # load model and generate types.
-    spec = model.create_lsp_model(json_model)
-    code = utils.TypesCodeGenerator(spec).get_code()
-    if args.output:
-        for file_name in code:
-            pathlib.Path(args.output, file_name).write_text(
-                code[file_name], encoding="utf-8"
-            )
-    else:
-        print(code)
+    LOGGER.info("Finding plugins.")
+    plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
+    plugins = []
+    for item in plugin_root.iterdir():
+        if (
+            item.is_dir()
+            and (item / "__init__.py").exists()
+            and not item.name.startswith("_")
+        ):
+            plugins.append(item.name)
+    LOGGER.info(f"Found plugins: {plugins}")
+    LOGGER.info("Starting code generation.")
+
+    for plugin in plugins:
+        LOGGER.info(f"Running plugin {plugin}.")
+
+        # load model and generate types for each plugin to avoid
+        # any conflicts between plugins.
+        spec: model.LSPModel = model.create_lsp_model(json_model)
+
+        try:
+            plugin_module = importlib.import_module(f"generator-plugins.{plugin}")
+            plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
+            LOGGER.info(f"Plugin {plugin} completed.")
+        except Exception as e:
+            LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)
 
 
 if __name__ == "__main__":
+    setup_logging()
     main(sys.argv[1:])

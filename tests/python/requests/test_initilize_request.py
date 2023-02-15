@@ -5,9 +5,8 @@ import json
 import uuid
 
 import hamcrest
+import jsonrpc
 import pytest
-
-from tests import jsonrpc
 
 ID = str(uuid.uuid4())
 INITIALIZE_PARAMS = {

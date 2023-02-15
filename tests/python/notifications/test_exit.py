@@ -4,10 +4,9 @@
 import json
 
 import hamcrest
+import jsonrpc
 import pytest
 from cattrs.errors import ClassValidationError
-
-from tests import jsonrpc
 
 
 @pytest.mark.parametrize(

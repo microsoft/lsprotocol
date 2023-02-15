@@ -7,17 +7,23 @@ import nox
 
 
 def _install_requirements(session: nox.Session):
-    session.install("-r", "./requirements.txt")
-    session.install("-r", "./generator/requirements.txt")
-    session.install("-r", "./tests/requirements.txt")
+    session.install(
+        "-r",
+        "./packages/python/requirements.txt",
+        "-r",
+        "./generator/requirements.txt",
+        "-r",
+        "./tests/python/requirements.txt",
+        "-r",
+        "./tests/generator/requirements.txt",
+    )
+    session.run("pip", "list")
 
 
 @nox.session()
 def tests(session: nox.Session):
     """Run tests for lsprotocol and generator."""
     _install_requirements(session)
-
-    session.run("pip", "list")
     session.run("pytest", "./tests")
 
 
@@ -26,12 +32,10 @@ def lint(session: nox.Session):
     """Lint all packages."""
     _install_requirements(session)
 
-    session.install("isort", "black", "docformatter", "mypy")
+    session.install("isort", "black", "mypy")
     session.run("isort", "--profile", "black", "--check", ".")
-    # session.run("docformatter", "--check", "--recursive", "./lsprotocol")
     session.run("black", "--check", ".")
-
-    session.run("mypy", "--strict", "--no-incremental", "lsprotocol")
+    session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")
 
 
 @nox.session()
@@ -41,37 +45,37 @@ def format(session: nox.Session):
 
 
 def _generate_model(session: nox.Session):
-    session.install("-r", "./requirements.txt")
-    session.install("-r", "./generator/requirements.txt")
+    _install_requirements(session)
 
-    session.run("pip", "list")
-
-    session.run("python", "-m", "generator", "--output", "./lsprotocol")
+    session.run("python", "-m", "generator")
     _format_code(session)
 
 
 def _format_code(session: nox.Session):
     session.install("isort", "black", "docformatter")
 
-    session.run("isort", "--profile", "black", "./lsprotocol")
-    session.run("black", "./lsprotocol")
-    session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
-
-    # Do it again because doc-formatter can move lines.
-    session.run("isort", "--profile", "black", "./lsprotocol")
-    session.run("black", "./lsprotocol")
-    session.run("docformatter", "--in-place", "--recursive", "./lsprotocol")
-
     session.run("isort", "--profile", "black", ".")
     session.run("black", ".")
     session.run("docformatter", "--in-place", "--recursive", ".")
+    session.run("isort", "--profile", "black", ".")
+    session.run("black", ".")
+
+    # this is for the lsprotocol package only
+    python_package_path = "./packages/python/lsprotocol"
+    session.run("isort", "--profile", "black", python_package_path)
+    session.run("black", python_package_path)
+    session.run("docformatter", "--in-place", "--recursive", python_package_path)
+    # do it again to correct any adjustments done by docformatter
+    session.run("isort", "--profile", "black", python_package_path)
+    session.run("black", python_package_path)
 
 
 @nox.session()
 def build(session: nox.Session):
     """Build lsprotocol package."""
     session.install("flit")
-    session.run("flit", "build")
+    with session.chdir("./packages/python"):
+        session.run("flit", "build")
 
 
 def _get_content(uri) -> str:
@@ -113,10 +117,25 @@ def update_lsp(session: nox.Session):
 def update_packages(session: nox.Session):
     """Update dependencies of generator and lsprotocol."""
     session.install("wheel", "pip-tools")
+
+    session.run(
+        "pip-compile",
+        "--generate-hashes",
+        "--upgrade",
+        "./packages/python/requirements.in",
+    )
     session.run(
         "pip-compile", "--generate-hashes", "--upgrade", "./generator/requirements.in"
     )
-    session.run("pip-compile", "--generate-hashes", "--upgrade", "./requirements.in")
     session.run(
-        "pip-compile", "--generate-hashes", "--upgrade", "./tests/requirements.in"
+        "pip-compile",
+        "--generate-hashes",
+        "--upgrade",
+        "./tests/python/requirements.in",
+    )
+    session.run(
+        "pip-compile",
+        "--generate-hashes",
+        "--upgrade",
+        "./tests/generator/requirements.in",
     )

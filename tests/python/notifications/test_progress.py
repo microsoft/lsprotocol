@@ -4,6 +4,7 @@
 import json
 
 import hamcrest
+import jsonrpc
 import pytest
 
 from lsprotocol.types import (
@@ -13,7 +14,6 @@ from lsprotocol.types import (
     WorkDoneProgressEnd,
     WorkDoneProgressReport,
 )
-from tests import jsonrpc
 
 
 @pytest.mark.parametrize(

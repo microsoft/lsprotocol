@@ -8,17 +8,16 @@ import pytest
 
 import generator.model as model
 
+lsp_json_path = pathlib.Path(model.__file__).parent / "lsp.json"
 
 def test_model_loading():
-    root = pathlib.Path(__file__).parent.parent / "generator"
-    json_model = json.loads((root / "lsp.json").read_text(encoding="utf-8"))
-
+    json_model = json.loads((lsp_json_path).read_text(encoding="utf-8"))
     model.LSPModel(**json_model)
 
 
 def test_model_loading_failure():
     root = pathlib.Path(__file__).parent.parent / "generator"
-    json_model = json.loads((root / "lsp.json").read_text(encoding="utf-8"))
+    json_model = json.loads((lsp_json_path).read_text(encoding="utf-8"))
 
     del json_model["structures"][0]["name"]
     with pytest.raises(TypeError):

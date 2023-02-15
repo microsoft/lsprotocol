@@ -3,7 +3,9 @@
 
 
 import argparse
+import importlib
 import json
+import os
 import pathlib
 import sys
 from typing import Sequence
@@ -11,7 +13,9 @@ from typing import Sequence
 import importlib_resources as ir
 import jsonschema
 
-from . import model, utils
+from . import model
+
+PACKAGES_ROOT = pathlib.Path(__file__).parent.parent / "packages"
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -27,13 +31,6 @@ def get_parser() -> argparse.ArgumentParser:
         "-m",
         help="Path to a model JSON file. By default uses packaged model file.",
         type=str,
-    )
-    parser.add_argument(
-        "--output",
-        "-o",
-        help="Path to a where the types should be written. By default uses stdout.",
-        type=str,
-        default="-",
     )
     return parser
 
@@ -55,18 +52,31 @@ def main(argv: Sequence[str]) -> None:
         model_file = ir.files("generator") / "lsp.json"
         json_model = json.load(model_file.open("rb"))
 
+    print("Model schema validated.")
     jsonschema.validate(json_model, schema)
 
-    # load model and generate types.
-    spec = model.create_lsp_model(json_model)
-    code = utils.TypesCodeGenerator(spec).get_code()
-    if args.output:
-        for file_name in code:
-            pathlib.Path(args.output, file_name).write_text(
-                code[file_name], encoding="utf-8"
-            )
-    else:
-        print(code)
+    print("Finding plugins.")
+    plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
+    plugins = []
+    for item in plugin_root.iterdir():
+        if (
+            item.is_dir()
+            and (item / "__init__.py").exists()
+            and not item.name.startswith("_")
+        ):
+            plugins.append(item.name)
+    print(f"Found plugins: {plugins}")
+    print("Starting code generation.")
+
+    for plugin in plugins:
+        print(f"Running plugin {plugin}.")
+
+        # load model and generate types for each plugin to avoid
+        # any conflicts between plugins.
+        spec: model.LSPModel = model.create_lsp_model(json_model)
+
+        plugin_module = importlib.import_module(f"generator-plugins.{plugin}")
+        plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
 
 
 if __name__ == "__main__":

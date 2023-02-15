@@ -5,13 +5,23 @@ import collections
 import copy
 import itertools
 import keyword
+import pathlib
 import re
 from typing import Dict, List, Optional, OrderedDict, Sequence, Tuple, Union
 
-from . import model
+import generator.model as model
 
 METHOD_NAME_RE_1 = re.compile(r"(.)([A-Z][a-z]+)")
 METHOD_NAME_RE_2 = re.compile(r"([a-z0-9])([A-Z])")
+PACKAGE_NAME = "lsprotocol"
+
+
+def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
+    code = TypesCodeGenerator(spec).get_code()
+    for file_name in code:
+        pathlib.Path(output_dir, PACKAGE_NAME, file_name).write_text(
+            code[file_name], encoding="utf-8"
+        )
 
 
 def _generate_field_validator(

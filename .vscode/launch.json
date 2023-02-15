@@ -18,7 +18,12 @@
             "request": "launch",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "purpose": ["debug-test"]
+            "purpose": ["debug-test"],
+            "presentation": {
+                "hidden": true,
+                "group": "",
+                "order": 4
+            }
         }
     ]
 }

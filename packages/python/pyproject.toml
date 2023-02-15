@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "lsprotocol"
 description = 'Python implementation of the Language Server Protocol.'
-version = "2023.0.0a11"
+version = "2023.0.0a0"
 authors = [{name = "Microsoft Corporation", email = "lsprotocol-help@microsoft.com"}]
 license = {file = "LICENSE"}
 readme = {"file" = "README.md", "content-type" = "text/markdown"}
@@ -35,18 +35,8 @@ Source = "https://github.com/microsoft/lsprotocol"
 include = ["lsprotocol/", "README.md", "LICENSE"]
 exclude = [
   "lsprotocol/__pycache__/",
-  "generator/",
-  "tests/",
-  ".vscode/",
-  ".venv/",
-  ".gitignore",
-  "CODE_OF_CONDUCT.md",
-  "conftest.py",
-  "noxfile.py",
   "requirements.in",
   "requirements.txt",
-  "SECURITY.md",
-  "SUPPORT.md",
 ]
 
 [tool.mypy]

@@ -5,6 +5,7 @@
 import argparse
 import importlib
 import json
+import logging
 import os
 import pathlib
 import sys
@@ -16,6 +17,16 @@ import jsonschema
 from . import model
 
 PACKAGES_ROOT = pathlib.Path(__file__).parent.parent / "packages"
+LOGGER = logging.getLogger("generator")
+
+
+def setup_logging() -> None:
+    logging.basicConfig(
+        stream=sys.stdout,
+        level=logging.DEBUG,
+        format="[%(levelname)s][%(asctime)s]  %(name)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -40,22 +51,27 @@ def main(argv: Sequence[str]) -> None:
     args = parser.parse_args(argv)
 
     # Validate against LSP model JSON schema.
+
     if args.schema:
-        schema = json.load(pathlib.Path(args.schema).open("rb"))
+        schema_file = pathlib.Path(args.schema)
     else:
         schema_file = ir.files("generator") / "lsp.schema.json"
-        schema = json.load(schema_file.open("rb"))
+
+    LOGGER.info("Using schema file %s", os.fspath(schema_file))
+    schema = json.load(schema_file.open("rb"))
 
     if args.model:
-        json_model = json.load(pathlib.Path(args.model).open("rb"))
+        model_file = pathlib.Path(args.model)
     else:
         model_file = ir.files("generator") / "lsp.json"
-        json_model = json.load(model_file.open("rb"))
 
-    print("Model schema validated.")
+    LOGGER.info("Using model file %s", os.fspath(model_file))
+    json_model = json.load(model_file.open("rb"))
+
+    LOGGER.info("Validating model.")
     jsonschema.validate(json_model, schema)
 
-    print("Finding plugins.")
+    LOGGER.info("Finding plugins.")
     plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
     plugins = []
     for item in plugin_root.iterdir():
@@ -65,19 +81,24 @@ def main(argv: Sequence[str]) -> None:
             and not item.name.startswith("_")
         ):
             plugins.append(item.name)
-    print(f"Found plugins: {plugins}")
-    print("Starting code generation.")
+    LOGGER.info(f"Found plugins: {plugins}")
+    LOGGER.info("Starting code generation.")
 
     for plugin in plugins:
-        print(f"Running plugin {plugin}.")
+        LOGGER.info(f"Running plugin {plugin}.")
 
         # load model and generate types for each plugin to avoid
         # any conflicts between plugins.
         spec: model.LSPModel = model.create_lsp_model(json_model)
 
-        plugin_module = importlib.import_module(f"generator-plugins.{plugin}")
-        plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
+        try:
+            plugin_module = importlib.import_module(f"generator-plugins.{plugin}")
+            plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
+            LOGGER.info(f"Plugin {plugin} completed.")
+        except Exception as e:
+            LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)
 
 
 if __name__ == "__main__":
+    setup_logging()
     main(sys.argv[1:])

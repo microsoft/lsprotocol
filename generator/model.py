@@ -105,6 +105,10 @@ class EnumItem:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    deprecated: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -137,6 +141,10 @@ class Enum:
     )
     supportsCustomValues: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    deprecated: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
 
@@ -273,6 +281,10 @@ class Property:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    deprecated: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -305,6 +317,10 @@ class LiteralType:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    deprecated: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
 
 
 @attrs.define
@@ -323,6 +339,10 @@ class TypeAlias:
         default=None,
     )
     since: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -349,6 +369,10 @@ class Structure:
         default=None,
     )
     since: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -383,6 +407,10 @@ class Notification:
         default=None,
     )
     registrationMethod: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -432,6 +460,10 @@ class Request:
         default=None,
     )
     registrationMethod: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )

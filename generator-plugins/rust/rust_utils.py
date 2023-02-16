@@ -21,10 +21,12 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
             code[file_name], encoding="utf-8"
         )
 
+
 def generate_package_code(spec: model.LSPModel) -> List[str]:
     return {
         "src/lib.rs": generate_lib_rs(spec),
     }
+
 
 def generate_lib_rs(spec: model.LSPModel) -> List[str]:
     lines = lines_to_comments(license_header())
@@ -36,4 +38,3 @@ def generate_lib_rs(spec: model.LSPModel) -> List[str]:
         lines += [""]
 
     return "\n".join(lines)
-

@@ -10,7 +10,6 @@ def license_header() -> List[str]:
         "Licensed under the MIT License.",
     ]
 
+
 def package_description() -> List[str]:
-    return [
-    "Language Server Protocol types for Rust generated from LSP specification."
-    ]
+    return ["Language Server Protocol types for Rust generated from LSP specification."]

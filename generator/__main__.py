@@ -83,7 +83,7 @@ def main(argv: Sequence[str]) -> None:
     if not plugins:
         LOGGER.info("Finding plugins.")
         plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
-        
+
         for item in plugin_root.iterdir():
             if (
                 item.is_dir()

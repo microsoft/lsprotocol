@@ -17,7 +17,10 @@ def generate_int_enum(enum: model.Enum) -> List[str]:
         f"#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]",
         f"#[repr(i64)]",
         f"pub enum {enum.name} " "{",
-        *[f"    {to_upper_camel_case(item.name)} = {item.value}," for item in enum.values],
+        *[
+            f"    {to_upper_camel_case(item.name)} = {item.value},"
+            for item in enum.values
+        ],
         "}",
     ]
 

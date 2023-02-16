@@ -6,3 +6,4 @@ dist
 **/.pytest_cache
 **/.vs
 **/.mypy_cache
+packages/rust/**/target/

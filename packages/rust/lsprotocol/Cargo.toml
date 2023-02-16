@@ -1,0 +1,15 @@
+[package]
+name = "lsprotocol"
+version = "0.1.0"
+edition = "2021"
+description = "Rust implementation of the Language Server Protocol generated from LSP specification."
+authors = ["Microsoft Corporation <lsprotocol-help@microsoft.com>", "Karthik Nadig <kanadig@microsoft.com>"]
+license = "MIT"
+repository = "https://github.com/microsoft/lsprotocol"
+readme = "README.md"
+
+[dependencies]
+serde = "1.0.152"
+serde_json = "1.0.93"
+serde_repr = "0.1.10"
+url = "2.3.1"

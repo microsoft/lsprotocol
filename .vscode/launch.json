@@ -5,12 +5,21 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Run Generator",
+            "name": "Run Generator (all)",
             "type": "python",
             "request": "launch",
             "module": "generator",
             "console": "integratedTerminal",
             "justMyCode": true
+        },
+        {
+            "name": "Run Generator (select plugin)",
+            "type": "python",
+            "request": "launch",
+            "module": "generator",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": ["--plugin", "${input:plugin}"]
         },
         {
             "name": "DON'T SELECT (test debug config)",
@@ -24,6 +33,14 @@
                 "group": "",
                 "order": 4
             }
+        }
+    ],
+    "inputs": [
+        {
+            "id": "plugin",
+            "type": "pickString",
+            "description": "Select a plugin to debug",
+            "options": ["python", "rust"]
         }
     ]
 }

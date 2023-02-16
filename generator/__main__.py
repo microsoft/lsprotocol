@@ -43,6 +43,13 @@ def get_parser() -> argparse.ArgumentParser:
         help="Path to a model JSON file. By default uses packaged model file.",
         type=str,
     )
+    parser.add_argument(
+        "--plugin",
+        "-p",
+        help="Name of a builtin plugin module. By default uses all plugins.",
+        type=str,
+        action="append",
+    )
     return parser
 
 
@@ -71,18 +78,21 @@ def main(argv: Sequence[str]) -> None:
     LOGGER.info("Validating model.")
     jsonschema.validate(json_model, schema)
 
-    LOGGER.info("Finding plugins.")
-    plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
-    plugins = []
-    for item in plugin_root.iterdir():
-        if (
-            item.is_dir()
-            and (item / "__init__.py").exists()
-            and not item.name.startswith("_")
-        ):
-            plugins.append(item.name)
-    LOGGER.info(f"Found plugins: {plugins}")
-    LOGGER.info("Starting code generation.")
+    plugins = args.plugin or []
+
+    if not plugins:
+        LOGGER.info("Finding plugins.")
+        plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
+        
+        for item in plugin_root.iterdir():
+            if (
+                item.is_dir()
+                and (item / "__init__.py").exists()
+                and not item.name.startswith("_")
+            ):
+                plugins.append(item.name)
+        LOGGER.info(f"Found plugins: {plugins}")
+        LOGGER.info("Starting code generation.")
 
     for plugin in plugins:
         LOGGER.info(f"Running plugin {plugin}.")

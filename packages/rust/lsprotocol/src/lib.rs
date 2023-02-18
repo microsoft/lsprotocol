@@ -8,57 +8,83 @@ use serde_repr::*;
 /// corresponding client capabilities.
 ///
 /// @since 3.16.0
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum SemanticTokenTypes {
     #[serde(rename = "namespace")]
     Namespace,
+
     /// Represents a generic type. Acts as a fallback for types which can't be mapped to
     /// a specific type like class or enum.
     #[serde(rename = "type")]
     Type,
+
     #[serde(rename = "class")]
     Class,
+
     #[serde(rename = "enum")]
     Enum,
+
     #[serde(rename = "interface")]
     Interface,
+
     #[serde(rename = "struct")]
     Struct,
+
     #[serde(rename = "typeParameter")]
     TypeParameter,
+
     #[serde(rename = "parameter")]
     Parameter,
+
     #[serde(rename = "variable")]
     Variable,
+
     #[serde(rename = "property")]
     Property,
+
     #[serde(rename = "enumMember")]
     EnumMember,
+
     #[serde(rename = "event")]
     Event,
+
     #[serde(rename = "function")]
     Function,
+
     #[serde(rename = "method")]
     Method,
+
     #[serde(rename = "macro")]
     Macro,
+
     #[serde(rename = "keyword")]
     Keyword,
+
     #[serde(rename = "modifier")]
     Modifier,
+
     #[serde(rename = "comment")]
     Comment,
+
     #[serde(rename = "string")]
     String,
+
     #[serde(rename = "number")]
     Number,
+
     #[serde(rename = "regexp")]
     Regexp,
+
     #[serde(rename = "operator")]
     Operator,
+
     /// @since 3.17.0
     #[serde(rename = "decorator")]
     Decorator,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 /// A set of predefined token modifiers. This set is not fixed
@@ -70,24 +96,37 @@ pub enum SemanticTokenTypes {
 pub enum SemanticTokenModifiers {
     #[serde(rename = "declaration")]
     Declaration,
+
     #[serde(rename = "definition")]
     Definition,
+
     #[serde(rename = "readonly")]
     Readonly,
+
     #[serde(rename = "static")]
     Static,
+
     #[serde(rename = "deprecated")]
     Deprecated,
+
     #[serde(rename = "abstract")]
     Abstract,
+
     #[serde(rename = "async")]
     Async,
+
     #[serde(rename = "modification")]
     Modification,
+
     #[serde(rename = "documentation")]
     Documentation,
+
     #[serde(rename = "defaultLibrary")]
     DefaultLibrary,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 /// The document diagnostic report kinds.
@@ -99,6 +138,7 @@ pub enum DocumentDiagnosticReportKind {
     /// set of problems.
     #[serde(rename = "full")]
     Full,
+
     /// A report indicating that the last
     /// returned report is still accurate.
     #[serde(rename = "unchanged")]
@@ -110,14 +150,24 @@ pub enum DocumentDiagnosticReportKind {
 #[repr(i64)]
 pub enum ErrorCodes {
     ParseError = -32700,
+
     InvalidRequest = -32600,
+
     MethodNotFound = -32601,
+
     InvalidParams = -32602,
+
     InternalError = -32603,
+
     /// Error code indicating that a server received a notification or
     /// request before the server has received the `initialize` request.
     ServerNotInitialized = -32002,
+
     UnknownErrorCode = -32001,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 #[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
@@ -130,12 +180,14 @@ pub enum LSPErrorCodes {
     ///
     /// @since 3.17.0
     RequestFailed = -32803,
+
     /// The server cancelled the request. This error code should
     /// only be used for requests that explicitly support being
     /// server cancellable.
     ///
     /// @since 3.17.0
     ServerCancelled = -32802,
+
     /// The server detected that the content of a document got
     /// modified outside normal conditions. A server should
     /// NOT send this error code if it detects a content change
@@ -145,9 +197,14 @@ pub enum LSPErrorCodes {
     /// If a client decides that a result is not of any use anymore
     /// the client should cancel the request.
     ContentModified = -32801,
+
     /// The client has canceled a request and a server as detected
     /// the cancel.
     RequestCancelled = -32800,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 /// A set of predefined range kinds.
@@ -156,12 +213,18 @@ pub enum FoldingRangeKind {
     /// Folding range for a comment
     #[serde(rename = "comment")]
     Comment,
+
     /// Folding range for an import or include
     #[serde(rename = "imports")]
     Imports,
+
     /// Folding range for a region (e.g. `#region`)
     #[serde(rename = "region")]
     Region,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 /// A symbol kind.
@@ -169,30 +232,55 @@ pub enum FoldingRangeKind {
 #[repr(i64)]
 pub enum SymbolKind {
     File = 1,
+
     Module = 2,
+
     Namespace = 3,
+
     Package = 4,
+
     Class = 5,
+
     Method = 6,
+
     Property = 7,
+
     Field = 8,
+
     Constructor = 9,
+
     Enum = 10,
+
     Interface = 11,
+
     Function = 12,
+
     Variable = 13,
+
     Constant = 14,
+
     String = 15,
+
     Number = 16,
+
     Boolean = 17,
+
     Array = 18,
+
     Object = 19,
+
     Key = 20,
+
     Null = 21,
+
     EnumMember = 22,
+
     Struct = 23,
+
     Event = 24,
+
     Operator = 25,
+
     TypeParameter = 26,
 }
 
@@ -214,15 +302,19 @@ pub enum UniquenessLevel {
     /// The moniker is only unique inside a document
     #[serde(rename = "document")]
     Document,
+
     /// The moniker is unique inside a project for which a dump got created
     #[serde(rename = "project")]
     Project,
+
     /// The moniker is unique inside the group to which a project belongs
     #[serde(rename = "group")]
     Group,
+
     /// The moniker is unique inside the moniker scheme.
     #[serde(rename = "scheme")]
     Scheme,
+
     /// The moniker is globally unique
     #[serde(rename = "global")]
     Global,
@@ -236,9 +328,11 @@ pub enum MonikerKind {
     /// The moniker represent a symbol that is imported into a project
     #[serde(rename = "import")]
     Import,
+
     /// The moniker represents a symbol that is exported from a project
     #[serde(rename = "export")]
     Export,
+
     /// The moniker represents a symbol that is local to a project (e.g. a local
     /// variable of a function, a class not visible outside the project, ...)
     #[serde(rename = "local")]
@@ -253,6 +347,7 @@ pub enum MonikerKind {
 pub enum InlayHintKind {
     /// An inlay hint that for a type annotation.
     Type = 1,
+
     /// An inlay hint that is for a parameter.
     Parameter = 2,
 }
@@ -263,10 +358,13 @@ pub enum InlayHintKind {
 pub enum MessageType {
     /// An error message.
     Error = 1,
+
     /// A warning message.
     Warning = 2,
+
     /// An information message.
     Info = 3,
+
     /// A log message.
     Log = 4,
 }
@@ -278,9 +376,11 @@ pub enum MessageType {
 pub enum TextDocumentSyncKind {
     /// Documents should not be synced at all.
     None = 0,
+
     /// Documents are synced by always sending the full content
     /// of the document.
     Full = 1,
+
     /// Documents are synced by sending the full content on open.
     /// After that only incremental updates to the document are
     /// send.
@@ -294,8 +394,10 @@ pub enum TextDocumentSaveReason {
     /// Manually triggered, e.g. by the user pressing save, by starting debugging,
     /// or by an API call.
     Manual = 1,
+
     /// Automatic after a delay.
     AfterDelay = 2,
+
     /// When the editor lost focus.
     FocusOut = 3,
 }
@@ -305,29 +407,53 @@ pub enum TextDocumentSaveReason {
 #[repr(i64)]
 pub enum CompletionItemKind {
     Text = 1,
+
     Method = 2,
+
     Function = 3,
+
     Constructor = 4,
+
     Field = 5,
+
     Variable = 6,
+
     Class = 7,
+
     Interface = 8,
+
     Module = 9,
+
     Property = 10,
+
     Unit = 11,
+
     Value = 12,
+
     Enum = 13,
+
     Keyword = 14,
+
     Snippet = 15,
+
     Color = 16,
+
     File = 17,
+
     Reference = 18,
+
     Folder = 19,
+
     EnumMember = 20,
+
     Constant = 21,
+
     Struct = 22,
+
     Event = 23,
+
     Operator = 24,
+
     TypeParameter = 25,
 }
 
@@ -349,6 +475,7 @@ pub enum CompletionItemTag {
 pub enum InsertTextFormat {
     /// The primary text to be inserted is treated as a plain string.
     PlainText = 1,
+
     /// The primary text to be inserted is treated as a snippet.
     ///
     /// A snippet can define tab stops and placeholders with `$1`, `$2`
@@ -373,6 +500,7 @@ pub enum InsertTextMode {
     /// The client will not apply any kind of adjustments to the
     /// string.
     AsIs = 1,
+
     /// The editor adjusts leading whitespace of new lines so that
     /// they match the indentation up to the cursor of the line for
     /// which the item is accepted.
@@ -389,8 +517,10 @@ pub enum InsertTextMode {
 pub enum DocumentHighlightKind {
     /// A textual occurrence.
     Text = 1,
+
     /// Read-access of a symbol, like reading a variable.
     Read = 2,
+
     /// Write-access of a symbol, like writing to a variable.
     Write = 3,
 }
@@ -401,12 +531,15 @@ pub enum CodeActionKind {
     /// Empty kind.
     #[serde(rename = "")]
     Empty,
+
     /// Base kind for quickfix actions: 'quickfix'
     #[serde(rename = "quickfix")]
     QuickFix,
+
     /// Base kind for refactoring actions: 'refactor'
     #[serde(rename = "refactor")]
     Refactor,
+
     /// Base kind for refactoring extraction actions: 'refactor.extract'
     ///
     /// Example extract actions:
@@ -418,6 +551,7 @@ pub enum CodeActionKind {
     /// - ...
     #[serde(rename = "refactor.extract")]
     RefactorExtract,
+
     /// Base kind for refactoring inline actions: 'refactor.inline'
     ///
     /// Example inline actions:
@@ -428,6 +562,7 @@ pub enum CodeActionKind {
     /// - ...
     #[serde(rename = "refactor.inline")]
     RefactorInline,
+
     /// Base kind for refactoring rewrite actions: 'refactor.rewrite'
     ///
     /// Example rewrite actions:
@@ -440,14 +575,17 @@ pub enum CodeActionKind {
     /// - ...
     #[serde(rename = "refactor.rewrite")]
     RefactorRewrite,
+
     /// Base kind for source actions: `source`
     ///
     /// Source code actions apply to the entire file.
     #[serde(rename = "source")]
     Source,
+
     /// Base kind for an organize imports source action: `source.organizeImports`
     #[serde(rename = "source.organizeImports")]
     SourceOrganizeImports,
+
     /// Base kind for auto-fix source actions: `source.fixAll`.
     ///
     /// Fix all actions automatically fix errors that have a clear fix that do not require user input.
@@ -456,6 +594,10 @@ pub enum CodeActionKind {
     /// @since 3.15.0
     #[serde(rename = "source.fixAll")]
     SourceFixAll,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -463,9 +605,11 @@ pub enum TraceValues {
     /// Turn tracing off.
     #[serde(rename = "off")]
     Off,
+
     /// Trace messages only.
     #[serde(rename = "messages")]
     Messages,
+
     /// Verbose message tracing.
     #[serde(rename = "verbose")]
     Verbose,
@@ -481,6 +625,7 @@ pub enum MarkupKind {
     /// Plain text is supported as a content format
     #[serde(rename = "plaintext")]
     PlainText,
+
     /// Markdown is supported as a content format
     #[serde(rename = "markdown")]
     Markdown,
@@ -494,12 +639,14 @@ pub enum PositionEncodingKind {
     /// Character offsets count UTF-8 code units.
     #[serde(rename = "utf-8")]
     UTF8,
+
     /// Character offsets count UTF-16 code units.
     ///
     /// This is the default and must always be supported
     /// by servers
     #[serde(rename = "utf-16")]
     UTF16,
+
     /// Character offsets count UTF-32 code units.
     ///
     /// Implementation note: these are the same as Unicode code points,
@@ -507,6 +654,10 @@ pub enum PositionEncodingKind {
     /// encoding-agnostic representation of character offsets.
     #[serde(rename = "utf-32")]
     UTF32,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 /// The file event type
@@ -515,8 +666,10 @@ pub enum PositionEncodingKind {
 pub enum FileChangeType {
     /// The file got created.
     Created = 1,
+
     /// The file got changed.
     Changed = 2,
+
     /// The file got deleted.
     Deleted = 3,
 }
@@ -526,10 +679,16 @@ pub enum FileChangeType {
 pub enum WatchKind {
     /// Interested in create events.
     Create = 1,
+
     /// Interested in change events
     Change = 2,
+
     /// Interested in delete events
     Delete = 4,
+
+    /// This enum allows custom values.
+    #[serde(other)]
+    Custom,
 }
 
 /// The diagnostic's severity.
@@ -538,10 +697,13 @@ pub enum WatchKind {
 pub enum DiagnosticSeverity {
     /// Reports an error.
     Error = 1,
+
     /// Reports a warning.
     Warning = 2,
+
     /// Reports an information.
     Information = 3,
+
     /// Reports a hint.
     Hint = 4,
 }
@@ -557,6 +719,7 @@ pub enum DiagnosticTag {
     /// Clients are allowed to render diagnostics with this tag faded out instead of having
     /// an error squiggle.
     Unnecessary = 1,
+
     /// Deprecated or obsolete code.
     ///
     /// Clients are allowed to rendered diagnostics with this tag strike through.
@@ -570,9 +733,11 @@ pub enum CompletionTriggerKind {
     /// Completion was triggered by typing an identifier (24x7 code
     /// complete), manual invocation (e.g Ctrl+Space) or via API.
     Invoked = 1,
+
     /// Completion was triggered by a trigger character specified by
     /// the `triggerCharacters` properties of the `CompletionRegistrationOptions`.
     TriggerCharacter = 2,
+
     /// Completion was re-triggered as current completion list is incomplete
     TriggerForIncompleteCompletions = 3,
 }
@@ -585,8 +750,10 @@ pub enum CompletionTriggerKind {
 pub enum SignatureHelpTriggerKind {
     /// Signature help was invoked manually by the user or by a command.
     Invoked = 1,
+
     /// Signature help was triggered by a trigger character.
     TriggerCharacter = 2,
+
     /// Signature help was triggered by the cursor moving or by the document content changing.
     ContentChange = 3,
 }
@@ -599,6 +766,7 @@ pub enum SignatureHelpTriggerKind {
 pub enum CodeActionTriggerKind {
     /// Code actions were explicitly requested by the user or by an extension.
     Invoked = 1,
+
     /// Code actions were requested automatically.
     ///
     /// This typically happens when current selection in a file changes, but can
@@ -615,6 +783,7 @@ pub enum FileOperationPatternKind {
     /// The pattern matches a file only.
     #[serde(rename = "file")]
     File,
+
     /// The pattern matches a folder only.
     #[serde(rename = "folder")]
     Folder,
@@ -628,6 +797,7 @@ pub enum FileOperationPatternKind {
 pub enum NotebookCellKind {
     /// A markup-cell is formatted source that is used for display.
     Markup = 1,
+
     /// A code-cell is source code.
     Code = 2,
 }
@@ -637,9 +807,11 @@ pub enum ResourceOperationKind {
     /// Supports creating new files and folders.
     #[serde(rename = "create")]
     Create,
+
     /// Supports renaming existing files and folders.
     #[serde(rename = "rename")]
     Rename,
+
     /// Supports deleting existing files and folders.
     #[serde(rename = "delete")]
     Delete,
@@ -651,15 +823,18 @@ pub enum FailureHandlingKind {
     /// fails. All operations executed before the failing operation stay executed.
     #[serde(rename = "abort")]
     Abort,
+
     /// All operations are executed transactional. That means they either all
     /// succeed or no changes at all are applied to the workspace.
     #[serde(rename = "transactional")]
     Transactional,
+
     /// If the workspace edit contains only textual file changes they are executed transactional.
     /// If resource changes (create, rename or delete file) are part of the change the failure
     /// handling strategy is abort.
     #[serde(rename = "textOnlyTransactional")]
     TextOnlyTransactional,
+
     /// The client tries to undo the operations already executed. But there is no
     /// guarantee that this is succeeding.
     #[serde(rename = "undo")]

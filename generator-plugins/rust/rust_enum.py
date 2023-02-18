@@ -14,21 +14,32 @@ def generate_int_enum(enum: model.Enum) -> List[str]:
         raise Exception("Enum is not an integer enum")
 
     doc = enum.documentation.splitlines(keepends=False) if enum.documentation else []
-    lines = lines_to_doc_comments(doc) +  [
+    lines = lines_to_doc_comments(doc) + [
         f"#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]",
         f"#[repr(i64)]",
         f"pub enum {enum.name} " "{",
     ]
 
+    indent = " " * 4
     for item in enum.values:
-        doc = item.documentation.splitlines(keepends=False) if item.documentation else []
-        lines += lines_to_doc_comments(doc) +  [
-            f"    {to_upper_camel_case(item.name)} = {item.value},",
+        doc = (
+            item.documentation.splitlines(keepends=False) if item.documentation else []
+        )
+        lines += [f"{indent}{line}" for line in lines_to_doc_comments(doc)]
+        lines += [f"{indent}{to_upper_camel_case(item.name)} = {item.value},", ""]
+
+    if enum.supportsCustomValues:
+        lines += [
+            f"{indent}/// This enum allows custom values.",
+            f"{indent}#[serde(other)]",
+            f"{indent}Custom,",
+            "",
         ]
 
     lines += ["}"]
 
     return lines
+
 
 def generate_string_enum(enum: model.Enum) -> List[str]:
     is_string = all(isinstance(item.value, str) for item in enum.values)
@@ -36,21 +47,35 @@ def generate_string_enum(enum: model.Enum) -> List[str]:
         raise Exception("Enum is not a string enum")
 
     doc = enum.documentation.splitlines(keepends=False) if enum.documentation else []
-    lines = lines_to_doc_comments(doc) +  [
+    lines = lines_to_doc_comments(doc) + [
         f"#[derive(Serialize, Deserialize, PartialEq, Debug)]",
         f"pub enum {enum.name} " "{",
     ]
 
+    indent = " " * 4
     for item in enum.values:
-        doc = item.documentation.splitlines(keepends=False) if item.documentation else []
-        lines += lines_to_doc_comments(doc) +  [
-            f"    #[serde(rename = \"{item.value}\")]",
-            f"    {to_upper_camel_case(item.name)},",
+        doc = (
+            item.documentation.splitlines(keepends=False) if item.documentation else []
+        )
+        lines += [f"{indent}{line}" for line in lines_to_doc_comments(doc)]
+        lines += [
+            f'{indent}#[serde(rename = "{item.value}")]',
+            f"{indent}{to_upper_camel_case(item.name)},",
+            "",
+        ]
+
+    if enum.supportsCustomValues:
+        lines += [
+            f"{indent}/// This enum allows custom values.",
+            f"{indent}#[serde(other)]",
+            f"{indent}Custom,",
+            "",
         ]
 
     lines += ["}"]
 
     return lines
+
 
 def generate_enum(enum: model.Enum) -> List[str]:
     is_int = all(isinstance(item.value, int) for item in enum.values)

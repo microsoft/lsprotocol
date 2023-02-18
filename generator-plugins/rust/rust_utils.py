@@ -30,7 +30,7 @@ def generate_package_code(spec: model.LSPModel) -> List[str]:
 
 def generate_lib_rs(spec: model.LSPModel) -> List[str]:
     lines = lines_to_comments(license_header())
-    lines += ["use serde_repr::*;", ""]
+    lines += ["use serde_repr::*;", "use serde::{Serialize, Deserialize};", ""]
 
     enums = generate_enums(spec.enumerations)
     for enum_name in enums:

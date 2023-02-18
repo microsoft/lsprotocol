@@ -7,3 +7,4 @@ dist
 **/.vs
 **/.mypy_cache
 packages/rust/**/target/
+packages/rust/**/Cargo.lock

@@ -28,14 +28,6 @@ def generate_int_enum(enum: model.Enum) -> List[str]:
         lines += [f"{indent}{line}" for line in lines_to_doc_comments(doc)]
         lines += [f"{indent}{to_upper_camel_case(item.name)} = {item.value},", ""]
 
-    if enum.supportsCustomValues:
-        lines += [
-            f"{indent}/// This enum allows custom values.",
-            f"{indent}#[serde(other)]",
-            f"{indent}Custom,",
-            "",
-        ]
-
     lines += ["}"]
 
     return lines
@@ -61,14 +53,6 @@ def generate_string_enum(enum: model.Enum) -> List[str]:
         lines += [
             f'{indent}#[serde(rename = "{item.value}")]',
             f"{indent}{to_upper_camel_case(item.name)},",
-            "",
-        ]
-
-    if enum.supportsCustomValues:
-        lines += [
-            f"{indent}/// This enum allows custom values.",
-            f"{indent}#[serde(other)]",
-            f"{indent}Custom,",
             "",
         ]
 

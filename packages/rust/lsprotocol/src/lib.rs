@@ -81,10 +81,6 @@ pub enum SemanticTokenTypes {
     /// @since 3.17.0
     #[serde(rename = "decorator")]
     Decorator,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 /// A set of predefined token modifiers. This set is not fixed
@@ -123,10 +119,6 @@ pub enum SemanticTokenModifiers {
 
     #[serde(rename = "defaultLibrary")]
     DefaultLibrary,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 /// The document diagnostic report kinds.
@@ -164,10 +156,6 @@ pub enum ErrorCodes {
     ServerNotInitialized = -32002,
 
     UnknownErrorCode = -32001,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 #[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]
@@ -201,10 +189,6 @@ pub enum LSPErrorCodes {
     /// The client has canceled a request and a server as detected
     /// the cancel.
     RequestCancelled = -32800,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 /// A set of predefined range kinds.
@@ -221,10 +205,6 @@ pub enum FoldingRangeKind {
     /// Folding range for a region (e.g. `#region`)
     #[serde(rename = "region")]
     Region,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 /// A symbol kind.
@@ -594,10 +574,6 @@ pub enum CodeActionKind {
     /// @since 3.15.0
     #[serde(rename = "source.fixAll")]
     SourceFixAll,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -654,10 +630,6 @@ pub enum PositionEncodingKind {
     /// encoding-agnostic representation of character offsets.
     #[serde(rename = "utf-32")]
     UTF32,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 /// The file event type
@@ -685,10 +657,6 @@ pub enum WatchKind {
 
     /// Interested in delete events
     Delete = 4,
-
-    /// This enum allows custom values.
-    #[serde(other)]
-    Custom,
 }
 
 /// The diagnostic's severity.

@@ -24,6 +24,9 @@ optional arguments:
   --model MODEL, -m MODEL
                         Path to a model JSON file. By default uses packaged
                         model file.
+  --plugin PLUGIN, -p PLUGIN
+                        Name of a builtin plugin module. By default uses all
+                        plugins.
 ```
 
 ### using `nox`
@@ -35,28 +38,29 @@ This project uses `nox` as a task runner to run the code generator. You can inst
 > nox --session build_lsp
 ```
 
+You can format code, run tests, and other tasks using `nox` as well.
+
 # Contributing plugins
 
-You can contribute plugins by adding your code generator under `generator-plugins` directory. The `generator` module will load the plugin (`myplugin`), and call `myplugin.generate()` on it. See, the `python` plugin for layout.
+## Adding a new plugin
 
-This is the expected signature of generate:
+Follow these steps to generate boiler plate code for new plugin:
 
-```python
-def (spec: model.LSPModel, output_dir: str) -> None: ...
-```
+1. Create a virtual environment for python using python 3.7 and activate that environment.
+    1. If you have python extension for VS Code installed then run `Python: Create Environment` command. Be sure to select all the `requirements.txt` files in the repo. This should, install all packages needed and select the environment for you.
+1. Ensure `nox` is installed.
+    1. Run `nox --list`, is nox is installed oyu should see a list of available sessions. Otherwise, run `python -m pip install nox` from the python 3.7 environment you created above.
+1. Run `nox --session create_plugin` and follow the prompts to create a new plugin.
 
-Expected directory structure:
+Example:
 
-```
-generator-plugins
-├───myplugin
-│      __init__.py (required)
-│      <your code files>
-│
-└───python
-       utils.py
-       __init__.py
-
+```console
+> nox --session create_plugin
+nox > Running session create_plugin
+nox > Creating virtual environment (virtualenv) using python.exe in .nox\create_plugin
+Enter the name of the plugin: java
+nox > Created plugin java.
+nox > Session create_plugin was successful.
 ```
 
 # Supported plugins

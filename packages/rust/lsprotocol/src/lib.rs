@@ -3,6 +3,26 @@
 use serde::{Deserialize, Serialize};
 use serde_repr::*;
 
+/// This type allows extending any string enum to support custom values.
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(untagged)]
+pub enum CustomStringEnum<T> {
+    /// The value is one of the known enum values.
+    Known(T),
+    /// The value is custom.
+    Custom(String),
+}
+
+/// This type allows extending any integer enum to support custom values.
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(untagged)]
+pub enum CustomIntEnum<T> {
+    /// The value is one of the known enum values.
+    Known(T),
+    /// The value is custom.
+    Custom(i64),
+}
+
 /// A set of predefined token types. This set is not fixed
 /// an clients can specify additional token types via the
 /// corresponding client capabilities.

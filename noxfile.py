@@ -1,5 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
+import json
 import pathlib
 import urllib.request as url_lib
 
@@ -139,3 +140,78 @@ def update_packages(session: nox.Session):
         "--upgrade",
         "./tests/generator/requirements.in",
     )
+
+
+@nox.session()
+def create_plugin(session: nox.Session):
+    """Create a new plugin."""
+    name = input("Enter the name of the plugin: ")
+
+    plugin_root = pathlib.Path(__file__).parent / "generator-plugins" / name
+    plugin_root.mkdir(parents=True, exist_ok=True)
+
+    init_text = "\n".join(
+        [
+            "# Copyright (c) Microsoft Corporation. All rights reserved.",
+            "# Licensed under the MIT License.",
+            "",
+            f"from .{name}_utils import generate_from_spec as generate",
+        ]
+    )
+    plugin_root.joinpath("__init__.py").write_text(init_text, encoding="utf-8")
+
+    utils_text = "\n".join(
+        [
+            "# Copyright (c) Microsoft Corporation. All rights reserved.",
+            "# Licensed under the MIT License.",
+            "",
+            "import pathlib",
+            "from typing import List, Dict",
+            "",
+            "import generator.model as model",
+            "",
+            "",
+            'PACKAGE_DIR_NAME = "lsprotocol"',
+            "",
+            "",
+            "def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:",
+            '    """Generate the code for the given spec."""',
+            "    # key is the relative path to the file, value is the content",
+            "    code: Dict[str, str] = generate_package_code(spec)",
+            "    for file_name in code:",
+            "        pathlib.Path(output_dir, PACKAGE_DIR_NAME, file_name).write_text(",
+            '            code[file_name], encoding="utf-8"',
+            "        )",
+            "",
+            "def generate_package_code(spec: model.LSPModel) -> List[str]:",
+            "    return {",
+            '        "src/lib.rs": "code for lib.rs",',
+            "    }",
+        ]
+    )
+
+    plugin_root.joinpath(f"{name}_utils.py").write_text(utils_text, encoding="utf-8")
+
+    package_root = pathlib.Path(__file__).parent / "packages" / name / "lsprotocol"
+    package_root.mkdir(parents=True, exist_ok=True)
+    package_root.joinpath("README.md").write_text(
+        f"# your generated code and other package files go under this directory.",
+        encoding="utf-8",
+    )
+
+    tests_root = pathlib.Path(__file__).parent / "tests" / name
+    tests_root.mkdir(parents=True, exist_ok=True)
+    tests_root.joinpath("README.md").write_text(
+        f"# your tests go under this directory.", encoding="utf-8"
+    )
+
+    launch_json_path = pathlib.Path(__file__).parent / ".vscode" / "launch.json"
+    launch_json = json.loads(launch_json_path.read_text(encoding="utf-8"))
+
+    for i in launch_json["inputs"]:
+        if i["id"] == "plugin":
+            i["options"].append(name)
+
+    launch_json_path.write_text(json.dumps(launch_json, indent=4), encoding="utf-8")
+
+    session.log(f"Created plugin {name}.")

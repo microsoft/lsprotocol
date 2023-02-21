@@ -5,7 +5,7 @@ from typing import Dict, List
 
 import generator.model as model
 
-from .rust_lang_utils import to_upper_camel_case
+from .rust_lang_utils import lines_to_doc_comments, to_upper_camel_case
 
 
 def generate_int_enum(enum: model.Enum) -> List[str]:
@@ -13,16 +13,52 @@ def generate_int_enum(enum: model.Enum) -> List[str]:
     if not is_int:
         raise Exception("Enum is not an integer enum")
 
-    return [
+    doc = enum.documentation.splitlines(keepends=False) if enum.documentation else []
+    lines = lines_to_doc_comments(doc) + [
         f"#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]",
         f"#[repr(i64)]",
         f"pub enum {enum.name} " "{",
-        *[
-            f"    {to_upper_camel_case(item.name)} = {item.value},"
-            for item in enum.values
-        ],
-        "}",
     ]
+
+    indent = " " * 4
+    for item in enum.values:
+        doc = (
+            item.documentation.splitlines(keepends=False) if item.documentation else []
+        )
+        lines += [f"{indent}{line}" for line in lines_to_doc_comments(doc)]
+        lines += [f"{indent}{to_upper_camel_case(item.name)} = {item.value},", ""]
+
+    lines += ["}"]
+
+    return lines
+
+
+def generate_string_enum(enum: model.Enum) -> List[str]:
+    is_string = all(isinstance(item.value, str) for item in enum.values)
+    if not is_string:
+        raise Exception("Enum is not a string enum")
+
+    doc = enum.documentation.splitlines(keepends=False) if enum.documentation else []
+    lines = lines_to_doc_comments(doc) + [
+        f"#[derive(Serialize, Deserialize, PartialEq, Debug)]",
+        f"pub enum {enum.name} " "{",
+    ]
+
+    indent = " " * 4
+    for item in enum.values:
+        doc = (
+            item.documentation.splitlines(keepends=False) if item.documentation else []
+        )
+        lines += [f"{indent}{line}" for line in lines_to_doc_comments(doc)]
+        lines += [
+            f'{indent}#[serde(rename = "{item.value}")]',
+            f"{indent}{to_upper_camel_case(item.name)},",
+            "",
+        ]
+
+    lines += ["}"]
+
+    return lines
 
 
 def generate_enum(enum: model.Enum) -> List[str]:
@@ -30,6 +66,8 @@ def generate_enum(enum: model.Enum) -> List[str]:
     lines = []
     if is_int:
         lines += generate_int_enum(enum)
+    else:
+        lines += generate_string_enum(enum)
     return lines
 
 

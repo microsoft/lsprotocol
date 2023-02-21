@@ -7,6 +7,7 @@ from typing import List
 
 import generator.model as model
 
+from .rust_commons import generate_commons
 from .rust_enum import generate_enums
 from .rust_file_header import license_header
 from .rust_lang_utils import lines_to_comments
@@ -30,11 +31,15 @@ def generate_package_code(spec: model.LSPModel) -> List[str]:
 
 def generate_lib_rs(spec: model.LSPModel) -> List[str]:
     lines = lines_to_comments(license_header())
-    lines += ["use serde_repr::*;", ""]
+    lines += ["use serde_repr::*;", "use serde::{Serialize, Deserialize};", ""]
 
-    enums = generate_enums(spec.enumerations)
-    for enum_name in enums:
-        lines += enums[enum_name]
+    types = {
+        **generate_commons(spec),
+        **generate_enums(spec.enumerations),
+    }
+
+    for name in types:
+        lines += types[name]
         lines += [""]
 
     return "\n".join(lines)

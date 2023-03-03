@@ -15,6 +15,9 @@ METHOD_NAME_RE_1 = re.compile(r"(.)([A-Z][a-z]+)")
 METHOD_NAME_RE_2 = re.compile(r"([a-z0-9])([A-Z])")
 PACKAGE_NAME = "lsprotocol"
 
+# These are special type aliases to preserve backward compatibility.
+custom_request_params_aliases = ["WorkspaceConfigurationParams"]
+
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
     code = TypesCodeGenerator(spec).get_code()
@@ -801,9 +804,22 @@ class TypesCodeGenerator:
             doc = _get_indented_documentation(request.documentation, indent)
 
             if request.params:
-                params_type = self._generate_type_name(
-                    request.params, f"{class_name}Params"
-                )
+                if (
+                    request.params.kind == "reference"
+                    and f"{class_name}Params" in custom_request_params_aliases
+                ):
+                    params_type = f"{class_name}Params"
+
+                    self._add_type_alias(
+                        model.TypeAlias(
+                            name=params_type,
+                            type={"kind": "reference", "name": request.params.name},
+                        )
+                    )
+                else:
+                    params_type = self._generate_type_name(
+                        request.params, f"{class_name}Params"
+                    )
                 if not self._has_type(params_type):
                     raise ValueError(f"{class_name}Params type definition is missing.")
                 params_field = "attrs.field()"

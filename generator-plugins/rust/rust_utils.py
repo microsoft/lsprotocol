@@ -11,6 +11,7 @@ from .rust_commons import generate_commons
 from .rust_enum import generate_enums
 from .rust_file_header import license_header
 from .rust_lang_utils import lines_to_comments
+from .rust_structs import generate_type_aliases, generate_structures
 
 PACKAGE_DIR_NAME = "lsprotocol"
 
@@ -31,15 +32,19 @@ def generate_package_code(spec: model.LSPModel) -> List[str]:
 
 def generate_lib_rs(spec: model.LSPModel) -> List[str]:
     lines = lines_to_comments(license_header())
-    lines += ["use serde_repr::*;", "use serde::{Serialize, Deserialize};", ""]
+    lines += ["use serde_repr::*;", "use serde::{Serialize, Deserialize};", "use std::collections::HashMap;", ""]
 
     types = {
         **generate_commons(spec),
         **generate_enums(spec.enumerations),
     }
 
+    generate_type_aliases(spec, types)
+    generate_structures(spec, types)
+
     for name in types:
-        lines += types[name]
-        lines += [""]
+        if types[name]:
+            lines += types[name]
+            lines += [""]
 
     return "\n".join(lines)

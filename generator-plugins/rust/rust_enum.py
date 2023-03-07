@@ -6,6 +6,7 @@ from typing import Dict, List
 import generator.model as model
 
 from .rust_lang_utils import lines_to_doc_comments, to_upper_camel_case
+from .rust_commons import generate_extras
 
 
 def generate_int_enum(enum: model.Enum) -> List[str]:
@@ -13,8 +14,9 @@ def generate_int_enum(enum: model.Enum) -> List[str]:
     if not is_int:
         raise Exception("Enum is not an integer enum")
 
+    extras = generate_extras(enum)
     doc = enum.documentation.splitlines(keepends=False) if enum.documentation else []
-    lines = lines_to_doc_comments(doc) + [
+    lines = lines_to_doc_comments(doc) + extras + [
         f"#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]",
         f"#[repr(i64)]",
         f"pub enum {enum.name} " "{",
@@ -22,10 +24,12 @@ def generate_int_enum(enum: model.Enum) -> List[str]:
 
     indent = " " * 4
     for item in enum.values:
+        extras = generate_extras(item)
         doc = (
             item.documentation.splitlines(keepends=False) if item.documentation else []
         )
         lines += [f"{indent}{line}" for line in lines_to_doc_comments(doc)]
+        lines += [f"{indent}{line}" for line in extras]
         lines += [f"{indent}{to_upper_camel_case(item.name)} = {item.value},", ""]
 
     lines += ["}"]

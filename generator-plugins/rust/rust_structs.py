@@ -13,7 +13,7 @@ def generate_type_aliases(
     spec: model.LSPModel, types: Dict[str, List[str]]
 ) -> Dict[str, List[str]]:
     for alias in spec.typeAliases:
-        if alias.name == "LSPObject":
+        if alias.name in types and types[alias.name]:
             continue
         types[alias.name] = generate_type_alias(alias, types, spec)
     return types
@@ -70,6 +70,8 @@ def generate_structures(
     spec: model.LSPModel, types: Dict[str, List[str]]
 ) -> Dict[str, List[str]]:
     for struct in spec.structures:
+        if struct.name in types and types[struct.name]:
+            continue
         types[struct.name] = generate_struct(struct, types, spec)
     return types
 

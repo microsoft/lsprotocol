@@ -123,10 +123,85 @@ def generate_custom_enum() -> Dict[str, List[str]]:
     }
 
 
+def get_definition(
+    name: str, spec: model.LSPModel
+) -> Optional[Union[model.TypeAlias, model.Structure]]:
+    for type_def in spec.typeAliases + spec.structures:
+        if type_def.name == name:
+            return type_def
+    return None
+
+
 def generate_commons(model: model.LSPModel) -> Dict[str, List[str]]:
-    return {
+    types = {
         **generate_custom_enum(),
     }
+
+    special_types = [
+        get_definition("LSPAny", model),
+        get_definition("LSPObject", model),
+        get_definition("LSPArray", model),
+        get_definition("SelectionRange", model),
+    ]
+
+    for type_def in special_types:
+        if type_def:
+            doc = (
+                type_def.documentation.splitlines(keepends=False)
+                if type_def.documentation
+                else []
+            )
+            lines = lines_to_doc_comments(doc)
+            lines += generate_extras(type_def)
+
+            if type_def.name == "LSPAny":
+                lines += [
+                    "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
+                    "#[serde(untagged)]",
+                    "pub enum LSPAny {",
+                    "    String(String),",
+                    "    Integer(i64),",
+                    "    UInteger(u64),",
+                    "    Decimal(f64),",
+                    "    Boolean(bool),",
+                    "    Object(LSPObject),",
+                    "    Array(LSPArray),",
+                    "    Null,",
+                    "}",
+                ]
+
+            elif type_def.name == "LSPObject":
+                lines += ["type LSPObject = serde_json::Value;"]
+            elif type_def.name == "LSPArray":
+                lines += ["type LSPArray = Vec<LSPAny>;"]
+            elif type_def.name == "SelectionRange":
+                lines += [
+                    "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
+                    "pub struct SelectionRange {",
+                ]
+                for property in type_def.properties:
+                    doc = (
+                        property.documentation.splitlines(keepends=False)
+                        if property.documentation
+                        else []
+                    )
+                    lines += lines_to_doc_comments(doc)
+                    lines += generate_extras(property)
+                    prop_name = to_snake_case(property.name)
+                    prop_type = get_type_name(
+                        property.type, types, model, property.optional
+                    )
+                    if "SelectionRange" in prop_type:
+                        prop_type = prop_type.replace(
+                            "SelectionRange", "Box<SelectionRange>"
+                        )
+                    lines += [f"pub {prop_name}: {prop_type},"]
+                    lines += [""]
+                lines += ["}"]
+            lines += [""]
+            types[type_def.name] = lines
+
+    return types
 
 
 def lsp_to_base_types(lsp_type: model.BaseType):
@@ -274,7 +349,7 @@ def generate_literal_struct_type(
         + [
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             '#[serde(rename_all = "camelCase")]',
-            f"struct {name}",
+            f"pub struct {name}",
             "{",
         ]
     )

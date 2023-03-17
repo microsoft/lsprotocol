@@ -16,7 +16,10 @@
                     "type": "string"
                 }
             },
-            "required": ["kind", "items"],
+            "required": [
+                "kind",
+                "items"
+            ],
             "type": "object"
         },
         "ArrayType": {
@@ -31,7 +34,10 @@
                     "type": "string"
                 }
             },
-            "required": ["kind", "element"],
+            "required": [
+                "kind",
+                "element"
+            ],
             "type": "object"
         },
         "BaseType": {
@@ -46,7 +52,10 @@
                     "$ref": "#/definitions/BaseTypes"
                 }
             },
-            "required": ["kind", "name"],
+            "required": [
+                "kind",
+                "name"
+            ],
             "type": "object"
         },
         "BaseTypes": {
@@ -75,7 +84,10 @@
                     "type": "boolean"
                 }
             },
-            "required": ["kind", "value"],
+            "required": [
+                "kind",
+                "value"
+            ],
             "type": "object"
         },
         "Enumeration": {
@@ -118,7 +130,11 @@
                     "type": "array"
                 }
             },
-            "required": ["name", "type", "values"],
+            "required": [
+                "name",
+                "type",
+                "values"
+            ],
             "type": "object"
         },
         "EnumerationEntry": {
@@ -147,10 +163,16 @@
                 },
                 "value": {
                     "description": "The value.",
-                    "type": ["string", "number"]
+                    "type": [
+                        "string",
+                        "number"
+                    ]
                 }
             },
-            "required": ["name", "value"],
+            "required": [
+                "name",
+                "value"
+            ],
             "type": "object"
         },
         "EnumerationType": {
@@ -161,11 +183,18 @@
                     "type": "string"
                 },
                 "name": {
-                    "enum": ["string", "integer", "uinteger"],
+                    "enum": [
+                        "string",
+                        "integer",
+                        "uinteger"
+                    ],
                     "type": "string"
                 }
             },
-            "required": ["kind", "name"],
+            "required": [
+                "kind",
+                "name"
+            ],
             "type": "object"
         },
         "IntegerLiteralType": {
@@ -180,7 +209,10 @@
                     "type": "number"
                 }
             },
-            "required": ["kind", "value"],
+            "required": [
+                "kind",
+                "value"
+            ],
             "type": "object"
         },
         "MapKeyType": {
@@ -193,11 +225,19 @@
                             "type": "string"
                         },
                         "name": {
-                            "enum": ["URI", "DocumentUri", "string", "integer"],
+                            "enum": [
+                                "URI",
+                                "DocumentUri",
+                                "string",
+                                "integer"
+                            ],
                             "type": "string"
                         }
                     },
-                    "required": ["kind", "name"],
+                    "required": [
+                        "kind",
+                        "name"
+                    ],
                     "type": "object"
                 },
                 {
@@ -221,12 +261,20 @@
                     "$ref": "#/definitions/Type"
                 }
             },
-            "required": ["kind", "key", "value"],
+            "required": [
+                "kind",
+                "key",
+                "value"
+            ],
             "type": "object"
         },
         "MessageDirection": {
             "description": "Indicates in which direction a message is sent in the protocol.",
-            "enum": ["clientToServer", "serverToClient", "both"],
+            "enum": [
+                "clientToServer",
+                "serverToClient",
+                "both"
+            ],
             "type": "string"
         },
         "MetaData": {
@@ -237,7 +285,9 @@
                     "type": "string"
                 }
             },
-            "required": ["version"],
+            "required": [
+                "version"
+            ],
             "type": "object"
         },
         "MetaModel": {
@@ -345,7 +395,10 @@
                     "type": "string"
                 }
             },
-            "required": ["method", "messageDirection"],
+            "required": [
+                "method",
+                "messageDirection"
+            ],
             "type": "object"
         },
         "OrType": {
@@ -363,7 +416,10 @@
                     "type": "string"
                 }
             },
-            "required": ["kind", "items"],
+            "required": [
+                "kind",
+                "items"
+            ],
             "type": "object"
         },
         "Property": {
@@ -399,7 +455,10 @@
                     "description": "The type of the property"
                 }
             },
-            "required": ["name", "type"],
+            "required": [
+                "name",
+                "type"
+            ],
             "type": "object"
         },
         "ReferenceType": {
@@ -414,7 +473,10 @@
                     "type": "string"
                 }
             },
-            "required": ["kind", "name"],
+            "required": [
+                "kind",
+                "name"
+            ],
             "type": "object"
         },
         "Request": {
@@ -480,7 +542,11 @@
                     "type": "string"
                 }
             },
-            "required": ["method", "result", "messageDirection"],
+            "required": [
+                "method",
+                "result",
+                "messageDirection"
+            ],
             "type": "object"
         },
         "StringLiteralType": {
@@ -495,7 +561,10 @@
                     "type": "string"
                 }
             },
-            "required": ["kind", "value"],
+            "required": [
+                "kind",
+                "value"
+            ],
             "type": "object"
         },
         "Structure": {
@@ -544,7 +613,10 @@
                     "type": "string"
                 }
             },
-            "required": ["name", "properties"],
+            "required": [
+                "name",
+                "properties"
+            ],
             "type": "object"
         },
         "StructureLiteral": {
@@ -575,7 +647,9 @@
                     "type": "string"
                 }
             },
-            "required": ["properties"],
+            "required": [
+                "properties"
+            ],
             "type": "object"
         },
         "StructureLiteralType": {
@@ -590,7 +664,10 @@
                     "$ref": "#/definitions/StructureLiteral"
                 }
             },
-            "required": ["kind", "value"],
+            "required": [
+                "kind",
+                "value"
+            ],
             "type": "object"
         },
         "TupleType": {
@@ -608,7 +685,10 @@
                     "type": "string"
                 }
             },
-            "required": ["kind", "items"],
+            "required": [
+                "kind",
+                "items"
+            ],
             "type": "object"
         },
         "Type": {
@@ -677,7 +757,10 @@
                     "description": "The aliased type."
                 }
             },
-            "required": ["name", "type"],
+            "required": [
+                "name",
+                "type"
+            ],
             "type": "object"
         },
         "TypeKind": {

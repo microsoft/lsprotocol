@@ -6,6 +6,18 @@ This repository contains code to generate Language Server Protocol types and cla
 
 ## Usage
 
+You will need a python environment to run the generator. Here are the steps:
+
+1. Clone this repository.
+2. Create environment using `python -m venv .venv` in the root directory of this project.
+3. Activate the environment using `.venv\Scripts\activate` on Windows or `.venv/bin/activate` on Linux/Mac.
+4. Run this command to install `nox`: `python -m pip install nox`
+5. Run this command to install dependencies:
+
+```
+python -m pip install -r ./packages/python/requirements.txt -r ./generator/requirements.txt -r ./tests/python/requirements.txt -r ./tests/generator/requirements.txt
+```
+
 ### Command line
 
 Clone this repository and run `generator` like a module.
@@ -65,6 +77,6 @@ nox > Session create_plugin was successful.
 
 # Supported plugins
 
-| Language | Plugin                  | Package                                                            | Notes  |
-| -------- | ----------------------- | ------------------------------------------------------------------ | ------ |
-| Python   | generator-plugin.python | ![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol) | Active |
+| Language | Plugin                  | Package                                                                                             | Notes  |
+| -------- | ----------------------- | --------------------------------------------------------------------------------------------------- | ------ |
+| Python   | generator-plugin.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active |

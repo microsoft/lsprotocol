@@ -34,6 +34,9 @@ def lint(session: nox.Session):
     session.run("black", "--check", ".")
     session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")
 
+    with session.chdir("./packages/rust/lsprotocol"):
+        session.run("cargo", "fmt", "--check", external=True)
+
 
 @nox.session()
 def format(session: nox.Session):
@@ -65,6 +68,9 @@ def _format_code(session: nox.Session):
     # do it again to correct any adjustments done by docformatter
     session.run("isort", "--profile", "black", python_package_path)
     session.run("black", python_package_path)
+
+    with session.chdir("./packages/rust/lsprotocol"):
+        session.run("cargo", "fmt", external=True)
 
 
 @nox.session()
@@ -105,8 +111,14 @@ def update_lsp(session: nox.Session):
     schema_path = pathlib.Path(__file__).parent / "generator" / "lsp.schema.json"
     model_path = schema_path.parent / "lsp.json"
 
-    schema_path.write_text(model_schema_text.replace("\t", "    "), encoding="utf-8")
-    model_path.write_text(model_text.replace("\t", "    "), encoding="utf-8")
+    schema_path.write_text(
+        json.dumps(json.loads(model_schema_text), indent=4, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    model_path.write_text(
+        json.dumps(json.loads(model_text), indent=4, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
     _generate_model(session)
 
 

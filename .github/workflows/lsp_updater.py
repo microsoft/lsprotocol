@@ -6,29 +6,21 @@ import hashlib
 import json
 import os
 import pathlib
-import subprocess
-import sys
 import urllib.request as url_lib
-from typing import Union
+from typing import Optional, Union
 
 import github
+import github.Issue
 import github.PullRequest
 
 MODEL_SCHEMA = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.schema.json"
 MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.json"
 
-OWNER = "karthiknadig"
-LSP_ROOT = pathlib.Path(__file__).parent.parent.parent / "generator"
-REPO = f"{OWNER}/lsprotocol"
-
-UPDATER_BRANCH = "lsp-updater"
-UPDATER_BRANCH_HEAD = f"{OWNER}:{UPDATER_BRANCH}"
-
+LABEL_DEBT = "debt"
 LABEL_UPDATE = "lsp-update"
-LABEL_UPDATE_ERROR = "lsp-update-error"
 
-gh = github.Github(os.getenv("GITHUB_TOKEN"))
-GH_REPO = gh.get_repo(REPO)
+GH = github.Github(os.getenv("GITHUB_TOKEN"))
+GH_REPO = GH.get_repo(os.getenv("GITHUB_REPOSITORY"))
 
 
 def _get_content(uri) -> str:
@@ -40,7 +32,7 @@ def _get_content(uri) -> str:
             return content.decode("utf-8")
 
 
-def _get_update_error_issue_body(error: str, schema_hash: str, model_hash: str) -> str:
+def _get_update_issue_body(schema_hash: str, model_hash: str) -> str:
     return "\n".join(
         [
             "LSP Schema has changed. Please update the generator.",
@@ -52,25 +44,7 @@ def _get_update_error_issue_body(error: str, schema_hash: str, model_hash: str) 
             "2. Install all requirements for generator.",
             "3. Run `nox --session update_lsp`.",
             "",
-            "Error:",
-            "```",
-            error,
-            "```",
-            "",
             "Hashes:",
-            f"* schema: `{schema_hash}`",
-            f"* model: `{model_hash}`",
-        ]
-    )
-
-
-def _get_update_pr_body(schema_hash: str, model_hash: str) -> str:
-    return "\n".join(
-        [
-            "LSP Schema has changed.",
-            f"Schema: [source]({MODEL_SCHEMA})",
-            f"Model: [source]({MODEL})",
-            "" "Hashes:",
             f"* schema: `{schema_hash}`",
             f"* model: `{model_hash}`",
         ]
@@ -95,157 +69,62 @@ def get_hash(text: str) -> str:
     return hash_object.hexdigest()
 
 
-def already_published_pr(
+def get_existing_issue(
     schema_hash: str, model_hash: str
 ) -> Union[github.PullRequest.PullRequest, None]:
-    prs = GH_REPO.get_pulls(state="open", base="main")
-    for pr in prs:
-        if schema_hash in pr.body or model_hash in pr.body:
-            return pr
-    return None
-
-
-def clean_up_old_prs():
-    prs = GH_REPO.get_pulls(state="open", base="main")
-    for pr in prs:
-        if any([l for l in pr.labels if l.name == LABEL_UPDATE]):
-            pr.create_comment(
-                "Closing this PR as there are more recent changes to LSP JSON."
-            )
-            pr.edit(state="closed")
-
-
-def clean_up_branches():
-    branches = GH_REPO.get_branches()
-    for branch in branches:
-        if branch.name == UPDATER_BRANCH:
-            branch.delete()
-
-
-def create_and_apply_lsp_update() -> Union[str, None]:
-    result = subprocess.run(["git", "checkout", "-b", UPDATER_BRANCH])
-    if result.returncode != 0:
-        return result.stderr
-
-    result = subprocess.run([sys.executable, "-m", "nox", "--session", "update_lsp"])
-    if result.returncode != 0:
-        return result.stderr
-
-    result = subprocess.run(
-        ["git", "commit", "-a", "-m", "Update LSP model and packages to latest"]
-    )
-    if result.returncode != 0:
-        return result.stderr
-
-    result = subprocess.run(["git", "push", "--set-upstream", "origin", UPDATER_BRANCH])
-    if result.returncode != 0:
-        return result.stderr
-
-    return None
-
-
-def create_pr(schema_hash: str, model_hash: str):
-    pr = GH_REPO.create_pull(
-        title="Auto-update LSP",
-        body=_get_update_pr_body(schema_hash, model_hash),
-        head=UPDATER_BRANCH,
-        base="main",
-        maintainer_can_modify=True,
-        draft=True,
-    )
-    pr.add_to_labels(LABEL_UPDATE, "no-changelog")
-    return pr
-
-
-def handle_update_error(schema_hash: str, model_hash: str, update_error: str):
-    issues = GH_REPO.get_issues(state="open", labels=["lsp-update-error"])
-
-    issue_found = None
-    stale_issues = []
+    issues = GH_REPO.get_issues(state="open", labels=[LABEL_UPDATE, LABEL_DEBT])
     for issue in issues:
         if schema_hash in issue.body and model_hash in issue.body:
-            issue_found = issue
-        else:
-            stale_issues.append(issue)
+            return issue
 
-    if issue_found:
-        issue_found.create_comment(
-            "\n".join(
-                [
-                    "Another attempt to generate LSP code failed.",
-                    "Update failed with error:",
-                    "",
-                    "```",
-                    update_error,
-                    "```",
-                ]
-            )
-        )
-    else:
-        issue_found = GH_REPO.create_issue(
-            title="Auto-update LSP failed",
-            body=_get_update_error_issue_body(update_error, schema_hash, model_hash),
-            state="open",
-            labels=[LABEL_UPDATE_ERROR, "bug", "triage-needed"],
-        )
-
-    for issue in stale_issues:
-        issue.create_comment(
-            "\n".join(
-                [
-                    "This issue is stale as the schema has changed.",
-                    f"Closing in favor of {issue_found.url} .",
-                ]
-            )
-        )
-        issue.edit(state="closed")
+    return None
 
 
-def clean_up_issues(pr: github.PullRequest.PullRequest) -> None:
-    issues = GH_REPO.get_issues(state="open", labels=["lsp-update-error"])
-
+def cleanup_stale_issues(
+    schema_hash: str, model_hash: str, new_issue: Optional[github.Issue.Issue] = None
+):
+    issues = GH_REPO.get_issues(state="open", labels=[LABEL_UPDATE, LABEL_DEBT])
     for issue in issues:
-        issue.create_comment(f"Resolved via {pr.url}")
-        issue.edit(state="closed")
+        if schema_hash not in issue.body or model_hash not in issue.body:
+            if new_issue:
+                issue.create_comment(
+                    "\n".join(
+                        [
+                            "This issue is stale as the schema has changed.",
+                            f"Closing in favor of {new_issue.url} .",
+                        ]
+                    )
+                )
+            issue.edit(state="closed")
 
 
 def main():
-    old_schema = pathlib.Path(LSP_ROOT / "lsp.schema.json").read_text(encoding="utf-8")
-    old_model = pathlib.Path(LSP_ROOT / "lsp.json").read_text(encoding="utf-8")
+    lsp_root = pathlib.Path(__file__).parent.parent.parent / "generator"
+
+    old_schema = pathlib.Path(lsp_root / "lsp.schema.json").read_text(encoding="utf-8")
+    old_model = pathlib.Path(lsp_root / "lsp.json").read_text(encoding="utf-8")
+
     new_schema = _get_content(MODEL_SCHEMA)
     new_model = _get_content(MODEL)
-    schema_hash = get_hash(new_schema)
-    model_hash = get_hash(new_model)
 
     schema_changed = is_schema_changed(old_schema, new_schema)
     model_changed = is_model_changed(old_model, new_model)
 
     if schema_changed or model_changed:
-        # See if PR already published
-        published_pr = already_published_pr(schema_hash, model_hash)
-        if published_pr:
-            print(f"Changes already in PR {published_pr.url}")
-            return
+        schema_hash = get_hash(new_schema)
+        model_hash = get_hash(new_model)
 
-        # Schema or model changed but there is no PR with the latest changes
-        # Clean up any old PRs
-        clean_up_old_prs()
+        issue = get_existing_issue(schema_hash, model_hash)
 
-        # Clean up any old branches from auto-updater
-        clean_up_branches()
-
-        # Create new branch and apply changes
-        err = create_and_apply_lsp_update()
-        if err:
-            handle_update_error(schema_hash, model_hash, err)
-            return
-
-        # Create PR
-        pr = create_pr(schema_hash, model_hash)
-        print(f"Pull request created successfully: {pr.url}")
-
-        # Clean-up old update error issues
-        clean_up_issues(pr)
+        if not issue:
+            issue = GH_REPO.create_issue(
+                title="Update LSP schema and model",
+                body=_get_update_issue_body(schema_hash, model_hash),
+                state="open",
+                labels=[LABEL_UPDATE, LABEL_DEBT],
+            )
+        cleanup_stale_issues(schema_hash, model_hash, issue)
+        print(f"Created issue {issue.url}")
     else:
         print("No changes detected.")
 

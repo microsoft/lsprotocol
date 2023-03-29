@@ -12,11 +12,7 @@ def _install_requirements(session: nox.Session):
         "-r",
         "./packages/python/requirements.txt",
         "-r",
-        "./generator/requirements.txt",
-        "-r",
-        "./tests/python/requirements.txt",
-        "-r",
-        "./tests/generator/requirements.txt",
+        "./requirements.txt",
     )
     session.run("pip", "list")
 
@@ -125,21 +121,7 @@ def update_packages(session: nox.Session):
         "--upgrade",
         "./packages/python/requirements.in",
     )
-    session.run(
-        "pip-compile", "--generate-hashes", "--upgrade", "./generator/requirements.in"
-    )
-    session.run(
-        "pip-compile",
-        "--generate-hashes",
-        "--upgrade",
-        "./tests/python/requirements.in",
-    )
-    session.run(
-        "pip-compile",
-        "--generate-hashes",
-        "--upgrade",
-        "./tests/generator/requirements.in",
-    )
+    session.run("pip-compile", "--generate-hashes", "--upgrade", "./requirements.in")
 
 
 @nox.session()

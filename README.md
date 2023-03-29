@@ -15,7 +15,7 @@ You will need a python environment to run the generator. Here are the steps:
 5. Run this command to install dependencies:
 
 ```
-python -m pip install -r ./packages/python/requirements.txt -r ./generator/requirements.txt -r ./tests/python/requirements.txt -r ./tests/generator/requirements.txt
+python -m pip install -r ./packages/python/requirements.txt -r ./requirements.txt
 ```
 
 ### Command line

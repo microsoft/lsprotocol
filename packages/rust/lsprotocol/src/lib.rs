@@ -94,10 +94,6 @@ pub enum OR7<T, U, V, W, X, Y, Z> {
     Z(Z),
 }
 
-/// LSP object definition.
-/// @since 3.17.0
-type LSPObject = serde_json::Value;
-
 /// The LSP any type.
 /// Please note that strictly speaking a property with the value `undefined`
 /// can't be converted into JSON preserving the property name. However for
@@ -117,6 +113,10 @@ pub enum LSPAny {
     Null,
 }
 
+/// LSP object definition.
+/// @since 3.17.0
+type LSPObject = serde_json::Value;
+
 /// LSP arrays.
 /// @since 3.17.0
 type LSPArray = Vec<LSPAny>;
@@ -130,6 +130,207 @@ pub struct SelectionRange {
 
     /// The parent selection range containing this range. Therefore `parent.range` must contain `this.range`.
     pub parent: Option<Box<SelectionRange>>,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub enum LSPMethod {
+    #[serde(rename = "textDocument/implementation")]
+    TextDocumentImplementation,
+    #[serde(rename = "textDocument/typeDefinition")]
+    TextDocumentTypeDefinition,
+    #[serde(rename = "workspace/workspaceFolders")]
+    WorkspaceWorkspaceFolders,
+    #[serde(rename = "workspace/configuration")]
+    WorkspaceConfiguration,
+    #[serde(rename = "textDocument/documentColor")]
+    TextDocumentDocumentColor,
+    #[serde(rename = "textDocument/colorPresentation")]
+    TextDocumentColorPresentation,
+    #[serde(rename = "textDocument/foldingRange")]
+    TextDocumentFoldingRange,
+    #[serde(rename = "textDocument/declaration")]
+    TextDocumentDeclaration,
+    #[serde(rename = "textDocument/selectionRange")]
+    TextDocumentSelectionRange,
+    #[serde(rename = "window/workDoneProgress/create")]
+    WindowWorkDoneProgressCreate,
+    #[serde(rename = "textDocument/prepareCallHierarchy")]
+    TextDocumentPrepareCallHierarchy,
+    #[serde(rename = "callHierarchy/incomingCalls")]
+    CallHierarchyIncomingCalls,
+    #[serde(rename = "callHierarchy/outgoingCalls")]
+    CallHierarchyOutgoingCalls,
+    #[serde(rename = "textDocument/semanticTokens/full")]
+    TextDocumentSemanticTokensFull,
+    #[serde(rename = "textDocument/semanticTokens/full/delta")]
+    TextDocumentSemanticTokensFullDelta,
+    #[serde(rename = "textDocument/semanticTokens/range")]
+    TextDocumentSemanticTokensRange,
+    #[serde(rename = "workspace/semanticTokens/refresh")]
+    WorkspaceSemanticTokensRefresh,
+    #[serde(rename = "window/showDocument")]
+    WindowShowDocument,
+    #[serde(rename = "textDocument/linkedEditingRange")]
+    TextDocumentLinkedEditingRange,
+    #[serde(rename = "workspace/willCreateFiles")]
+    WorkspaceWillCreateFiles,
+    #[serde(rename = "workspace/willRenameFiles")]
+    WorkspaceWillRenameFiles,
+    #[serde(rename = "workspace/willDeleteFiles")]
+    WorkspaceWillDeleteFiles,
+    #[serde(rename = "textDocument/moniker")]
+    TextDocumentMoniker,
+    #[serde(rename = "textDocument/prepareTypeHierarchy")]
+    TextDocumentPrepareTypeHierarchy,
+    #[serde(rename = "typeHierarchy/supertypes")]
+    TypeHierarchySupertypes,
+    #[serde(rename = "typeHierarchy/subtypes")]
+    TypeHierarchySubtypes,
+    #[serde(rename = "textDocument/inlineValue")]
+    TextDocumentInlineValue,
+    #[serde(rename = "workspace/inlineValue/refresh")]
+    WorkspaceInlineValueRefresh,
+    #[serde(rename = "textDocument/inlayHint")]
+    TextDocumentInlayHint,
+    #[serde(rename = "inlayHint/resolve")]
+    InlayHintResolve,
+    #[serde(rename = "workspace/inlayHint/refresh")]
+    WorkspaceInlayHintRefresh,
+    #[serde(rename = "textDocument/diagnostic")]
+    TextDocumentDiagnostic,
+    #[serde(rename = "workspace/diagnostic")]
+    WorkspaceDiagnostic,
+    #[serde(rename = "workspace/diagnostic/refresh")]
+    WorkspaceDiagnosticRefresh,
+    #[serde(rename = "client/registerCapability")]
+    ClientRegisterCapability,
+    #[serde(rename = "client/unregisterCapability")]
+    ClientUnregisterCapability,
+    #[serde(rename = "initialize")]
+    Initialize,
+    #[serde(rename = "shutdown")]
+    Shutdown,
+    #[serde(rename = "window/showMessageRequest")]
+    WindowShowMessageRequest,
+    #[serde(rename = "textDocument/willSaveWaitUntil")]
+    TextDocumentWillSaveWaitUntil,
+    #[serde(rename = "textDocument/completion")]
+    TextDocumentCompletion,
+    #[serde(rename = "completionItem/resolve")]
+    CompletionItemResolve,
+    #[serde(rename = "textDocument/hover")]
+    TextDocumentHover,
+    #[serde(rename = "textDocument/signatureHelp")]
+    TextDocumentSignatureHelp,
+    #[serde(rename = "textDocument/definition")]
+    TextDocumentDefinition,
+    #[serde(rename = "textDocument/references")]
+    TextDocumentReferences,
+    #[serde(rename = "textDocument/documentHighlight")]
+    TextDocumentDocumentHighlight,
+    #[serde(rename = "textDocument/documentSymbol")]
+    TextDocumentDocumentSymbol,
+    #[serde(rename = "textDocument/codeAction")]
+    TextDocumentCodeAction,
+    #[serde(rename = "codeAction/resolve")]
+    CodeActionResolve,
+    #[serde(rename = "workspace/symbol")]
+    WorkspaceSymbol,
+    #[serde(rename = "workspaceSymbol/resolve")]
+    WorkspaceSymbolResolve,
+    #[serde(rename = "textDocument/codeLens")]
+    TextDocumentCodeLens,
+    #[serde(rename = "codeLens/resolve")]
+    CodeLensResolve,
+    #[serde(rename = "workspace/codeLens/refresh")]
+    WorkspaceCodeLensRefresh,
+    #[serde(rename = "textDocument/documentLink")]
+    TextDocumentDocumentLink,
+    #[serde(rename = "documentLink/resolve")]
+    DocumentLinkResolve,
+    #[serde(rename = "textDocument/formatting")]
+    TextDocumentFormatting,
+    #[serde(rename = "textDocument/rangeFormatting")]
+    TextDocumentRangeFormatting,
+    #[serde(rename = "textDocument/onTypeFormatting")]
+    TextDocumentOnTypeFormatting,
+    #[serde(rename = "textDocument/rename")]
+    TextDocumentRename,
+    #[serde(rename = "textDocument/prepareRename")]
+    TextDocumentPrepareRename,
+    #[serde(rename = "workspace/executeCommand")]
+    WorkspaceExecuteCommand,
+    #[serde(rename = "workspace/applyEdit")]
+    WorkspaceApplyEdit,
+    #[serde(rename = "workspace/didChangeWorkspaceFolders")]
+    WorkspaceDidChangeWorkspaceFolders,
+    #[serde(rename = "window/workDoneProgress/cancel")]
+    WindowWorkDoneProgressCancel,
+    #[serde(rename = "workspace/didCreateFiles")]
+    WorkspaceDidCreateFiles,
+    #[serde(rename = "workspace/didRenameFiles")]
+    WorkspaceDidRenameFiles,
+    #[serde(rename = "workspace/didDeleteFiles")]
+    WorkspaceDidDeleteFiles,
+    #[serde(rename = "notebookDocument/didOpen")]
+    NotebookDocumentDidOpen,
+    #[serde(rename = "notebookDocument/didChange")]
+    NotebookDocumentDidChange,
+    #[serde(rename = "notebookDocument/didSave")]
+    NotebookDocumentDidSave,
+    #[serde(rename = "notebookDocument/didClose")]
+    NotebookDocumentDidClose,
+    #[serde(rename = "initialized")]
+    Initialized,
+    #[serde(rename = "exit")]
+    Exit,
+    #[serde(rename = "workspace/didChangeConfiguration")]
+    WorkspaceDidChangeConfiguration,
+    #[serde(rename = "window/showMessage")]
+    WindowShowMessage,
+    #[serde(rename = "window/logMessage")]
+    WindowLogMessage,
+    #[serde(rename = "telemetry/event")]
+    TelemetryEvent,
+    #[serde(rename = "textDocument/didOpen")]
+    TextDocumentDidOpen,
+    #[serde(rename = "textDocument/didChange")]
+    TextDocumentDidChange,
+    #[serde(rename = "textDocument/didClose")]
+    TextDocumentDidClose,
+    #[serde(rename = "textDocument/didSave")]
+    TextDocumentDidSave,
+    #[serde(rename = "textDocument/willSave")]
+    TextDocumentWillSave,
+    #[serde(rename = "workspace/didChangeWatchedFiles")]
+    WorkspaceDidChangeWatchedFiles,
+    #[serde(rename = "textDocument/publishDiagnostics")]
+    TextDocumentPublishDiagnostics,
+    #[serde(rename = "$/setTrace")]
+    SetTrace,
+    #[serde(rename = "$/logTrace")]
+    LogTrace,
+    #[serde(rename = "$/cancelRequest")]
+    CancelRequest,
+    #[serde(rename = "$/progress")]
+    Progress,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(untagged)]
+pub enum Method {
+    LSP(LSPMethod),
+    Custom(String),
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+pub enum MessageDirection {
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
+    #[serde(rename = "serverToClient")]
+    ServerToClient,
+    #[serde(rename = "both")]
+    Both,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -743,14 +944,14 @@ pub enum MarkupKind {
 pub enum PositionEncodingKind {
     /// Character offsets count UTF-8 code units.
     #[serde(rename = "utf-8")]
-    UTF8,
+    Utf8,
 
     /// Character offsets count UTF-16 code units.
     ///
     /// This is the default and must always be supported
     /// by servers
     #[serde(rename = "utf-16")]
-    UTF16,
+    Utf16,
 
     /// Character offsets count UTF-32 code units.
     ///
@@ -758,7 +959,7 @@ pub enum PositionEncodingKind {
     /// so this `PositionEncodingKind` may also be used for an
     /// encoding-agnostic representation of character offsets.
     #[serde(rename = "utf-32")]
-    UTF32,
+    Utf32,
 }
 
 /// The file event type
@@ -961,8 +1162,8 @@ pub enum TokenFormat {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum Definition {
-    ValueType0(Location),
-    ValueType1(Vec<Location>),
+    One(Location),
+    Many(Vec<Location>),
 }
 
 /// Information about where a symbol is defined.
@@ -975,8 +1176,8 @@ pub type DefinitionLink = LocationLink;
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum Declaration {
-    ValueType0(Location),
-    ValueType1(Vec<Location>),
+    One(Location),
+    Many(Vec<Location>),
 }
 
 /// Information about where a symbol is declared.
@@ -998,9 +1199,9 @@ pub type DeclarationLink = LocationLink;
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum InlineValue {
-    ValueType0(InlineValueText),
-    ValueType1(InlineValueVariableLookup),
-    ValueType2(InlineValueEvaluatableExpression),
+    Text(InlineValueText),
+    VariableLookup(InlineValueVariableLookup),
+    EvaluatableExpression(InlineValueEvaluatableExpression),
 }
 
 /// The result of a document diagnostic pull request. A report can
@@ -1013,13 +1214,13 @@ pub enum InlineValue {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum DocumentDiagnosticReport {
-    ValueType0(RelatedFullDocumentDiagnosticReport),
-    ValueType1(RelatedUnchangedDocumentDiagnosticReport),
+    Full(RelatedFullDocumentDiagnosticReport),
+    Unchanged(RelatedUnchangedDocumentDiagnosticReport),
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructRangeRangePlaceholderString {
+pub struct StructPrepareRenameResult {
     pub range: Range,
 
     pub placeholder: String,
@@ -1027,16 +1228,16 @@ pub struct StructRangeRangePlaceholderString {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructDefaultBehaviorbool {
+pub struct StructPrepareRenameResultDefault {
     pub default_behavior: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum PrepareRenameResult {
-    ValueType0(Range),
-    ValueType1(StructRangeRangePlaceholderString),
-    ValueType2(StructDefaultBehaviorbool),
+    Range(Range),
+    Placeholder(StructPrepareRenameResult),
+    Default(StructPrepareRenameResultDefault),
 }
 
 /// A document selector is the combination of one or many document filters.
@@ -1049,8 +1250,8 @@ pub type DocumentSelector = Vec<DocumentFilter>;
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum ProgressToken {
-    ValueType0(i64),
-    ValueType1(String),
+    Int(i64),
+    String(String),
 }
 
 /// An identifier to refer to a change annotation stored with a workspace edit.
@@ -1062,13 +1263,13 @@ pub type ChangeAnnotationIdentifier = String;
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum WorkspaceDocumentDiagnosticReport {
-    ValueType0(WorkspaceFullDocumentDiagnosticReport),
-    ValueType1(WorkspaceUnchangedDocumentDiagnosticReport),
+    Full(WorkspaceFullDocumentDiagnosticReport),
+    Unchanged(WorkspaceUnchangedDocumentDiagnosticReport),
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructRangeRangeRangeLengthOptionu64TextString {
+pub struct StructTextDocumentContentChangeEvent {
     /// The range of the document that changed.
     pub range: Range,
 
@@ -1083,7 +1284,7 @@ pub struct StructRangeRangeRangeLengthOptionu64TextString {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructTextString {
+pub struct StructTextDocumentContentChangeEventText {
     /// The new text of the whole document.
     pub text: String,
 }
@@ -1093,13 +1294,13 @@ pub struct StructTextString {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum TextDocumentContentChangeEvent {
-    ValueType0(StructRangeRangeRangeLengthOptionu64TextString),
-    ValueType1(StructTextString),
+    Range(StructTextDocumentContentChangeEvent),
+    Text(StructTextDocumentContentChangeEventText),
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLanguageStringValueString {
+pub struct StructMarkedString {
     pub language: String,
 
     pub value: String,
@@ -1121,8 +1322,8 @@ pub struct StructLanguageStringValueString {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum MarkedString {
-    ValueType0(String),
-    ValueType1(StructLanguageStringValueString),
+    String(String),
+    MarkedString(StructMarkedString),
 }
 
 /// A document filter describes a top level text document or
@@ -1132,8 +1333,8 @@ pub enum MarkedString {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum DocumentFilter {
-    ValueType0(TextDocumentFilter),
-    ValueType1(NotebookCellTextDocumentFilter),
+    TextDocumentFilter(TextDocumentFilter),
+    NotebookCell(NotebookCellTextDocumentFilter),
 }
 
 /// The glob pattern. Either a string pattern or a relative pattern.
@@ -1142,13 +1343,13 @@ pub enum DocumentFilter {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum GlobPattern {
-    ValueType0(Pattern),
-    ValueType1(RelativePattern),
+    Pattern(Pattern),
+    Relative(RelativePattern),
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLanguageStringSchemeOptionStringPatternOptionString {
+pub struct StructTextDocumentFilter {
     /// A language id, like `typescript`.
     pub language: String,
 
@@ -1161,7 +1362,7 @@ pub struct StructLanguageStringSchemeOptionStringPatternOptionString {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLanguageOptionStringSchemeStringPatternOptionString {
+pub struct StructTextDocumentFilterScheme {
     /// A language id, like `typescript`.
     pub language: Option<String>,
 
@@ -1174,7 +1375,7 @@ pub struct StructLanguageOptionStringSchemeStringPatternOptionString {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLanguageOptionStringSchemeOptionStringPatternString {
+pub struct StructTextDocumentFilterPattern {
     /// A language id, like `typescript`.
     pub language: Option<String>,
 
@@ -1204,14 +1405,14 @@ pub struct StructLanguageOptionStringSchemeOptionStringPatternString {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum TextDocumentFilter {
-    ValueType0(StructLanguageStringSchemeOptionStringPatternOptionString),
-    ValueType1(StructLanguageOptionStringSchemeStringPatternOptionString),
-    ValueType2(StructLanguageOptionStringSchemeOptionStringPatternString),
+    Language(StructTextDocumentFilter),
+    Scheme(StructTextDocumentFilterScheme),
+    Pattern(StructTextDocumentFilterPattern),
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructNotebookTypeStringSchemeOptionStringPatternOptionString {
+pub struct StructNotebookDocumentFilter {
     /// The type of the enclosing notebook.
     pub notebook_type: String,
 
@@ -1224,7 +1425,7 @@ pub struct StructNotebookTypeStringSchemeOptionStringPatternOptionString {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructNotebookTypeOptionStringSchemeStringPatternOptionString {
+pub struct StructNotebookDocumentFilterScheme {
     /// The type of the enclosing notebook.
     pub notebook_type: Option<String>,
 
@@ -1237,7 +1438,7 @@ pub struct StructNotebookTypeOptionStringSchemeStringPatternOptionString {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructNotebookTypeOptionStringSchemeOptionStringPatternString {
+pub struct StructNotebookDocumentFilterPattern {
     /// The type of the enclosing notebook.
     pub notebook_type: Option<String>,
 
@@ -1256,9 +1457,9 @@ pub struct StructNotebookTypeOptionStringSchemeOptionStringPatternString {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum NotebookDocumentFilter {
-    ValueType0(StructNotebookTypeStringSchemeOptionStringPatternOptionString),
-    ValueType1(StructNotebookTypeOptionStringSchemeStringPatternOptionString),
-    ValueType2(StructNotebookTypeOptionStringSchemeOptionStringPatternString),
+    Type(StructNotebookDocumentFilter),
+    Scheme(StructNotebookDocumentFilterScheme),
+    Pattern(StructNotebookDocumentFilterPattern),
 }
 
 /// The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
@@ -2134,7 +2335,7 @@ pub struct InitializeParams {}
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructNameStringVersionOptionString {
+pub struct StructServerInfo {
     /// The name of the server as defined by the server.
     pub name: String,
 
@@ -2152,7 +2353,7 @@ pub struct InitializeResult {
     /// Information about the server.
     ///
     /// @since 3.15.0
-    pub server_info: Option<StructNameStringVersionOptionString>,
+    pub server_info: Option<StructServerInfo>,
 }
 
 /// The data type of the ResponseError if the
@@ -2504,7 +2705,7 @@ pub struct CompletionItem {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructInsertRangeReplaceRange {
+pub struct StructInsert {
     pub insert: Range,
 
     pub replace: Range,
@@ -2512,8 +2713,7 @@ pub struct StructInsertRangeReplaceRange {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructCommitCharactersOptionVecStringEditRangeOptionOR2RangeStructInsertRangeReplaceRangeInsertTextFormatOptionInsertTextFormatInsertTextModeOptionInsertTextModeDataOptionLSPAny
-{
+pub struct StructItemDefaults {
     /// A default commit character set.
     ///
     /// @since 3.17.0
@@ -2522,7 +2722,7 @@ pub struct StructCommitCharactersOptionVecStringEditRangeOptionOR2RangeStructIns
     /// A default edit range.
     ///
     /// @since 3.17.0
-    pub edit_range: Option<OR2<Range, StructInsertRangeReplaceRange>>,
+    pub edit_range: Option<OR2<Range, StructInsert>>,
 
     /// A default insert text format.
     ///
@@ -2544,32 +2744,30 @@ pub struct StructCommitCharactersOptionVecStringEditRangeOptionOR2RangeStructIns
 /// in the editor.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct CompletionList
-{
-/// This list it not complete. Further typing results in recomputing this list.
-/// 
-/// Recomputed lists have all their items replaced (not appended) in the
-/// incomplete completion sessions.
-pub is_incomplete: bool,
+pub struct CompletionList {
+    /// This list it not complete. Further typing results in recomputing this list.
+    ///
+    /// Recomputed lists have all their items replaced (not appended) in the
+    /// incomplete completion sessions.
+    pub is_incomplete: bool,
 
-/// In many cases the items of an actual completion result share the same
-/// value for properties like `commitCharacters` or the range of a text
-/// edit. A completion list can therefore define item defaults which will
-/// be used if a completion item itself doesn't specify the value.
-/// 
-/// If a completion list specifies a default value and a completion item
-/// also specifies a corresponding value the one from the item is used.
-/// 
-/// Servers are only allowed to return default values if the client
-/// signals support for this via the `completionList.itemDefaults`
-/// capability.
-/// 
-/// @since 3.17.0
-pub item_defaults: Option<StructCommitCharactersOptionVecStringEditRangeOptionOR2RangeStructInsertRangeReplaceRangeInsertTextFormatOptionInsertTextFormatInsertTextModeOptionInsertTextModeDataOptionLSPAny>,
+    /// In many cases the items of an actual completion result share the same
+    /// value for properties like `commitCharacters` or the range of a text
+    /// edit. A completion list can therefore define item defaults which will
+    /// be used if a completion item itself doesn't specify the value.
+    ///
+    /// If a completion list specifies a default value and a completion item
+    /// also specifies a corresponding value the one from the item is used.
+    ///
+    /// Servers are only allowed to return default values if the client
+    /// signals support for this via the `completionList.itemDefaults`
+    /// capability.
+    ///
+    /// @since 3.17.0
+    pub item_defaults: Option<StructItemDefaults>,
 
-/// The completion items.
-pub items: Vec<CompletionItem>,
-
+    /// The completion items.
+    pub items: Vec<CompletionItem>,
 }
 
 /// Registration options for a {@link CompletionRequest}.
@@ -2801,7 +2999,7 @@ pub struct Command {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructReasonString {
+pub struct StructDisabled {
     /// Human readable description of why the code action is currently disabled.
     ///
     /// This is displayed in the code actions UI.
@@ -2850,7 +3048,7 @@ pub struct CodeAction {
     ///     error message with `reason` in the editor.
     ///
     /// @since 3.16.0
-    pub disabled: Option<StructReasonString>,
+    pub disabled: Option<StructDisabled>,
 
     /// The workspace edit this code action performs.
     pub edit: Option<WorkspaceEdit>,
@@ -2883,7 +3081,7 @@ pub struct WorkspaceSymbolParams {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructUriString {
+pub struct StructUri {
     pub uri: String,
 }
 
@@ -2900,7 +3098,7 @@ pub struct WorkspaceSymbol {
     /// capability `workspace.symbol.resolveSupport`.
     ///
     /// See SymbolInformation#location for more details.
-    pub location: OR2<Location, StructUriString>,
+    pub location: OR2<Location, StructUri>,
 
     /// A data entry field that is preserved on a workspace symbol between a
     /// workspace symbol request and a workspace symbol resolve request.
@@ -3426,11 +3624,7 @@ pub struct CallHierarchyOptions {}
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct Struct {}
-
-#[derive(Serialize, Deserialize, PartialEq, Debug)]
-#[serde(rename_all = "camelCase")]
-pub struct StructDeltaOptionbool {
+pub struct StructOptions {
     /// The server supports deltas for full documents.
     pub delta: Option<bool>,
 }
@@ -3444,10 +3638,10 @@ pub struct SemanticTokensOptions {
 
     /// Server supports providing semantic tokens for a specific range
     /// of a document.
-    pub range: Option<OR2<bool, Struct>>,
+    pub range: Option<OR2<bool, LSPObject>>,
 
     /// Server supports providing semantic tokens for a full document.
-    pub full: Option<OR2<bool, StructDeltaOptionbool>>,
+    pub full: Option<OR2<bool, StructOptions>>,
 }
 
 /// @since 3.16.0
@@ -3918,8 +4112,7 @@ pub struct VersionedNotebookDocumentIdentifier {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructArrayNotebookCellArrayChangeDidOpenOptionVecTextDocumentItemDidCloseOptionVecTextDocumentIdentifier
-{
+pub struct StructStructure {
     /// The change to the cell array.
     pub array: NotebookCellArrayChange,
 
@@ -3932,7 +4125,7 @@ pub struct StructArrayNotebookCellArrayChangeDidOpenOptionVecTextDocumentItemDid
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructDocumentVersionedTextDocumentIdentifierChangesVecTextDocumentContentChangeEvent {
+pub struct StructDocument {
     pub document: VersionedTextDocumentIdentifier,
 
     pub changes: Vec<TextDocumentContentChangeEvent>,
@@ -3940,19 +4133,17 @@ pub struct StructDocumentVersionedTextDocumentIdentifierChangesVecTextDocumentCo
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructStructureOptionStructArrayNotebookCellArrayChangeDidOpenOptionVecTextDocumentItemDidCloseOptionVecTextDocumentIdentifierDataOptionVecNotebookCellTextContentOptionVecStructDocumentVersionedTextDocumentIdentifierChangesVecTextDocumentContentChangeEvent
-{
-/// Changes to the cell structure to add or
-/// remove cells.
-pub structure: Option<StructArrayNotebookCellArrayChangeDidOpenOptionVecTextDocumentItemDidCloseOptionVecTextDocumentIdentifier>,
+pub struct StructCells {
+    /// Changes to the cell structure to add or
+    /// remove cells.
+    pub structure: Option<StructStructure>,
 
-/// Changes to notebook cells properties like its
-/// kind, execution summary or metadata.
-pub data: Option<Vec<NotebookCell>>,
+    /// Changes to notebook cells properties like its
+    /// kind, execution summary or metadata.
+    pub data: Option<Vec<NotebookCell>>,
 
-/// Changes to the text content of notebook cells.
-pub text_content: Option<Vec<StructDocumentVersionedTextDocumentIdentifierChangesVecTextDocumentContentChangeEvent>>,
-
+    /// Changes to the text content of notebook cells.
+    pub text_content: Option<Vec<StructDocument>>,
 }
 
 /// A change event for a notebook document.
@@ -3960,16 +4151,14 @@ pub text_content: Option<Vec<StructDocumentVersionedTextDocumentIdentifierChange
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct NotebookDocumentChangeEvent
-{
-/// The changed meta data if any.
-/// 
-/// Note: should always be an object literal (e.g. LSPObject)
-pub metadata: Option<LSPObject>,
+pub struct NotebookDocumentChangeEvent {
+    /// The changed meta data if any.
+    ///
+    /// Note: should always be an object literal (e.g. LSPObject)
+    pub metadata: Option<LSPObject>,
 
-/// Changes to cells
-pub cells: Option<StructStructureOptionStructArrayNotebookCellArrayChangeDidOpenOptionVecTextDocumentItemDidCloseOptionVecTextDocumentIdentifierDataOptionVecNotebookCellTextContentOptionVecStructDocumentVersionedTextDocumentIdentifierChangesVecTextDocumentContentChangeEvent>,
-
+    /// Changes to cells
+    pub cells: Option<StructCells>,
 }
 
 /// A literal to identify a notebook document in the client.
@@ -4009,6 +4198,16 @@ pub struct Unregistration {
     pub method: String,
 }
 
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructClientInfo {
+    /// The name of the client as defined by the client.
+    pub name: String,
+
+    /// The client's version as defined by the client.
+    pub version: Option<String>,
+}
+
 /// The initialize parameters
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -4023,7 +4222,7 @@ pub struct _InitializeParams {
     /// Information about the client
     ///
     /// @since 3.15.0
-    pub client_info: Option<StructNameStringVersionOptionString>,
+    pub client_info: Option<StructClientInfo>,
 
     /// The locale the client is currently showing the user interface
     /// in. This must not necessarily be the locale of the operating
@@ -4075,8 +4274,7 @@ pub struct WorkspaceFoldersInitializeParams {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructWorkspaceFoldersOptionWorkspaceFoldersServerCapabilitiesFileOperationsOptionFileOperationOptions
-{
+pub struct StructWorkspace {
     /// The server supports workspace folder.
     ///
     /// @since 3.6.0
@@ -4092,145 +4290,153 @@ pub struct StructWorkspaceFoldersOptionWorkspaceFoldersServerCapabilitiesFileOpe
 /// server.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct ServerCapabilities
-{
-/// The position encoding the server picked from the encodings offered
-/// by the client via the client capability `general.positionEncodings`.
-/// 
-/// If the client didn't provide any position encodings the only valid
-/// value that a server can return is 'utf-16'.
-/// 
-/// If omitted it defaults to 'utf-16'.
-/// 
-/// @since 3.17.0
-pub position_encoding: Option<CustomStringEnum<PositionEncodingKind>>,
+pub struct ServerCapabilities {
+    /// The position encoding the server picked from the encodings offered
+    /// by the client via the client capability `general.positionEncodings`.
+    ///
+    /// If the client didn't provide any position encodings the only valid
+    /// value that a server can return is 'utf-16'.
+    ///
+    /// If omitted it defaults to 'utf-16'.
+    ///
+    /// @since 3.17.0
+    pub position_encoding: Option<CustomStringEnum<PositionEncodingKind>>,
 
-/// Defines how text documents are synced. Is either a detailed structure
-/// defining each notification or for backwards compatibility the
-/// TextDocumentSyncKind number.
-pub text_document_sync: Option<OR2<TextDocumentSyncOptions, TextDocumentSyncKind>>,
+    /// Defines how text documents are synced. Is either a detailed structure
+    /// defining each notification or for backwards compatibility the
+    /// TextDocumentSyncKind number.
+    pub text_document_sync: Option<OR2<TextDocumentSyncOptions, TextDocumentSyncKind>>,
 
-/// Defines how notebook documents are synced.
-/// 
-/// @since 3.17.0
-pub notebook_document_sync: Option<OR2<NotebookDocumentSyncOptions, NotebookDocumentSyncRegistrationOptions>>,
+    /// Defines how notebook documents are synced.
+    ///
+    /// @since 3.17.0
+    pub notebook_document_sync:
+        Option<OR2<NotebookDocumentSyncOptions, NotebookDocumentSyncRegistrationOptions>>,
 
-/// The server provides completion support.
-pub completion_provider: Option<CompletionOptions>,
+    /// The server provides completion support.
+    pub completion_provider: Option<CompletionOptions>,
 
-/// The server provides hover support.
-pub hover_provider: Option<OR2<bool, HoverOptions>>,
+    /// The server provides hover support.
+    pub hover_provider: Option<OR2<bool, HoverOptions>>,
 
-/// The server provides signature help support.
-pub signature_help_provider: Option<SignatureHelpOptions>,
+    /// The server provides signature help support.
+    pub signature_help_provider: Option<SignatureHelpOptions>,
 
-/// The server provides Goto Declaration support.
-pub declaration_provider: Option<OR3<bool, DeclarationOptions, DeclarationRegistrationOptions>>,
+    /// The server provides Goto Declaration support.
+    pub declaration_provider: Option<OR3<bool, DeclarationOptions, DeclarationRegistrationOptions>>,
 
-/// The server provides goto definition support.
-pub definition_provider: Option<OR2<bool, DefinitionOptions>>,
+    /// The server provides goto definition support.
+    pub definition_provider: Option<OR2<bool, DefinitionOptions>>,
 
-/// The server provides Goto Type Definition support.
-pub type_definition_provider: Option<OR3<bool, TypeDefinitionOptions, TypeDefinitionRegistrationOptions>>,
+    /// The server provides Goto Type Definition support.
+    pub type_definition_provider:
+        Option<OR3<bool, TypeDefinitionOptions, TypeDefinitionRegistrationOptions>>,
 
-/// The server provides Goto Implementation support.
-pub implementation_provider: Option<OR3<bool, ImplementationOptions, ImplementationRegistrationOptions>>,
+    /// The server provides Goto Implementation support.
+    pub implementation_provider:
+        Option<OR3<bool, ImplementationOptions, ImplementationRegistrationOptions>>,
 
-/// The server provides find references support.
-pub references_provider: Option<OR2<bool, ReferenceOptions>>,
+    /// The server provides find references support.
+    pub references_provider: Option<OR2<bool, ReferenceOptions>>,
 
-/// The server provides document highlight support.
-pub document_highlight_provider: Option<OR2<bool, DocumentHighlightOptions>>,
+    /// The server provides document highlight support.
+    pub document_highlight_provider: Option<OR2<bool, DocumentHighlightOptions>>,
 
-/// The server provides document symbol support.
-pub document_symbol_provider: Option<OR2<bool, DocumentSymbolOptions>>,
+    /// The server provides document symbol support.
+    pub document_symbol_provider: Option<OR2<bool, DocumentSymbolOptions>>,
 
-/// The server provides code actions. CodeActionOptions may only be
-/// specified if the client states that it supports
-/// `codeActionLiteralSupport` in its initial `initialize` request.
-pub code_action_provider: Option<OR2<bool, CodeActionOptions>>,
+    /// The server provides code actions. CodeActionOptions may only be
+    /// specified if the client states that it supports
+    /// `codeActionLiteralSupport` in its initial `initialize` request.
+    pub code_action_provider: Option<OR2<bool, CodeActionOptions>>,
 
-/// The server provides code lens.
-pub code_lens_provider: Option<CodeLensOptions>,
+    /// The server provides code lens.
+    pub code_lens_provider: Option<CodeLensOptions>,
 
-/// The server provides document link support.
-pub document_link_provider: Option<DocumentLinkOptions>,
+    /// The server provides document link support.
+    pub document_link_provider: Option<DocumentLinkOptions>,
 
-/// The server provides color provider support.
-pub color_provider: Option<OR3<bool, DocumentColorOptions, DocumentColorRegistrationOptions>>,
+    /// The server provides color provider support.
+    pub color_provider: Option<OR3<bool, DocumentColorOptions, DocumentColorRegistrationOptions>>,
 
-/// The server provides workspace symbol support.
-pub workspace_symbol_provider: Option<OR2<bool, WorkspaceSymbolOptions>>,
+    /// The server provides workspace symbol support.
+    pub workspace_symbol_provider: Option<OR2<bool, WorkspaceSymbolOptions>>,
 
-/// The server provides document formatting.
-pub document_formatting_provider: Option<OR2<bool, DocumentFormattingOptions>>,
+    /// The server provides document formatting.
+    pub document_formatting_provider: Option<OR2<bool, DocumentFormattingOptions>>,
 
-/// The server provides document range formatting.
-pub document_range_formatting_provider: Option<OR2<bool, DocumentRangeFormattingOptions>>,
+    /// The server provides document range formatting.
+    pub document_range_formatting_provider: Option<OR2<bool, DocumentRangeFormattingOptions>>,
 
-/// The server provides document formatting on typing.
-pub document_on_type_formatting_provider: Option<DocumentOnTypeFormattingOptions>,
+    /// The server provides document formatting on typing.
+    pub document_on_type_formatting_provider: Option<DocumentOnTypeFormattingOptions>,
 
-/// The server provides rename support. RenameOptions may only be
-/// specified if the client states that it supports
-/// `prepareSupport` in its initial `initialize` request.
-pub rename_provider: Option<OR2<bool, RenameOptions>>,
+    /// The server provides rename support. RenameOptions may only be
+    /// specified if the client states that it supports
+    /// `prepareSupport` in its initial `initialize` request.
+    pub rename_provider: Option<OR2<bool, RenameOptions>>,
 
-/// The server provides folding provider support.
-pub folding_range_provider: Option<OR3<bool, FoldingRangeOptions, FoldingRangeRegistrationOptions>>,
+    /// The server provides folding provider support.
+    pub folding_range_provider:
+        Option<OR3<bool, FoldingRangeOptions, FoldingRangeRegistrationOptions>>,
 
-/// The server provides selection range support.
-pub selection_range_provider: Option<OR3<bool, SelectionRangeOptions, SelectionRangeRegistrationOptions>>,
+    /// The server provides selection range support.
+    pub selection_range_provider:
+        Option<OR3<bool, SelectionRangeOptions, SelectionRangeRegistrationOptions>>,
 
-/// The server provides execute command support.
-pub execute_command_provider: Option<ExecuteCommandOptions>,
+    /// The server provides execute command support.
+    pub execute_command_provider: Option<ExecuteCommandOptions>,
 
-/// The server provides call hierarchy support.
-/// 
-/// @since 3.16.0
-pub call_hierarchy_provider: Option<OR3<bool, CallHierarchyOptions, CallHierarchyRegistrationOptions>>,
+    /// The server provides call hierarchy support.
+    ///
+    /// @since 3.16.0
+    pub call_hierarchy_provider:
+        Option<OR3<bool, CallHierarchyOptions, CallHierarchyRegistrationOptions>>,
 
-/// The server provides linked editing range support.
-/// 
-/// @since 3.16.0
-pub linked_editing_range_provider: Option<OR3<bool, LinkedEditingRangeOptions, LinkedEditingRangeRegistrationOptions>>,
+    /// The server provides linked editing range support.
+    ///
+    /// @since 3.16.0
+    pub linked_editing_range_provider:
+        Option<OR3<bool, LinkedEditingRangeOptions, LinkedEditingRangeRegistrationOptions>>,
 
-/// The server provides semantic tokens support.
-/// 
-/// @since 3.16.0
-pub semantic_tokens_provider: Option<OR2<SemanticTokensOptions, SemanticTokensRegistrationOptions>>,
+    /// The server provides semantic tokens support.
+    ///
+    /// @since 3.16.0
+    pub semantic_tokens_provider:
+        Option<OR2<SemanticTokensOptions, SemanticTokensRegistrationOptions>>,
 
-/// The server provides moniker support.
-/// 
-/// @since 3.16.0
-pub moniker_provider: Option<OR3<bool, MonikerOptions, MonikerRegistrationOptions>>,
+    /// The server provides moniker support.
+    ///
+    /// @since 3.16.0
+    pub moniker_provider: Option<OR3<bool, MonikerOptions, MonikerRegistrationOptions>>,
 
-/// The server provides type hierarchy support.
-/// 
-/// @since 3.17.0
-pub type_hierarchy_provider: Option<OR3<bool, TypeHierarchyOptions, TypeHierarchyRegistrationOptions>>,
+    /// The server provides type hierarchy support.
+    ///
+    /// @since 3.17.0
+    pub type_hierarchy_provider:
+        Option<OR3<bool, TypeHierarchyOptions, TypeHierarchyRegistrationOptions>>,
 
-/// The server provides inline values.
-/// 
-/// @since 3.17.0
-pub inline_value_provider: Option<OR3<bool, InlineValueOptions, InlineValueRegistrationOptions>>,
+    /// The server provides inline values.
+    ///
+    /// @since 3.17.0
+    pub inline_value_provider:
+        Option<OR3<bool, InlineValueOptions, InlineValueRegistrationOptions>>,
 
-/// The server provides inlay hints.
-/// 
-/// @since 3.17.0
-pub inlay_hint_provider: Option<OR3<bool, InlayHintOptions, InlayHintRegistrationOptions>>,
+    /// The server provides inlay hints.
+    ///
+    /// @since 3.17.0
+    pub inlay_hint_provider: Option<OR3<bool, InlayHintOptions, InlayHintRegistrationOptions>>,
 
-/// The server has support for pull model diagnostics.
-/// 
-/// @since 3.17.0
-pub diagnostic_provider: Option<OR2<DiagnosticOptions, DiagnosticRegistrationOptions>>,
+    /// The server has support for pull model diagnostics.
+    ///
+    /// @since 3.17.0
+    pub diagnostic_provider: Option<OR2<DiagnosticOptions, DiagnosticRegistrationOptions>>,
 
-/// Workspace specific server capabilities.
-pub workspace: Option<StructWorkspaceFoldersOptionWorkspaceFoldersServerCapabilitiesFileOperationsOptionFileOperationOptions>,
+    /// Workspace specific server capabilities.
+    pub workspace: Option<StructWorkspace>,
 
-/// Experimental server capabilities.
-pub experimental: Option<LSPAny>,
-
+    /// Experimental server capabilities.
+    pub experimental: Option<LSPAny>,
 }
 
 /// A text document identifier to denote a specific version of a text document.
@@ -4365,7 +4571,7 @@ pub struct InsertReplaceEdit {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLabelDetailsSupportOptionbool {
+pub struct StructCompletionItem {
     /// The server has support for completion item label
     /// details (see also `CompletionItemLabelDetails`) when
     /// receiving a completion item in a resolve call.
@@ -4406,7 +4612,7 @@ pub struct CompletionOptions {
     /// capabilities.
     ///
     /// @since 3.17.0
-    pub completion_item: Option<StructLabelDetailsSupportOptionbool>,
+    pub completion_item: Option<StructCompletionItem>,
 }
 
 /// Hover options.
@@ -4901,32 +5107,38 @@ pub struct TextDocumentSyncOptions {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLanguageString {
+pub struct StructLanguage {
     pub language: String,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructNotebookOR2StringNotebookDocumentFilterCellsOptionVecStructLanguageString {
+pub struct StructNotebook {
     /// The notebook to be synced If a string
     /// value is provided it matches against the
     /// notebook type. '*' matches every notebook.
     pub notebook: OR2<String, NotebookDocumentFilter>,
 
     /// The cells of the matching notebook to be synced.
-    pub cells: Option<Vec<StructLanguageString>>,
+    pub cells: Option<Vec<StructLanguage>>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructNotebookOptionOR2StringNotebookDocumentFilterCellsVecStructLanguageString {
+pub struct StructLanguage2 {
+    pub language: String,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructCells2 {
     /// The notebook to be synced If a string
     /// value is provided it matches against the
     /// notebook type. '*' matches every notebook.
     pub notebook: Option<OR2<String, NotebookDocumentFilter>>,
 
     /// The cells of the matching notebook to be synced.
-    pub cells: Vec<StructLanguageString>,
+    pub cells: Vec<StructLanguage2>,
 }
 
 /// Options specific to a notebook plus its cells
@@ -4946,12 +5158,7 @@ pub struct StructNotebookOptionOR2StringNotebookDocumentFilterCellsVecStructLang
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentSyncOptions {
     /// The notebooks to be synced
-    pub notebook_selector: Vec<
-        OR2<
-            StructNotebookOR2StringNotebookDocumentFilterCellsOptionVecStructLanguageString,
-            StructNotebookOptionOR2StringNotebookDocumentFilterCellsVecStructLanguageString,
-        >,
-    >,
+    pub notebook_selector: Vec<OR2<StructNotebook, StructCells2>>,
 
     /// Whether save notification should be forwarded to
     /// the server. Will only be honored if mode === `notebook`.
@@ -5325,7 +5532,7 @@ pub struct WindowClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructCancelboolRetryOnContentModifiedVecString {
+pub struct StructStaleRequestSupport {
     /// The client will actively cancel the request.
     pub cancel: bool,
 
@@ -5347,7 +5554,7 @@ pub struct GeneralClientCapabilities {
     /// anymore since the information is outdated).
     ///
     /// @since 3.17.0
-    pub stale_request_support: Option<StructCancelboolRetryOnContentModifiedVecString>,
+    pub stale_request_support: Option<StructStaleRequestSupport>,
 
     /// Client capabilities specific to regular expressions.
     ///
@@ -5398,7 +5605,7 @@ pub struct RelativePattern {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructGroupsOnLabelOptionbool {
+pub struct StructChangeAnnotationSupport {
     /// Whether the client groups edits with equal labels into tree nodes,
     /// for instance all edits labelled with "Changes in Strings" would
     /// be a tree node.
@@ -5436,7 +5643,7 @@ pub struct WorkspaceEditClientCapabilities {
     /// create file, rename file and delete file changes.
     ///
     /// @since 3.16.0
-    pub change_annotation_support: Option<StructGroupsOnLabelOptionbool>,
+    pub change_annotation_support: Option<StructChangeAnnotationSupport>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -5463,7 +5670,7 @@ pub struct DidChangeWatchedFilesClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetOptionVecSymbolKind {
+pub struct StructSymbolKind {
     /// The symbol kind values the client supports. When this
     /// property exists the client also guarantees that it will
     /// handle values outside its set gracefully and falls back
@@ -5477,14 +5684,14 @@ pub struct StructValueSetOptionVecSymbolKind {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetVecSymbolTag {
+pub struct StructTagSupport {
     /// The tags supported by the client.
     pub value_set: Vec<SymbolTag>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructPropertiesVecString {
+pub struct StructResolveSupport {
     /// The properties that a client can resolve lazily. Usually
     /// `location.range`
     pub properties: Vec<String>,
@@ -5498,20 +5705,20 @@ pub struct WorkspaceSymbolClientCapabilities {
     pub dynamic_registration: Option<bool>,
 
     /// Specific capabilities for the `SymbolKind` in the `workspace/symbol` request.
-    pub symbol_kind: Option<StructValueSetOptionVecSymbolKind>,
+    pub symbol_kind: Option<StructSymbolKind>,
 
     /// The client supports tags on `SymbolInformation`.
     /// Clients supporting tags have to handle unknown tags gracefully.
     ///
     /// @since 3.16.0
-    pub tag_support: Option<StructValueSetVecSymbolTag>,
+    pub tag_support: Option<StructTagSupport>,
 
     /// The client support partial workspace symbols. The client will send the
     /// request `workspaceSymbol/resolve` to the server to resolve additional
     /// properties.
     ///
     /// @since 3.17.0
-    pub resolve_support: Option<StructPropertiesVecString>,
+    pub resolve_support: Option<StructResolveSupport>,
 }
 
 /// The client capabilities of a {@link ExecuteCommandRequest}.
@@ -5649,21 +5856,27 @@ pub struct TextDocumentSyncClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetVecCompletionItemTag {
+pub struct StructTagSupportValue {
     /// The tags supported by the client.
     pub value_set: Vec<CompletionItemTag>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetVecInsertTextMode {
+pub struct StructResolveSupportProperties {
+    /// The properties that a client can resolve lazily.
+    pub properties: Vec<String>,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructInsertTextModeSupport {
     pub value_set: Vec<InsertTextMode>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructSnippetSupportOptionboolCommitCharactersSupportOptionboolDocumentationFormatOptionVecMarkupKindDeprecatedSupportOptionboolPreselectSupportOptionboolTagSupportOptionStructValueSetVecCompletionItemTagInsertReplaceSupportOptionboolResolveSupportOptionStructPropertiesVecStringInsertTextModeSupportOptionStructValueSetVecInsertTextModeLabelDetailsSupportOptionbool
-{
+pub struct StructCompletionItemOptions {
     /// Client supports snippets as insert text.
     ///
     /// A snippet can define tab stops and placeholders with `$1`, `$2`
@@ -5691,7 +5904,7 @@ pub struct StructSnippetSupportOptionboolCommitCharactersSupportOptionboolDocume
     /// a resolve call.
     ///
     /// @since 3.15.0
-    pub tag_support: Option<StructValueSetVecCompletionItemTag>,
+    pub tag_support: Option<StructTagSupportValue>,
 
     /// Client support insert replace edit to control different behavior if a
     /// completion item is inserted in the text or should replace text.
@@ -5704,14 +5917,14 @@ pub struct StructSnippetSupportOptionboolCommitCharactersSupportOptionboolDocume
     /// and `details` could be resolved lazily.
     ///
     /// @since 3.16.0
-    pub resolve_support: Option<StructPropertiesVecString>,
+    pub resolve_support: Option<StructResolveSupportProperties>,
 
     /// The client supports the `insertTextMode` property on
     /// a completion item to override the whitespace handling mode
     /// as defined by the client (see `insertTextMode`).
     ///
     /// @since 3.16.0
-    pub insert_text_mode_support: Option<StructValueSetVecInsertTextMode>,
+    pub insert_text_mode_support: Option<StructInsertTextModeSupport>,
 
     /// The client has support for completion item label
     /// details (see also `CompletionItemLabelDetails`).
@@ -5722,7 +5935,7 @@ pub struct StructSnippetSupportOptionboolCommitCharactersSupportOptionboolDocume
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetOptionVecCompletionItemKind {
+pub struct StructCompletionItemKind {
     /// The completion item kind values the client supports. When this
     /// property exists the client also guarantees that it will
     /// handle values outside its set gracefully and falls back
@@ -5736,7 +5949,7 @@ pub struct StructValueSetOptionVecCompletionItemKind {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructItemDefaultsOptionVecString {
+pub struct StructCompletionList {
     /// The client supports the following itemDefaults on
     /// a completion list.
     ///
@@ -5751,34 +5964,32 @@ pub struct StructItemDefaultsOptionVecString {
 /// Completion client capabilities
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct CompletionClientCapabilities
-{
-/// Whether completion supports dynamic registration.
-pub dynamic_registration: Option<bool>,
+pub struct CompletionClientCapabilities {
+    /// Whether completion supports dynamic registration.
+    pub dynamic_registration: Option<bool>,
 
-/// The client supports the following `CompletionItem` specific
-/// capabilities.
-pub completion_item: Option<StructSnippetSupportOptionboolCommitCharactersSupportOptionboolDocumentationFormatOptionVecMarkupKindDeprecatedSupportOptionboolPreselectSupportOptionboolTagSupportOptionStructValueSetVecCompletionItemTagInsertReplaceSupportOptionboolResolveSupportOptionStructPropertiesVecStringInsertTextModeSupportOptionStructValueSetVecInsertTextModeLabelDetailsSupportOptionbool>,
+    /// The client supports the following `CompletionItem` specific
+    /// capabilities.
+    pub completion_item: Option<StructCompletionItemOptions>,
 
-pub completion_item_kind: Option<StructValueSetOptionVecCompletionItemKind>,
+    pub completion_item_kind: Option<StructCompletionItemKind>,
 
-/// Defines how the client handles whitespace and indentation
-/// when accepting a completion item that uses multi line
-/// text in either `insertText` or `textEdit`.
-/// 
-/// @since 3.17.0
-pub insert_text_mode: Option<InsertTextMode>,
+    /// Defines how the client handles whitespace and indentation
+    /// when accepting a completion item that uses multi line
+    /// text in either `insertText` or `textEdit`.
+    ///
+    /// @since 3.17.0
+    pub insert_text_mode: Option<InsertTextMode>,
 
-/// The client supports to send additional context information for a
-/// `textDocument/completion` request.
-pub context_support: Option<bool>,
+    /// The client supports to send additional context information for a
+    /// `textDocument/completion` request.
+    pub context_support: Option<bool>,
 
-/// The client supports the following `CompletionList` specific
-/// capabilities.
-/// 
-/// @since 3.17.0
-pub completion_list: Option<StructItemDefaultsOptionVecString>,
-
+    /// The client supports the following `CompletionList` specific
+    /// capabilities.
+    ///
+    /// @since 3.17.0
+    pub completion_list: Option<StructCompletionList>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -5794,7 +6005,7 @@ pub struct HoverClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructLabelOffsetSupportOptionbool {
+pub struct StructParameterInformation {
     /// The client supports processing label offsets instead of a
     /// simple label string.
     ///
@@ -5804,14 +6015,13 @@ pub struct StructLabelOffsetSupportOptionbool {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructDocumentationFormatOptionVecMarkupKindParameterInformationOptionStructLabelOffsetSupportOptionboolActiveParameterSupportOptionbool
-{
+pub struct StructSignatureInformation {
     /// Client supports the following content formats for the documentation
     /// property. The order describes the preferred format of the client.
     pub documentation_format: Option<Vec<MarkupKind>>,
 
     /// Client capabilities specific to parameter information.
-    pub parameter_information: Option<StructLabelOffsetSupportOptionbool>,
+    pub parameter_information: Option<StructParameterInformation>,
 
     /// The client supports the `activeParameter` property on `SignatureInformation`
     /// literal.
@@ -5823,23 +6033,21 @@ pub struct StructDocumentationFormatOptionVecMarkupKindParameterInformationOptio
 /// Client Capabilities for a {@link SignatureHelpRequest}.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct SignatureHelpClientCapabilities
-{
-/// Whether signature help supports dynamic registration.
-pub dynamic_registration: Option<bool>,
+pub struct SignatureHelpClientCapabilities {
+    /// Whether signature help supports dynamic registration.
+    pub dynamic_registration: Option<bool>,
 
-/// The client supports the following `SignatureInformation`
-/// specific properties.
-pub signature_information: Option<StructDocumentationFormatOptionVecMarkupKindParameterInformationOptionStructLabelOffsetSupportOptionboolActiveParameterSupportOptionbool>,
+    /// The client supports the following `SignatureInformation`
+    /// specific properties.
+    pub signature_information: Option<StructSignatureInformation>,
 
-/// The client supports to send additional context information for a
-/// `textDocument/signatureHelp` request. A client that opts into
-/// contextSupport will also support the `retriggerCharacters` on
-/// `SignatureHelpOptions`.
-/// 
-/// @since 3.15.0
-pub context_support: Option<bool>,
-
+    /// The client supports to send additional context information for a
+    /// `textDocument/signatureHelp` request. A client that opts into
+    /// contextSupport will also support the `retriggerCharacters` on
+    /// `SignatureHelpOptions`.
+    ///
+    /// @since 3.15.0
+    pub context_support: Option<bool>,
 }
 
 /// @since 3.14.0
@@ -5914,6 +6122,27 @@ pub struct DocumentHighlightClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructSymbolKindOptions {
+    /// The symbol kind values the client supports. When this
+    /// property exists the client also guarantees that it will
+    /// handle values outside its set gracefully and falls back
+    /// to a default value when unknown.
+    ///
+    /// If this property is not present the client only supports
+    /// the symbol kinds from `File` to `Array` as defined in
+    /// the initial version of the protocol.
+    pub value_set: Option<Vec<SymbolKind>>,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructTagSupportValueSet {
+    /// The tags supported by the client.
+    pub value_set: Vec<SymbolTag>,
+}
+
 /// Client Capabilities for a {@link DocumentSymbolRequest}.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -5923,7 +6152,7 @@ pub struct DocumentSymbolClientCapabilities {
 
     /// Specific capabilities for the `SymbolKind` in the
     /// `textDocument/documentSymbol` request.
-    pub symbol_kind: Option<StructValueSetOptionVecSymbolKind>,
+    pub symbol_kind: Option<StructSymbolKindOptions>,
 
     /// The client supports hierarchical document symbols.
     pub hierarchical_document_symbol_support: Option<bool>,
@@ -5933,7 +6162,7 @@ pub struct DocumentSymbolClientCapabilities {
     /// Clients supporting tags have to handle unknown tags gracefully.
     ///
     /// @since 3.16.0
-    pub tag_support: Option<StructValueSetVecSymbolTag>,
+    pub tag_support: Option<StructTagSupportValueSet>,
 
     /// The client supports an additional label presented in the UI when
     /// registering a document symbol provider.
@@ -5944,7 +6173,7 @@ pub struct DocumentSymbolClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetVecCustomStringEnumCodeActionKind {
+pub struct StructCodeActionKind {
     /// The code action kind values the client supports. When this
     /// property exists the client also guarantees that it will
     /// handle values outside its set gracefully and falls back
@@ -5954,10 +6183,17 @@ pub struct StructValueSetVecCustomStringEnumCodeActionKind {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructCodeActionKindStructValueSetVecCustomStringEnumCodeActionKind {
+pub struct StructCodeActionLiteralSupport {
     /// The code action kind is support with the following value
     /// set.
-    pub code_action_kind: StructValueSetVecCustomStringEnumCodeActionKind,
+    pub code_action_kind: StructCodeActionKind,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructResolveSupportProperties2 {
+    /// The properties that a client can resolve lazily.
+    pub properties: Vec<String>,
 }
 
 /// The Client Capabilities of a {@link CodeActionRequest}.
@@ -5972,8 +6208,7 @@ pub struct CodeActionClientCapabilities {
     /// set the request can only return `Command` literals.
     ///
     /// @since 3.8.0
-    pub code_action_literal_support:
-        Option<StructCodeActionKindStructValueSetVecCustomStringEnumCodeActionKind>,
+    pub code_action_literal_support: Option<StructCodeActionLiteralSupport>,
 
     /// Whether code action supports the `isPreferred` property.
     ///
@@ -5996,7 +6231,7 @@ pub struct CodeActionClientCapabilities {
     /// properties via a separate `codeAction/resolve` request.
     ///
     /// @since 3.16.0
-    pub resolve_support: Option<StructPropertiesVecString>,
+    pub resolve_support: Option<StructResolveSupportProperties2>,
 
     /// Whether the client honors the change annotations in
     /// text edits and resource operations returned via the
@@ -6094,7 +6329,7 @@ pub struct RenameClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetOptionVecCustomStringEnumFoldingRangeKind {
+pub struct StructFoldingRangeKind {
     /// The folding range kind values the client supports. When this
     /// property exists the client also guarantees that it will
     /// handle values outside its set gracefully and falls back
@@ -6104,7 +6339,7 @@ pub struct StructValueSetOptionVecCustomStringEnumFoldingRangeKind {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructCollapsedTextOptionbool {
+pub struct StructFoldingRange {
     /// If set, the client signals that it supports setting collapsedText on
     /// folding ranges to display custom labels instead of the default text.
     ///
@@ -6134,12 +6369,12 @@ pub struct FoldingRangeClientCapabilities {
     /// Specific options for the folding range kind.
     ///
     /// @since 3.17.0
-    pub folding_range_kind: Option<StructValueSetOptionVecCustomStringEnumFoldingRangeKind>,
+    pub folding_range_kind: Option<StructFoldingRangeKind>,
 
     /// Specific options for the folding range.
     ///
     /// @since 3.17.0
-    pub folding_range: Option<StructCollapsedTextOptionbool>,
+    pub folding_range: Option<StructFoldingRange>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -6153,7 +6388,7 @@ pub struct SelectionRangeClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructValueSetVecDiagnosticTag {
+pub struct StructTagSupportValueSet2 {
     /// The tags supported by the client.
     pub value_set: Vec<DiagnosticTag>,
 }
@@ -6169,7 +6404,7 @@ pub struct PublishDiagnosticsClientCapabilities {
     /// Clients supporting tags have to handle unknown tags gracefully.
     ///
     /// @since 3.15.0
-    pub tag_support: Option<StructValueSetVecDiagnosticTag>,
+    pub tag_support: Option<StructTagSupportValueSet2>,
 
     /// Whether the client interprets the version property of the
     /// `textDocument/publishDiagnostics` notification's parameter.
@@ -6202,14 +6437,22 @@ pub struct CallHierarchyClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructRangeOptionOR2boolStructFullOptionOR2boolStructDeltaOptionbool {
+pub struct StructOptions2 {
+    /// The client will send the `textDocument/semanticTokens/full/delta` request if
+    /// the server provides a corresponding handler.
+    pub delta: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructRequests {
     /// The client will send the `textDocument/semanticTokens/range` request if
     /// the server provides a corresponding handler.
-    pub range: Option<OR2<bool, Struct>>,
+    pub range: Option<OR2<bool, LSPObject>>,
 
     /// The client will send the `textDocument/semanticTokens/full` request if
     /// the server provides a corresponding handler.
-    pub full: Option<OR2<bool, StructDeltaOptionbool>>,
+    pub full: Option<OR2<bool, StructOptions2>>,
 }
 
 /// @since 3.16.0
@@ -6229,7 +6472,7 @@ pub struct SemanticTokensClientCapabilities {
     /// `request.range` are both set to true but the server only provides a
     /// range provider the client might not render a minimap correctly or might
     /// even decide to not show any semantic tokens at all.
-    pub requests: StructRangeOptionOR2boolStructFullOptionOR2boolStructDeltaOptionbool,
+    pub requests: StructRequests,
 
     /// The token types that the client supports.
     pub token_types: Vec<String>,
@@ -6311,6 +6554,13 @@ pub struct InlineValueClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
+#[derive(Serialize, Deserialize, PartialEq, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct StructResolveSupportProperties3 {
+    /// The properties that a client can resolve lazily.
+    pub properties: Vec<String>,
+}
+
 /// Inlay hint client capabilities.
 ///
 /// @since 3.17.0
@@ -6322,7 +6572,7 @@ pub struct InlayHintClientCapabilities {
 
     /// Indicates which properties a client can resolve lazily on an inlay
     /// hint.
-    pub resolve_support: Option<StructPropertiesVecString>,
+    pub resolve_support: Option<StructResolveSupportProperties3>,
 }
 
 /// Client capabilities specific to diagnostic pull requests.
@@ -6358,7 +6608,7 @@ pub struct NotebookDocumentSyncClientCapabilities {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
-pub struct StructAdditionalPropertiesSupportOptionbool {
+pub struct StructMessageActionItem {
     /// Whether the client supports additional attributes which
     /// are preserved and send back to the server in the
     /// request's response.
@@ -6370,7 +6620,7 @@ pub struct StructAdditionalPropertiesSupportOptionbool {
 #[serde(rename_all = "camelCase")]
 pub struct ShowMessageRequestClientCapabilities {
     /// Capabilities specific to the `MessageActionItem` type.
-    pub message_action_item: Option<StructAdditionalPropertiesSupportOptionbool>,
+    pub message_action_item: Option<StructMessageActionItem>,
 }
 
 /// Client capabilities for the showDocument request.

@@ -1,16 +1,76 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
-import generator.model as model
+from generator import model
 
-from .rust_lang_utils import lines_to_doc_comments, to_snake_case, to_upper_camel_case
+from .rust_lang_utils import (
+    get_parts,
+    lines_to_doc_comments,
+    to_snake_case,
+    to_upper_camel_case,
+)
+
+TypesWithId = Union[
+    model.Request,
+    model.TypeAlias,
+    model.Enum,
+    model.Structure,
+    model.Notification,
+    model.LiteralType,
+    model.ReferenceType,
+    model.ReferenceMapKeyType,
+    model.Property,
+    model.EnumItem,
+]
 
 
-def generate_custom_enum() -> Dict[str, List[str]]:
-    return {
-        "CustomStringEnum": [
+class TypeData:
+    def __init__(self) -> None:
+        self._id_data: Dict[
+            str,
+            Tuple[
+                str,
+                TypesWithId,
+                List[str],
+            ],
+        ] = {}
+
+    def add_type_info(
+        self,
+        type_def: TypesWithId,
+        type_name: str,
+        impl: List[str],
+    ) -> None:
+        if type_def.id_ in self._id_data:
+            raise Exception(f"Duplicate id {type_def.id_} for type {type_name}")
+        self._id_data[type_def.id_] = (type_name, type_def, impl)
+
+    def has_id(
+        self,
+        type_def: TypesWithId,
+    ) -> bool:
+        return type_def.id_ in self._id_data
+
+    def has_name(self, type_name: str) -> bool:
+        return any(type_name == name for name, _, _ in self._id_data.values())
+
+    def get_by_name(self, type_name: str) -> List[TypesWithId]:
+        return [type_name == name for name, _, _ in self._id_data.values()]
+
+    def get_lines(self):
+        lines = []
+        for _, _, impl in self._id_data.values():
+            lines += impl + ["", ""]
+        return lines
+
+
+def generate_custom_enum(type_data: TypeData) -> None:
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="CustomStringEnum"),
+        "CustomStringEnum",
+        [
             "/// This type allows extending any string enum to support custom values.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -22,7 +82,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "CustomIntEnum": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="CustomIntEnum"),
+        "CustomIntEnum",
+        [
             "/// This type allows extending any integer enum to support custom values.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -34,7 +98,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "OR2": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="OR2"),
+        "OR2",
+        [
             "/// This allows a field to have two types.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -44,7 +112,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "OR3": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="OR3"),
+        "OR3",
+        [
             "/// This allows a field to have three types.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -55,7 +127,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "OR4": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="OR4"),
+        "OR4",
+        [
             "/// This allows a field to have four types.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -67,7 +143,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "OR5": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="OR5"),
+        "OR5",
+        [
             "/// This allows a field to have five types.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -80,7 +160,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "OR6": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="OR6"),
+        "OR6",
+        [
             "/// This allows a field to have six types.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -94,7 +178,11 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "OR7": [
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="OR7"),
+        "OR7",
+        [
             "/// This allows a field to have seven types.",
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             "#[serde(untagged)]",
@@ -109,18 +197,7 @@ def generate_custom_enum() -> Dict[str, List[str]]:
             "}",
             "",
         ],
-        "LSPObject": [
-            "/// This is a base type for all user LSP objects.",
-            "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
-            "#[serde(untagged)]",
-            "pub enum LSPObject<'a>{",
-            "    Known(&'a LSPAny<'a>),",
-            '    #[lang = "None"]',
-            "    None,",
-            "}",
-            "",
-        ],
-    }
+    )
 
 
 def get_definition(
@@ -132,11 +209,7 @@ def get_definition(
     return None
 
 
-def generate_commons(model: model.LSPModel) -> Dict[str, List[str]]:
-    types = {
-        **generate_custom_enum(),
-    }
-
+def generate_special_types(model: model.LSPModel, types: TypeData) -> None:
     special_types = [
         get_definition("LSPAny", model),
         get_definition("LSPObject", model),
@@ -169,7 +242,6 @@ def generate_commons(model: model.LSPModel) -> Dict[str, List[str]]:
                     "    Null,",
                     "}",
                 ]
-
             elif type_def.name == "LSPObject":
                 lines += ["type LSPObject = serde_json::Value;"]
             elif type_def.name == "LSPArray":
@@ -199,9 +271,65 @@ def generate_commons(model: model.LSPModel) -> Dict[str, List[str]]:
                     lines += [""]
                 lines += ["}"]
             lines += [""]
-            types[type_def.name] = lines
+            types.add_type_info(type_def, type_def.name, lines)
 
-    return types
+
+def _fix_lsp_method_name(name: str) -> str:
+    if name.startswith("$/"):
+        name = name[2:]
+    return to_upper_camel_case(name.replace("/", "_"))
+
+
+def generate_special_enum(enum_name: str, items: List[str]) -> Dict[str, List[str]]:
+    lines = [
+        "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
+        f"pub enum {enum_name}",
+        "{",
+    ]
+    for item in items:
+        lines += [
+            f'    #[serde(rename = "{item}")]',
+            f"    {_fix_lsp_method_name(item)},",
+        ]
+    lines += ["}"]
+    return lines
+
+
+def generate_extra_types(spec: model.LSPModel, type_data: TypeData) -> None:
+    methods = [m.method for m in (spec.requests + spec.notifications)]
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="LSPMethod"),
+        "LSPMethod",
+        generate_special_enum("LSPMethod", methods),
+    )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="Method"),
+        "Method",
+        [
+            "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
+            "#[serde(untagged)]",
+            "pub enum Method {",
+            "    LSP(LSPMethod),",
+            "    Custom(String),",
+            "}",
+            "",
+        ],
+    )
+
+    direction = set([m.messageDirection for m in (spec.requests + spec.notifications)])
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="MessageDirection"),
+        "MessageDirection",
+        generate_special_enum("MessageDirection", direction),
+    )
+
+
+def generate_commons(
+    model: model.LSPModel, type_data: TypeData
+) -> Dict[str, List[str]]:
+    generate_custom_enum(type_data)
+    generate_special_types(model, type_data)
+    generate_extra_types(model, type_data)
 
 
 def lsp_to_base_types(lsp_type: model.BaseType):
@@ -237,9 +365,10 @@ def _is_int_enum(enum_def: model.Enum) -> bool:
 
 def get_type_name(
     type_def: model.LSP_TYPE_SPEC,
-    types: Dict[str, Optional[List[str]]],
+    types: TypeData,
     spec: model.LSPModel,
     optional: Optional[bool] = None,
+    name_context: Optional[str] = None,
 ) -> str:
     if type_def.kind == "reference":
         enum_def = _get_enum(type_def.name, spec)
@@ -283,9 +412,7 @@ def get_type_name(
             )
         optional = optional or has_null
     elif type_def.kind == "literal":
-        name = generate_literal_struct_name(type_def, types, spec)
-        if name not in types:
-            types[name] = generate_literal_struct_type(type_def, types, spec)
+        name = generate_literal_struct_type(type_def, types, spec, name_context)
     elif type_def.kind == "stringLiteral":
         name = "String"
         # TODO: generate proper string literals
@@ -317,39 +444,77 @@ def get_type_name(
 
 
 def generate_literal_struct_name(
-    type_def: model.LiteralType, types: Dict[str, List[str]], spec: model.LSPModel
+    type_def: model.LiteralType,
+    types: TypeData,
+    spec: model.LSPModel,
+    name_context: Optional[str] = None,
 ) -> str:
-    parts = []
-    for property in type_def.value.properties:
-        parts.append(to_upper_camel_case(property.name))
-        parts.append(get_type_name(property.type, types, spec, property.optional))
-    return (
-        f"Struct{''.join(parts)}".replace("<", "")
-        .replace(">", "")
-        .replace(",", "")
-        .replace(" ", "")
+    ignore_list = ["Struct", "Type", "Kind", "Options", "Params", "Result", "Options"]
+
+    initial_parts = ["Struct"]
+    if name_context:
+        initial_parts += get_parts(name_context)
+
+    optional_props = [p for p in type_def.value.properties if p.optional]
+    required_props = [p for p in type_def.value.properties if not p.optional]
+
+    required_parts = []
+    for property in required_props:
+        for p in get_parts(property.name):
+            if p not in (ignore_list + required_parts):
+                required_parts.append(p)
+
+    optional = (
+        ["Options"] if len(optional_props) == len(type_def.value.properties) else []
     )
+
+    name_parts = initial_parts
+    name = to_upper_camel_case("_".join(name_parts))
+
+    all_ignore = all(n in ignore_list for n in name_parts)
+    if types.has_name(name) or all_ignore:
+        parts = []
+
+        for r in required_parts:
+            parts.append(r)
+            name = to_upper_camel_case("_".join(initial_parts + parts + optional))
+            if not types.has_name(name):
+                return name
+
+        for i in range(1, 100):
+            end = [f"{i}"] if i > 1 else []
+            name = to_upper_camel_case(
+                "_".join(initial_parts + required_parts + optional + end)
+            )
+            if not types.has_name(name):
+                return name
+    return name
 
 
 def generate_literal_struct_type(
-    type_def: model.LiteralType, types: Dict[str, List[str]], spec: model.LSPModel
-) -> List[str]:
-    name = generate_literal_struct_name(type_def, types, spec)
-    if name in types:
-        return types[name]
+    type_def: model.LiteralType,
+    types: TypeData,
+    spec: model.LSPModel,
+    name_context: Optional[str] = None,
+) -> None:
+    if len(type_def.value.properties) == 0:
+        return "LSPObject"
+    if types.has_id(type_def):
+        return type_def.name
+    type_def.name = generate_literal_struct_name(type_def, types, spec, name_context)
 
     doc = (
         type_def.documentation.splitlines(keepends=False)
         if type_def.documentation
         else []
     )
-    inner_code = (
+    lines = (
         lines_to_doc_comments(doc)
         + generate_extras(type_def)
         + [
             "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
             '#[serde(rename_all = "camelCase")]',
-            f"pub struct {name}",
+            f"pub struct {type_def.name}",
             "{",
         ]
     )
@@ -359,15 +524,17 @@ def generate_literal_struct_type(
             if property.documentation
             else []
         )
-        inner_code += lines_to_doc_comments(doc)
-        inner_code += generate_extras(property)
+        lines += lines_to_doc_comments(doc)
+        lines += generate_extras(property)
         prop_name = to_snake_case(property.name)
-        prop_type = get_type_name(property.type, types, spec, property.optional)
-        inner_code += [f"pub {prop_name}: {prop_type},"]
-        inner_code += [""]
-    inner_code += ["}", ""]
-    types[name] = inner_code
-    return inner_code
+        prop_type = get_type_name(
+            property.type, types, spec, property.optional, property.name
+        )
+        lines += [f"pub {prop_name}: {prop_type},"]
+        lines += [""]
+    lines += ["}", ""]
+    types.add_type_info(type_def, type_def.name, lines)
+    return type_def.name
 
 
 def generate_extras(

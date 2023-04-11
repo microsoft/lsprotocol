@@ -5,9 +5,9 @@ import os
 import pathlib
 from typing import List
 
-import generator.model as model
+from generator import model
 
-from .rust_commons import generate_commons
+from .rust_commons import TypeData, generate_commons
 from .rust_enum import generate_enums
 from .rust_file_header import license_header
 from .rust_lang_utils import lines_to_comments
@@ -48,17 +48,12 @@ def generate_lib_rs(spec: model.LSPModel) -> List[str]:
         "",
     ]
 
-    types = {
-        **generate_commons(spec),
-        **generate_enums(spec.enumerations),
-    }
+    type_data = TypeData()
+    generate_commons(spec, type_data)
+    generate_enums(spec.enumerations, type_data)
 
-    generate_type_aliases(spec, types)
-    generate_structures(spec, types)
+    generate_type_aliases(spec, type_data)
+    generate_structures(spec, type_data)
 
-    for name in types:
-        if types[name]:
-            lines += types[name]
-            lines += [""]
-
+    lines += type_data.get_lines()
     return "\n".join(lines)

@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 
+import re
 from typing import List
 
 
@@ -17,13 +18,13 @@ def lines_to_block_comment(lines: List[str]) -> List[str]:
     return ["/*"] + lines + ["*/"]
 
 
+def get_parts(name: str) -> List[str]:
+    name = name.replace("_", " ")
+    return re.sub("(([a-z0-9])([A-Z]))", r"\2 \3", name).split()
+
+
 def to_snake_case(name: str) -> str:
-    result = ""
-    for i, c in enumerate(name):
-        if i > 0 and c.isupper():
-            result += "_"
-        result += c.lower()
-    return result
+    return "_".join([part.lower() for part in get_parts(name)])
 
 
 def has_upper_case(name: str) -> bool:
@@ -40,15 +41,11 @@ def is_snake_case(name: str) -> bool:
 
 
 def to_upper_camel_case(name: str) -> str:
-    if not is_snake_case(name):
-        name = to_snake_case(name)
-    return "".join([c.capitalize() for c in name.split("_")])
+    return "".join([c.capitalize() for c in get_parts(name)])
 
 
 def to_camel_case(name: str) -> str:
-    if not is_snake_case(name):
-        name = to_snake_case(name)
-    parts = name.split("_")
+    parts = get_parts(name)
     if len(parts) > 1:
         return parts[0] + "".join([c.capitalize() for c in parts[1:]])
     else:

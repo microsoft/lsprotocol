@@ -125,7 +125,7 @@ type LSPArray = Vec<LSPAny>;
 /// may have a parent selection range that contains it.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct SelectionRange {
-    /// The {@link Range range} of this selection range.
+    /// The [range][Range] of this selection range.
     pub range: Range,
 
     /// The parent selection range containing this range. Therefore `parent.range` must contain `this.range`.
@@ -325,12 +325,12 @@ pub enum Method {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub enum MessageDirection {
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
-    #[serde(rename = "serverToClient")]
-    ServerToClient,
     #[serde(rename = "both")]
     Both,
+    #[serde(rename = "serverToClient")]
+    ServerToClient,
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -1153,7 +1153,7 @@ pub enum TokenFormat {
     Relative,
 }
 
-/// The definition of a symbol represented as one or many {@link Location locations}.
+/// The definition of a symbol represented as one or many [locations][Location].
 /// For most programming languages there is only one location at which a symbol is
 /// defined.
 ///
@@ -1168,11 +1168,11 @@ pub enum Definition {
 
 /// Information about where a symbol is defined.
 ///
-/// Provides additional metadata over normal {@link Location location} definitions, including the range of
+/// Provides additional metadata over normal [location][Location] definitions, including the range of
 /// the defining symbol
 pub type DefinitionLink = LocationLink;
 
-/// The declaration of a symbol representation as one or many {@link Location locations}.
+/// The declaration of a symbol representation as one or many [locations][Location].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(untagged)]
 pub enum Declaration {
@@ -1182,7 +1182,7 @@ pub enum Declaration {
 
 /// Information about where a symbol is declared.
 ///
-/// Provides additional metadata over normal {@link Location location} declarations, including the range of
+/// Provides additional metadata over normal [location][Location] declarations, including the range of
 /// the declaring symbol.
 ///
 /// Servers should prefer returning `DeclarationLink` over `Declaration` if supported
@@ -1354,7 +1354,7 @@ pub struct StructTextDocumentFilter {
     /// A language id, like `typescript`.
     pub language: String,
 
-    /// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
 
@@ -1370,7 +1370,7 @@ pub struct StructTextDocumentFilterScheme {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
 
-    /// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
 
     /// A glob pattern, like `*.{ts,js}`.
@@ -1385,7 +1385,7 @@ pub struct StructTextDocumentFilterPattern {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language: Option<String>,
 
-    /// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
 
@@ -1394,8 +1394,8 @@ pub struct StructTextDocumentFilterPattern {
 }
 
 /// A document filter denotes a document by different properties like
-/// the {@link TextDocument.languageId language}, the {@link Uri.scheme scheme} of
-/// its resource, or a glob-pattern that is applied to the {@link TextDocument.fileName path}.
+/// the [language][`TextDocument::languageId`], the [scheme][`Uri::scheme`] of
+/// its resource, or a glob-pattern that is applied to the [path][`TextDocument::fileName`].
 ///
 /// Glob patterns can have the following syntax:
 /// - `*` to match one or more characters in a path segment
@@ -1423,7 +1423,7 @@ pub struct StructNotebookDocumentFilter {
     /// The type of the enclosing notebook.
     pub notebook_type: String,
 
-    /// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
 
@@ -1439,7 +1439,7 @@ pub struct StructNotebookDocumentFilterScheme {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notebook_type: Option<String>,
 
-    /// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
 
     /// A glob pattern.
@@ -1454,7 +1454,7 @@ pub struct StructNotebookDocumentFilterPattern {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notebook_type: Option<String>,
 
-    /// A Uri {@link Uri.scheme scheme}, like `file` or `untitled`.
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
 
@@ -1539,7 +1539,7 @@ pub struct ConfigurationParams {
     pub items: Vec<ConfigurationItem>,
 }
 
-/// Parameters for a {@link DocumentColorRequest}.
+/// Parameters for a [DocumentColorRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentColorParams {
@@ -1562,7 +1562,7 @@ pub struct ColorInformation {
 #[serde(rename_all = "camelCase")]
 pub struct DocumentColorRegistrationOptions {}
 
-/// Parameters for a {@link ColorPresentationRequest}.
+/// Parameters for a [ColorPresentationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ColorPresentationParams {
@@ -1584,14 +1584,14 @@ pub struct ColorPresentation {
     /// this color presentation.
     pub label: String,
 
-    /// An {@link TextEdit edit} which is applied to a document when selecting
-    /// this presentation for the color.  When `falsy` the {@link ColorPresentation.label label}
+    /// An [edit][TextEdit] which is applied to a document when selecting
+    /// this presentation for the color.  When `falsy` the [label][`ColorPresentation::label`]
     /// is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_edit: Option<TextEdit>,
 
-    /// An optional array of additional {@link TextEdit text edits} that are applied when
-    /// selecting this color presentation. Edits must not overlap with the main {@link ColorPresentation.textEdit edit} nor with themselves.
+    /// An optional array of additional [text edits][TextEdit] that are applied when
+    /// selecting this color presentation. Edits must not overlap with the main [edit][`ColorPresentation::textEdit`] nor with themselves.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_text_edits: Option<Vec<TextEdit>>,
 }
@@ -1613,7 +1613,7 @@ pub struct TextDocumentRegistrationOptions {
     pub document_selector: Option<DocumentSelector>,
 }
 
-/// Parameters for a {@link FoldingRangeRequest}.
+/// Parameters for a [FoldingRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct FoldingRangeParams {
@@ -1644,7 +1644,7 @@ pub struct FoldingRange {
 
     /// Describes the kind of the folding range such as `comment' or 'region'. The kind
     /// is used to categorize folding ranges and used by commands like 'Fold all comments'.
-    /// See {@link FoldingRangeKind} for an enumeration of standardized kinds.
+    /// See [FoldingRangeKind] for an enumeration of standardized kinds.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<CustomStringEnum<FoldingRangeKind>>,
 
@@ -1733,7 +1733,7 @@ pub struct CallHierarchyItem {
     pub range: Range,
 
     /// The range that should be selected and revealed when this symbol is being picked, e.g. the name of a function.
-    /// Must be contained by the {@link CallHierarchyItem.range `range`}.
+    /// Must be contained by the [`range`][`CallHierarchyItem::range`].
     pub selection_range: Range,
 
     /// A data entry field that is preserved between a call hierarchy prepare and
@@ -1768,7 +1768,7 @@ pub struct CallHierarchyIncomingCall {
     pub from: CallHierarchyItem,
 
     /// The ranges at which the calls appear. This is relative to the caller
-    /// denoted by {@link CallHierarchyIncomingCall.from `this.from`}.
+    /// denoted by [`this.from`][`CallHierarchyIncomingCall::from`].
     pub from_ranges: Vec<Range>,
 }
 
@@ -1791,8 +1791,8 @@ pub struct CallHierarchyOutgoingCall {
     pub to: CallHierarchyItem,
 
     /// The range at which this item is called. This is the range relative to the caller, e.g the item
-    /// passed to {@link CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls `provideCallHierarchyOutgoingCalls`}
-    /// and not {@link CallHierarchyOutgoingCall.to `this.to`}.
+    /// passed to [`provideCallHierarchyOutgoingCalls`][`CallHierarchyItemProvider::provideCallHierarchyOutgoingCalls`]
+    /// and not [`this.to`][`CallHierarchyOutgoingCall::to`].
     pub from_ranges: Vec<Range>,
 }
 
@@ -2086,7 +2086,7 @@ pub struct TypeHierarchyItem {
 
     /// The range that should be selected and revealed when this symbol is being
     /// picked, e.g. the name of a function. Must be contained by the
-    /// {@link TypeHierarchyItem.range `range`}.
+    /// [`range`][`TypeHierarchyItem::range`].
     pub selection_range: Range,
 
     /// A data entry field that is preserved between a type hierarchy prepare and
@@ -2439,7 +2439,7 @@ pub struct DidChangeConfigurationRegistrationOptions {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ShowMessageParams {
-    /// The message type. See {@link MessageType}
+    /// The message type. See [MessageType]
     #[serde(rename = "type")]
     pub type_: MessageType,
 
@@ -2450,7 +2450,7 @@ pub struct ShowMessageParams {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ShowMessageRequestParams {
-    /// The message type. See {@link MessageType}
+    /// The message type. See [MessageType]
     #[serde(rename = "type")]
     pub type_: MessageType,
 
@@ -2473,7 +2473,7 @@ pub struct MessageActionItem {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct LogMessageParams {
-    /// The message type. See {@link MessageType}
+    /// The message type. See [MessageType]
     #[serde(rename = "type")]
     pub type_: MessageType,
 
@@ -2668,19 +2668,19 @@ pub struct CompletionItem {
     pub preselect: Option<bool>,
 
     /// A string that should be used when comparing this item
-    /// with other items. When `falsy` the {@link CompletionItem.label label}
+    /// with other items. When `falsy` the [label][`CompletionItem::label`]
     /// is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_text: Option<String>,
 
     /// A string that should be used when filtering a set of
-    /// completion items. When `falsy` the {@link CompletionItem.label label}
+    /// completion items. When `falsy` the [label][`CompletionItem::label`]
     /// is used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_text: Option<String>,
 
     /// A string that should be inserted into a document when selecting
-    /// this completion. When `falsy` the {@link CompletionItem.label label}
+    /// this completion. When `falsy` the [label][`CompletionItem::label`]
     /// is used.
     ///
     /// The `insertText` is subject to interpretation by the client side.
@@ -2710,9 +2710,9 @@ pub struct CompletionItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub insert_text_mode: Option<InsertTextMode>,
 
-    /// An {@link TextEdit edit} which is applied to a document when selecting
+    /// An [edit][TextEdit] which is applied to a document when selecting
     /// this completion. When an edit is provided the value of
-    /// {@link CompletionItem.insertText insertText} is ignored.
+    /// [insertText][`CompletionItem::insertText`] is ignored.
     ///
     /// Most editors support two different operations when accepting a completion
     /// item. One is to insert a completion text and the other is to replace an
@@ -2746,9 +2746,9 @@ pub struct CompletionItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub text_edit_text: Option<String>,
 
-    /// An optional array of additional {@link TextEdit text edits} that are applied when
+    /// An optional array of additional [text edits][TextEdit] that are applied when
     /// selecting this completion. Edits must not overlap (including the same insert position)
-    /// with the main {@link CompletionItem.textEdit edit} nor with themselves.
+    /// with the main [edit][`CompletionItem::textEdit`] nor with themselves.
     ///
     /// Additional text edits should be used to change text unrelated to the current cursor position
     /// (for example adding an import statement at the top of the file if the completion item will
@@ -2762,14 +2762,14 @@ pub struct CompletionItem {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub commit_characters: Option<Vec<String>>,
 
-    /// An optional {@link Command command} that is executed *after* inserting this completion. *Note* that
+    /// An optional [command][Command] that is executed *after* inserting this completion. *Note* that
     /// additional modifications to the current document should be described with the
-    /// {@link CompletionItem.additionalTextEdits additionalTextEdits}-property.
+    /// [additionalTextEdits][`CompletionItem::additionalTextEdits`]-property.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<Command>,
 
     /// A data entry field that is preserved on a completion item between a
-    /// {@link CompletionRequest} and a {@link CompletionResolveRequest}.
+    /// [CompletionRequest] and a [CompletionResolveRequest].
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<LSPAny>,
 }
@@ -2816,7 +2816,7 @@ pub struct StructItemDefaults {
     pub data: Option<LSPAny>,
 }
 
-/// Represents a collection of {@link CompletionItem completion items} to be presented
+/// Represents a collection of [completion items][CompletionItem] to be presented
 /// in the editor.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -2847,12 +2847,12 @@ pub struct CompletionList {
     pub items: Vec<CompletionItem>,
 }
 
-/// Registration options for a {@link CompletionRequest}.
+/// Registration options for a [CompletionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CompletionRegistrationOptions {}
 
-/// Parameters for a {@link HoverRequest}.
+/// Parameters for a [HoverRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct HoverParams {}
@@ -2870,12 +2870,12 @@ pub struct Hover {
     pub range: Option<Range>,
 }
 
-/// Registration options for a {@link HoverRequest}.
+/// Registration options for a [HoverRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct HoverRegistrationOptions {}
 
-/// Parameters for a {@link SignatureHelpRequest}.
+/// Parameters for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SignatureHelpParams {
@@ -2919,34 +2919,34 @@ pub struct SignatureHelp {
     pub active_parameter: Option<u32>,
 }
 
-/// Registration options for a {@link SignatureHelpRequest}.
+/// Registration options for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SignatureHelpRegistrationOptions {}
 
-/// Parameters for a {@link DefinitionRequest}.
+/// Parameters for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DefinitionParams {}
 
-/// Registration options for a {@link DefinitionRequest}.
+/// Registration options for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DefinitionRegistrationOptions {}
 
-/// Parameters for a {@link ReferencesRequest}.
+/// Parameters for a [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ReferenceParams {
     pub context: ReferenceContext,
 }
 
-/// Registration options for a {@link ReferencesRequest}.
+/// Registration options for a [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ReferenceRegistrationOptions {}
 
-/// Parameters for a {@link DocumentHighlightRequest}.
+/// Parameters for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentHighlightParams {}
@@ -2960,17 +2960,17 @@ pub struct DocumentHighlight {
     /// The range this highlight applies to.
     pub range: Range,
 
-    /// The highlight kind, default is {@link DocumentHighlightKind.Text text}.
+    /// The highlight kind, default is [text][`DocumentHighlightKind::Text`].
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kind: Option<DocumentHighlightKind>,
 }
 
-/// Registration options for a {@link DocumentHighlightRequest}.
+/// Registration options for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentHighlightRegistrationOptions {}
 
-/// Parameters for a {@link DocumentSymbolRequest}.
+/// Parameters for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentSymbolParams {
@@ -3047,12 +3047,12 @@ pub struct DocumentSymbol {
     pub children: Option<Vec<DocumentSymbol>>,
 }
 
-/// Registration options for a {@link DocumentSymbolRequest}.
+/// Registration options for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentSymbolRegistrationOptions {}
 
-/// The parameters of a {@link CodeActionRequest}.
+/// The parameters of a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionParams {
@@ -3160,12 +3160,12 @@ pub struct CodeAction {
     pub data: Option<LSPAny>,
 }
 
-/// Registration options for a {@link CodeActionRequest}.
+/// Registration options for a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionRegistrationOptions {}
 
-/// The parameters of a {@link WorkspaceSymbolRequest}.
+/// The parameters of a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkspaceSymbolParams {
@@ -3201,12 +3201,12 @@ pub struct WorkspaceSymbol {
     pub data: Option<LSPAny>,
 }
 
-/// Registration options for a {@link WorkspaceSymbolRequest}.
+/// Registration options for a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkspaceSymbolRegistrationOptions {}
 
-/// The parameters of a {@link CodeLensRequest}.
+/// The parameters of a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeLensParams {
@@ -3214,7 +3214,7 @@ pub struct CodeLensParams {
     pub text_document: TextDocumentIdentifier,
 }
 
-/// A code lens represents a {@link Command command} that should be shown along with
+/// A code lens represents a [command][Command] that should be shown along with
 /// source text, like the number of references, a way to run tests, etc.
 ///
 /// A code lens is _unresolved_ when no command is associated to it. For performance
@@ -3230,18 +3230,18 @@ pub struct CodeLens {
     pub command: Option<Command>,
 
     /// A data entry field that is preserved on a code lens item between
-    /// a {@link CodeLensRequest} and a [CodeLensResolveRequest]
+    /// a [CodeLensRequest] and a [CodeLensResolveRequest]
     /// (#CodeLensResolveRequest)
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<LSPAny>,
 }
 
-/// Registration options for a {@link CodeLensRequest}.
+/// Registration options for a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeLensRegistrationOptions {}
 
-/// The parameters of a {@link DocumentLinkRequest}.
+/// The parameters of a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentLinkParams {
@@ -3277,12 +3277,12 @@ pub struct DocumentLink {
     pub data: Option<LSPAny>,
 }
 
-/// Registration options for a {@link DocumentLinkRequest}.
+/// Registration options for a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentLinkRegistrationOptions {}
 
-/// The parameters of a {@link DocumentFormattingRequest}.
+/// The parameters of a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentFormattingParams {
@@ -3293,12 +3293,12 @@ pub struct DocumentFormattingParams {
     pub options: FormattingOptions,
 }
 
-/// Registration options for a {@link DocumentFormattingRequest}.
+/// Registration options for a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentFormattingRegistrationOptions {}
 
-/// The parameters of a {@link DocumentRangeFormattingRequest}.
+/// The parameters of a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentRangeFormattingParams {
@@ -3312,12 +3312,12 @@ pub struct DocumentRangeFormattingParams {
     pub options: FormattingOptions,
 }
 
-/// Registration options for a {@link DocumentRangeFormattingRequest}.
+/// Registration options for a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentRangeFormattingRegistrationOptions {}
 
-/// The parameters of a {@link DocumentOnTypeFormattingRequest}.
+/// The parameters of a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOnTypeFormattingParams {
@@ -3339,12 +3339,12 @@ pub struct DocumentOnTypeFormattingParams {
     pub options: FormattingOptions,
 }
 
-/// Registration options for a {@link DocumentOnTypeFormattingRequest}.
+/// Registration options for a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOnTypeFormattingRegistrationOptions {}
 
-/// The parameters of a {@link RenameRequest}.
+/// The parameters of a [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct RenameParams {
@@ -3355,12 +3355,12 @@ pub struct RenameParams {
     pub position: Position,
 
     /// The new name of the symbol. If the given name is not valid the
-    /// request must return a {@link ResponseError} with an
+    /// request must return a [ResponseError] with an
     /// appropriate message set.
     pub new_name: String,
 }
 
-/// Registration options for a {@link RenameRequest}.
+/// Registration options for a [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct RenameRegistrationOptions {}
@@ -3369,7 +3369,7 @@ pub struct RenameRegistrationOptions {}
 #[serde(rename_all = "camelCase")]
 pub struct PrepareRenameParams {}
 
-/// The parameters of a {@link ExecuteCommandRequest}.
+/// The parameters of a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecuteCommandParams {
@@ -3381,7 +3381,7 @@ pub struct ExecuteCommandParams {
     pub arguments: Option<Vec<LSPAny>>,
 }
 
-/// Registration options for a {@link ExecuteCommandRequest}.
+/// Registration options for a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecuteCommandRegistrationOptions {}
@@ -3559,7 +3559,7 @@ pub struct PartialResultParams {
     pub partial_result_token: Option<ProgressToken>,
 }
 
-/// Represents the connection of two locations. Provides additional metadata over normal {@link Location locations},
+/// Represents the connection of two locations. Provides additional metadata over normal [locations][Location],
 /// including an origin range.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -4665,7 +4665,7 @@ pub struct FileEvent {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct FileSystemWatcher {
-    /// The glob pattern to watch. See {@link GlobPattern glob pattern} for more detail.
+    /// The glob pattern to watch. See [glob pattern][GlobPattern] for more detail.
     ///
     /// @since 3.17.0 support for relative patterns.
     pub glob_pattern: GlobPattern,
@@ -4748,12 +4748,12 @@ pub struct CompletionContext {
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CompletionItemLabelDetails {
-    /// An optional string which is rendered less prominently directly after {@link CompletionItem.label label},
+    /// An optional string which is rendered less prominently directly after [label][`CompletionItem::label`],
     /// without any spacing. Should be used for function signatures and type annotations.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub detail: Option<String>,
 
-    /// An optional string which is rendered less prominently after {@link CompletionItem.detail}. Should be used
+    /// An optional string which is rendered less prominently after [`CompletionItem::detail`]. Should be used
     /// for fully qualified names and file paths.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -4888,7 +4888,7 @@ pub struct SignatureInformation {
     pub active_parameter: Option<u32>,
 }
 
-/// Server Capabilities for a {@link SignatureHelpRequest}.
+/// Server Capabilities for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SignatureHelpOptions {
@@ -4906,7 +4906,7 @@ pub struct SignatureHelpOptions {
     pub retrigger_characters: Option<Vec<String>>,
 }
 
-/// Server Capabilities for a {@link DefinitionRequest}.
+/// Server Capabilities for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DefinitionOptions {}
@@ -4925,7 +4925,7 @@ pub struct ReferenceContext {
 #[serde(rename_all = "camelCase")]
 pub struct ReferenceOptions {}
 
-/// Provider options for a {@link DocumentHighlightRequest}.
+/// Provider options for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentHighlightOptions {}
@@ -4954,7 +4954,7 @@ pub struct BaseSymbolInformation {
     pub container_name: Option<String>,
 }
 
-/// Provider options for a {@link DocumentSymbolRequest}.
+/// Provider options for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentSymbolOptions {
@@ -4967,7 +4967,7 @@ pub struct DocumentSymbolOptions {
 }
 
 /// Contains additional diagnostic information about the context in which
-/// a {@link CodeActionProvider.provideCodeActions code action} is run.
+/// a [code action][`CodeActionProvider::provideCodeActions`] is run.
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionContext {
@@ -4992,7 +4992,7 @@ pub struct CodeActionContext {
     pub trigger_kind: Option<CodeActionTriggerKind>,
 }
 
-/// Provider options for a {@link CodeActionRequest}.
+/// Provider options for a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionOptions {
@@ -5011,7 +5011,7 @@ pub struct CodeActionOptions {
     pub resolve_provider: Option<bool>,
 }
 
-/// Server capabilities for a {@link WorkspaceSymbolRequest}.
+/// Server capabilities for a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkspaceSymbolOptions {
@@ -5023,7 +5023,7 @@ pub struct WorkspaceSymbolOptions {
     pub resolve_provider: Option<bool>,
 }
 
-/// Code Lens provider options of a {@link CodeLensRequest}.
+/// Code Lens provider options of a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeLensOptions {
@@ -5032,7 +5032,7 @@ pub struct CodeLensOptions {
     pub resolve_provider: Option<bool>,
 }
 
-/// Provider options for a {@link DocumentLinkRequest}.
+/// Provider options for a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentLinkOptions {
@@ -5070,17 +5070,17 @@ pub struct FormattingOptions {
     pub trim_final_newlines: Option<bool>,
 }
 
-/// Provider options for a {@link DocumentFormattingRequest}.
+/// Provider options for a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentFormattingOptions {}
 
-/// Provider options for a {@link DocumentRangeFormattingRequest}.
+/// Provider options for a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentRangeFormattingOptions {}
 
-/// Provider options for a {@link DocumentOnTypeFormattingRequest}.
+/// Provider options for a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOnTypeFormattingOptions {
@@ -5092,7 +5092,7 @@ pub struct DocumentOnTypeFormattingOptions {
     pub more_trigger_character: Option<Vec<String>>,
 }
 
-/// Provider options for a {@link RenameRequest}.
+/// Provider options for a [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct RenameOptions {
@@ -5103,7 +5103,7 @@ pub struct RenameOptions {
     pub prepare_provider: Option<bool>,
 }
 
-/// The server capabilities of a {@link ExecuteCommandRequest}.
+/// The server capabilities of a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecuteCommandOptions {
@@ -5994,7 +5994,7 @@ pub struct DidChangeWatchedFilesClientCapabilities {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_registration: Option<bool>,
 
-    /// Whether the client has support for {@link  RelativePattern relative pattern}
+    /// Whether the client has support for [relative pattern][RelativePattern]
     /// or not.
     ///
     /// @since 3.17.0
@@ -6032,7 +6032,7 @@ pub struct StructResolveSupport {
     pub properties: Vec<String>,
 }
 
-/// Client capabilities for a {@link WorkspaceSymbolRequest}.
+/// Client capabilities for a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkspaceSymbolClientCapabilities {
@@ -6060,7 +6060,7 @@ pub struct WorkspaceSymbolClientCapabilities {
     pub resolve_support: Option<StructResolveSupport>,
 }
 
-/// The client capabilities of a {@link ExecuteCommandRequest}.
+/// The client capabilities of a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ExecuteCommandClientCapabilities {
@@ -6410,7 +6410,7 @@ pub struct StructSignatureInformation {
     pub active_parameter_support: Option<bool>,
 }
 
-/// Client Capabilities for a {@link SignatureHelpRequest}.
+/// Client Capabilities for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct SignatureHelpClientCapabilities {
@@ -6448,7 +6448,7 @@ pub struct DeclarationClientCapabilities {
     pub link_support: Option<bool>,
 }
 
-/// Client Capabilities for a {@link DefinitionRequest}.
+/// Client Capabilities for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DefinitionClientCapabilities {
@@ -6497,7 +6497,7 @@ pub struct ImplementationClientCapabilities {
     pub link_support: Option<bool>,
 }
 
-/// Client Capabilities for a {@link ReferencesRequest}.
+/// Client Capabilities for a [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ReferenceClientCapabilities {
@@ -6506,7 +6506,7 @@ pub struct ReferenceClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
-/// Client Capabilities for a {@link DocumentHighlightRequest}.
+/// Client Capabilities for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentHighlightClientCapabilities {
@@ -6537,7 +6537,7 @@ pub struct StructTagSupportValueSet {
     pub value_set: Vec<SymbolTag>,
 }
 
-/// Client Capabilities for a {@link DocumentSymbolRequest}.
+/// Client Capabilities for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentSymbolClientCapabilities {
@@ -6595,7 +6595,7 @@ pub struct StructResolveSupportProperties2 {
     pub properties: Vec<String>,
 }
 
-/// The Client Capabilities of a {@link CodeActionRequest}.
+/// The Client Capabilities of a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionClientCapabilities {
@@ -6649,7 +6649,7 @@ pub struct CodeActionClientCapabilities {
     pub honors_change_annotations: Option<bool>,
 }
 
-/// The client capabilities  of a {@link CodeLensRequest}.
+/// The client capabilities  of a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeLensClientCapabilities {
@@ -6658,7 +6658,7 @@ pub struct CodeLensClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
-/// The client capabilities of a {@link DocumentLinkRequest}.
+/// The client capabilities of a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentLinkClientCapabilities {
@@ -6683,7 +6683,7 @@ pub struct DocumentColorClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
-/// Client capabilities of a {@link DocumentFormattingRequest}.
+/// Client capabilities of a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentFormattingClientCapabilities {
@@ -6692,7 +6692,7 @@ pub struct DocumentFormattingClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
-/// Client capabilities of a {@link DocumentRangeFormattingRequest}.
+/// Client capabilities of a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentRangeFormattingClientCapabilities {
@@ -6701,7 +6701,7 @@ pub struct DocumentRangeFormattingClientCapabilities {
     pub dynamic_registration: Option<bool>,
 }
 
-/// Client capabilities of a {@link DocumentOnTypeFormattingRequest}.
+/// Client capabilities of a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentOnTypeFormattingClientCapabilities {

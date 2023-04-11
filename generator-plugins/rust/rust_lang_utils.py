@@ -5,13 +5,29 @@
 import re
 from typing import List
 
+BASIC_LINK_RE = re.compile(r"{@link +(\w+) ([\w ]+)}")
+BASIC_LINK_RE2 = re.compile(r"{@link +(\w+)\.(\w+) ([\w \.`]+)}")
+BASIC_LINK_RE3 = re.compile(r"{@link +(\w+)}")
+BASIC_LINK_RE4 = re.compile(r"{@link +(\w+)\.(\w+)}")
+PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
+
 
 def lines_to_comments(lines: List[str]) -> List[str]:
     return ["// " + line for line in lines]
 
 
 def lines_to_doc_comments(lines: List[str]) -> List[str]:
-    return ["/// " + line for line in lines]
+    doc = []
+    for line in lines:
+        line = BASIC_LINK_RE.sub(r"[\2][\1]", line)
+        line = BASIC_LINK_RE2.sub(r"[\3][`\1::\2`]", line)
+        line = BASIC_LINK_RE3.sub(r"[\1]", line)
+        line = BASIC_LINK_RE4.sub(r"[`\1::\2`]", line)
+        if line.startswith("///"):
+            doc.append(line)
+        else:
+            doc.append("/// " + line)
+    return doc
 
 
 def lines_to_block_comment(lines: List[str]) -> List[str]:
@@ -20,7 +36,7 @@ def lines_to_block_comment(lines: List[str]) -> List[str]:
 
 def get_parts(name: str) -> List[str]:
     name = name.replace("_", " ")
-    return re.sub("(([a-z0-9])([A-Z]))", r"\2 \3", name).split()
+    return PARTS_RE.sub(r"\2 \3", name).split()
 
 
 def to_snake_case(name: str) -> str:

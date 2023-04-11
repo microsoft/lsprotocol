@@ -21,7 +21,7 @@ def generate_int_enum(enum: model.Enum, types: TypeData) -> None:
         + extras
         + [
             f"#[derive(Serialize_repr, Deserialize_repr, PartialEq, Debug)]",
-            f"#[repr(i64)]",
+            f"#[repr(i32)]",
             f"pub enum {enum.name} " "{",
         ]
     )

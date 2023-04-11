@@ -94,7 +94,7 @@ def generate_custom_enum(type_data: TypeData) -> None:
             "    /// The value is one of the known enum values.",
             "    Known(T),",
             "    /// The value is custom.",
-            "    Custom(i64),",
+            "    Custom(i32),",
             "}",
             "",
         ],
@@ -233,9 +233,9 @@ def generate_special_types(model: model.LSPModel, types: TypeData) -> None:
                     "#[serde(untagged)]",
                     "pub enum LSPAny {",
                     "    String(String),",
-                    "    Integer(i64),",
-                    "    UInteger(u64),",
-                    "    Decimal(f64),",
+                    "    Integer(i32),",
+                    "    UInteger(u32),",
+                    "    Decimal(f32),",
                     "    Boolean(bool),",
                     "    Object(LSPObject),",
                     "    Array(LSPArray),",
@@ -336,11 +336,11 @@ def lsp_to_base_types(lsp_type: model.BaseType):
     if lsp_type.name in ["string", "DocumentUri", "URI", "RegExp"]:
         return "String"
     elif lsp_type.name in ["decimal"]:
-        return "f64"
+        return "f32"
     elif lsp_type.name in ["integer"]:
-        return "i64"
+        return "i32"
     elif lsp_type.name in ["uinteger"]:
-        return "u64"
+        return "u32"
     elif lsp_type.name in ["boolean"]:
         return "bool"
 
@@ -530,6 +530,8 @@ def generate_literal_struct_type(
         prop_type = get_type_name(
             property.type, types, spec, property.optional, property.name
         )
+        if prop_type.startswith("Option<"):
+            lines += [f'#[serde(skip_serializing_if = "Option::is_none")]']
         lines += [f"pub {prop_name}: {prop_type},"]
         lines += [""]
     lines += ["}", ""]

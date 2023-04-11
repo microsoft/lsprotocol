@@ -304,6 +304,9 @@ def generate_struct(
             property.type, types, spec, property.optional, property.name
         )
 
+        if prop_type.startswith("Option<"):
+            lines += [f'#[serde(skip_serializing_if = "Option::is_none")]']
+
         if prop_name in ["type"]:
             prop_name = f"{prop_name}_"
             lines += [f'#[serde(rename = "{property.name}")]']

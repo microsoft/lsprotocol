@@ -6,12 +6,8 @@
 using System.Runtime.Serialization;
 
 namespace LSProtocol {
-    /// <summary>
-    /// </summary>
     public enum TokenFormat 
     {
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "relative")]Relative,
 
     }

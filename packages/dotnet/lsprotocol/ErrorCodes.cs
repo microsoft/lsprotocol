@@ -9,24 +9,14 @@ namespace LSProtocol {
     /// </summary>
     public enum ErrorCodes 
     {
-        /// <summary>
-        /// </summary>
         ParseError = -32700,
 
-        /// <summary>
-        /// </summary>
         InvalidRequest = -32600,
 
-        /// <summary>
-        /// </summary>
         MethodNotFound = -32601,
 
-        /// <summary>
-        /// </summary>
         InvalidParams = -32602,
 
-        /// <summary>
-        /// </summary>
         InternalError = -32603,
 
         /// <summary>
@@ -35,8 +25,6 @@ namespace LSProtocol {
         /// </summary>
         ServerNotInitialized = -32002,
 
-        /// <summary>
-        /// </summary>
         UnknownErrorCode = -32001,
 
     }

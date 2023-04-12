@@ -15,8 +15,6 @@ namespace LSProtocol {
     /// </summary>
     public enum SemanticTokenTypes 
     {
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "namespace")]Namespace,
 
         /// <summary>
@@ -25,84 +23,44 @@ namespace LSProtocol {
         /// </summary>
         [EnumMember(Value = "type")]Type,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "class")]Class,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "enum")]Enum,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "interface")]Interface,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "struct")]Struct,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "typeParameter")]TypeParameter,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "parameter")]Parameter,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "variable")]Variable,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "property")]Property,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "enumMember")]EnumMember,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "event")]Event,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "function")]Function,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "method")]Method,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "macro")]Macro,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "keyword")]Keyword,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "modifier")]Modifier,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "comment")]Comment,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "string")]String,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "number")]Number,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "regexp")]Regexp,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "operator")]Operator,
 
         /// <summary>

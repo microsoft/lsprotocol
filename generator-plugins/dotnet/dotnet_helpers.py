@@ -8,6 +8,8 @@ PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
 
 
 def lines_to_doc_comments(lines: List[str]) -> List[str]:
+    if not lines:
+        return []
     return ["/// <summary>"] + [f"/// {line}" for line in lines] + ["/// </summary>"]
 
 

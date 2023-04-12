@@ -9,108 +9,56 @@ namespace LSProtocol {
     /// </summary>
     public enum SymbolKind 
     {
-        /// <summary>
-        /// </summary>
         File = 1,
 
-        /// <summary>
-        /// </summary>
         Module = 2,
 
-        /// <summary>
-        /// </summary>
         Namespace = 3,
 
-        /// <summary>
-        /// </summary>
         Package = 4,
 
-        /// <summary>
-        /// </summary>
         Class = 5,
 
-        /// <summary>
-        /// </summary>
         Method = 6,
 
-        /// <summary>
-        /// </summary>
         Property = 7,
 
-        /// <summary>
-        /// </summary>
         Field = 8,
 
-        /// <summary>
-        /// </summary>
         Constructor = 9,
 
-        /// <summary>
-        /// </summary>
         Enum = 10,
 
-        /// <summary>
-        /// </summary>
         Interface = 11,
 
-        /// <summary>
-        /// </summary>
         Function = 12,
 
-        /// <summary>
-        /// </summary>
         Variable = 13,
 
-        /// <summary>
-        /// </summary>
         Constant = 14,
 
-        /// <summary>
-        /// </summary>
         String = 15,
 
-        /// <summary>
-        /// </summary>
         Number = 16,
 
-        /// <summary>
-        /// </summary>
         Boolean = 17,
 
-        /// <summary>
-        /// </summary>
         Array = 18,
 
-        /// <summary>
-        /// </summary>
         Object = 19,
 
-        /// <summary>
-        /// </summary>
         Key = 20,
 
-        /// <summary>
-        /// </summary>
         Null = 21,
 
-        /// <summary>
-        /// </summary>
         EnumMember = 22,
 
-        /// <summary>
-        /// </summary>
         Struct = 23,
 
-        /// <summary>
-        /// </summary>
         Event = 24,
 
-        /// <summary>
-        /// </summary>
         Operator = 25,
 
-        /// <summary>
-        /// </summary>
         TypeParameter = 26,
 
     }

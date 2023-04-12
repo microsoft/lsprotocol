@@ -15,44 +15,24 @@ namespace LSProtocol {
     /// </summary>
     public enum SemanticTokenModifiers 
     {
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "declaration")]Declaration,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "definition")]Definition,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "readonly")]Readonly,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "static")]Static,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "deprecated")]Deprecated,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "abstract")]Abstract,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "async")]Async,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "modification")]Modification,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "documentation")]Documentation,
 
-        /// <summary>
-        /// </summary>
         [EnumMember(Value = "defaultLibrary")]DefaultLibrary,
 
     }

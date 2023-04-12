@@ -6,8 +6,6 @@
 using System.Runtime.Serialization;
 
 namespace LSProtocol {
-    /// <summary>
-    /// </summary>
     public enum ResourceOperationKind 
     {
         /// <summary>

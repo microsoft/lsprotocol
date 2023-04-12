@@ -9,104 +9,54 @@ namespace LSProtocol {
     /// </summary>
     public enum CompletionItemKind 
     {
-        /// <summary>
-        /// </summary>
         Text = 1,
 
-        /// <summary>
-        /// </summary>
         Method = 2,
 
-        /// <summary>
-        /// </summary>
         Function = 3,
 
-        /// <summary>
-        /// </summary>
         Constructor = 4,
 
-        /// <summary>
-        /// </summary>
         Field = 5,
 
-        /// <summary>
-        /// </summary>
         Variable = 6,
 
-        /// <summary>
-        /// </summary>
         Class = 7,
 
-        /// <summary>
-        /// </summary>
         Interface = 8,
 
-        /// <summary>
-        /// </summary>
         Module = 9,
 
-        /// <summary>
-        /// </summary>
         Property = 10,
 
-        /// <summary>
-        /// </summary>
         Unit = 11,
 
-        /// <summary>
-        /// </summary>
         Value = 12,
 
-        /// <summary>
-        /// </summary>
         Enum = 13,
 
-        /// <summary>
-        /// </summary>
         Keyword = 14,
 
-        /// <summary>
-        /// </summary>
         Snippet = 15,
 
-        /// <summary>
-        /// </summary>
         Color = 16,
 
-        /// <summary>
-        /// </summary>
         File = 17,
 
-        /// <summary>
-        /// </summary>
         Reference = 18,
 
-        /// <summary>
-        /// </summary>
         Folder = 19,
 
-        /// <summary>
-        /// </summary>
         EnumMember = 20,
 
-        /// <summary>
-        /// </summary>
         Constant = 21,
 
-        /// <summary>
-        /// </summary>
         Struct = 22,
 
-        /// <summary>
-        /// </summary>
         Event = 23,
 
-        /// <summary>
-        /// </summary>
         Operator = 24,
 
-        /// <summary>
-        /// </summary>
         TypeParameter = 25,
 
     }

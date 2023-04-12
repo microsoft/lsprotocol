@@ -16,7 +16,10 @@
             "module": "generator",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--plugin", "${input:plugin}"]
+            "args": [
+                "--plugin",
+                "${input:plugin}"
+            ]
         },
         {
             "name": "DON'T SELECT (test debug config)",
@@ -24,7 +27,9 @@
             "request": "launch",
             "console": "integratedTerminal",
             "justMyCode": false,
-            "purpose": ["debug-test"],
+            "purpose": [
+                "debug-test"
+            ],
             "presentation": {
                 "hidden": true,
                 "group": "",
@@ -37,7 +42,11 @@
             "id": "plugin",
             "type": "pickString",
             "description": "Select a plugin to debug",
-            "options": ["python", "rust"]
+            "options": [
+                "python",
+                "rust",
+                "dotnet"
+            ]
         }
     ]
 }

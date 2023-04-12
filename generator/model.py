@@ -3,7 +3,8 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, List, Optional, Union
+import uuid
+from typing import Any, Dict, Iterable, List, Optional, Type, TypeVar, Union
 
 import attrs
 
@@ -109,6 +110,19 @@ class EnumItem:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: Any) -> bool:
+        if isinstance(other, EnumItem):
+            return self.name == other.name and self.value == other.value
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
@@ -117,6 +131,19 @@ class EnumValueType:
     name: str = attrs.field(
         validator=attrs.validators.in_(["string", "integer", "uinteger"])
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, EnumValueType):
+            return self.name == other.name and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
@@ -147,6 +174,27 @@ class Enum:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Enum):
+            return (
+                self.name == other.name
+                and self.type == other.type
+                and self.values == other.values
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = [self.type]
+        for value in self.values:
+            types.append(value)
+            types.extend(value.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -167,18 +215,57 @@ class BaseType:
             ]
         )
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, BaseType):
+            return self.name == other.name and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
 class ReferenceType:
     kind: str = attrs.field(validator=attrs.validators.in_(["reference"]))
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, ReferenceType):
+            return self.name == other.name and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
 class StringLiteralType:
     kind: str = attrs.field(validator=attrs.validators.in_(["stringLiteral"]))
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, StringLiteralType):
+            return self.value == other.value and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
@@ -187,6 +274,23 @@ class OrType:
     items: Iterable[LSP_TYPE_SPEC] = attrs.field(
         converter=list_converter(convert_to_lsp_type)
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, OrType):
+            return self.items == other.items and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        for item in self.items:
+            types.append(item)
+            types.extend(item.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -195,6 +299,23 @@ class AndType:
     items: Iterable[LSP_TYPE_SPEC] = attrs.field(
         converter=list_converter(convert_to_lsp_type),
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, AndType):
+            return self.items == other.items and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        for item in self.items:
+            types.append(item)
+            types.extend(item.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -203,6 +324,19 @@ class ArrayType:
     element: LSP_TYPE_SPEC = attrs.field(
         validator=type_validator, converter=partial_apply(convert_to_lsp_type)
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, ArrayType):
+            return self.element == other.element and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return [self.element] + self.element.get_inner_types()
 
 
 @attrs.define
@@ -211,6 +345,23 @@ class TupleType:
     items: Iterable[LSP_TYPE_SPEC] = attrs.field(
         converter=list_converter(convert_to_lsp_type)
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, TupleType):
+            return self.items == other.items and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        for item in self.items:
+            types.append(item)
+            types.extend(item.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -226,12 +377,38 @@ class BaseMapKeyType:
             ]
         )
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, BaseMapKeyType):
+            return self.name == other.name and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
 class ReferenceMapKeyType:
     kind: str = attrs.field(validator=attrs.validators.in_(["reference"]))
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, ReferenceMapKeyType):
+            return self.name == other.name and self.kind == other.kind
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 def convert_map_key(
@@ -251,11 +428,45 @@ class MapType:
     value: LSP_TYPE_SPEC = attrs.field(
         validator=type_validator, converter=partial_apply(convert_to_lsp_type)
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, MapType):
+            return (
+                self.key == other.key
+                and self.value == other.value
+                and self.kind == other.kind
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return (
+            [self.value, self.key]
+            + self.value.get_inner_types()
+            + self.key.get_inner_types()
+        )
 
 
 @attrs.define
 class MetaData:
     version: str = attrs.field(validator=attrs.validators.instance_of(str))
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, MetaData):
+            return self.version == other.version
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return []
 
 
 @attrs.define
@@ -285,6 +496,23 @@ class Property:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Property):
+            return (
+                self.name == other.name
+                and self.type == other.type
+                and self.optional == other.optional
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return [self.type] + self.type.get_inner_types()
 
 
 @attrs.define
@@ -292,6 +520,23 @@ class LiteralValue:
     properties: Iterable[Property] = attrs.field(
         converter=list_converter(Property),
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, LiteralValue):
+            return self.properties == other.properties
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        for prop in self.properties:
+            types.append(prop)
+            types.extend(prop.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -321,6 +566,23 @@ class LiteralType:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, LiteralType):
+            return (
+                self.value == other.value
+                and self.kind == other.kind
+                and self.name == other.name
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return [self.value] + self.value.get_inner_types()
 
 
 @attrs.define
@@ -346,6 +608,23 @@ class TypeAlias:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, TypeAlias):
+            return (
+                self.name == other.name
+                and self.type == other.type
+                and self.kind == other.kind
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        return [self.type] + self.type.get_inner_types()
 
 
 @attrs.define
@@ -376,6 +655,34 @@ class Structure:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Structure):
+            return (
+                self.name == other.name
+                and self.properties == other.properties
+                and self.extends == other.extends
+                and self.mixins == other.mixins
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        for prop in self.properties:
+            types.append(prop.type)
+            types.extend(prop.type.get_inner_types())
+        for ext in self.extends:
+            types.append(ext)
+            types.extend(ext.get_inner_types())
+        for mixin in self.mixins:
+            types.append(mixin)
+            types.extend(mixin.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -414,6 +721,32 @@ class Notification:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Notification):
+            return (
+                self.method == other.method
+                and self.messageDirection == other.messageDirection
+                and self.params == other.params
+                and self.registrationOptions == other.registrationOptions
+                and self.registrationMethod == other.registrationMethod
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        if self.params:
+            types.append(self.params)
+            types.extend(self.params.get_inner_types())
+        if self.registrationOptions:
+            types.append(self.registrationOptions)
+            types.extend(self.registrationOptions.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -467,6 +800,44 @@ class Request:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    id_: Optional[str] = attrs.field(
+        converter=lambda x: str(uuid.uuid4()),
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Request):
+            return (
+                self.method == other.method
+                and self.messageDirection == other.messageDirection
+                and self.params == other.params
+                and self.result == other.result
+                and self.partialResult == other.partialResult
+                and self.errorData == other.errorData
+                and self.registrationOptions == other.registrationOptions
+                and self.registrationMethod == other.registrationMethod
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = []
+        if self.params:
+            types.append(self.params)
+            types.extend(self.params.get_inner_types())
+        if self.result:
+            types.append(self.result)
+            types.extend(self.result.get_inner_types())
+        if self.partialResult:
+            types.append(self.partialResult)
+            types.extend(self.partialResult.get_inner_types())
+        if self.errorData:
+            types.append(self.errorData)
+            types.extend(self.errorData.get_inner_types())
+        if self.registrationOptions:
+            types.append(self.registrationOptions)
+            types.extend(self.registrationOptions.get_inner_types())
+        return types
 
 
 @attrs.define
@@ -479,6 +850,32 @@ class LSPModel:
     enumerations: Iterable[Enum] = attrs.field(converter=list_converter(Enum))
     typeAliases: Iterable[TypeAlias] = attrs.field(converter=list_converter(TypeAlias))
     metaData: MetaData = attrs.field(converter=lambda x: MetaData(**x))
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, LSPModel):
+            return (
+                self.requests == other.requests
+                and self.notifications == other.notifications
+                and self.structures == other.structures
+                and self.enumerations == other.enumerations
+                and self.typeAliases == other.typeAliases
+                and self.metaData == other.metaData
+            )
+        return False
+
+    def get_inner_types(self) -> List[Type]:
+        types = self.metaData.get_inner_types()
+        for r in self.requests:
+            types.extend(r.get_inner_types())
+        for n in self.notifications:
+            types.extend(n.get_inner_types())
+        for s in self.structures:
+            types.extend(s.get_inner_types())
+        for e in self.enumerations:
+            types.extend(e.get_inner_types())
+        for t in self.typeAliases:
+            types.extend(t.get_inner_types())
+        return types
 
 
 def create_lsp_model(model: Dict[str, Any]) -> LSPModel:

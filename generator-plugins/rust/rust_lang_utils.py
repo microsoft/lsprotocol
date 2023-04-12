@@ -2,7 +2,14 @@
 # Licensed under the MIT License.
 
 
+import re
 from typing import List
+
+BASIC_LINK_RE = re.compile(r"{@link +(\w+) ([\w ]+)}")
+BASIC_LINK_RE2 = re.compile(r"{@link +(\w+)\.(\w+) ([\w \.`]+)}")
+BASIC_LINK_RE3 = re.compile(r"{@link +(\w+)}")
+BASIC_LINK_RE4 = re.compile(r"{@link +(\w+)\.(\w+)}")
+PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
 
 
 def lines_to_comments(lines: List[str]) -> List[str]:
@@ -10,20 +17,30 @@ def lines_to_comments(lines: List[str]) -> List[str]:
 
 
 def lines_to_doc_comments(lines: List[str]) -> List[str]:
-    return ["/// " + line for line in lines]
+    doc = []
+    for line in lines:
+        line = BASIC_LINK_RE.sub(r"[\2][\1]", line)
+        line = BASIC_LINK_RE2.sub(r"[\3][`\1::\2`]", line)
+        line = BASIC_LINK_RE3.sub(r"[\1]", line)
+        line = BASIC_LINK_RE4.sub(r"[`\1::\2`]", line)
+        if line.startswith("///"):
+            doc.append(line)
+        else:
+            doc.append("/// " + line)
+    return doc
 
 
 def lines_to_block_comment(lines: List[str]) -> List[str]:
     return ["/*"] + lines + ["*/"]
 
 
+def get_parts(name: str) -> List[str]:
+    name = name.replace("_", " ")
+    return PARTS_RE.sub(r"\2 \3", name).split()
+
+
 def to_snake_case(name: str) -> str:
-    result = ""
-    for i, c in enumerate(name):
-        if i > 0 and c.isupper():
-            result += "_"
-        result += c.lower()
-    return result
+    return "_".join([part.lower() for part in get_parts(name)])
 
 
 def has_upper_case(name: str) -> bool:
@@ -40,15 +57,11 @@ def is_snake_case(name: str) -> bool:
 
 
 def to_upper_camel_case(name: str) -> str:
-    if not is_snake_case(name):
-        name = to_snake_case(name)
-    return "".join([c.capitalize() for c in name.split("_")])
+    return "".join([c.capitalize() for c in get_parts(name)])
 
 
 def to_camel_case(name: str) -> str:
-    if not is_snake_case(name):
-        name = to_snake_case(name)
-    parts = name.split("_")
+    parts = get_parts(name)
     if len(parts) > 1:
         return parts[0] + "".join([c.capitalize() for c in parts[1:]])
     else:

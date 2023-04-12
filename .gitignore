@@ -8,3 +8,5 @@ dist
 **/.mypy_cache
 packages/rust/**/target/
 packages/rust/**/Cargo.lock
+packages/dotnet/lsprotocol/bin/
+packages/dotnet/lsprotocol/obj/

@@ -5,7 +5,12 @@ from typing import Dict, List, Union
 
 from generator import model
 
-from .dotnet_helpers import file_header, lines_to_doc_comments, to_upper_camel_case
+from .dotnet_helpers import (
+    indent_lines,
+    lines_to_doc_comments,
+    namespace_wrapper,
+    to_upper_camel_case,
+)
 
 
 def generate_enums(spec: model.LSPModel) -> Dict[str, str]:
@@ -27,29 +32,22 @@ def _get_enum_doc(enum: Union[model.Enum, model.EnumItem]) -> List[str]:
 
 def generate_enum(enum: model.Enum) -> List[str]:
     use_enum_member = all(isinstance(item.value, str) for item in enum.values)
-    indent = " " * 4
-    lines = file_header()
-    if use_enum_member:
-        lines += [
-            "using System.Runtime.Serialization;",
-            "",
-        ]
-    lines += ["namespace LSProtocol {"]
-    lines += [f"{indent}{line}" for line in _get_enum_doc(enum)]
-    lines += [
-        f"{indent}public enum {enum.name} ",
-        f"{indent}" "{",
-    ]
+    imports = ["using System.Runtime.Serialization;", ""]
+
+    lines = _get_enum_doc(enum)
+    lines += [f"public enum {enum.name} ", "{"]
 
     for item in enum.values:
         name = to_upper_camel_case(item.name)
-
-        lines += [f"{indent*2}{line}" for line in _get_enum_doc(item)]
+        inner = _get_enum_doc(item)
         if use_enum_member:
-            lines += [f'{indent*2}[EnumMember(Value = "{item.value}")]{name},']
+            inner += [f'[EnumMember(Value = "{item.value}")]{name},']
         else:
-            lines += [f"{indent*2}{name} = {item.value},"]
-        lines += [""]
+            inner += [f"{name} = {item.value},"]
+        lines += indent_lines(inner) + [""]
 
-    lines += [f"{indent}" "}", "}"]
-    return "\n".join(lines)
+    lines += ["}"]
+
+    return "\n".join(
+        namespace_wrapper("LSProtocol", (imports if use_enum_member else []), lines)
+    )

@@ -10,6 +10,7 @@ BASIC_LINK_RE2 = re.compile(r"{@link +(\w+)\.(\w+) ([\w \.`]+)}")
 BASIC_LINK_RE3 = re.compile(r"{@link +(\w+)}")
 BASIC_LINK_RE4 = re.compile(r"{@link +(\w+)\.(\w+)}")
 PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
+DEFAULT_INDENT = "    "
 
 
 def lines_to_comments(lines: List[str]) -> List[str]:
@@ -66,3 +67,7 @@ def to_camel_case(name: str) -> str:
         return parts[0] + "".join([c.capitalize() for c in parts[1:]])
     else:
         return parts[0]
+
+
+def indent_lines(lines: List[str], indent: str = DEFAULT_INDENT) -> List[str]:
+    return [f"{indent}{line}" for line in lines]

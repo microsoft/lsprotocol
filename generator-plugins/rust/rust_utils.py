@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import os
 import pathlib
 from typing import List
 
@@ -11,7 +10,11 @@ from .rust_commons import TypeData, generate_commons
 from .rust_enum import generate_enums
 from .rust_file_header import license_header
 from .rust_lang_utils import lines_to_comments
-from .rust_structs import generate_structures, generate_type_aliases
+from .rust_structs import (
+    generate_notifications,
+    generate_structures,
+    generate_type_aliases,
+)
 
 PACKAGE_DIR_NAME = "lsprotocol"
 
@@ -42,10 +45,9 @@ def generate_lib_rs(spec: model.LSPModel) -> List[str]:
         "",
     ]
     lines += [
-        "use serde_repr::*;",
         "use serde::{Serialize, Deserialize};",
         "use std::collections::HashMap;",
-        "",
+        "use rust_decimal::Decimal;" "",
     ]
 
     type_data = TypeData()
@@ -54,6 +56,7 @@ def generate_lib_rs(spec: model.LSPModel) -> List[str]:
 
     generate_type_aliases(spec, type_data)
     generate_structures(spec, type_data)
+    generate_notifications(spec, type_data)
 
     lines += type_data.get_lines()
     return "\n".join(lines)

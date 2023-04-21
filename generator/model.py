@@ -23,7 +23,7 @@ LSP_TYPE_SPEC = Union[
 
 def partial_apply(callable):
     def apply(x):
-        if x:
+        if isinstance(x, dict):
             return callable(**x)
         else:
             return x

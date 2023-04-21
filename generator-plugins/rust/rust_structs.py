@@ -7,9 +7,17 @@ import generator.model as model
 
 from .rust_commons import (
     TypeData,
+    fix_lsp_method_name,
     generate_extras,
     generate_literal_struct_name,
+    generate_property,
+    get_extended_properties,
+    get_from_name,
+    get_message_type_name,
     get_type_name,
+    is_special_property,
+    struct_wrapper,
+    type_alias_wrapper,
 )
 from .rust_lang_utils import (
     get_parts,
@@ -113,11 +121,11 @@ def _get_all_reference_similar_code(
     field_names = []
     for item in list(items):
         if item.kind == "base" and item.name == "null":
-            lines += ["    None,"]
+            lines += ["None,"]
             field_names += ["None"]
         elif item.kind == "base":
             name = _base_to_field_name(item.name)
-            lines += [f"    {name}({get_type_name(item, types, spec)}),"]
+            lines += [f"{name}({get_type_name(item, types, spec)}),"]
             field_names += [name]
         elif item.kind == "reference":
             name = [
@@ -129,7 +137,7 @@ def _get_all_reference_similar_code(
             common_name += [n.lower() for n in name]
             name = to_upper_camel_case("".join(name))
             field_names += [name]
-            lines += [f"    {name}({get_type_name(item, types, spec)}),"]
+            lines += [f"{name}({get_type_name(item, types, spec)}),"]
         elif item.kind == "literal":
             name = [
                 part for part in get_parts(item.name) if part.lower() not in common_name
@@ -164,7 +172,7 @@ def _get_all_reference_similar_code(
             common_name += [n.lower() for n in name]
             name = to_upper_camel_case("".join(name))
             field_names += [name]
-            lines += [f"    {name}({item.name}),"]
+            lines += [f"{name}({item.name}),"]
         else:
             raise ValueError(f"Unknown type {item}")
     return lines
@@ -201,40 +209,36 @@ def _get_literal_field_name(literal: model.LiteralType, types: TypeData) -> str:
 def _generate_or_type_alias(
     alias_def: model.TypeAlias, types: Dict[str, List[str]], spec: model.LSPModel
 ) -> List[str]:
-    lines = [
-        "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
-        "#[serde(untagged)]",
-    ]
-    lines += [f"pub enum {alias_def.name}", "{"]
+    inner = []
 
     if len(alias_def.type.items) == 2 and _is_some_array_type(alias_def.type.items):
-        lines += _get_some_array_code(alias_def.type.items, types, spec)
+        inner += _get_some_array_code(alias_def.type.items, types, spec)
     elif _is_all_reference_similar_type(alias_def):
-        lines += _get_all_reference_similar_code(alias_def, types, spec)
+        inner += _get_all_reference_similar_code(alias_def, types, spec)
     else:
         index = 0
 
         for sub_type in alias_def.type.items:
             if sub_type.kind == "base" and sub_type.name == "null":
-                lines += [f"    None,"]
+                inner += [f"None,"]
             else:
-                lines += [
-                    f"    ValueType{index}({get_type_name(sub_type, types, spec)}),"
-                ]
+                inner += [f"ValueType{index}({get_type_name(sub_type, types, spec)}),"]
             index += 1
-    lines += ["}", ""]
-    return lines
+    return type_alias_wrapper(alias_def, inner)
 
 
 def generate_type_alias(
     alias_def: model.TypeAlias, types: TypeData, spec: model.LSPModel
 ) -> List[str]:
-    lines = _get_doc(alias_def.documentation)
-    lines += generate_extras(alias_def)
+    doc = _get_doc(alias_def.documentation)
+    doc += generate_extras(alias_def)
 
+    lines = []
     if alias_def.type.kind == "reference":
+        lines += doc
         lines += [f"pub type {alias_def.name} = {alias_def.type.name};"]
     elif alias_def.type.kind == "array":
+        lines += doc
         lines += [
             f"pub type {alias_def.name} = {get_type_name(alias_def.type, types, spec)};"
         ]
@@ -243,10 +247,12 @@ def generate_type_alias(
     elif alias_def.type.kind == "and":
         raise ValueError("And type not supported")
     elif alias_def.type.kind == "literal":
+        lines += doc
         lines += [
             f"pub type {alias_def.name} = {get_type_name(alias_def.type, types, spec)};"
         ]
     elif alias_def.type.kind == "base":
+        lines += doc
         lines += [
             f"pub type {alias_def.name} = {get_type_name(alias_def.type, types, spec)};"
         ]
@@ -266,52 +272,57 @@ def generate_structures(spec: model.LSPModel, types: TypeData) -> Dict[str, List
 def generate_struct(
     struct_def: model.Structure, types: TypeData, spec: model.LSPModel
 ) -> None:
-    doc = (
-        struct_def.documentation.splitlines(keepends=False)
-        if struct_def.documentation
-        else []
-    )
-    lines = lines_to_doc_comments(doc) + generate_extras(struct_def)
-    lines += [
-        "#[derive(Serialize, Deserialize, PartialEq, Debug)]",
-        '#[serde(rename_all = "camelCase")]',
+    inner = []
+    for prop_def in get_extended_properties(struct_def, spec):
+        inner += generate_property(prop_def, types, spec)
+
+    lines = struct_wrapper(struct_def, inner)
+    types.add_type_info(struct_def, struct_def.name, lines)
+
+
+def generate_notifications(
+    spec: model.LSPModel, types: TypeData
+) -> Dict[str, List[str]]:
+    for notification in spec.notifications:
+        if not types.has_id(notification):
+            generate_notification(notification, types, spec)
+    return types
+
+
+def required_rpc_properties(name: str) -> List[model.Property]:
+    return [
+        model.Property(
+            name="method",
+            type=model.ReferenceType(kind="reference", name=name),
+            optional=False,
+            documentation="The method to be invoked.",
+        ),
+        model.Property(
+            name="jsonrpc",
+            type=model.BaseType(kind="base", name="string"),
+            optional=False,
+            documentation="The version of the JSON RPC protocol.",
+        ),
     ]
 
-    properties = [p for p in struct_def.properties]
-    for t in struct_def.extends + struct_def.mixins:
-        if t.kind == "reference":
-            for s in spec.structures:
-                if s.name == t.name:
-                    properties += [p for p in s.properties]
-                    break
-        elif t.kind == "literal":
-            properties += [p for p in t.value.properties]
-        else:
-            pass
 
-    lines += [f"pub struct {struct_def.name}", "{"]
+def generate_notification(
+    notification_def: model.Notification, types: TypeData, spec: model.LSPModel
+) -> None:
+    properties = required_rpc_properties("LSPNotificationMethods")
+    if notification_def.params:
+        properties += [
+            model.Property(
+                name="params",
+                type=notification_def.params,
+            )
+        ]
 
-    for property in struct_def.properties:
-        doc = (
-            property.documentation.splitlines(keepends=False)
-            if property.documentation
-            else []
-        )
-        lines += lines_to_doc_comments(doc)
-        lines += generate_extras(property)
-        prop_name = to_snake_case(property.name)
-        prop_type = get_type_name(
-            property.type, types, spec, property.optional, property.name
-        )
+    inner = []
+    for prop_def in properties:
+        inner += generate_property(prop_def, types, spec)
 
-        if prop_type.startswith("Option<"):
-            lines += [f'#[serde(skip_serializing_if = "Option::is_none")]']
-
-        if prop_name in ["type"]:
-            prop_name = f"{prop_name}_"
-            lines += [f'#[serde(rename = "{property.name}")]']
-        lines += [f"pub {prop_name}: {prop_type},"]
-        lines += [""]
-    lines += ["}"]
-    lines += [""]
-    types.add_type_info(struct_def, struct_def.name, lines)
+    lines = struct_wrapper(notification_def, inner)
+    types.add_type_info(
+        notification_def, get_message_type_name(notification_def), lines
+    )

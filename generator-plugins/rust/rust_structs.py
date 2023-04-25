@@ -289,14 +289,8 @@ def generate_notifications(
     return types
 
 
-def required_rpc_properties(name: str) -> List[model.Property]:
-    return [
-        model.Property(
-            name="method",
-            type=model.ReferenceType(kind="reference", name=name),
-            optional=False,
-            documentation="The method to be invoked.",
-        ),
+def required_rpc_properties(name: Optional[str] = None) -> List[model.Property]:
+    props = [
         model.Property(
             name="jsonrpc",
             type=model.BaseType(kind="base", name="string"),
@@ -304,6 +298,16 @@ def required_rpc_properties(name: str) -> List[model.Property]:
             documentation="The version of the JSON RPC protocol.",
         ),
     ]
+    if name:
+        props += [
+            model.Property(
+                name="method",
+                type=model.ReferenceType(kind="reference", name=name),
+                optional=False,
+                documentation="The method to be invoked.",
+            ),
+        ]
+    return props
 
 
 def generate_notification(
@@ -326,3 +330,134 @@ def generate_notification(
     types.add_type_info(
         notification_def, get_message_type_name(notification_def), lines
     )
+
+
+def generate_required_request_types(
+    spec: model.LSPModel, types: TypeData
+) -> Dict[str, List[str]]:
+    lsp_id = model.TypeAlias(
+        name="LSPId",
+        documentation="An identifier to denote a specific request.",
+        type=model.OrType(
+            kind="or",
+            items=[
+                model.BaseType(kind="base", name="integer"),
+                model.BaseType(kind="base", name="string"),
+            ],
+        ),
+    )
+    generate_type_alias(lsp_id, types, spec)
+
+    lsp_id_optional = model.TypeAlias(
+        name="LSPIdOptional",
+        documentation="An identifier to denote a specific response.",
+        type=model.OrType(
+            kind="or",
+            items=[
+                model.BaseType(kind="base", name="integer"),
+                model.BaseType(kind="base", name="string"),
+                model.BaseType(kind="base", name="null"),
+            ],
+        ),
+    )
+    generate_type_alias(lsp_id_optional, types, spec)
+
+
+def generate_requests(spec: model.LSPModel, types: TypeData) -> Dict[str, List[str]]:
+    generate_required_request_types(spec, types)
+    for request in spec.requests:
+        if not types.has_id(request):
+            generate_request(request, types, spec)
+            generate_response(request, types, spec)
+            generate_partial_result(request, types, spec)
+            generate_registration_options(request, types, spec)
+    return types
+
+
+def generate_request(
+    request_def: model.Request, types: TypeData, spec: model.LSPModel
+) -> None:
+    properties = required_rpc_properties("LSPRequestMethods")
+
+    properties += [
+        model.Property(
+            name="id",
+            type=model.ReferenceType(kind="reference", name="LSPId"),
+            optional=False,
+            documentation="The request id.",
+        )
+    ]
+    if request_def.params:
+        properties += [
+            model.Property(
+                name="params",
+                type=request_def.params,
+            )
+        ]
+
+    inner = []
+    for prop_def in properties:
+        inner += generate_property(prop_def, types, spec)
+
+    lines = struct_wrapper(request_def, inner)
+    types.add_type_info(request_def, get_message_type_name(request_def), lines)
+
+
+def generate_response(
+    request_def: model.Request, types: TypeData, spec: model.LSPModel
+) -> None:
+    properties = required_rpc_properties("LSPRequestMethods")
+    properties += [
+        model.Property(
+            name="id",
+            type=model.ReferenceType(kind="reference", name="LSPIdOptional"),
+            optional=False,
+            documentation="The request id.",
+        )
+    ]
+    if request_def.result:
+        if request_def.result.kind == "base" and request_def.result.name == "null":
+            properties += [
+                model.Property(
+                    name="result",
+                    type=model.ReferenceType(kind="reference", name="LSPNull"),
+                )
+            ]
+        else:
+            properties += [
+                model.Property(
+                    name="result",
+                    type=request_def.result,
+                )
+            ]
+    name = fix_lsp_method_name(request_def.method)
+    response_def = model.Structure(
+        name=f"{name}Response",
+        documentation=f"Response to the [{name}Request].",
+        properties=properties,
+        since=request_def.since,
+        deprecated=request_def.deprecated,
+    )
+
+    inner = []
+    for prop_def in properties:
+        inner += generate_property(prop_def, types, spec)
+
+    lines = struct_wrapper(response_def, inner)
+    types.add_type_info(response_def, response_def.name, lines)
+
+
+def generate_partial_result(request_def: model.Request, types: TypeData) -> None:
+    if not request_def.partialResult:
+        return
+
+    if request_def.partialResult.kind not in ["and", "or"]:
+        return
+
+
+def generate_registration_options(request_def: model.Request, types: TypeData) -> None:
+    if not request_def.registrationOptions:
+        return
+
+    if request_def.registrationOptions.kind not in ["and", "or"]:
+        return

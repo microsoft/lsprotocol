@@ -12,6 +12,7 @@ from .rust_file_header import license_header
 from .rust_lang_utils import lines_to_comments
 from .rust_structs import (
     generate_notifications,
+    generate_requests,
     generate_structures,
     generate_type_aliases,
 )
@@ -57,6 +58,7 @@ def generate_lib_rs(spec: model.LSPModel) -> List[str]:
     generate_type_aliases(spec, type_data)
     generate_structures(spec, type_data)
     generate_notifications(spec, type_data)
+    generate_requests(spec, type_data)
 
     lines += type_data.get_lines()
     return "\n".join(lines)

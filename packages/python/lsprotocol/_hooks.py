@@ -20,14 +20,14 @@ def _resolve_forward_references() -> None:
     global _resolved_forward_references
     if not _resolved_forward_references:
 
-        def _filter(p: Tuple[str, Union[type, object]]) -> bool:
+        def _filter(p: Tuple[str, object]) -> bool:
             return isinstance(p[1], type) and attrs.has(p[1])
 
         # Creating a concrete list here because `resolve_types` mutates the provided map.
         items = list(filter(_filter, lsp_types.ALL_TYPES_MAP.items()))
         for _, value in items:
             if isinstance(value, type):
-                attrs.resolve_types(value, lsp_types.ALL_TYPES_MAP, {})
+                attrs.resolve_types(value, lsp_types.ALL_TYPES_MAP, {})  # type: ignore
         _resolved_forward_references = True
 
 

@@ -120,7 +120,6 @@ def main():
             issue = GH_REPO.create_issue(
                 title="Update LSP schema and model",
                 body=_get_update_issue_body(schema_hash, model_hash),
-                state="open",
                 labels=[LABEL_UPDATE, LABEL_DEBT],
             )
         cleanup_stale_issues(schema_hash, model_hash, issue)

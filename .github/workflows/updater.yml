@@ -26,3 +26,5 @@ jobs:
 
       - name: Run Checker
         run: python ./.github/workflows/lsp_updater.py
+        env:
+          GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}

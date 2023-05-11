@@ -4,6 +4,7 @@
 
 import hashlib
 import json
+import logging
 import os
 import pathlib
 import urllib.request as url_lib
@@ -12,6 +13,12 @@ from typing import Optional, Union
 import github
 import github.Issue
 import github.PullRequest
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Enable detailed logging for the 'github' module
+logging.getLogger("github").setLevel(logging.DEBUG)
 
 MODEL_SCHEMA = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.schema.json"
 MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.json"
@@ -119,8 +126,6 @@ def main():
         if not issue:
             issue = GH_REPO.create_issue(
                 title="Update LSP schema and model",
-                body=_get_update_issue_body(schema_hash, model_hash),
-                labels=[LABEL_UPDATE, LABEL_DEBT],
             )
         cleanup_stale_issues(schema_hash, model_hash, issue)
         print(f"Created issue {issue.url}")

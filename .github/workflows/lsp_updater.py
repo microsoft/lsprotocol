@@ -23,6 +23,8 @@ GH = github.Github(os.getenv("GITHUB_TOKEN"))
 GH_REPO = GH.get_repo(os.getenv("GITHUB_REPOSITORY"))
 
 print(f"Full repo name {os.getenv('GITHUB_REPOSITORY')}")
+print(f"Repo Full name {GH_REPO.full_name}")
+print(f"Repo URL {GH_REPO.url}")
 
 
 def _get_content(uri) -> str:

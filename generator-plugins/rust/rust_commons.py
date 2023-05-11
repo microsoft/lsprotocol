@@ -400,6 +400,26 @@ def _is_int_enum(enum_def: model.Enum) -> bool:
     return all(isinstance(item.value, int) for item in enum_def.values)
 
 
+def generate_or_type(
+    type_def: model.LSP_TYPE_SPEC,
+    types: TypeData,
+    spec: model.LSPModel,
+    optional: Optional[bool] = None,
+    name_context: Optional[str] = None,
+) -> str:
+    pass
+
+
+def generate_and_type(
+    type_def: model.LSP_TYPE_SPEC,
+    types: TypeData,
+    spec: model.LSPModel,
+    optional: Optional[bool] = None,
+    name_context: Optional[str] = None,
+) -> str:
+    pass
+
+
 def get_type_name(
     type_def: model.LSP_TYPE_SPEC,
     types: TypeData,

@@ -12,17 +12,14 @@ from .rust_commons import (
     generate_literal_struct_name,
     generate_property,
     get_extended_properties,
-    get_from_name,
     get_message_type_name,
     get_type_name,
-    is_special_property,
     struct_wrapper,
     type_alias_wrapper,
 )
 from .rust_lang_utils import (
     get_parts,
     lines_to_doc_comments,
-    to_snake_case,
     to_upper_camel_case,
 )
 

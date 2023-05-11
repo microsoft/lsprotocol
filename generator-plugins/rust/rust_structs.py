@@ -17,11 +17,7 @@ from .rust_commons import (
     struct_wrapper,
     type_alias_wrapper,
 )
-from .rust_lang_utils import (
-    get_parts,
-    lines_to_doc_comments,
-    to_upper_camel_case,
-)
+from .rust_lang_utils import get_parts, lines_to_doc_comments, to_upper_camel_case
 
 
 def generate_type_aliases(spec: model.LSPModel, types: TypeData) -> None:

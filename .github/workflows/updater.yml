@@ -1,6 +1,7 @@
 name: LSP Update check
 
 on:
+  pull_request:
   schedule:
     - cron: '0 10 * * 1-5' # 10AM UTC (2AM PDT) MON-FRI
 

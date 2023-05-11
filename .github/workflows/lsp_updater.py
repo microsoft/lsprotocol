@@ -22,6 +22,8 @@ LABEL_UPDATE = "lsp-update"
 GH = github.Github(os.getenv("GITHUB_TOKEN"))
 GH_REPO = GH.get_repo(os.getenv("GITHUB_REPOSITORY"))
 
+print(f"Full repo name {os.getenv('GITHUB_REPOSITORY')}")
+
 
 def _get_content(uri) -> str:
     with url_lib.urlopen(uri) as response:

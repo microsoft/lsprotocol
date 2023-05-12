@@ -19,7 +19,7 @@ MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/
 LABEL_DEBT = "debt"
 LABEL_UPDATE = "lsp-update"
 
-GH = github.Github(os.getenv("GITHUB_TOKEN"))
+GH = github.Github(os.getenv("GITHUB_ACCESS_TOKEN"))
 GH_REPO = GH.get_repo(os.getenv("GITHUB_REPOSITORY"))
 
 

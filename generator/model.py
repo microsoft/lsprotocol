@@ -33,7 +33,10 @@ def partial_apply(callable):
 
 def list_converter(callable):
     def apply(x):
-        return callable(**x)
+        if isinstance(x, dict):
+            return callable(**x)
+        else:
+            return x
 
     def converter(x: List[Any]) -> List[Any]:
         return list(map(apply, x))

@@ -199,6 +199,19 @@ def generate_custom_enum(type_data: TypeData) -> None:
             "",
         ],
     )
+    type_data.add_type_info(
+        model.ReferenceType(kind="reference", name="LSPNull"),
+        "LSPNull",
+        [
+            "/// This allows a field to always have null or empty value.",
+            "#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]",
+            "#[serde(untagged)]",
+            "pub enum LSPNull {",
+            "    None,",
+            "}",
+            "",
+        ],
+    )
 
 
 def get_definition(
@@ -387,6 +400,26 @@ def _is_int_enum(enum_def: model.Enum) -> bool:
     return all(isinstance(item.value, int) for item in enum_def.values)
 
 
+def generate_or_type(
+    type_def: model.LSP_TYPE_SPEC,
+    types: TypeData,
+    spec: model.LSPModel,
+    optional: Optional[bool] = None,
+    name_context: Optional[str] = None,
+) -> str:
+    pass
+
+
+def generate_and_type(
+    type_def: model.LSP_TYPE_SPEC,
+    types: TypeData,
+    spec: model.LSPModel,
+    optional: Optional[bool] = None,
+    name_context: Optional[str] = None,
+) -> str:
+    pass
+
+
 def get_type_name(
     type_def: model.LSP_TYPE_SPEC,
     types: TypeData,
@@ -428,6 +461,7 @@ def get_type_name(
                 f"OR type with more than out of range count of subtypes: {type_def}"
             )
         optional = optional or is_special(type_def)
+        print(f"Option<{name}>" if optional else name)
     elif type_def.kind == "literal":
         name = generate_literal_struct_type(type_def, types, spec, name_context)
     elif type_def.kind == "stringLiteral":

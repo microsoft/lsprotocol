@@ -5,11 +5,11 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// The document diagnostic report kinds.
     /// 
-    /// @since 3.17.0
     /// </summary>
     public enum DocumentDiagnosticReportKind 
     {

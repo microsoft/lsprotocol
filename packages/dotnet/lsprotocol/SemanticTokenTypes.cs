@@ -5,13 +5,13 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// A set of predefined token types. This set is not fixed
     /// an clients can specify additional token types via the
     /// corresponding client capabilities.
     /// 
-    /// @since 3.16.0
     /// </summary>
     public enum SemanticTokenTypes 
     {
@@ -64,7 +64,6 @@ namespace LSProtocol {
         [EnumMember(Value = "operator")]Operator,
 
         /// <summary>
-        /// @since 3.17.0
         /// </summary>
         [EnumMember(Value = "decorator")]Decorator,
 

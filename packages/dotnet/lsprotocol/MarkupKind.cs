@@ -5,6 +5,7 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// Describes the content type that a client supports in various

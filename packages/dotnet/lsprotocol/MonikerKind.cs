@@ -5,11 +5,11 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// The moniker kind.
     /// 
-    /// @since 3.16.0
     /// </summary>
     public enum MonikerKind 
     {

@@ -5,11 +5,11 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// Moniker uniqueness level to define scope of the moniker.
     /// 
-    /// @since 3.16.0
     /// </summary>
     public enum UniquenessLevel 
     {

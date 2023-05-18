@@ -2,7 +2,9 @@
 # Licensed under the MIT License.
 
 import re
-from typing import List
+from typing import List, Optional, Union
+
+from generator import model
 
 PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
 
@@ -10,7 +12,11 @@ PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
 def lines_to_doc_comments(lines: List[str]) -> List[str]:
     if not lines:
         return []
-    return ["/// <summary>"] + [f"/// {line}" for line in lines] + ["/// </summary>"]
+    return (
+        ["/// <summary>"]
+        + [f"/// {line}" for line in lines if not line.startswith("@")]
+        + ["/// </summary>"]
+    )
 
 
 def get_parts(name: str) -> List[str]:
@@ -39,11 +45,86 @@ def namespace_wrapper(
     return (
         file_header()
         + imports
+        + [""]
         + ["namespace " + namespace + " {"]
         + [(f"{indent}{line}" if line else line) for line in lines]
         + ["}", ""]
     )
 
 
+def get_doc(doc: Optional[str]) -> str:
+    if doc:
+        return lines_to_doc_comments(doc.splitlines(keepends=False))
+    return []
+
+
+def class_wrapper(
+    type_def: Union[model.Structure, model.Notification, model.Request],
+    inner: List[str],
+    derived: Optional[str] = None,
+) -> List[str]:
+    if hasattr(type_def, "name"):
+        name = type_def.name
+    else:
+        raise ValueError(f"Unknown type: {type_def}")
+
+    lines = (
+        get_doc(type_def.documentation)
+        + generate_extras(type_def)
+        + [
+            "[DataContract]",
+            f"public class {name}: {derived}" if derived else f"public class {name}",
+            "{",
+        ]
+    )
+    lines += indent_lines(inner)
+    lines += ["}", ""]
+    return lines
+
+
+def property_wrapper(prop_def: model.Property, content: List[str]) -> List[str]:
+    lines = (get_doc(prop_def.documentation) + generate_extras(prop_def) + content,)
+    lines += indent_lines(content)
+    return lines
+
+
 def indent_lines(lines: List[str], indent: str = " " * 4) -> List[str]:
     return [(f"{indent}{line}" if line else line) for line in lines]
+
+
+def generate_extras(
+    type_def: Union[
+        model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
+    ]
+) -> List[str]:
+    extras = []
+    if type_def.deprecated:
+        extras = [f"[Obsolete({type_def.deprecated})]"]
+    elif type_def.proposed:
+        if type_def.since:
+            extras = [f'[Proposed("{type_def.since}")]']
+        else:
+            extras = [f"[Proposed]"]
+    else:
+        if type_def.since:
+            extras = [f'[Since("{type_def.since}")]']
+
+    return extras
+
+
+def get_usings(types: List[str]) -> List[str]:
+    usings = []
+
+    for t in ["DataMember", "DataContract"]:
+        if t in types:
+            usings.append("using System.Runtime.Serialization;")
+
+    for t in ["JsonConverter", "JsonConstructor", "JsonProperty", "NullValueHandling"]:
+        if t in types:
+            usings.append("using Newtonsoft.Json;")
+
+    for t in ["JToken", "JObject", "JArray"]:
+        if t in types:
+            usings.append("using Newtonsoft.Json.Linq;")
+
+    return list(set(usings))

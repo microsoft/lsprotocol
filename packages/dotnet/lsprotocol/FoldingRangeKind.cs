@@ -5,6 +5,7 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// A set of predefined range kinds.

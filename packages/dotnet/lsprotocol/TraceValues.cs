@@ -5,6 +5,7 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     public enum TraceValues 
     {

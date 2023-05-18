@@ -5,6 +5,7 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// A set of predefined code action kinds
@@ -83,7 +84,6 @@ namespace LSProtocol {
         /// Fix all actions automatically fix errors that have a clear fix that do not require user input.
         /// They should not suppress errors or perform unsafe fixes such as generating new types or classes.
         /// 
-        /// @since 3.15.0
         /// </summary>
         [EnumMember(Value = "source.fixAll")]SourceFixAll,
 

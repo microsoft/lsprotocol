@@ -5,11 +5,11 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// A set of predefined position encoding kinds.
     /// 
-    /// @since 3.17.0
     /// </summary>
     public enum PositionEncodingKind 
     {

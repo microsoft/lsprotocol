@@ -5,12 +5,12 @@
 
 using System.Runtime.Serialization;
 
+
 namespace LSProtocol {
     /// <summary>
     /// A pattern kind describing if a glob pattern matches a file a folder or
     /// both.
     /// 
-    /// @since 3.16.0
     /// </summary>
     public enum FileOperationPatternKind 
     {

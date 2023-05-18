@@ -6,26 +6,27 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// A set of predefined code action kinds
     /// </summary>
-    public enum CodeActionKind 
+    public enum CodeActionKind
     {
         /// <summary>
         /// Empty kind.
         /// </summary>
-        [EnumMember(Value = "")]Empty,
+        [EnumMember(Value = "")] Empty,
 
         /// <summary>
         /// Base kind for quickfix actions: 'quickfix'
         /// </summary>
-        [EnumMember(Value = "quickfix")]QuickFix,
+        [EnumMember(Value = "quickfix")] QuickFix,
 
         /// <summary>
         /// Base kind for refactoring actions: 'refactor'
         /// </summary>
-        [EnumMember(Value = "refactor")]Refactor,
+        [EnumMember(Value = "refactor")] Refactor,
 
         /// <summary>
         /// Base kind for refactoring extraction actions: 'refactor.extract'
@@ -38,7 +39,7 @@ namespace LSProtocol {
         /// - Extract interface from class
         /// - ...
         /// </summary>
-        [EnumMember(Value = "refactor.extract")]RefactorExtract,
+        [EnumMember(Value = "refactor.extract")] RefactorExtract,
 
         /// <summary>
         /// Base kind for refactoring inline actions: 'refactor.inline'
@@ -50,7 +51,7 @@ namespace LSProtocol {
         /// - Inline constant
         /// - ...
         /// </summary>
-        [EnumMember(Value = "refactor.inline")]RefactorInline,
+        [EnumMember(Value = "refactor.inline")] RefactorInline,
 
         /// <summary>
         /// Base kind for refactoring rewrite actions: 'refactor.rewrite'
@@ -64,19 +65,19 @@ namespace LSProtocol {
         /// - Move method to base class
         /// - ...
         /// </summary>
-        [EnumMember(Value = "refactor.rewrite")]RefactorRewrite,
+        [EnumMember(Value = "refactor.rewrite")] RefactorRewrite,
 
         /// <summary>
         /// Base kind for source actions: `source`
         /// 
         /// Source code actions apply to the entire file.
         /// </summary>
-        [EnumMember(Value = "source")]Source,
+        [EnumMember(Value = "source")] Source,
 
         /// <summary>
         /// Base kind for an organize imports source action: `source.organizeImports`
         /// </summary>
-        [EnumMember(Value = "source.organizeImports")]SourceOrganizeImports,
+        [EnumMember(Value = "source.organizeImports")] SourceOrganizeImports,
 
         /// <summary>
         /// Base kind for auto-fix source actions: `source.fixAll`.
@@ -85,7 +86,7 @@ namespace LSProtocol {
         /// They should not suppress errors or perform unsafe fixes such as generating new types or classes.
         /// 
         /// </summary>
-        [EnumMember(Value = "source.fixAll")]SourceFixAll,
+        [EnumMember(Value = "source.fixAll")] SourceFixAll,
 
     }
 }

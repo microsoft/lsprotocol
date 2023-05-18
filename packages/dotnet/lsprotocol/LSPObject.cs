@@ -6,13 +6,14 @@
 using System.Runtime.Serialization;
 using Newtonsoft.Json.Linq;
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// LSP object definition.
     /// </summary>
     [Since("3.17.0")]
     [DataContract]
-    public class LSPObject: JObject
+    public class LSPObject : JObject
     {
     }
 

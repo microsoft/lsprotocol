@@ -6,17 +6,18 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// A set of predefined position encoding kinds.
     /// 
     /// </summary>
-    public enum PositionEncodingKind 
+    public enum PositionEncodingKind
     {
         /// <summary>
         /// Character offsets count UTF-8 code units.
         /// </summary>
-        [EnumMember(Value = "utf-8")]Utf8,
+        [EnumMember(Value = "utf-8")] Utf8,
 
         /// <summary>
         /// Character offsets count UTF-16 code units.
@@ -24,7 +25,7 @@ namespace LSProtocol {
         /// This is the default and must always be supported
         /// by servers
         /// </summary>
-        [EnumMember(Value = "utf-16")]Utf16,
+        [EnumMember(Value = "utf-16")] Utf16,
 
         /// <summary>
         /// Character offsets count UTF-32 code units.
@@ -33,7 +34,7 @@ namespace LSProtocol {
         /// so this `PositionEncodingKind` may also be used for an
         /// encoding-agnostic representation of character offsets.
         /// </summary>
-        [EnumMember(Value = "utf-32")]Utf32,
+        [EnumMember(Value = "utf-32")] Utf32,
 
     }
 }

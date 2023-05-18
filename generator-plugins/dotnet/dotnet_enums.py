@@ -31,7 +31,7 @@ def generate_enum(enum: model.Enum) -> List[str]:
     imports = ["using System.Runtime.Serialization;", ""]
 
     lines = _get_enum_doc(enum)
-    lines += [f"public enum {enum.name} ", "{"]
+    lines += [f"public enum {enum.name}", "{"]
 
     for item in enum.values:
         name = to_upper_camel_case(item.name)

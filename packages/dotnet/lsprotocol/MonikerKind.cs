@@ -6,28 +6,29 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// The moniker kind.
     /// 
     /// </summary>
-    public enum MonikerKind 
+    public enum MonikerKind
     {
         /// <summary>
         /// The moniker represent a symbol that is imported into a project
         /// </summary>
-        [EnumMember(Value = "import")]Import,
+        [EnumMember(Value = "import")] Import,
 
         /// <summary>
         /// The moniker represents a symbol that is exported from a project
         /// </summary>
-        [EnumMember(Value = "export")]Export,
+        [EnumMember(Value = "export")] Export,
 
         /// <summary>
         /// The moniker represents a symbol that is local to a project (e.g. a local
         /// variable of a function, a class not visible outside the project, ...)
         /// </summary>
-        [EnumMember(Value = "local")]Local,
+        [EnumMember(Value = "local")] Local,
 
     }
 }

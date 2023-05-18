@@ -5,7 +5,8 @@
 
 using System.Runtime.Serialization;
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// The LSP any type.
     /// Please note that strictly speaking a property with the value `undefined`
@@ -15,7 +16,7 @@ namespace LSProtocol {
     /// </summary>
     [Since("3.17.0")]
     [DataContract]
-    public class LSPAny: object
+    public class LSPAny : object
     {
     }
 

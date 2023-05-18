@@ -6,24 +6,25 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// The document diagnostic report kinds.
     /// 
     /// </summary>
-    public enum DocumentDiagnosticReportKind 
+    public enum DocumentDiagnosticReportKind
     {
         /// <summary>
         /// A diagnostic report with a full
         /// set of problems.
         /// </summary>
-        [EnumMember(Value = "full")]Full,
+        [EnumMember(Value = "full")] Full,
 
         /// <summary>
         /// A report indicating that the last
         /// returned report is still accurate.
         /// </summary>
-        [EnumMember(Value = "unchanged")]Unchanged,
+        [EnumMember(Value = "unchanged")] Unchanged,
 
     }
 }

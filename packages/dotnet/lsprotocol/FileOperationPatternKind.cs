@@ -6,23 +6,24 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// A pattern kind describing if a glob pattern matches a file a folder or
     /// both.
     /// 
     /// </summary>
-    public enum FileOperationPatternKind 
+    public enum FileOperationPatternKind
     {
         /// <summary>
         /// The pattern matches a file only.
         /// </summary>
-        [EnumMember(Value = "file")]File,
+        [EnumMember(Value = "file")] File,
 
         /// <summary>
         /// The pattern matches a folder only.
         /// </summary>
-        [EnumMember(Value = "folder")]Folder,
+        [EnumMember(Value = "folder")] Folder,
 
     }
 }

@@ -6,23 +6,24 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
-    public enum TraceValues 
+namespace LSProtocol
+{
+    public enum TraceValues
     {
         /// <summary>
         /// Turn tracing off.
         /// </summary>
-        [EnumMember(Value = "off")]Off,
+        [EnumMember(Value = "off")] Off,
 
         /// <summary>
         /// Trace messages only.
         /// </summary>
-        [EnumMember(Value = "messages")]Messages,
+        [EnumMember(Value = "messages")] Messages,
 
         /// <summary>
         /// Verbose message tracing.
         /// </summary>
-        [EnumMember(Value = "verbose")]Verbose,
+        [EnumMember(Value = "verbose")] Verbose,
 
     }
 }

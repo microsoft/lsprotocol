@@ -6,37 +6,38 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// Moniker uniqueness level to define scope of the moniker.
     /// 
     /// </summary>
-    public enum UniquenessLevel 
+    public enum UniquenessLevel
     {
         /// <summary>
         /// The moniker is only unique inside a document
         /// </summary>
-        [EnumMember(Value = "document")]Document,
+        [EnumMember(Value = "document")] Document,
 
         /// <summary>
         /// The moniker is unique inside a project for which a dump got created
         /// </summary>
-        [EnumMember(Value = "project")]Project,
+        [EnumMember(Value = "project")] Project,
 
         /// <summary>
         /// The moniker is unique inside the group to which a project belongs
         /// </summary>
-        [EnumMember(Value = "group")]Group,
+        [EnumMember(Value = "group")] Group,
 
         /// <summary>
         /// The moniker is unique inside the moniker scheme.
         /// </summary>
-        [EnumMember(Value = "scheme")]Scheme,
+        [EnumMember(Value = "scheme")] Scheme,
 
         /// <summary>
         /// The moniker is globally unique
         /// </summary>
-        [EnumMember(Value = "global")]Global,
+        [EnumMember(Value = "global")] Global,
 
     }
 }

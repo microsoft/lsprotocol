@@ -6,66 +6,67 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
+namespace LSProtocol
+{
     /// <summary>
     /// A set of predefined token types. This set is not fixed
     /// an clients can specify additional token types via the
     /// corresponding client capabilities.
     /// 
     /// </summary>
-    public enum SemanticTokenTypes 
+    public enum SemanticTokenTypes
     {
-        [EnumMember(Value = "namespace")]Namespace,
+        [EnumMember(Value = "namespace")] Namespace,
 
         /// <summary>
         /// Represents a generic type. Acts as a fallback for types which can't be mapped to
         /// a specific type like class or enum.
         /// </summary>
-        [EnumMember(Value = "type")]Type,
+        [EnumMember(Value = "type")] Type,
 
-        [EnumMember(Value = "class")]Class,
+        [EnumMember(Value = "class")] Class,
 
-        [EnumMember(Value = "enum")]Enum,
+        [EnumMember(Value = "enum")] Enum,
 
-        [EnumMember(Value = "interface")]Interface,
+        [EnumMember(Value = "interface")] Interface,
 
-        [EnumMember(Value = "struct")]Struct,
+        [EnumMember(Value = "struct")] Struct,
 
-        [EnumMember(Value = "typeParameter")]TypeParameter,
+        [EnumMember(Value = "typeParameter")] TypeParameter,
 
-        [EnumMember(Value = "parameter")]Parameter,
+        [EnumMember(Value = "parameter")] Parameter,
 
-        [EnumMember(Value = "variable")]Variable,
+        [EnumMember(Value = "variable")] Variable,
 
-        [EnumMember(Value = "property")]Property,
+        [EnumMember(Value = "property")] Property,
 
-        [EnumMember(Value = "enumMember")]EnumMember,
+        [EnumMember(Value = "enumMember")] EnumMember,
 
-        [EnumMember(Value = "event")]Event,
+        [EnumMember(Value = "event")] Event,
 
-        [EnumMember(Value = "function")]Function,
+        [EnumMember(Value = "function")] Function,
 
-        [EnumMember(Value = "method")]Method,
+        [EnumMember(Value = "method")] Method,
 
-        [EnumMember(Value = "macro")]Macro,
+        [EnumMember(Value = "macro")] Macro,
 
-        [EnumMember(Value = "keyword")]Keyword,
+        [EnumMember(Value = "keyword")] Keyword,
 
-        [EnumMember(Value = "modifier")]Modifier,
+        [EnumMember(Value = "modifier")] Modifier,
 
-        [EnumMember(Value = "comment")]Comment,
+        [EnumMember(Value = "comment")] Comment,
 
-        [EnumMember(Value = "string")]String,
+        [EnumMember(Value = "string")] String,
 
-        [EnumMember(Value = "number")]Number,
+        [EnumMember(Value = "number")] Number,
 
-        [EnumMember(Value = "regexp")]Regexp,
+        [EnumMember(Value = "regexp")] Regexp,
 
-        [EnumMember(Value = "operator")]Operator,
+        [EnumMember(Value = "operator")] Operator,
 
         /// <summary>
         /// </summary>
-        [EnumMember(Value = "decorator")]Decorator,
+        [EnumMember(Value = "decorator")] Decorator,
 
     }
 }

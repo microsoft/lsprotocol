@@ -6,23 +6,24 @@
 using System.Runtime.Serialization;
 
 
-namespace LSProtocol {
-    public enum ResourceOperationKind 
+namespace LSProtocol
+{
+    public enum ResourceOperationKind
     {
         /// <summary>
         /// Supports creating new files and folders.
         /// </summary>
-        [EnumMember(Value = "create")]Create,
+        [EnumMember(Value = "create")] Create,
 
         /// <summary>
         /// Supports renaming existing files and folders.
         /// </summary>
-        [EnumMember(Value = "rename")]Rename,
+        [EnumMember(Value = "rename")] Rename,
 
         /// <summary>
         /// Supports deleting existing files and folders.
         /// </summary>
-        [EnumMember(Value = "delete")]Delete,
+        [EnumMember(Value = "delete")] Delete,
 
     }
 }

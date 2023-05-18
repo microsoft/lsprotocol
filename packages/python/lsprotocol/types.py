@@ -344,12 +344,13 @@ class InsertTextFormat(int, enum.Enum):
     Snippet = 2
     """The primary text to be inserted is treated as a snippet.
 
-    A snippet can define tab stops and placeholders with `$1`, `$2`
-    and `${3:foo}`. `$0` defines the final tab stop, it defaults to
-    the end of the snippet. Placeholders with equal identifiers are linked,
-    that is typing in one will update others too.
+    A snippet can define tab stops and placeholders with `$1`, `$2` and
+    `${3:foo}`. `$0` defines the final tab stop, it defaults to the end
+    of the snippet. Placeholders with equal identifiers are linked, that
+    is typing in one will update others too.
 
-    See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax
+    See also:
+    https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax
     """
 
 
@@ -488,7 +489,7 @@ class PositionEncodingKind(str, enum.Enum):
 
     # Since: 3.17.0
     Utf8 = "utf-8"
-    """Character offsets count UTF-8 code units."""
+    """Character offsets count UTF-8 code units (e.g. bytes)."""
     Utf16 = "utf-16"
     """Character offsets count UTF-16 code units.
 
@@ -497,7 +498,7 @@ class PositionEncodingKind(str, enum.Enum):
     Utf32 = "utf-32"
     """Character offsets count UTF-32 code units.
 
-    Implementation note: these are the same as Unicode code points, so
+    Implementation note: these are the same as Unicode codepoints, so
     this `PositionEncodingKind` may also be used for an encoding-
     agnostic representation of character offsets.
     """
@@ -743,11 +744,11 @@ locations}."""
 DeclarationLink = Union["LocationLink", "LocationLink"]
 """Information about where a symbol is declared.
 
-Provides additional metadata over normal {@link Location location} declarations, including the range of
-the declaring symbol.
+Provides additional metadata over normal {@link Location location}
+declarations, including the range of the declaring symbol.
 
-Servers should prefer returning `DeclarationLink` over `Declaration` if supported
-by the client.
+Servers should prefer returning `DeclarationLink` over `Declaration` if
+supported by the client.
 """
 
 
@@ -2026,7 +2027,7 @@ class SemanticTokensRangeParams:
 
 @attrs.define
 class ShowDocumentParams:
-    """Params to show a document.
+    """Params to show a resource in the UI.
 
     @since 3.16.0
     """
@@ -2034,7 +2035,7 @@ class ShowDocumentParams:
     # Since: 3.16.0
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The document uri to show."""
+    """The uri to show."""
 
     external: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2042,8 +2043,8 @@ class ShowDocumentParams:
     )
     """Indicates to show the resource in an external program.
 
-    To show for example `https://code.visualstudio.com/` in the default
-    WEB browser set `external` to `true`.
+    To show, for example, `https://code.visualstudio.com/`
+    in the default WEB browser set `external` to `true`.
     """
 
     take_focus: Optional[bool] = attrs.field(
@@ -2174,14 +2175,17 @@ class WorkspaceEdit:
     If documentChanges are present they are preferred over `changes` if the
     client can handle versioned document edits.
 
-    Since version 3.13.0 a workspace edit can contain resource operations as well. If resource
-    operations are present clients need to execute the operations in the order in which they
-    are provided. So a workspace edit for example can consist of the following two changes:
-    (1) a create file a.txt and (2) a text document edit which insert text into file a.txt.
+    Since version 3.13.0 a workspace edit can contain resource
+    operations as well. If resource operations are present clients need
+    to execute the operations in the order in which they are provided.
+    So a workspace edit for example can consist of the following two
+    changes: (1) a create file a.txt and (2) a text document edit which
+    insert text into file a.txt.
 
-    An invalid sequence (e.g. (1) delete file a.txt and (2) insert text into file a.txt) will
-    cause failure of the operation. How the client recovers from the failure is described by
-    the client capability: `workspace.workspaceEdit.failureHandling`
+    An invalid sequence (e.g. (1) delete file a.txt and (2) insert text
+    into file a.txt) will cause failure of the operation. How the client
+    recovers from the failure is described by the client capability:
+    `workspace.workspaceEdit.failureHandling`
     """
 
     changes: Optional[Dict[str, List["TextEdit"]]] = attrs.field(default=None)
@@ -2200,8 +2204,9 @@ class WorkspaceEdit:
     Whether a client supports versioned document edits is expressed via
     `workspace.workspaceEdit.documentChanges` client capability.
 
-    If a client neither supports `documentChanges` nor `workspace.workspaceEdit.resourceOperations` then
-    only plain `TextEdit`s using the `changes` property are supported.
+    If a client neither supports `documentChanges` nor
+    `workspace.workspaceEdit.resourceOperations` then only plain
+    `TextEdit`s using the `changes` property are supported.
     """
 
     change_annotations: Optional[
@@ -2372,9 +2377,9 @@ class TypeHierarchyItem:
 
     selection_range: "Range" = attrs.field()
     """The range that should be selected and revealed when this symbol is being
-    picked, e.g. the name of a function. Must be contained by the.
+    picked, e.g. the name of a function.
 
-    {@link TypeHierarchyItem.range `range`}.
+    Must be contained by the {@link TypeHierarchyItem.range `range`}.
     """
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
@@ -3468,11 +3473,11 @@ class CompletionItem:
     label: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The label of this completion item.
 
-    The label property is also by default the text that
-    is inserted when selecting this completion.
+    The label property is also by default the text that is inserted when
+    selecting this completion.
 
-    If label details are provided the label itself should
-    be an unqualified name of the completion item.
+    If label details are provided the label itself should be an
+    unqualified name of the completion item.
     """
 
     label_details: Optional["CompletionItemLabelDetails"] = attrs.field(default=None)
@@ -3581,9 +3586,8 @@ class CompletionItem:
         default=None
     )
     """An {@link TextEdit edit} which is applied to a document when selecting
-    this completion. When an edit is provided the value of.
-
-    {@link CompletionItem.insertText insertText} is ignored.
+    this completion. When an edit is provided the value of {@link
+    CompletionItem.insertText insertText} is ignored.
 
     Most editors support two different operations when accepting a completion
     item. One is to insert a completion text and the other is to replace an
@@ -3643,18 +3647,16 @@ class CompletionItem:
 
     command: Optional["Command"] = attrs.field(default=None)
     """An optional {@link Command command} that is executed *after* inserting
-    this completion. *Note* that additional modifications to the current
-    document should be described with the.
+    this completion.
 
-    {@link CompletionItem.additionalTextEdits
-    additionalTextEdits}-property.
+    *Note* that
+    additional modifications to the current document should be described with the
+    {@link CompletionItem.additionalTextEdits additionalTextEdits}-property.
     """
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on a completion item between a.
-
-    {@link CompletionRequest} and a {@link CompletionResolveRequest}.
-    """
+    """A data entry field that is preserved on a completion item between a
+    {@link CompletionRequest} and a {@link CompletionResolveRequest}."""
 
 
 @attrs.define
@@ -4766,11 +4768,9 @@ class CodeLens:
     """The command this code lens represents."""
 
     data: Optional[LSPAny] = attrs.field(default=None)
-    """A data entry field that is preserved on a code lens item between a.
-
+    """A data entry field that is preserved on a code lens item between a
     {@link CodeLensRequest} and a [CodeLensResolveRequest]
-    (#CodeLensResolveRequest)
-    """
+    (#CodeLensResolveRequest)"""
 
 
 @attrs.define
@@ -5181,7 +5181,7 @@ class ExecuteCommandRegistrationOptions:
 
 @attrs.define
 class ApplyWorkspaceEditParams:
-    """The parameters passed via a apply workspace edit request."""
+    """The parameters passed via an apply workspace edit request."""
 
     edit: WorkspaceEdit = attrs.field()
     """The edits to apply."""
@@ -5480,29 +5480,26 @@ class Color:
 class Position:
     """Position in a text document expressed as zero-based line and character
     offset. Prior to 3.17 the offsets were always based on a UTF-16 string
-    representation. So a string of the form `a𐐀b` the character offset of the
-    character `a` is 0, the character offset of `𐐀` is 1 and the character
-    offset of b is 3 since `𐐀` is represented using two code units in UTF-16.
-    Since 3.17 clients and servers can agree on a different string encoding
-    representation (e.g. UTF-8). The client announces it's supported encoding
-    via the client capability.
-
+    representation. So a string of the form `a𐐀b` the character offset of
+    the character `a` is 0, the character offset of `𐐀` is 1 and the
+    character offset of b is 3 since `𐐀` is represented using two code units
+    in UTF-16. Since 3.17 clients and servers can agree on a different string
+    encoding representation (e.g. UTF-8). The client announces it's supported
+    encoding via the client capability
     [`general.positionEncodings`](#clientCapabilities). The value is an array
     of position encodings the client supports, with decreasing preference (e.g.
     the encoding at index `0` is the most preferred one). To stay backwards
     compatible the only mandatory encoding is UTF-16 represented via the string
     `utf-16`. The server can pick one of the encodings offered by the client
     and signals that encoding back to the client via the initialize result's
-    property.
-
-    [`capabilities.positionEncoding`](#serverCapabilities). If the string value
-    `utf-16` is missing from the client's capability `general.positionEncodings`
-    servers can safely assume that the client supports UTF-16. If the server
-    omits the position encoding in its initialize result the encoding defaults
-    to the string value `utf-16`. Implementation considerations: since the
-    conversion from one encoding into another requires the content of the
-    file / line the conversion is best done where the file is read which is
-    usually on the server side.
+    property [`capabilities.positionEncoding`](#serverCapabilities). If the
+    string value `utf-16` is missing from the client's capability
+    `general.positionEncodings` servers can safely assume that the client
+    supports UTF-16. If the server omits the position encoding in its
+    initialize result the encoding defaults to the string value `utf-16`.
+    Implementation considerations: since the conversion from one encoding into
+    another requires the content of the file / line the conversion is best done
+    where the file is read which is usually on the server side.
 
     Positions are line end character agnostic. So you can not specify a position
     that denotes `\r|\n` or `\n|` where `|` represents the character offset.
@@ -5526,8 +5523,8 @@ class Position:
     The meaning of this offset is determined by the negotiated
     `PositionEncodingKind`.
 
-    If the character value is greater than the line length it defaults back to the
-    line length.
+    If the character value is greater than the line length it defaults
+    back to the line length.
     """
 
     def __eq__(self, o: object) -> bool:
@@ -6205,7 +6202,7 @@ class NotebookDocumentIdentifier:
 
 @attrs.define
 class Registration:
-    """General parameters to to register for an notification or to register a
+    """General parameters to register for a notification or to register a
     provider."""
 
     id: str = attrs.field(validator=attrs.validators.instance_of(str))
@@ -6619,8 +6616,7 @@ class CompletionItemLabelDetails:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """An optional string which is rendered less prominently directly after.
-
+    """An optional string which is rendered less prominently directly after
     {@link CompletionItem.label label}, without any spacing.
 
     Should be used for function signatures and type annotations.
@@ -6744,10 +6740,8 @@ class ReferenceContext:
 
 @attrs.define
 class CodeActionContext:
-    """Contains additional diagnostic information about the context in which a.
-
-    {@link CodeActionProvider.provideCodeActions code action} is run.
-    """
+    """Contains additional diagnostic information about the context in which a
+    {@link CodeActionProvider.provideCodeActions code action} is run."""
 
     diagnostics: List[Diagnostic] = attrs.field()
     """An array of diagnostics known on the client side overlapping the range
@@ -9973,6 +9967,10 @@ class WorkspaceWillCreateFilesRequest:
     before files are actually created as long as the creation is triggered from
     within the client.
 
+    The request can return a `WorkspaceEdit` which will be applied to workspace before the
+    files are created. Hence the `WorkspaceEdit` can not manipulate the content of the file
+    to be created.
+
     @since 3.16.0
     """
 
@@ -10140,8 +10138,7 @@ class TypeHierarchySubtypesResponse:
 @attrs.define
 class TextDocumentInlineValueRequest:
     """A request to provide inline values in a document. The request's
-    parameter is of type {@link InlineValueParams}, the response is of type.
-
+    parameter is of type {@link InlineValueParams}, the response is of type
     {@link InlineValue InlineValue[]} or a Thenable that resolves to such.
 
     @since 3.17.0
@@ -10186,9 +10183,8 @@ class WorkspaceInlineValueRefreshResponse:
 @attrs.define
 class TextDocumentInlayHintRequest:
     """A request to provide inlay hints in a document. The request's parameter
-    is of type {@link InlayHintsParams}, the response is of type.
-
-    {@link InlayHint InlayHint[]} or a Thenable that resolves to such.
+    is of type {@link InlayHintsParams}, the response is of type {@link
+    InlayHint InlayHint[]} or a Thenable that resolves to such.
 
     @since 3.17.0
     """
@@ -10212,8 +10208,7 @@ class TextDocumentInlayHintResponse:
 @attrs.define
 class InlayHintResolveRequest:
     """A request to resolve additional properties for an inlay hint. The
-    request's parameter is of type {@link InlayHint}, the response is of type.
-
+    request's parameter is of type {@link InlayHint}, the response is of type
     {@link InlayHint} or a Thenable that resolves to such.
 
     @since 3.17.0
@@ -10596,10 +10591,11 @@ class TextDocumentDefinitionResponse:
 @attrs.define
 class TextDocumentReferencesRequest:
     """A request to resolve project-wide references for the symbol denoted by
-    the given text document position. The request's parameter is of type {@link
-    ReferenceParams} the response is of type.
+    the given text document position.
 
-    {@link Location Location[]} or a Thenable that resolves to such.
+    The request's parameter is of type {@link ReferenceParams} the
+    response is of type {@link Location Location[]} or a Thenable that
+    resolves to such.
     """
 
     id: Union[int, str] = attrs.field()
@@ -10695,10 +10691,8 @@ class TextDocumentCodeActionResponse:
 @attrs.define
 class CodeActionResolveRequest:
     """Request to resolve additional information for a given code action.The
-    request's parameter is of type {@link CodeAction} the response is of type.
-
-    {@link CodeAction} or a Thenable that resolves to such.
-    """
+    request's parameter is of type {@link CodeAction} the response is of type
+    {@link CodeAction} or a Thenable that resolves to such."""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10877,7 +10871,7 @@ class DocumentLinkResolveResponse:
 
 @attrs.define
 class TextDocumentFormattingRequest:
-    """A request to to format a whole document."""
+    """A request to format a whole document."""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10897,7 +10891,7 @@ class TextDocumentFormattingResponse:
 
 @attrs.define
 class TextDocumentRangeFormattingRequest:
-    """A request to to format a range in a document."""
+    """A request to format a range in a document."""
 
     id: Union[int, str] = attrs.field()
     """The request id."""

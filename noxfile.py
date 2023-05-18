@@ -56,7 +56,7 @@ def _format_code(session: nox.Session):
 
     session.run("isort", "--profile", "black", ".")
     session.run("black", ".")
-    session.run("docformatter", "--in-place", "--recursive", ".")
+    session.run("docformatter", "--in-place", "--recursive", "--black", ".")
     session.run("isort", "--profile", "black", ".")
     session.run("black", ".")
 
@@ -64,7 +64,9 @@ def _format_code(session: nox.Session):
     python_package_path = "./packages/python/lsprotocol"
     session.run("isort", "--profile", "black", python_package_path)
     session.run("black", python_package_path)
-    session.run("docformatter", "--in-place", "--recursive", python_package_path)
+    session.run(
+        "docformatter", "--in-place", "--recursive", "--black", python_package_path
+    )
     # do it again to correct any adjustments done by docformatter
     session.run("isort", "--profile", "black", python_package_path)
     session.run("black", python_package_path)

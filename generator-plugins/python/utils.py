@@ -106,6 +106,7 @@ def _to_snake_case(name: str) -> str:
 
 def _snake_case_item_name(original: str) -> str:
     """Generate snake case names from LSP definition names.
+
     Example:
     * PlainText -> PLAIN_TEXT
     * $import -> IMPORT
@@ -123,6 +124,7 @@ def _snake_case_item_name(original: str) -> str:
 
 def _capitalized_item_name(original: str) -> str:
     """Generate capitalized names from LSP definition names.
+
     Example:
     * someClass -> SomeClass
     * some_class -> SomeClass

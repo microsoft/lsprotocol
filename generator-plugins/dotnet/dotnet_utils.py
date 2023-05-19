@@ -1,11 +1,14 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+import os
 import pathlib
+import subprocess
 from typing import Dict, List
 
 import generator.model as model
 
+from .dotnet_classes import generate_all_classes
 from .dotnet_commons import TypeData
 from .dotnet_constants import NAMESPACE, PACKAGE_DIR_NAME
 from .dotnet_enums import generate_enums
@@ -26,10 +29,15 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
             "\n".join(lines), encoding="utf-8"
         )
 
+    subprocess.run(
+        ["dotnet", "format"], cwd=os.fspath(pathlib.Path(output_dir, PACKAGE_DIR_NAME))
+    )
+
 
 def generate_package_code(spec: model.LSPModel, types: TypeData) -> Dict[str, str]:
     generate_enums(spec, types)
     generate_special_classes(spec, types)
+    generate_all_classes(spec, types)
 
 
 def cleanup(output_dir: str) -> None:

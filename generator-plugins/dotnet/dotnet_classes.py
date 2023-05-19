@@ -66,6 +66,7 @@ def get_type_name(
     spec: model.LSPModel,
     name_context: Optional[str] = None,
 ) -> str:
+    name = None
     if type_def.kind == "reference":
         enum_def = _get_enum(type_def.name, spec)
         if enum_def and enum_def.supportsCustomValues:
@@ -84,15 +85,26 @@ def get_type_name(
     elif type_def.kind == "base":
         name = lsp_to_base_types(type_def)
     elif type_def.kind == "literal":
-        pass
+        name = "Literal"
     elif type_def.kind == "stringLiteral":
         name = "string"
     elif type_def.kind == "tuple":
         subset = filter_null_base_type(type_def.items)
-        name = f"({', '.join(get_type_name(item, types, spec, name_context) for item in subset)})"
+        subset_types = [
+            get_type_name(item, types, spec, name_context) for item in subset
+        ]
+        name = f"({', '.join(subset_types)})"
     elif type_def.kind == "or":
         subset = filter_null_base_type(type_def.items)
-        name = f"OrType<{', '.join(get_type_name(item, types, spec, name_context) for item in subset)}>"
+        if len(subset) == 1:
+            name = get_type_name(subset[0], types, spec, name_context)
+        elif len(subset) >= 2:
+            subset_types = [
+                get_type_name(item, types, spec, name_context) for item in subset
+            ]
+            name = f"OrType<{', '.join(subset_types)}>"
+        else:
+            raise ValueError(f"Unknown type kind: {type_def.kind}")
     else:
         raise ValueError(f"Unknown type kind: {type_def.kind}")
     return name
@@ -108,28 +120,43 @@ def get_converter(
         return "[JsonConverter(typeof(DocumentUriConverter))]"
     elif type_def.kind == "or":
         subset = filter_null_base_type(type_def.items)
-        type_names = ", ".join(
-            get_type_name(item, types, spec, name_context) for item in subset
-        )
-        return f"[JsonConverter(typeof(OrTypeConverter<{type_names}>))]"
+        if len(subset) >= 2:
+            type_names = ", ".join(
+                get_type_name(item, types, spec, name_context) for item in subset
+            )
+            return f"[JsonConverter(typeof(OrTypeConverter<{type_names}>))]"
     return None
 
 
 def generate_property(
-    prop_def: model.Property, spec: model.LSPModel, types: TypeData
+    prop_def: model.Property, spec: model.LSPModel, types: TypeData, usings: List[str]
 ) -> List[str]:
     name = to_upper_camel_case(prop_def.name)
     type_name = get_type_name(prop_def.type, types, spec, name)
     converter = get_converter(prop_def.type, types, spec, name)
+    special_optional = prop_def.type.kind == "or" and has_null_base_type(
+        prop_def.type.items
+    )
+    optional = "?" if prop_def.optional or special_optional else ""
     lines = (
         get_doc(prop_def.documentation)
         + generate_extras(prop_def)
         + ([converter] if converter else [])
+        + (
+            ["[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]"]
+            if optional and not special_optional
+            else []
+        )
         + [
             f'[DataMember(Name = "{prop_def.name}")]',
-            f"public {type_name} {name} {{ get; set; }}",
+            f"public {type_name}{optional} {name} {{ get; set; }}",
         ]
     )
+    usings.append("DataMember")
+    if converter:
+        usings.append("JsonConverter")
+    if optional and not special_optional:
+        usings.append("JsonProperty")
     return lines
 
 
@@ -138,9 +165,12 @@ def generate_from_struct(
 ):
     derived = ", ".join(get_type_name(e, types, spec) for e in struct.extends)
     inner = []
+    usings = ["DataContract"]
     for prop in struct.properties:
-        inner += generate_property(prop, spec, types)
-    lines = class_wrapper(struct, inner, derived)
+        inner += generate_property(prop, spec, types, usings)
+    lines = namespace_wrapper(
+        NAMESPACE, get_usings(usings), class_wrapper(struct, inner, derived)
+    )
     types.add_type_info(struct, struct.name, lines)
 
 

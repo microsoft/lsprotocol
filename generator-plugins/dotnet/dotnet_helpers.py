@@ -99,7 +99,7 @@ def generate_extras(
 ) -> List[str]:
     extras = []
     if type_def.deprecated:
-        extras = [f"[Obsolete({type_def.deprecated})]"]
+        extras = [f'[Obsolete("{type_def.deprecated}")]']
     elif type_def.proposed:
         if type_def.since:
             extras = [f'[Proposed("{type_def.since}")]']

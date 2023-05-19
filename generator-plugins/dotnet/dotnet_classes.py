@@ -3,6 +3,8 @@
 
 from typing import Dict, List, Optional, Tuple, Union
 
+import cattrs
+
 from generator import model
 
 from .dotnet_commons import TypeData
@@ -12,6 +14,7 @@ from .dotnet_helpers import (
     generate_extras,
     get_doc,
     get_usings,
+    interface_wrapper,
     namespace_wrapper,
     to_upper_camel_case,
 )
@@ -21,6 +24,13 @@ def _get_enum(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
     for enum in spec.enumerations:
         if enum.name == name:
             return enum
+    return None
+
+
+def _get_struct(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
+    for struct in spec.structures:
+        if struct.name == name:
+            return struct
     return None
 
 
@@ -74,6 +84,12 @@ def get_type_name(
                 name = f"string"
             elif _is_int_enum(enum_def):
                 name = f"int"
+        elif type_def.name == "Command":
+            name = "CommandAction"
+        elif type_def.name == "ChangeAnnotationIdentifier":
+            name = "string"
+        elif type_def.name == "DocumentSelector":
+            name = "DocumentFilter[]"
         else:
             name = type_def.name
     elif type_def.kind == "array":
@@ -160,20 +176,154 @@ def generate_property(
     return lines
 
 
-def generate_from_struct(
+def generate_interface_property(
+    prop_def: model.Property, spec: model.LSPModel, types: TypeData
+) -> List[str]:
+    name = to_upper_camel_case(prop_def.name)
+    type_name = get_type_name(prop_def.type, types, spec, name)
+    special_optional = prop_def.type.kind == "or" and has_null_base_type(
+        prop_def.type.items
+    )
+    optional = "?" if prop_def.optional or special_optional else ""
+    lines = get_doc(prop_def.documentation) + [
+        f"public {type_name}{optional} {name} {{ get; set; }}",
+    ]
+    return lines
+
+
+def generate_class_from_struct(
     struct: model.Structure, spec: model.LSPModel, types: TypeData
 ):
-    derived = ", ".join(get_type_name(e, types, spec) for e in struct.extends)
+    if types.get_by_name(struct.name):
+        return
+
+    interface = f"I{struct.name}"
+    extends = set(
+        [f"I{get_type_name(e, types, spec)}" for e in struct.extends]
+        + ([interface] if types.get_by_name(interface) else [])
+    )
+
     inner = []
     usings = ["DataContract"]
-    for prop in struct.properties:
+
+    properties = get_all_properties(struct, spec)
+    for prop in properties:
         inner += generate_property(prop, spec, types, usings)
+
     lines = namespace_wrapper(
-        NAMESPACE, get_usings(usings), class_wrapper(struct, inner, derived)
+        NAMESPACE,
+        get_usings(usings),
+        class_wrapper(struct, inner, ", ".join(extends)),
     )
     types.add_type_info(struct, struct.name, lines)
 
 
+def generate_interface_from_struct(
+    struct: model.Structure, spec: model.LSPModel, types: TypeData
+):
+    if types.get_by_name(struct.name):
+        return
+
+    derived = set([f"I{get_type_name(e, types, spec)}" for e in struct.extends])
+
+    inner = []
+    created_properties = []
+    for prop in struct.properties:
+        inner += generate_interface_property(prop, spec, types)
+        created_properties.append(prop.name)
+
+    if not all(mixin.kind == "reference" for mixin in struct.mixins):
+        raise ValueError(f"Struct {struct.name} has non-reference mixins")
+    for mixin in [_get_struct(mixin.name, spec) for mixin in struct.mixins]:
+        for prop in mixin.properties:
+            if prop.name not in created_properties:
+                inner += generate_interface_property(prop, spec, types)
+
+    lines = namespace_wrapper(
+        NAMESPACE,
+        [],
+        interface_wrapper(struct, inner, ", ".join(derived)),
+    )
+    types.add_type_info(struct, struct.name, lines)
+
+
+def generate_class_from_type_alias(
+    type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
+) -> None:
+    if types.get_by_name(type_def.name):
+        return
+
+    if type_def.name in ["ChangeAnnotationIdentifier", "DocumentSelector"]:
+        return
+
+    usings = ["DataContract"]
+    type_name = get_type_name(type_def.type, types, spec, type_def.name)
+    lines = namespace_wrapper(
+        NAMESPACE,
+        get_usings(usings),
+        class_wrapper(type_def, [], type_name),
+    )
+    types.add_type_info(type_def, type_def.name, lines)
+
+
+def copy_struct(struct_def: model.Structure, new_name: str):
+    converter = cattrs.GenConverter()
+    obj = converter.unstructure(struct_def, model.Structure)
+    obj["name"] = new_name
+    return model.Structure(**obj)
+
+
+def copy_property(prop_def: model.Property):
+    converter = cattrs.GenConverter()
+    obj = converter.unstructure(prop_def, model.Property)
+    return model.Property(**obj)
+
+
+def get_all_extends(struct_def: model.Structure, spec) -> List[model.Structure]:
+    extends = []
+    for extend in struct_def.extends:
+        extends.append(_get_struct(extend.name, spec))
+        for struct in get_all_extends(_get_struct(extend.name, spec), spec):
+            if not any(struct.name == e.name for e in extends):
+                extends.append(struct)
+    return extends
+
+
+def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
+    properties = []
+    for prop in struct.properties:
+        properties.append(copy_property(prop))
+
+    for extend in get_all_extends(struct, spec):
+        for prop in get_all_properties(extend, spec):
+            if not any(prop.name == p.name for p in properties):
+                properties.append(copy_property(prop))
+
+    if not all(mixin.kind == "reference" for mixin in struct.mixins):
+        raise ValueError(f"Struct {struct.name} has non-reference mixins")
+    for mixin in [_get_struct(mixin.name, spec) for mixin in struct.mixins]:
+        for prop in get_all_properties(mixin, spec):
+            if not any(prop.name == p.name for p in properties):
+                properties.append(copy_property(prop))
+
+    return properties
+
+
 def generate_all_classes(spec: model.LSPModel, types: TypeData):
+    interfaces = {}
     for struct in spec.structures:
-        generate_from_struct(struct, spec, types)
+        if not all(e.kind == "reference" for e in struct.extends):
+            raise ValueError(f"Struct {struct.name} has non-reference extends")
+        for extend in get_all_extends(struct, spec):
+            name = f"I{extend.name}"
+            if name not in interfaces:
+                interfaces[name] = copy_struct(_get_struct(extend.name, spec), name)
+
+    for struct in interfaces.values():
+        generate_interface_from_struct(struct, spec, types)
+
+    for struct in spec.structures:
+        generate_class_from_struct(struct, spec, types)
+
+    for type_alias in spec.typeAliases:
+        generate_class_from_type_alias(type_alias, spec, types)

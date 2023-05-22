@@ -63,8 +63,8 @@ def _generate_field_validator(
 
 
 def _to_class_name(lsp_method_name: str) -> str:
-    """Convert from LSP method name (e.g., textDocument/didSave) to python
-    class name (e.g., TextDocumentDidSave)"""
+    """Convert from LSP method name (e.g., textDocument/didSave) to python class name
+    (e.g., TextDocumentDidSave)"""
     name = lsp_method_name[2:] if lsp_method_name.startswith("$/") else lsp_method_name
     name = name.replace("/", "_")
     name = METHOD_NAME_RE_1.sub(r"\1_\2", name)
@@ -77,8 +77,8 @@ def lines_to_str(lines: Union[Sequence[str], List[str]]) -> str:
 
 
 def _sanitize_comment(text: str) -> str:
-    """LSP spec comments can contain newlines or characters that should not be
-    used or can cause issues with python code clean them up."""
+    """LSP spec comments can contain newlines or characters that should not be used or
+    can cause issues with python code clean them up."""
     return text.replace("\r", "").replace("\n", "")
 
 
@@ -137,8 +137,7 @@ def _capitalized_item_name(original: str) -> str:
 def _get_indented_documentation(
     documentation: Optional[str], indent: str = ""
 ) -> Optional[str]:
-    """Clean up doc string from LSP model and word wrap with correct indent
-    level."""
+    """Clean up doc string from LSP model and word wrap with correct indent level."""
     doc = (
         indent.join(documentation.splitlines(keepends=True)) if documentation else None
     )

@@ -35,8 +35,7 @@ def test_numeric_validation():
 
 
 def test_forward_refs():
-    """Test that forward references are handled correctly by cattrs
-    converter."""
+    """Test that forward references are handled correctly by cattrs converter."""
     data = {
         "uri": "something.py",
         "diagnostics": [
@@ -115,8 +114,7 @@ def test_forward_refs():
     ],
 )
 def test_union_with_complex_type(data):
-    """Ensure types with multiple possible resolutions are handled
-    correctly."""
+    """Ensure types with multiple possible resolutions are handled correctly."""
     converter = cv.get_converter()
     obj = converter.structure(data, lsp.TextDocumentRegistrationOptions)
     hamcrest.assert_that(obj, hamcrest.instance_of(lsp.TextDocumentRegistrationOptions))
@@ -185,8 +183,7 @@ def test_keyword_field():
     ],
 )
 def test_LSPAny(data):
-    """Ensure that broad primitive and custom type alias is handled
-    correctly."""
+    """Ensure that broad primitive and custom type alias is handled correctly."""
     converter = cv.get_converter()
     obj = converter.structure(data, lsp.DidChangeConfigurationParams)
     hamcrest.assert_that(obj, hamcrest.instance_of(lsp.DidChangeConfigurationParams))

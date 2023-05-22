@@ -440,7 +440,9 @@ def generate_response(
     types.add_type_info(response_def, response_def.name, lines)
 
 
-def generate_partial_result(request_def: model.Request, types: TypeData) -> None:
+def generate_partial_result(
+    request_def: model.Request, types: TypeData, spec: model.LSPModel
+) -> None:
     if not request_def.partialResult:
         return
 
@@ -448,7 +450,9 @@ def generate_partial_result(request_def: model.Request, types: TypeData) -> None
         return
 
 
-def generate_registration_options(request_def: model.Request, types: TypeData) -> None:
+def generate_registration_options(
+    request_def: model.Request, types: TypeData, spec: model.LSPModel
+) -> None:
     if not request_def.registrationOptions:
         return
 

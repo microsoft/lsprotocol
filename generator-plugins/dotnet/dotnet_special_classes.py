@@ -17,7 +17,7 @@ SPECIAL_CLASSES = [
 
 
 def generate_special_classes(spec: model.LSPModel, types: TypeData) -> None:
-    """Generate code for special classes in LSP"""
+    """Generate code for special classes in LSP."""
     for special_class in SPECIAL_CLASSES:
         for struct_def in spec.structures + spec.typeAliases:
             if struct_def.name == special_class:
@@ -27,7 +27,7 @@ def generate_special_classes(spec: model.LSPModel, types: TypeData) -> None:
 def generate_special_class(
     struct_def: model.Structure, spec: model.LSPModel, types: TypeData
 ) -> Dict[str, str]:
-    """Generate code for a special class"""
+    """Generate code for a special class."""
     lines: List[str] = []
 
     if struct_def.name == "LSPObject":

@@ -208,6 +208,8 @@ pub enum LSPRequestMethods {
     WorkspaceDiagnostic,
     #[serde(rename = "workspace/diagnostic/refresh")]
     WorkspaceDiagnosticRefresh,
+    #[serde(rename = "textDocument/inlineCompletion")]
+    TextDocumentInlineCompletion,
     #[serde(rename = "client/registerCapability")]
     ClientRegisterCapability,
     #[serde(rename = "client/unregisterCapability")]
@@ -330,10 +332,10 @@ pub enum LSPNotificationMethods {
 pub enum MessageDirection {
     #[serde(rename = "serverToClient")]
     ServerToClient,
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
     #[serde(rename = "both")]
     Both,
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -927,12 +929,26 @@ pub enum MarkupKind {
     Markdown,
 }
 
+/// Describes how an [inline completion provider][InlineCompletionItemProvider] was triggered.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+pub enum InlineCompletionTriggerKind {
+    /// Completion was triggered explicitly by a user gesture.
+    Invoked = 0,
+
+    /// Completion was triggered automatically while editing.
+    Automatic = 1,
+}
+
 /// A set of predefined position encoding kinds.
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum PositionEncodingKind {
-    /// Character offsets count UTF-8 code units.
+    /// Character offsets count UTF-8 code units (e.g. bytes).
     #[serde(rename = "utf-8")]
     Utf8,
 
@@ -945,7 +961,7 @@ pub enum PositionEncodingKind {
 
     /// Character offsets count UTF-32 code units.
     ///
-    /// Implementation note: these are the same as Unicode code points,
+    /// Implementation note: these are the same as Unicode codepoints,
     /// so this `PositionEncodingKind` may also be used for an
     /// encoding-agnostic representation of character offsets.
     #[serde(rename = "utf-32")]
@@ -2028,14 +2044,14 @@ pub struct SemanticTokensRangeParams {
     pub work_done_token: Option<ProgressToken>,
 }
 
-/// Params to show a document.
+/// Params to show a resource in the UI.
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ShowDocumentParams {
     /// Indicates to show the resource in an external program.
-    /// To show for example `https://code.visualstudio.com/`
+    /// To show, for example, `https://code.visualstudio.com/`
     /// in the default WEB browser set `external` to `true`.
     pub external: Option<bool>,
 
@@ -2051,7 +2067,7 @@ pub struct ShowDocumentParams {
     /// program is started.
     pub take_focus: Option<bool>,
 
-    /// The document uri to show.
+    /// The uri to show.
     pub uri: String,
 }
 
@@ -2629,6 +2645,79 @@ pub struct DidCloseNotebookDocumentParams {
 
     /// The notebook document that got closed.
     pub notebook_document: NotebookDocumentIdentifier,
+}
+
+/// A parameter literal used in inline completion requests.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionParams {
+    /// Additional information about the context in which inline completions were
+    /// requested.
+    pub context: InlineCompletionContext,
+
+    /// The position inside the text document.
+    pub position: Position,
+
+    /// The text document.
+    pub text_document: TextDocumentIdentifier,
+
+    /// An optional token that a server can use to report work done progress.
+    pub work_done_token: Option<ProgressToken>,
+}
+
+/// Represents a collection of [inline completion items][InlineCompletionItem] to be presented in the editor.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionList {
+    /// The inline completion items
+    pub items: Vec<InlineCompletionItem>,
+}
+
+/// An inline completion item represents a text snippet that is proposed inline to complete text that is being typed.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionItem {
+    /// An optional [Command] that is executed *after* inserting this completion.
+    pub command: Option<Command>,
+
+    /// A text that is used to decide if this inline completion should be shown. When `falsy` the [`InlineCompletionItem::insertText`] is used.
+    pub filter_text: Option<String>,
+
+    /// The text to replace the range with. Must be set.
+    pub insert_text: OR2<String, StringValue>,
+
+    /// The range to replace. Must begin and end on the same line.
+    pub range: Option<Range>,
+}
+
+/// Inline completion options used during static or dynamic registration.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionRegistrationOptions {
+    /// A document selector to identify the scope of the registration. If set to null
+    /// the document selector provided on the client side will be used.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_selector: Option<DocumentSelector>,
+
+    /// The id used to register the request. The id can be used to deregister
+    /// the request again. See also Registration#id.
+    pub id: Option<String>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -4004,7 +4093,7 @@ pub struct ExecuteCommandRegistrationOptions {
     pub commands: Vec<String>,
 }
 
-/// The parameters passed via a apply workspace edit request.
+/// The parameters passed via an apply workspace edit request.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ApplyWorkspaceEditParams {
@@ -4948,7 +5037,54 @@ pub struct NotebookDocumentIdentifier {
     pub uri: String,
 }
 
-/// General parameters to to register for an notification or to register a provider.
+/// Provides information about the context in which an inline completion was requested.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionContext {
+    /// Provides information about the currently selected item in the autocomplete widget if it is visible.
+    pub selected_completion_info: Option<SelectedCompletionInfo>,
+
+    /// Describes how the inline completion was triggered.
+    pub trigger_kind: InlineCompletionTriggerKind,
+}
+
+/// A string value used as a snippet is a template which allows to insert text
+/// and to control the editor cursor when insertion happens.
+///
+/// A snippet can define tab stops and placeholders with `$1`, `$2`
+/// and `${3:foo}`. `$0` defines the final tab stop, it defaults to
+/// the end of the snippet. Variables are defined with `$name` and
+/// `${name:default value}`.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct StringValue {
+    /// The kind of string value.
+    pub kind: String,
+
+    /// The snippet string.
+    pub value: String,
+}
+
+/// Inline completion options used during static registration.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionOptions {
+    pub work_done_progress: Option<bool>,
+}
+
+/// General parameters to register for a notification or to register a provider.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct Registration {
@@ -5133,6 +5269,13 @@ pub struct ServerCapabilities {
     ///
     /// @since 3.17.0
     pub inlay_hint_provider: Option<OR3<bool, InlayHintOptions, InlayHintRegistrationOptions>>,
+
+    /// Inline completion options used during static registration.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
+    pub inline_completion_provider: Option<OR2<bool, InlineCompletionOptions>>,
 
     /// The server provides inline values.
     ///
@@ -5883,6 +6026,21 @@ pub struct NotebookCellArrayChange {
     pub start: u32,
 }
 
+/// Describes the currently selected completion item.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct SelectedCompletionInfo {
+    /// The range that will be replaced if this completion item is accepted.
+    pub range: Range,
+
+    /// The text the range will be replaced with if this completion is accepted.
+    pub text: String,
+}
+
 /// Defines the capabilities provided by the client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -6275,6 +6433,13 @@ pub struct TextDocumentClientCapabilities {
     ///
     /// @since 3.17.0
     pub inlay_hint: Option<InlayHintClientCapabilities>,
+
+    /// Client capabilities specific to inline completions.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
+    pub inline_completion: Option<InlineCompletionClientCapabilities>,
 
     /// Capabilities specific to the `textDocument/inlineValue` request.
     ///
@@ -7430,6 +7595,18 @@ pub struct DiagnosticClientCapabilities {
     pub related_document_support: Option<bool>,
 }
 
+/// Client capabilities specific to inline completions.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct InlineCompletionClientCapabilities {
+    /// Whether implementation supports dynamic registration for inline completion providers.
+    pub dynamic_registration: Option<bool>,
+}
+
 /// Notebook specific client capabilities.
 ///
 /// @since 3.17.0
@@ -8560,6 +8737,10 @@ pub struct TextDocumentLinkedEditingRangeResponse {
 /// The will create files request is sent from the client to the server before files are actually
 /// created as long as the creation is triggered from within the client.
 ///
+/// The request can return a `WorkspaceEdit` which will be applied to workspace before the
+/// files are created. Hence the `WorkspaceEdit` can not manipulate the content of the file
+/// to be created.
+///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -9074,6 +9255,45 @@ pub struct WorkspaceDiagnosticRefreshResponse {
     pub id: LSPIdOptional,
 
     pub result: LSPNull,
+}
+
+/// A request to provide inline completions in a document. The request's parameter is of
+/// type [InlineCompletionParams], the response is of type
+/// {@link InlineCompletion InlineCompletion[]} or a Thenable that resolves to such.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TextDocumentInlineCompletionRequest {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPId,
+
+    pub params: InlineCompletionParams,
+}
+
+/// Response to the [TextDocumentInlineCompletionRequest].
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TextDocumentInlineCompletionResponse {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPIdOptional,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<OR2<InlineCompletionList, Vec<InlineCompletionItem>>>,
 }
 
 /// The `client/registerCapability` request is sent from the server to the client to register a new capability
@@ -9876,7 +10096,7 @@ pub struct DocumentLinkResolveResponse {
     pub result: DocumentLink,
 }
 
-/// A request to to format a whole document.
+/// A request to format a whole document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentFormattingRequest {
@@ -9909,7 +10129,7 @@ pub struct TextDocumentFormattingResponse {
     pub result: Option<Vec<TextEdit>>,
 }
 
-/// A request to to format a range in a document.
+/// A request to format a range in a document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentRangeFormattingRequest {

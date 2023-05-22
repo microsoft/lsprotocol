@@ -31,8 +31,8 @@ def to_json(
 
 
 def from_json(json_str: str, method: str = None, converter=None) -> types.MESSAGE_TYPES:
-    """Parses and given JSON string and returns LSP message object using the
-    provided converter."""
+    """Parses and given JSON string and returns LSP message object using the provided
+    converter."""
     if not converter:
         converter = converters.get_converter()
 

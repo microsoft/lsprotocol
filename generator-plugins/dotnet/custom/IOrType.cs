@@ -1,4 +1,4 @@
 public interface IOrType
 {
-    public readonly object? Value { get; }
+    public object? Value { get; }
 }

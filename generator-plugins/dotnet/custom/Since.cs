@@ -1,6 +1,6 @@
 using System;
 
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Enum)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Enum | AttributeTargets.Interface)]
 public class SinceAttribute : Attribute
 {
     public SinceAttribute()

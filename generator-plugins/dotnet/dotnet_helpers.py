@@ -65,6 +65,8 @@ def class_wrapper(
 ) -> List[str]:
     if hasattr(type_def, "name"):
         name = type_def.name
+        if name == "Command":
+            name = "CommandAction"
     else:
         raise ValueError(f"Unknown type: {type_def}")
 
@@ -74,6 +76,33 @@ def class_wrapper(
         + [
             "[DataContract]",
             f"public class {name}: {derived}" if derived else f"public class {name}",
+            "{",
+        ]
+    )
+    lines += indent_lines(inner)
+    lines += ["}", ""]
+    return lines
+
+
+def interface_wrapper(
+    type_def: Union[model.Structure, model.Notification, model.Request],
+    inner: List[str],
+    derived: Optional[str] = None,
+) -> List[str]:
+    if hasattr(type_def, "name"):
+        name = type_def.name
+    else:
+        raise ValueError(f"Unknown type: {type_def}")
+
+    lines = (
+        get_doc(type_def.documentation)
+        + generate_extras(type_def)
+        + [
+            (
+                f"public interface {name}: {derived}"
+                if derived
+                else f"public interface {name}"
+            ),
             "{",
         ]
     )
@@ -92,6 +121,10 @@ def indent_lines(lines: List[str], indent: str = " " * 4) -> List[str]:
     return [(f"{indent}{line}" if line else line) for line in lines]
 
 
+def cleanup_str(text: str) -> str:
+    return text.replace("\r", "").replace("\n", "")
+
+
 def generate_extras(
     type_def: Union[
         model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
@@ -99,15 +132,11 @@ def generate_extras(
 ) -> List[str]:
     extras = []
     if type_def.deprecated:
-        extras = [f'[Obsolete("{type_def.deprecated}")]']
-    elif type_def.proposed:
-        if type_def.since:
-            extras = [f'[Proposed("{type_def.since}")]']
-        else:
-            extras = [f"[Proposed]"]
-    else:
-        if type_def.since:
-            extras = [f'[Since("{type_def.since}")]']
+        extras += [f'[Obsolete("{cleanup_str(type_def.deprecated)}")]']
+    if type_def.proposed:
+        extras += [f"[Proposed]"]
+    if type_def.since:
+        extras += [f'[Since("{cleanup_str(type_def.since)}")]']
 
     return extras
 

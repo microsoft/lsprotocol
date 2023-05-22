@@ -36,8 +36,7 @@ def uinteger_validator(
     attribute: "attrs.Attribute[int]",
     value: Any,
 ) -> bool:
-    """Validates that unsigned integer value belongs in the range expected by
-    LSP."""
+    """Validates that unsigned integer value belongs in the range expected by LSP."""
     if not isinstance(value, int) or not (
         UINTEGER_MIN_VALUE <= value <= UINTEGER_MAX_VALUE
     ):

@@ -584,9 +584,13 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
         generate_class_from_struct(struct, spec, types)
 
     for type_alias in spec.typeAliases:
-        if type_alias.name in ["ChangeAnnotationIdentifier", "DocumentSelector"]:
+        if type_alias.name in [
+            "ChangeAnnotationIdentifier",
+            "DocumentSelector",
+            "Pattern",
+        ]:
             # DocumentSelector is an alias for DocumentFilter[] (array type) we can't derive from it.
-            # ChangeAnnotationIdentifier is an alias for string, we can't derive from it.
+            # ChangeAnnotationIdentifier, Pattern are aliases for string, we can't derive from it.
             continue
         if is_variant_type_alias(type_alias):
             generate_class_from_variant_type_alias(type_alias, spec, types)

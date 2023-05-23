@@ -86,13 +86,9 @@ def get_type_name(
             elif _is_int_enum(enum_def):
                 name = f"int"
         elif type_def.name == "Command":
+            # This is because C# does not allow class name and property name to be the same.
+            # public class Command{ public string Command { get; set; }} is not valid.
             name = "CommandAction"
-        elif type_def.name in ["ChangeAnnotationIdentifier", "Pattern"]:
-            # ChangeAnnotationIdentifier is an alias for string, so we use that instead.
-            name = "string"
-        elif type_def.name == "DocumentSelector":
-            # DocumentSelector is an alias for DocumentFilter[], so we use that instead.
-            name = "DocumentFilter[]"
         else:
             name = type_def.name
     elif type_def.kind == "array":
@@ -141,7 +137,14 @@ def get_converter(
     name_context: Optional[str] = None,
 ) -> Optional[str]:
     if type_def.kind == "base" and type_def.name in ["DocumentUri", "URI"]:
-        return "[JsonConverter(typeof(DocumentUriConverter))]"
+        return "[JsonConverter(typeof(CustomStringConverter<Uri>))]"
+    elif type_def.kind == "reference" and type_def.name in [
+        "Pattern",
+        "ChangeAnnotationIdentifier",
+    ]:
+        return f"[JsonConverter(typeof(CustomStringConverter<{type_def.name}>))]"
+    elif type_def.kind == "reference" and type_def.name == "DocumentSelector":
+        return "[JsonConverter(typeof(DocumentSelectorConverter))]"
     elif type_def.kind == "or":
         subset = filter_null_base_type(type_def.items)
         if len(subset) >= 2:
@@ -223,12 +226,6 @@ def generate_name(name_context: str, types: TypeData) -> str:
     name = "".join(parts)
     if not types.get_by_name(name):
         return name
-
-    # Try adding a number
-    for n in range(0, 1000):
-        name = to_upper_camel_case(f"{name_context}{n}")
-        if not types.get_by_name(name):
-            return name
 
     raise ValueError(f"Unable to generate name for {name_context}")
 
@@ -584,14 +581,6 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
         generate_class_from_struct(struct, spec, types)
 
     for type_alias in spec.typeAliases:
-        if type_alias.name in [
-            "ChangeAnnotationIdentifier",
-            "DocumentSelector",
-            "Pattern",
-        ]:
-            # DocumentSelector is an alias for DocumentFilter[] (array type) we can't derive from it.
-            # ChangeAnnotationIdentifier, Pattern are aliases for string, we can't derive from it.
-            continue
         if is_variant_type_alias(type_alias):
             generate_class_from_variant_type_alias(type_alias, spec, types)
         else:

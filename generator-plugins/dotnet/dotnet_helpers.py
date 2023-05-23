@@ -62,6 +62,7 @@ def class_wrapper(
     type_def: Union[model.Structure, model.Notification, model.Request],
     inner: List[str],
     derived: Optional[str] = None,
+    class_attributes: Optional[List[str]] = None,
 ) -> List[str]:
     if hasattr(type_def, "name"):
         name = type_def.name
@@ -73,6 +74,7 @@ def class_wrapper(
     lines = (
         get_doc(type_def.documentation)
         + generate_extras(type_def)
+        + (class_attributes if class_attributes else [])
         + [
             "[DataContract]",
             f"public class {name}: {derived}" if derived else f"public class {name}",
@@ -125,14 +127,28 @@ def cleanup_str(text: str) -> str:
     return text.replace("\r", "").replace("\n", "")
 
 
+def get_deprecated(text: Optional[str]) -> Optional[str]:
+    if not text:
+        return None
+
+    lines = text.splitlines(keepends=False)
+    for line in lines:
+        if line.startswith("@deprecated"):
+            return line.replace("@deprecated", "").strip()
+    return None
+
+
 def generate_extras(
     type_def: Union[
         model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
     ]
 ) -> List[str]:
+    deprecated = get_deprecated(type_def.documentation)
     extras = []
     if type_def.deprecated:
         extras += [f'[Obsolete("{cleanup_str(type_def.deprecated)}")]']
+    elif deprecated:
+        extras += [f'[Obsolete("{cleanup_str(deprecated)}")]']
     if type_def.proposed:
         extras += [f"[Proposed]"]
     if type_def.since:

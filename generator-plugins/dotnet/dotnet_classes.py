@@ -13,10 +13,12 @@ from .dotnet_helpers import (
     class_wrapper,
     generate_extras,
     get_doc,
+    get_special_case_class_name,
     get_usings,
     indent_lines,
     interface_wrapper,
     namespace_wrapper,
+    to_camel_case,
     to_upper_camel_case,
 )
 
@@ -85,12 +87,8 @@ def get_type_name(
                 name = f"string"
             elif _is_int_enum(enum_def):
                 name = f"int"
-        elif type_def.name == "Command":
-            # This is because C# does not allow class name and property name to be the same.
-            # public class Command{ public string Command { get; set; }} is not valid.
-            name = "CommandAction"
         else:
-            name = type_def.name
+            name = get_special_case_class_name(type_def.name)
     elif type_def.kind == "array":
         name = f"{get_type_name(type_def.element, types, spec, name_context)}[]"
     elif type_def.kind == "map":
@@ -195,23 +193,6 @@ def generate_property(
     return lines
 
 
-def generate_interface_property(
-    prop_def: model.Property, spec: model.LSPModel, types: TypeData, class_name: str
-) -> List[str]:
-    name = to_upper_camel_case(prop_def.name)
-    type_name = get_type_name(
-        prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
-    )
-    special_optional = prop_def.type.kind == "or" and has_null_base_type(
-        prop_def.type.items
-    )
-    optional = "?" if prop_def.optional or special_optional else ""
-    lines = get_doc(prop_def.documentation) + [
-        f"public {type_name}{optional} {name} {{ get; set; }}",
-    ]
-    return lines
-
-
 def generate_name(name_context: str, types: TypeData) -> str:
     # If name context has a '_' it is likely a property.
     # Try name generation using just the property name
@@ -269,63 +250,63 @@ def generate_literal_type(
     return literal.name
 
 
+def generate_constructor(
+    struct: model.Structure,
+    spec: model.LSPModel,
+    types: TypeData,
+    properties: List[model.Property],
+) -> List[str]:
+    class_name = get_special_case_class_name(struct.name)
+    constructor = [
+        "[JsonConstructor]",
+        f"public {class_name}(",
+    ]
+
+    arguments = []
+    optional_args = []
+    assignments = []
+    for prop in properties:
+        type_name = get_type_name(prop.type, types, spec, f"{class_name}_{prop.name}")
+        name = to_camel_case(prop.name)
+        special_optional = prop.type.kind == "or" and has_null_base_type(
+            prop.type.items
+        )
+        if prop.optional or special_optional:
+            optional_args += [f"{type_name}? {name} = null"]
+        else:
+            arguments += [f"{type_name} {name}"]
+        assignments += [f"{to_upper_camel_case(prop.name)} = {name};"]
+
+    # combine args with a '\n' to get comma with indent
+    all_args = ",\n".join(indent_lines(arguments + optional_args))
+
+    # re-split args to get the right coma placement and indent
+    constructor += all_args.splitlines()
+    constructor += [")", "{"]
+    constructor += indent_lines(assignments)
+    constructor += ["}"]
+    return constructor
+
+
 def generate_class_from_struct(
     struct: model.Structure, spec: model.LSPModel, types: TypeData
 ):
     if types.get_by_name(struct.name) or struct.name.startswith("_"):
         return
 
-    # interface = f"I{struct.name}"
-    # extends = set(
-    #     [f"I{get_type_name(e, types, spec)}" for e in struct.extends]
-    #     + ([interface] if types.get_by_name(interface) else [])
-    # )
-
     inner = []
-    usings = ["DataContract"]
+    usings = ["DataContract", "JsonConstructor"]
 
     properties = get_all_properties(struct, spec)
     for prop in properties:
         inner += generate_property(prop, spec, types, usings, struct.name)
 
+    inner = generate_constructor(struct, spec, types, properties) + inner
+
     lines = namespace_wrapper(
         NAMESPACE,
         get_usings(usings),
         class_wrapper(struct, inner),
-    )
-    types.add_type_info(struct, struct.name, lines)
-
-
-def generate_interface_from_struct(
-    struct: model.Structure, spec: model.LSPModel, types: TypeData
-):
-    if types.get_by_name(struct.name):
-        return
-
-    derived = set([f"I{get_type_name(e, types, spec)}" for e in struct.extends])
-
-    inner = []
-    created_properties = []
-    class_name = (
-        struct.name[1:]
-        if struct.name.startswith("I") and struct.name[1].upper()
-        else struct.name
-    )
-    for prop in struct.properties:
-        inner += generate_interface_property(prop, spec, types, class_name)
-        created_properties.append(prop.name)
-
-    if not all(mixin.kind == "reference" for mixin in struct.mixins):
-        raise ValueError(f"Struct {struct.name} has non-reference mixins")
-    for mixin in [_get_struct(mixin.name, spec) for mixin in struct.mixins]:
-        for prop in mixin.properties:
-            if prop.name not in created_properties:
-                inner += generate_interface_property(prop, spec, types, struct.name)
-
-    lines = namespace_wrapper(
-        NAMESPACE,
-        [],
-        interface_wrapper(struct, inner, ", ".join(derived)),
     )
     types.add_type_info(struct, struct.name, lines)
 
@@ -358,6 +339,32 @@ def get_context_from_literal(literal: model.LiteralType) -> str:
     return ""
 
 
+def generate_type_alias_constructor(
+    type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
+) -> List[str]:
+    constructor = []
+
+    if type_def.type.kind == "or":
+        subset = filter_null_base_type(type_def.type.items)
+        if len(subset) == 1:
+            raise ValueError("Unable to generate constructor for single item union")
+        elif len(subset) >= 2:
+            type_name = to_upper_camel_case(type_def.name)
+            for t in subset:
+                sub_type = get_type_name(t, types, spec, type_def.name)
+                arg = to_camel_case(sub_type)
+                if arg.endswith("[]"):
+                    arg = f"{arg[:-2]}s"
+
+                constructor += [
+                    f"public {type_name}({sub_type} {arg}): base({arg}) {{}}",
+                ]
+        else:
+            raise ValueError("Unable to generate constructor for empty union")
+
+    return constructor
+
+
 def generate_class_from_type_alias(
     type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
 ) -> None:
@@ -368,13 +375,14 @@ def generate_class_from_type_alias(
     type_name = get_type_name(type_def.type, types, spec, type_def.name)
     class_attributes = []
     if type_def.type.kind == "or":
-        [f"[JsonConverter(typeof({type_name}))]"]
+        class_attributes += [f"[JsonConverter(typeof({type_name}))]"]
         usings.append("JsonConverter")
 
+    inner = generate_type_alias_constructor(type_def, spec, types)
     lines = namespace_wrapper(
         NAMESPACE,
         get_usings(usings),
-        class_wrapper(type_def, [], type_name, class_attributes),
+        class_wrapper(type_def, inner, type_name, class_attributes),
     )
     types.add_type_info(type_def, type_def.name, lines)
 
@@ -565,18 +573,6 @@ def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
 
 
 def generate_all_classes(spec: model.LSPModel, types: TypeData):
-    # interfaces = {}
-    # for struct in spec.structures:
-    #     if not all(e.kind == "reference" for e in struct.extends):
-    #         raise ValueError(f"Struct {struct.name} has non-reference extends")
-    #     for extend in get_all_extends(struct, spec):
-    #         name = f"I{extend.name}"
-    #         if name not in interfaces:
-    #             interfaces[name] = copy_struct(_get_struct(extend.name, spec), name)
-
-    # for struct in interfaces.values():
-    #     generate_interface_from_struct(struct, spec, types)
-
     for struct in spec.structures:
         generate_class_from_struct(struct, spec, types)
 

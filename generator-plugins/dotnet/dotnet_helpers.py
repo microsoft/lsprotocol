@@ -24,6 +24,11 @@ def get_parts(name: str) -> List[str]:
     return PARTS_RE.sub(r"\2 \3", name).split()
 
 
+def to_camel_case(name: str) -> str:
+    parts = get_parts(name)
+    return parts[0] + "".join([p.capitalize() for p in parts[1:]])
+
+
 def to_upper_camel_case(name: str) -> str:
     return "".join([c.capitalize() for c in get_parts(name)])
 
@@ -58,6 +63,14 @@ def get_doc(doc: Optional[str]) -> str:
     return []
 
 
+def get_special_case_class_name(name: str) -> str:
+    # This is because C# does not allow class name and property name to be the same.
+    # public class Command{ public string Command { get; set; }} is not valid.
+    if name == "Command":
+        return "CommandAction"
+    return name
+
+
 def class_wrapper(
     type_def: Union[model.Structure, model.Notification, model.Request],
     inner: List[str],
@@ -65,9 +78,7 @@ def class_wrapper(
     class_attributes: Optional[List[str]] = None,
 ) -> List[str]:
     if hasattr(type_def, "name"):
-        name = type_def.name
-        if name == "Command":
-            name = "CommandAction"
+        name = get_special_case_class_name(type_def.name)
     else:
         raise ValueError(f"Unknown type: {type_def}")
 

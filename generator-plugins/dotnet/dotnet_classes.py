@@ -16,7 +16,6 @@ from .dotnet_helpers import (
     get_special_case_class_name,
     get_usings,
     indent_lines,
-    interface_wrapper,
     namespace_wrapper,
     to_camel_case,
     to_upper_camel_case,
@@ -30,7 +29,7 @@ def _get_enum(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
     return None
 
 
-def _get_struct(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
+def _get_struct(name: str, spec: model.LSPModel) -> Optional[model.Structure]:
     for struct in spec.structures:
         if struct.name == name:
             return struct

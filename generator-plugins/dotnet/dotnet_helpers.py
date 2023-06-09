@@ -97,33 +97,6 @@ def class_wrapper(
     return lines
 
 
-def interface_wrapper(
-    type_def: Union[model.Structure, model.Notification, model.Request],
-    inner: List[str],
-    derived: Optional[str] = None,
-) -> List[str]:
-    if hasattr(type_def, "name"):
-        name = type_def.name
-    else:
-        raise ValueError(f"Unknown type: {type_def}")
-
-    lines = (
-        get_doc(type_def.documentation)
-        + generate_extras(type_def)
-        + [
-            (
-                f"public interface {name}: {derived}"
-                if derived
-                else f"public interface {name}"
-            ),
-            "{",
-        ]
-    )
-    lines += indent_lines(inner)
-    lines += ["}", ""]
-    return lines
-
-
 def property_wrapper(prop_def: model.Property, content: List[str]) -> List[str]:
     lines = (get_doc(prop_def.documentation) + generate_extras(prop_def) + content,)
     lines += indent_lines(content)

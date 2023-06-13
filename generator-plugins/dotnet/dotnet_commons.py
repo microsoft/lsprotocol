@@ -21,14 +21,8 @@ TypesWithId = Union[
 
 class TypeData:
     def __init__(self) -> None:
-        self._id_data: Dict[
-            str,
-            Tuple[
-                str,
-                TypesWithId,
-                List[str],
-            ],
-        ] = {}
+        self._id_data: Dict[str, Tuple[str, TypesWithId, List[str]]] = {}
+        self._ctor_data: Dict[str, Tuple[str, str]] = {}
 
     def add_type_info(
         self,
@@ -58,3 +52,9 @@ class TypeData:
 
     def get_all(self) -> List[Tuple[str, List[str]]]:
         return [(name, lines) for name, _, lines in self._id_data.values()]
+
+    def add_ctor(self, type_name: str, ctor: Tuple[str, str, bool]) -> None:
+        self._ctor_data[type_name] = ctor
+
+    def get_ctor(self, type_name: str) -> Tuple[str, str, bool]:
+        return self._ctor_data[type_name]

@@ -71,6 +71,16 @@ def get_special_case_class_name(name: str) -> str:
     return name
 
 
+def get_special_case_property_name(name: str) -> str:
+    if name == "string":
+        return "stringValue"
+    if name == "int":
+        return "intValue"
+    if name == "event":
+        return "eventArgs"
+    return name
+
+
 def class_wrapper(
     type_def: Union[model.Structure, model.Notification, model.Request],
     inner: List[str],

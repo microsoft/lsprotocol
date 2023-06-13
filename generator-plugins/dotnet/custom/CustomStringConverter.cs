@@ -8,7 +8,7 @@ public class CustomStringConverter<T> : JsonConverter<T> where T : class
     {
         if (reader.TokenType == JsonToken.String && reader.Value is string str)
         {
-            return Activator.CreateInstance<T>(str);
+            return Activator.CreateInstance(typeof(T), str) as T;
         }
         else if (reader.TokenType == JsonToken.Null)
         {

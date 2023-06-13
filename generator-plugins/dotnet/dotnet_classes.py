@@ -247,7 +247,6 @@ def generate_literal_type(
         class_wrapper(literal, inner),
     )
     types.add_type_info(literal, literal.name, lines)
-    print(f"{name_context} => {literal.name}")
     return literal.name
 
 
@@ -436,7 +435,6 @@ def generate_class_from_variant_literals(
 
     lines = generate_code_for_variant_struct(struct, spec, types)
     types.add_type_info(struct, struct.name, lines)
-    print(f"{name_context} => {struct.name}")
     return struct.name
 
 

@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+import logging
 import os
 import pathlib
 import subprocess
@@ -14,6 +15,8 @@ from .dotnet_constants import NAMESPACE, PACKAGE_DIR_NAME
 from .dotnet_enums import generate_enums
 from .dotnet_helpers import namespace_wrapper
 from .dotnet_special_classes import generate_special_classes
+
+LOGGER = logging.getLogger("dotnet")
 
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
@@ -29,6 +32,7 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
             "\n".join(lines), encoding="utf-8"
         )
 
+    LOGGER.info("Running dotnet format")
     subprocess.run(
         ["dotnet", "format"], cwd=os.fspath(pathlib.Path(output_dir, PACKAGE_DIR_NAME))
     )

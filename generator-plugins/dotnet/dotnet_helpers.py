@@ -166,4 +166,4 @@ def get_usings(types: List[str]) -> List[str]:
         if t in types:
             usings.append("using Newtonsoft.Json.Linq;")
 
-    return list(set(usings))
+    return sorted(list(set(usings)))

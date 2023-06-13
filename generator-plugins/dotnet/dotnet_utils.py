@@ -24,6 +24,7 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
     cleanup(output_dir)
     copy_custom_classes(output_dir)
 
+    LOGGER.info("Generating code in C#")
     types = TypeData()
     generate_package_code(spec, types)
     for name, lines in types.get_all():

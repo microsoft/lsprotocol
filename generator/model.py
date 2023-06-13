@@ -881,5 +881,17 @@ class LSPModel:
         return types
 
 
-def create_lsp_model(model: Dict[str, Any]) -> LSPModel:
-    return LSPModel(**model)
+def create_lsp_model(models: List[Dict[str, Any]]) -> LSPModel:
+    if len(models) >= 1:
+        spec = LSPModel(**models[0])
+
+    if len(models) >= 2:
+        for model in models[1:]:
+            addition = LSPModel(**model)
+            spec.requests.extend(addition.requests)
+            spec.notifications.extend(addition.notifications)
+            spec.structures.extend(addition.structures)
+            spec.enumerations.extend(addition.enumerations)
+            spec.typeAliases.extend(addition.typeAliases)
+
+    return spec

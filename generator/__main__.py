@@ -42,6 +42,7 @@ def get_parser() -> argparse.ArgumentParser:
         "-m",
         help="Path to a model JSON file. By default uses packaged model file.",
         type=str,
+        nargs="*",
     )
     parser.add_argument(
         "--plugin",
@@ -68,15 +69,16 @@ def main(argv: Sequence[str]) -> None:
     schema = json.load(schema_file.open("rb"))
 
     if args.model:
-        model_file = pathlib.Path(args.model)
+        model_files = [pathlib.Path(m) for m in args.model]
     else:
-        model_file = ir.files("generator") / "lsp.json"
+        model_files = [ir.files("generator") / "lsp.json"]
 
-    LOGGER.info("Using model file %s", os.fspath(model_file))
-    json_model = json.load(model_file.open("rb"))
-
-    LOGGER.info("Validating model.")
-    jsonschema.validate(json_model, schema)
+    json_models = []
+    for model_file in model_files:
+        LOGGER.info("Validating model file %s", os.fspath(model_file))
+        json_model = json.load(model_file.open("rb"))
+        jsonschema.validate(json_model, schema)
+        json_models.append(json_model)
 
     plugins = args.plugin or []
 
@@ -99,7 +101,7 @@ def main(argv: Sequence[str]) -> None:
 
         # load model and generate types for each plugin to avoid
         # any conflicts between plugins.
-        spec: model.LSPModel = model.create_lsp_model(json_model)
+        spec: model.LSPModel = model.create_lsp_model(json_models)
 
         try:
             plugin_module = importlib.import_module(f"generator-plugins.{plugin}")

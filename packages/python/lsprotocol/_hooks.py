@@ -383,6 +383,16 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         else:
             return converter.structure(object_, lsp_types.InlayHintOptions)
 
+    def _inlay_hint_label_part_hook(
+        object_: Any, _: type
+    ) -> Union[str, List[lsp_types.InlayHintLabelPart]]:
+        if isinstance(object_, str):
+            return object_
+
+        return [
+            converter.structure(item, lsp_types.InlayHintLabelPart) for item in object_
+        ]
+
     def _diagnostic_provider_hook(
         object_: Any, _: type
     ) -> Union[
@@ -774,6 +784,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _inlay_hint_provider_hook,
+        ),
+        (
+            Union[str, List[lsp_types.InlayHintLabelPart]],
+            _inlay_hint_label_part_hook,
         ),
         (
             Optional[

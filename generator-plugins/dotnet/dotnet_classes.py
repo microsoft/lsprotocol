@@ -14,9 +14,9 @@ from .dotnet_helpers import (
     generate_extras,
     get_doc,
     get_special_case_class_name,
+    get_special_case_property_name,
     get_usings,
     indent_lines,
-    interface_wrapper,
     namespace_wrapper,
     to_camel_case,
     to_upper_camel_case,
@@ -30,7 +30,7 @@ def _get_enum(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
     return None
 
 
-def _get_struct(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
+def _get_struct(name: str, spec: model.LSPModel) -> Optional[model.Structure]:
     for struct in spec.structures:
         if struct.name == name:
             return struct
@@ -159,7 +159,7 @@ def generate_property(
     types: TypeData,
     usings: List[str],
     class_name: str = "",
-) -> List[str]:
+) -> Tuple[List[str], str]:
     name = to_upper_camel_case(prop_def.name)
     type_name = get_type_name(
         prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
@@ -190,7 +190,7 @@ def generate_property(
         usings.append("JsonConverter")
     if optional and not special_optional:
         usings.append("JsonProperty")
-    return lines
+    return lines, type_name
 
 
 def generate_name(name_context: str, types: TypeData) -> str:
@@ -238,7 +238,8 @@ def generate_literal_type(
     usings = ["DataContract"]
     inner = []
     for prop in literal.value.properties:
-        inner += generate_property(prop, spec, types, usings, literal.name)
+        prop_code, _ = generate_property(prop, spec, types, usings, literal.name)
+        inner += prop_code
 
     lines = namespace_wrapper(
         NAMESPACE,
@@ -252,9 +253,8 @@ def generate_literal_type(
 
 def generate_constructor(
     struct: model.Structure,
-    spec: model.LSPModel,
     types: TypeData,
-    properties: List[model.Property],
+    properties: List[Tuple[model.Property, str]],
 ) -> List[str]:
     class_name = get_special_case_class_name(struct.name)
     constructor = [
@@ -265,23 +265,26 @@ def generate_constructor(
     arguments = []
     optional_args = []
     assignments = []
-    for prop in properties:
-        type_name = get_type_name(prop.type, types, spec, f"{class_name}_{prop.name}")
-        name = to_camel_case(prop.name)
+    ctor_data = []
+    for prop, prop_type in properties:
+        name = get_special_case_property_name(to_camel_case(prop.name))
         special_optional = prop.type.kind == "or" and has_null_base_type(
             prop.type.items
         )
         if prop.optional or special_optional:
-            optional_args += [f"{type_name}? {name} = null"]
+            optional_args += [f"{prop_type}? {name} = null"]
+            ctor_data += [(prop_type, name, True)]
         else:
-            arguments += [f"{type_name} {name}"]
+            arguments += [f"{prop_type} {name}"]
+            ctor_data += [(prop_type, name, False)]
         assignments += [f"{to_upper_camel_case(prop.name)} = {name};"]
 
     # combine args with a '\n' to get comma with indent
-    all_args = ",\n".join(indent_lines(arguments + optional_args))
+    all_args = (",\n".join(indent_lines(arguments + optional_args))).splitlines()
+    types.add_ctor(struct.name, ctor_data)
 
     # re-split args to get the right coma placement and indent
-    constructor += all_args.splitlines()
+    constructor += all_args
     constructor += [")", "{"]
     constructor += indent_lines(assignments)
     constructor += ["}"]
@@ -298,10 +301,14 @@ def generate_class_from_struct(
     usings = ["DataContract", "JsonConstructor"]
 
     properties = get_all_properties(struct, spec)
+    prop_types = []
     for prop in properties:
-        inner += generate_property(prop, spec, types, usings, struct.name)
+        prop_code, prop_type = generate_property(prop, spec, types, usings, struct.name)
+        inner += prop_code
+        prop_types += [prop_type]
 
-    inner = generate_constructor(struct, spec, types, properties) + inner
+    ctor = generate_constructor(struct, types, zip(properties, prop_types))
+    inner = ctor + inner
 
     lines = namespace_wrapper(
         NAMESPACE,
@@ -352,7 +359,7 @@ def generate_type_alias_constructor(
             type_name = to_upper_camel_case(type_def.name)
             for t in subset:
                 sub_type = get_type_name(t, types, spec, type_def.name)
-                arg = to_camel_case(sub_type)
+                arg = get_special_case_property_name(to_camel_case(sub_type))
                 if arg.endswith("[]"):
                     arg = f"{arg[:-2]}s"
 
@@ -361,6 +368,29 @@ def generate_type_alias_constructor(
                 ]
         else:
             raise ValueError("Unable to generate constructor for empty union")
+    elif type_def.type.kind == "reference":
+        type_name = to_upper_camel_case(type_def.name)
+        ctor_data = types.get_ctor(type_def.type.name)
+        required = [
+            (prop_type, prop_name)
+            for prop_type, prop_name, optional in ctor_data
+            if not optional
+        ]
+        optional = [
+            (prop_type, prop_name)
+            for prop_type, prop_name, optional in ctor_data
+            if optional
+        ]
+
+        ctor_args = [f"{prop_type} {prop_name}" for prop_type, prop_name in required]
+        ctor_args += [
+            f"{prop_type}? {prop_name} = null" for prop_type, prop_name in optional
+        ]
+
+        base_args = [f"{prop_name}" for _, prop_name in required + optional]
+        constructor += [
+            f"public {type_name}({','.join(ctor_args)}): base({','.join(base_args)}) {{}}",
+        ]
 
     return constructor
 
@@ -431,20 +461,28 @@ def generate_code_for_variant_struct(
     spec: model.LSPModel,
     types: TypeData,
 ) -> None:
-    property_type: Dict[str, str] = {}
-    for prop in struct.properties:
-        property_type[prop.name] = get_type_name(
-            prop.type, types, spec, f"{struct.name}_{prop.name}"
-        )
-
+    prop_types = []
+    inner = []
     usings = ["DataContract", "JsonConstructor"]
-    constructor_args = [
-        f"{property_type[prop.name]}? {prop.name}" for prop in struct.properties
-    ]
-    conditions = [f"({prop.name} is null)" for prop in struct.properties]
-    inner = [
+    for prop in struct.properties:
+        prop_code, prop_type = generate_property(prop, spec, types, usings, struct.name)
+        inner += prop_code
+        prop_types += [prop_type]
+
+    ctor_data = []
+    constructor_args = []
+    conditions = []
+    for prop, prop_type in zip(struct.properties, prop_types):
+        name = get_special_case_property_name(to_camel_case(prop.name))
+        constructor_args += [f"{prop_type}? {name}"]
+        ctor_data = [(prop_type)]
+        conditions += [f"({name} is null)"]
+
+    sig = ", ".join(constructor_args)
+    types.add_ctor(struct.name, ctor_data)
+    ctor = [
         f"[JsonConstructor]",
-        f"public {struct.name}({', '.join(constructor_args)})",
+        f"public {struct.name}({sig})",
         "{",
         *indent_lines(
             [
@@ -460,14 +498,14 @@ def generate_code_for_variant_struct(
         ),
         *indent_lines(
             [
-                f"{to_upper_camel_case(prop.name)} = {prop.name};"
+                f"{to_upper_camel_case(prop.name)} = {get_special_case_property_name(to_camel_case(prop.name))};"
                 for prop in struct.properties
             ]
         ),
         "}",
     ]
-    for prop in struct.properties:
-        inner += generate_property(prop, spec, types, usings, struct.name)
+
+    inner = ctor + inner
 
     return namespace_wrapper(
         NAMESPACE,

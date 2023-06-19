@@ -71,6 +71,16 @@ def get_special_case_class_name(name: str) -> str:
     return name
 
 
+def get_special_case_property_name(name: str) -> str:
+    if name == "string":
+        return "stringValue"
+    if name == "int":
+        return "intValue"
+    if name == "event":
+        return "eventArgs"
+    return name
+
+
 def class_wrapper(
     type_def: Union[model.Structure, model.Notification, model.Request],
     inner: List[str],
@@ -89,33 +99,6 @@ def class_wrapper(
         + [
             "[DataContract]",
             f"public class {name}: {derived}" if derived else f"public class {name}",
-            "{",
-        ]
-    )
-    lines += indent_lines(inner)
-    lines += ["}", ""]
-    return lines
-
-
-def interface_wrapper(
-    type_def: Union[model.Structure, model.Notification, model.Request],
-    inner: List[str],
-    derived: Optional[str] = None,
-) -> List[str]:
-    if hasattr(type_def, "name"):
-        name = type_def.name
-    else:
-        raise ValueError(f"Unknown type: {type_def}")
-
-    lines = (
-        get_doc(type_def.documentation)
-        + generate_extras(type_def)
-        + [
-            (
-                f"public interface {name}: {derived}"
-                if derived
-                else f"public interface {name}"
-            ),
             "{",
         ]
     )

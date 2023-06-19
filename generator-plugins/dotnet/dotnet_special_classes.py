@@ -103,10 +103,10 @@ def generate_special_class(
             "    set { Filters[index] = value; }",
             "}",
             "public int Length => Filters.Length;",
-            "public IEnumerator<DocumentFilter> GetEnumerator() => ((IEnumerable<DocumentFilter>)Filters).GetEnumerator();",
-            "IEnumerator IEnumerable.GetEnumerator() => Filters.GetEnumerator();",
             "public static implicit operator DocumentSelector(DocumentFilter[] filters) => new(filters);",
             "public static implicit operator DocumentFilter[](DocumentSelector selector) => selector.Filters;",
+            "public IEnumerator<DocumentFilter> GetEnumerator() => ((IEnumerable<DocumentFilter>)Filters).GetEnumerator();",
+            "System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => Filters.GetEnumerator();",
         ]
         lines = namespace_wrapper(
             NAMESPACE,

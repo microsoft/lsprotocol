@@ -86,6 +86,10 @@ jobs:
         run: python -m pip install -r ./packages/python/requirements.txt
         shell: bash
 
+      - name: Install pygls
+        run: python -m pip install --no-deps ./smoke_tests
+        shell: bash
+
       - name: Pip List
         run: python -m pip list
         shell: bash

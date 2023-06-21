@@ -1,4 +1,4 @@
-public interface ILSPResponseError
+public interface IResponseError
 {
 
     int Code { get; }

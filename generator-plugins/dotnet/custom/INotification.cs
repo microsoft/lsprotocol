@@ -1,4 +1,4 @@
-public interface ILSPNotification<TParams> : ILSPMessage
+public interface INotification<TParams> : IMessage
 {
     string Method { get; }
 

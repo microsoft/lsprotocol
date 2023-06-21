@@ -166,4 +166,8 @@ def get_usings(types: List[str]) -> List[str]:
         if t in types:
             usings.append("using Newtonsoft.Json.Linq;")
 
+    for t in ["List", "Dictionary"]:
+        if t in types:
+            usings.append("using System.Collections.Generic;")
+
     return sorted(list(set(usings)))

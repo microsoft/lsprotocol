@@ -38,8 +38,8 @@ def generate_special_class(
     if type_def.name == "LSPObject":
         lines = namespace_wrapper(
             NAMESPACE,
-            get_usings(["JObject", "DataContract"]),
-            class_wrapper(type_def, [], "JObject"),
+            get_usings(["Dictionary", "DataContract"]),
+            class_wrapper(type_def, [], "Dictionary<object>"),
         )
     if type_def.name == "LSPAny":
         lines = namespace_wrapper(
@@ -50,8 +50,8 @@ def generate_special_class(
     if type_def.name == "LSPArray":
         lines = namespace_wrapper(
             NAMESPACE,
-            get_usings(["JArray", "DataContract"]),
-            class_wrapper(type_def, [], "JArray"),
+            get_usings(["DataContract", "List"]),
+            class_wrapper(type_def, [], "List<object>"),
         )
 
     if type_def.name == "Pattern":

@@ -182,14 +182,22 @@ def generate_property(
         )
         + [
             f'[DataMember(Name = "{prop_def.name}")]',
-            f"public {type_name}{optional} {name} {{ get; set; }}",
         ]
     )
+
+    if prop_def.type.kind == "stringLiteral":
+        lines.append(
+            f'public {type_name}{optional} {name} {{ get; set; }} = "{prop_def.type.value}";'
+        )
+    else:
+        lines.append(f"public {type_name}{optional} {name} {{ get; set; }}")
+
     usings.append("DataMember")
     if converter:
         usings.append("JsonConverter")
     if optional and not special_optional:
         usings.append("JsonProperty")
+
     return lines, type_name
 
 

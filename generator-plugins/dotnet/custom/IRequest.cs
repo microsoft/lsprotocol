@@ -1,4 +1,4 @@
-public interface ILSPRequest<TParams> : ILSPMessage
+public interface IRequest<TParams> : IMessage
 {
 
     OrType<int, string> Id { get; }

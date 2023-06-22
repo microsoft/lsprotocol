@@ -17,6 +17,7 @@ from .dotnet_helpers import (
     get_special_case_property_name,
     get_usings,
     indent_lines,
+    lsp_method_to_name,
     namespace_wrapper,
     to_camel_case,
     to_upper_camel_case,
@@ -182,14 +183,22 @@ def generate_property(
         )
         + [
             f'[DataMember(Name = "{prop_def.name}")]',
-            f"public {type_name}{optional} {name} {{ get; set; }}",
         ]
     )
+
+    if prop_def.type.kind == "stringLiteral":
+        lines.append(
+            f'public {type_name}{optional} {name} {{ get; set; }} = "{prop_def.type.value}";'
+        )
+    else:
+        lines.append(f"public {type_name}{optional} {name} {{ get; set; }}")
+
     usings.append("DataMember")
     if converter:
         usings.append("JsonConverter")
     if optional and not special_optional:
         usings.append("JsonProperty")
+
     return lines, type_name
 
 
@@ -247,7 +256,6 @@ def generate_literal_type(
         class_wrapper(literal, inner),
     )
     types.add_type_info(literal, literal.name, lines)
-    print(f"{name_context} => {literal.name}")
     return literal.name
 
 
@@ -436,7 +444,6 @@ def generate_class_from_variant_literals(
 
     lines = generate_code_for_variant_struct(struct, spec, types)
     types.add_type_info(struct, struct.name, lines)
-    print(f"{name_context} => {struct.name}")
     return struct.name
 
 
@@ -610,6 +617,46 @@ def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
     return properties
 
 
+def generate_code_for_request(request: model.Request):
+    lines = get_doc(request.documentation) + generate_extras(request)
+    lines.append(
+        f'public static string {lsp_method_to_name(request.method)} {{ get; }} = "{request.method}";'
+    )
+    return lines
+
+
+def generate_code_for_notification(notify: model.Notification):
+    lines = get_doc(notify.documentation) + generate_extras(notify)
+    lines.append(
+        f'public static string {lsp_method_to_name(notify.method)} {{ get; }} = "{notify.method}";'
+    )
+    return lines
+
+
+def generate_request_notification_types(spec: model.LSPModel, types: TypeData):
+    inner_lines = []
+    for request in spec.requests:
+        inner_lines += generate_code_for_request(request)
+
+    for notification in spec.notifications:
+        inner_lines += generate_code_for_notification(notification)
+
+    lines = namespace_wrapper(
+        NAMESPACE,
+        get_usings(["System"]),
+        ["public static class LSPMethods", "{", *indent_lines(inner_lines), "}"],
+    )
+    enum_type = model.Enum(
+        **{
+            "name": "LSPMethods",
+            "type": {"kind": "base", "name": "string"},
+            "values": [],
+            "documentation": "LSP methods as defined in the LSP spec",
+        }
+    )
+    types.add_type_info(enum_type, "LSPMethods", lines)
+
+
 def generate_all_classes(spec: model.LSPModel, types: TypeData):
     for struct in spec.structures:
         generate_class_from_struct(struct, spec, types)
@@ -619,3 +666,5 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             generate_class_from_variant_type_alias(type_alias, spec, types)
         else:
             generate_class_from_type_alias(type_alias, spec, types)
+
+    generate_request_notification_types(spec, types)

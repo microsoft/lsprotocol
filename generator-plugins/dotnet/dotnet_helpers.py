@@ -33,6 +33,13 @@ def to_upper_camel_case(name: str) -> str:
     return "".join([c.capitalize() for c in get_parts(name)])
 
 
+def lsp_method_to_name(method: str) -> str:
+    if method.startswith("$"):
+        method = method[1:]
+    method = method.replace("/", "_")
+    return to_upper_camel_case(method)
+
+
 def file_header() -> List[str]:
     return [
         "// Copyright (c) Microsoft Corporation. All rights reserved.",
@@ -134,7 +141,13 @@ def get_deprecated(text: Optional[str]) -> Optional[str]:
 
 def generate_extras(
     type_def: Union[
-        model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
+        model.Enum,
+        model.EnumItem,
+        model.Property,
+        model.TypeAlias,
+        model.Structure,
+        model.Request,
+        model.Notification,
     ]
 ) -> List[str]:
     deprecated = get_deprecated(type_def.documentation)
@@ -147,6 +160,12 @@ def generate_extras(
         extras += [f"[Proposed]"]
     if type_def.since:
         extras += [f'[Since("{cleanup_str(type_def.since)}")]']
+
+    if hasattr(type_def, "messageDirection"):
+        if type_def.since:
+            extras += [
+                f"[Direction(MessageDirection.{to_upper_camel_case(type_def.messageDirection)})]"
+            ]
 
     return extras
 
@@ -166,4 +185,8 @@ def get_usings(types: List[str]) -> List[str]:
         if t in types:
             usings.append("using Newtonsoft.Json.Linq;")
 
-    return list(set(usings))
+    for t in ["List", "Dictionary"]:
+        if t in types:
+            usings.append("using System.Collections.Generic;")
+
+    return sorted(list(set(usings)))

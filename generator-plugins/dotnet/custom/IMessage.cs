@@ -1,4 +1,4 @@
-public interface ILSPMessage
+public interface IMessage
 {
     string JsonRPC { get; }
 }

@@ -96,15 +96,7 @@ MODEL_SCHEMA = "https://raw.githubusercontent.com/microsoft/vscode-languageserve
 MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.json"
 
 
-@nox.session()
-def build_lsp(session: nox.Session):
-    """Generate lsprotocol package from LSP model."""
-    _generate_model(session)
-
-
-@nox.session()
-def update_lsp(session: nox.Session):
-    """Update the LSP model and generate the lsprotocol content."""
+def _download_models(session: nox.session):
     session.log("Downloading LSP model schema.")
     model_schema_text: str = _get_content(MODEL_SCHEMA)
     session.log("Downloading LSP model.")
@@ -121,6 +113,18 @@ def update_lsp(session: nox.Session):
         json.dumps(json.loads(model_text), indent=4, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
+
+
+@nox.session()
+def build_lsp(session: nox.Session):
+    """Generate lsprotocol package from LSP model."""
+    _generate_model(session)
+
+
+@nox.session()
+def update_lsp(session: nox.Session):
+    """Update the LSP model and generate the lsprotocol content."""
+    _download_models(session)
     _generate_model(session)
 
 
@@ -211,3 +215,14 @@ def create_plugin(session: nox.Session):
     launch_json_path.write_text(json.dumps(launch_json, indent=4), encoding="utf-8")
 
     session.log(f"Created plugin {name}.")
+
+
+@nox.session()
+def update_dotnet(session: nox.Session):
+    """Update the dotnet code."""
+    _download_models(session)
+    _install_requirements(session)
+
+    session.run("python", "-m", "generator", "--plugin", "dotnet")
+    with session.chdir("./packages/dotnet/lsprotocol"):
+        session.run("dotnet", "build")

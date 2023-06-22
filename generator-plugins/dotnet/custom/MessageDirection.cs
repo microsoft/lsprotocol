@@ -1,6 +1,8 @@
+using System.Runtime.Serialization;
+
 public enum MessageDirection
 {
-    ServerToClient = "serverToClient",
-    ClientToServer = "clientToServer",
-    Both = "both"
+    [EnumMember(Value = "serverToClient")] ServerToClient,
+    [EnumMember(Value = "clientToServer")] ClientToServer,
+    [EnumMember(Value = "both")] Both,
 }

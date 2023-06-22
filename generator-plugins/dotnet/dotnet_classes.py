@@ -646,7 +646,7 @@ def generate_request_notification_types(spec: model.LSPModel, types: TypeData):
     lines = namespace_wrapper(
         NAMESPACE,
         get_usings(["System"]),
-        ["public enum LSPMethods{", *indent_lines(inner_lines), "}"],
+        ["public enum LSPMethods", "{", *indent_lines(inner_lines), "}"],
     )
     types.add_type_info(None, "LSPMethods", lines)
 

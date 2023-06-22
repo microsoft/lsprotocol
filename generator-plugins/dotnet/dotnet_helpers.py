@@ -141,7 +141,13 @@ def get_deprecated(text: Optional[str]) -> Optional[str]:
 
 def generate_extras(
     type_def: Union[
-        model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
+        model.Enum,
+        model.EnumItem,
+        model.Property,
+        model.TypeAlias,
+        model.Structure,
+        model.Request,
+        model.Notification,
     ]
 ) -> List[str]:
     deprecated = get_deprecated(type_def.documentation)
@@ -154,6 +160,12 @@ def generate_extras(
         extras += [f"[Proposed]"]
     if type_def.since:
         extras += [f'[Since("{cleanup_str(type_def.since)}")]']
+
+    if hasattr(type_def, "messageDirection"):
+        if type_def.since:
+            extras += [
+                f'[Direction("{to_upper_camel_case(type_def.messageDirection)}")]'
+            ]
 
     return extras
 

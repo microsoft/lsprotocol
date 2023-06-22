@@ -164,7 +164,7 @@ def generate_extras(
     if hasattr(type_def, "messageDirection"):
         if type_def.since:
             extras += [
-                f'[Direction("{to_upper_camel_case(type_def.messageDirection)}")]'
+                f"[Direction(MessageDirection.{to_upper_camel_case(type_def.messageDirection)})]"
             ]
 
     return extras

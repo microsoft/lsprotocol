@@ -617,38 +617,44 @@ def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
     return properties
 
 
-def generate_code_for_request(
-    request: model.Request, spec: model.LSPModel, types: TypeData
-):
-    lines = get_doc(request.documentation) + generate_extras(request, spec, types)
-    lines.append(f'{lsp_method_to_name(request.method)} = "{request.method}";')
-
-
-def generate_code_for_notification(
-    notification: model.Notification, spec: model.LSPModel, types: TypeData
-):
-    lines = get_doc(notification.documentation) + generate_extras(
-        notification, spec, types
-    )
+def generate_code_for_request(request: model.Request):
+    lines = get_doc(request.documentation) + generate_extras(request)
     lines.append(
-        f'{lsp_method_to_name(notification.method)} = "{notification.method}";'
+        f'public static string {lsp_method_to_name(request.method)} {{ get; }} = "{request.method}";'
     )
+    return lines
+
+
+def generate_code_for_notification(notify: model.Notification):
+    lines = get_doc(notify.documentation) + generate_extras(notify)
+    lines.append(
+        f'public static string {lsp_method_to_name(notify.method)} {{ get; }} = "{notify.method}";'
+    )
+    return lines
 
 
 def generate_request_notification_types(spec: model.LSPModel, types: TypeData):
     inner_lines = []
     for request in spec.requests:
-        inner_lines += generate_code_for_request(request, spec, types)
+        inner_lines += generate_code_for_request(request)
 
     for notification in spec.notifications:
-        inner_lines += generate_code_for_notification(notification, spec, types)
+        inner_lines += generate_code_for_notification(notification)
 
     lines = namespace_wrapper(
         NAMESPACE,
         get_usings(["System"]),
-        ["public enum LSPMethods", "{", *indent_lines(inner_lines), "}"],
+        ["public static class LSPMethods", "{", *indent_lines(inner_lines), "}"],
     )
-    types.add_type_info(None, "LSPMethods", lines)
+    enum_type = model.Enum(
+        **{
+            "name": "LSPMethods",
+            "type": {"kind": "base", "name": "string"},
+            "values": [],
+            "documentation": "LSP methods as defined in the LSP spec",
+        }
+    )
+    types.add_type_info(enum_type, "LSPMethods", lines)
 
 
 def generate_all_classes(spec: model.LSPModel, types: TypeData):
@@ -660,3 +666,5 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             generate_class_from_variant_type_alias(type_alias, spec, types)
         else:
             generate_class_from_type_alias(type_alias, spec, types)
+
+    generate_request_notification_types(spec, types)

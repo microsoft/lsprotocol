@@ -39,7 +39,7 @@ def generate_special_class(
         lines = namespace_wrapper(
             NAMESPACE,
             get_usings(["Dictionary", "DataContract"]),
-            class_wrapper(type_def, [], "Dictionary<object>"),
+            class_wrapper(type_def, [], "Dictionary<string, object?>"),
         )
     if type_def.name == "LSPAny":
         lines = namespace_wrapper(

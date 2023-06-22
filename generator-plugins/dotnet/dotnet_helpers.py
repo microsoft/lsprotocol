@@ -33,6 +33,13 @@ def to_upper_camel_case(name: str) -> str:
     return "".join([c.capitalize() for c in get_parts(name)])
 
 
+def lsp_method_to_name(method: str) -> str:
+    if method.startswith("$"):
+        method = method[1:]
+    method = method.replace("/", "_")
+    return to_upper_camel_case(method)
+
+
 def file_header() -> List[str]:
     return [
         "// Copyright (c) Microsoft Corporation. All rights reserved.",

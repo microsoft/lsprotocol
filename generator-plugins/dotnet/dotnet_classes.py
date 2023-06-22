@@ -17,6 +17,7 @@ from .dotnet_helpers import (
     get_special_case_property_name,
     get_usings,
     indent_lines,
+    lsp_method_to_name,
     namespace_wrapper,
     to_camel_case,
     to_upper_camel_case,
@@ -614,6 +615,40 @@ def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
                 properties.append(copy_property(prop))
 
     return properties
+
+
+def generate_code_for_request(
+    request: model.Request, spec: model.LSPModel, types: TypeData
+):
+    lines = get_doc(request.documentation) + generate_extras(request, spec, types)
+    lines.append(f'{lsp_method_to_name(request.method)} = "{request.method}";')
+
+
+def generate_code_for_notification(
+    notification: model.Notification, spec: model.LSPModel, types: TypeData
+):
+    lines = get_doc(notification.documentation) + generate_extras(
+        notification, spec, types
+    )
+    lines.append(
+        f'{lsp_method_to_name(notification.method)} = "{notification.method}";'
+    )
+
+
+def generate_request_notification_types(spec: model.LSPModel, types: TypeData):
+    inner_lines = []
+    for request in spec.requests:
+        inner_lines += generate_code_for_request(request, spec, types)
+
+    for notification in spec.notifications:
+        inner_lines += generate_code_for_notification(notification, spec, types)
+
+    lines = namespace_wrapper(
+        NAMESPACE,
+        get_usings(["System"]),
+        ["public enum LSPMethods{", *indent_lines(inner_lines), "}"],
+    )
+    types.add_type_info(None, "LSPMethods", lines)
 
 
 def generate_all_classes(spec: model.LSPModel, types: TypeData):

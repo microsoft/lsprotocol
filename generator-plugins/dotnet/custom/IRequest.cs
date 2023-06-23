@@ -1,7 +1,7 @@
 public interface IRequest<TParams> : IMessage
 {
 
-    OrType<int, string> Id { get; }
+    OrType<string, int> Id { get; }
 
     string Method { get; }
 

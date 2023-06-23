@@ -85,6 +85,8 @@ def get_special_case_property_name(name: str) -> str:
         return "intValue"
     if name == "event":
         return "eventArgs"
+    if name == "params":
+        return "paramsValue"
     return name
 
 

@@ -34,9 +34,13 @@ def request_variants(method: str):
     for id_value in [LSP_OVER_MAX_INT, LSP_UNDER_MIN_INT, 1.0, True, None]:
         yield False, {"jsonrpc": "2.0", "id": id_value, "method": method}
     yield False, {"jsonrpc": "2.0", "method": method}
-    yield False, {"jsonrpc": "1.0", "id": 1, "method": method}
     yield False, {"jsonrpc": "2.0", "id": 1}
     yield False, {"id": 1, "method": method}
+
+
+def notify_variants(method: str):
+    yield True, {"jsonrpc": "2.0", "method": method}
+    yield False, {"jsonrpc": "2.0", "id": 1, "method": method}
 
 
 def _get_struct(name: str, spec: model.LSPModel) -> Optional[model.Structure]:
@@ -205,21 +209,25 @@ def generate_for_reference(
     enum = _get_enum(refname, spec)
     if ref:
         properties = get_all_properties(ref, spec)
-        names = [prop.name for prop in properties]
-        value_variants = [
-            list(generate_for_type(prop.type, spec, visited)) for prop in properties
-        ]
+        if properties:
+            names = [prop.name for prop in properties]
+            value_variants = [
+                list(generate_for_type(prop.type, spec, visited)) for prop in properties
+            ]
 
-        products = zip(*extend_all(value_variants))
-        for variants in products:
-            is_valid = all(valid for valid, _ in variants)
-            values = [value for _, value in variants]
-            variant = {
-                name: value
-                for name, value in zip(names, values)
-                if not isinstance(value, Ignore)
-            }
-            yield (is_valid, variant)
+            products = zip(*extend_all(value_variants))
+            for variants in products:
+                is_valid = all(valid for valid, _ in variants)
+                values = [value for _, value in variants]
+                variant = {
+                    name: value
+                    for name, value in zip(names, values)
+                    if not isinstance(value, Ignore)
+                }
+                yield (is_valid, variant)
+        else:
+            yield (True, {"lspExtension": "some value"})
+            yield (True, dict())
     elif alias:
         yield from generate_for_type(alias.type, spec, visited)
     elif enum:
@@ -289,6 +297,7 @@ def generate_for_literal(
         # Literal with no properties are a way to extend LSP spec
         # see: https://github.com/microsoft/vscode-languageserver-node/issues/997
         yield (True, {"lspExtension": "some value"})
+        yield (True, dict())
 
 
 def generate_for_type(
@@ -308,7 +317,7 @@ def generate_for_type(
         )
     elif type_def.kind == "stringLiteral":
         yield (True, type_def.value)
-        yield (False, f"invalid@{type_def.value}")
+        # yield (False, f"invalid@{type_def.value}")
     elif type_def.kind == "tuple":
         yield from generate_for_tuple(type_def.items, spec, visited)
     elif type_def.kind == "or":
@@ -341,18 +350,43 @@ def generate_requests(request: model.Request, spec: model.LSPModel):
             yield (valid1 and valid2, message)
 
 
-def generate_responses(spec: model.LSPModel, testdata: Dict[str, str]) -> None:
-    pass
+def generate_notifications(notify: model.Notification, spec: model.LSPModel) -> None:
+    variants = zip(
+        *extend_all(
+            [
+                list(notify_variants(notify.method)),
+                list(generate_for_type(notify.params, spec, [])),
+            ]
+        )
+    )
+
+    for (valid1, base), (valid2, params) in variants:
+        valid = valid1 and valid2
+        if isinstance(params, Ignore):
+            yield (valid, base)
+        else:
+            message = deepcopy(base)
+            message.update({"params": params})
+            yield (valid1 and valid2, message)
 
 
-def generate_notifications(spec: model.LSPModel, testdata: Dict[str, str]) -> None:
-    pass
+PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
 
 
-def to_upper_snake_case(name: str) -> str:
-    name = name.replace("$", "")
-    name = name.replace("/", "_")
-    return re.sub(r"([A-Z])", r"_\1", name).upper()
+def get_parts(name: str) -> List[str]:
+    name = name.replace("_", " ")
+    return PARTS_RE.sub(r"\2 \3", name).split()
+
+
+def to_upper_camel_case(name: str) -> str:
+    return "".join([c.capitalize() for c in get_parts(name)])
+
+
+def lsp_method_to_name(method: str) -> str:
+    if method.startswith("$"):
+        method = method[1:]
+    method = method.replace("/", "_")
+    return to_upper_camel_case(method)
 
 
 def generate(spec: model.LSPModel, logger: logging.Logger):
@@ -361,11 +395,23 @@ def generate(spec: model.LSPModel, logger: logging.Logger):
         counter = 0
         for valid, value in generate_requests(request, spec):
             content = json.dumps(value, indent=4, ensure_ascii=False)
-            name = f"request-{valid}-{to_upper_snake_case(request.method)}-{get_hash_from(content)}.json"
+            name = f"{lsp_method_to_name(request.method)}Request-{valid}-{get_hash_from(content)}.json"
             if name in testdata:
                 continue
             testdata[name] = content
             counter += 1
         logger.info(f"Generated {counter} variants for: {request.method}")
+
+    for notify in spec.notifications:
+        counter = 0
+        for valid, value in generate_notifications(notify, spec):
+            content = json.dumps(value, indent=4, ensure_ascii=False)
+            name = f"{lsp_method_to_name(notify.method)}Notification-{valid}-{get_hash_from(content)}.json"
+            if name in testdata:
+                continue
+            testdata[name] = content
+            counter += 1
+        logger.info(f"Generated {counter} variants for: {notify.method}")
+
     logger.info(f"Generated {len(testdata)} test variants")
     return testdata

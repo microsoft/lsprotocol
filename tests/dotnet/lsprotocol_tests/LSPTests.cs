@@ -1,6 +1,7 @@
 
 namespace lsprotocol_tests;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class LSPTests
 {
@@ -26,7 +27,8 @@ public class LSPTests
         string[] nameParts = fileName.Split('_');
         string className = nameParts[0];
 
-        object? deserializedObject = JsonConvert.DeserializeObject(json, Type.GetType(className));
+        Type type = Type.GetType(className) ?? throw new Exception($"Type {className} not found");
+        object? deserializedObject = JsonConvert.DeserializeObject(original, type);
         string newJson = JsonConvert.SerializeObject(deserializedObject);
 
         JToken token1 = JToken.Parse(original);

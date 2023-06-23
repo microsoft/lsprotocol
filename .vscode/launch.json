@@ -45,7 +45,8 @@
             "options": [
                 "python",
                 "rust",
-                "dotnet"
+                "dotnet",
+                "testdata"
             ]
         }
     ]

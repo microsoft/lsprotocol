@@ -161,7 +161,10 @@ def generate_property(
     usings: List[str],
     class_name: str = "",
 ) -> Tuple[List[str], str]:
-    name = to_upper_camel_case(prop_def.name)
+    if prop_def.name == "jsonrpc":
+        name = "JsonRPC"
+    else:
+        name = to_upper_camel_case(prop_def.name)
     type_name = get_type_name(
         prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
     )
@@ -282,10 +285,17 @@ def generate_constructor(
         if prop.optional or special_optional:
             optional_args += [f"{prop_type}? {name} = null"]
             ctor_data += [(prop_type, name, True)]
+        elif prop.name == "jsonrpc":
+            optional_args += [f'{prop_type} {name} = "2.0"']
+            ctor_data += [(prop_type, name, True)]
         else:
             arguments += [f"{prop_type} {name}"]
             ctor_data += [(prop_type, name, False)]
-        assignments += [f"{to_upper_camel_case(prop.name)} = {name};"]
+
+        if prop.name == "jsonrpc":
+            assignments += [f"JsonRPC = {name};"]
+        else:
+            assignments += [f"{to_upper_camel_case(prop.name)} = {name};"]
 
     # combine args with a '\n' to get comma with indent
     all_args = (",\n".join(indent_lines(arguments + optional_args))).splitlines()
@@ -300,7 +310,10 @@ def generate_constructor(
 
 
 def generate_class_from_struct(
-    struct: model.Structure, spec: model.LSPModel, types: TypeData
+    struct: model.Structure,
+    spec: model.LSPModel,
+    types: TypeData,
+    derived: Optional[str] = None,
 ):
     if types.get_by_name(struct.name) or struct.name.startswith("_"):
         return
@@ -321,7 +334,7 @@ def generate_class_from_struct(
     lines = namespace_wrapper(
         NAMESPACE,
         get_usings(usings),
-        class_wrapper(struct, inner),
+        class_wrapper(struct, inner, derived),
     )
     types.add_type_info(struct, struct.name, lines)
 
@@ -633,7 +646,7 @@ def generate_code_for_notification(notify: model.Notification):
     return lines
 
 
-def generate_request_notification_types(spec: model.LSPModel, types: TypeData):
+def generate_request_notification_methods(spec: model.LSPModel, types: TypeData):
     inner_lines = []
     for request in spec.requests:
         inner_lines += generate_code_for_request(request)
@@ -657,6 +670,99 @@ def generate_request_notification_types(spec: model.LSPModel, types: TypeData):
     types.add_type_info(enum_type, "LSPMethods", lines)
 
 
+def get_message_template(
+    obj: Union[model.Request, model.Notification],
+    spec: model.LSPModel,
+    types: TypeData,
+    is_request: bool,
+) -> model.Structure:
+    text = "Request" if is_request else "Notification"
+    properties = [
+        {
+            "name": "jsonrpc",
+            "type": {"kind": "stringLiteral", "value": "2.0"},
+            "documentation": "The jsonrpc version.",
+        }
+    ]
+    if is_request:
+        properties += [
+            {
+                "name": "id",
+                "type": {
+                    "kind": "or",
+                    "items": [
+                        {"kind": "base", "name": "string"},
+                        {"kind": "base", "name": "integer"},
+                    ],
+                },
+                "documentation": f"The {text} id.",
+            }
+        ]
+    properties += [
+        {
+            "name": "method",
+            "type": {"kind": "base", "name": "string"},
+            "documentation": f"The {text} method.",
+        },
+    ]
+    if obj.params:
+        properties.append(
+            {
+                "name": "params",
+                "type": {
+                    "kind": "reference",
+                    "name": get_type_name(obj.params, types, spec),
+                },
+                "documentation": f"The {text} parameters.",
+            }
+        )
+    else:
+        properties.append(
+            {
+                "name": "params",
+                "type": {"kind": "reference", "name": "LSPAny"},
+                "documentation": f"The {text} parameters.",
+                "optional": True,
+            }
+        )
+
+    class_template = {
+        "name": f"{lsp_method_to_name(obj.method)}{text}",
+        "properties": properties,
+        "documentation": obj.documentation,
+        "since": obj.since,
+        "deprecated": obj.deprecated,
+        "proposed": obj.proposed,
+    }
+    return model.Structure(**class_template)
+
+
+def get_registration_options_template(
+    obj: Union[model.Request, model.Notification],
+    spec: model.LSPModel,
+    types: TypeData,
+) -> model.Structure:
+    if obj.registrationOptions and obj.registrationOptions.kind != "reference":
+        if obj.registrationOptions.kind == "and":
+            structs = [_get_struct(s.name, spec) for s in obj.registrationOptions.items]
+            properties = []
+            for struct in structs:
+                properties += get_all_properties(struct, spec)
+
+            class_template = {
+                "name": f"{lsp_method_to_name(obj.method)}RegistrationOptions",
+                "properties": [
+                    cattrs.unstructure(p, model.Property) for p in properties
+                ],
+            }
+            return model.Structure(**class_template)
+        else:
+            raise ValueError(
+                f"Unexpected registrationOptions type: {obj.registrationOptions.type.kind}"
+            )
+    return None
+
+
 def generate_all_classes(spec: model.LSPModel, types: TypeData):
     for struct in spec.structures:
         generate_class_from_struct(struct, spec, types)
@@ -667,4 +773,40 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
         else:
             generate_class_from_type_alias(type_alias, spec, types)
 
-    generate_request_notification_types(spec, types)
+    generate_request_notification_methods(spec, types)
+
+    for request in spec.requests:
+        struct = get_message_template(request, spec, types, is_request=True)
+        params = struct.properties[3]
+        generate_class_from_struct(
+            struct,
+            spec,
+            types,
+            f"IRequest<{params.type.name}>",
+        )
+        registration_options = get_registration_options_template(request, spec, types)
+        if registration_options:
+            generate_class_from_struct(
+                registration_options,
+                spec,
+                types,
+            )
+
+    for notification in spec.notifications:
+        struct = get_message_template(notification, spec, types, is_request=False)
+        params = struct.properties[2]
+        generate_class_from_struct(
+            struct,
+            spec,
+            types,
+            f"INotification<{params.type.name}>",
+        )
+        registration_options = get_registration_options_template(
+            notification, spec, types
+        )
+        if registration_options:
+            generate_class_from_struct(
+                registration_options,
+                spec,
+                types,
+            )

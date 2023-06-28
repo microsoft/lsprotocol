@@ -334,14 +334,13 @@ class InsertTextFormat(int, enum.Enum):
     """The primary text to be inserted is treated as a plain string."""
     Snippet = 2
     """The primary text to be inserted is treated as a snippet.
-
+    
     A snippet can define tab stops and placeholders with `$1`, `$2`
     and `${3:foo}`. `$0` defines the final tab stop, it defaults to
     the end of the snippet. Placeholders with equal identifiers are linked,
     that is typing in one will update others too.
-
-    See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax
-    """
+    
+    See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax"""
 
 
 @enum.unique
@@ -457,17 +456,15 @@ class MarkupKind(str, enum.Enum):
     PlainText = "plaintext"
     """Plain text is supported as a content format"""
     Markdown = "markdown"
-    """Markdown is supported as a content format."""
+    """Markdown is supported as a content format"""
 
 
 @enum.unique
 class InlineCompletionTriggerKind(int, enum.Enum):
-    """Describes how an {@link InlineCompletionItemProvider inline completion provider}
-    was triggered.
+    """Describes how an {@link InlineCompletionItemProvider inline completion provider} was triggered.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -493,11 +490,10 @@ class PositionEncodingKind(str, enum.Enum):
     by servers"""
     Utf32 = "utf-32"
     """Character offsets count UTF-32 code units.
-
+    
     Implementation note: these are the same as Unicode codepoints,
     so this `PositionEncodingKind` may also be used for an
-    encoding-agnostic representation of character offsets.
-    """
+    encoding-agnostic representation of character offsets."""
 
 
 @enum.unique
@@ -667,9 +663,7 @@ class TokenFormat(str, enum.Enum):
 
 class LSPObject:
     """LSP object definition.
-
-    @since 3.17.0
-    """
+    @since 3.17.0"""
 
     # Since: 3.17.0
     pass
@@ -681,8 +675,7 @@ For most programming languages there is only one location at which a symbol is
 defined.
 
 Servers should prefer returning `DefinitionLink` over `Definition` if supported
-by the client.
-"""
+by the client."""
 
 
 DefinitionLink = Union["LocationLink", "LocationLink"]
@@ -719,8 +712,7 @@ Provides additional metadata over normal {@link Location location} declarations,
 the declaring symbol.
 
 Servers should prefer returning `DeclarationLink` over `Declaration` if supported
-by the client.
-"""
+by the client."""
 
 
 InlineValue = Union[
@@ -1002,9 +994,7 @@ against the notebook's URI (same as with documents)
 
 
 Pattern = str
-"""The glob pattern to watch relative to the base path. Glob patterns can have the
-following syntax:
-
+"""The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
 - `*` to match one or more characters in a path segment
 - `?` to match on one character in a path segment
 - `**` to match any number of path segments, including none
@@ -1292,12 +1282,9 @@ class ColorPresentation:
     this color presentation."""
 
     text_edit: Optional["TextEdit"] = attrs.field(default=None)
-    """An {@link TextEdit edit} which is applied to a document when selecting this
-    presentation for the color.
-
-    When `falsy` the {@link ColorPresentation.label label}
-    is used.
-    """
+    """An {@link TextEdit edit} which is applied to a document when selecting
+    this presentation for the color.  When `falsy` the {@link ColorPresentation.label label}
+    is used."""
 
     additional_text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
     """An optional array of additional {@link TextEdit text edits} that are applied when
@@ -1635,10 +1622,6 @@ class CallHierarchyIncomingCall:
     from_ranges: List["Range"] = attrs.field()
     """The ranges at which the calls appear. This is relative to the caller
     denoted by {@link CallHierarchyIncomingCall.from `this.from`}."""
-
-    This is relative to the caller
-    denoted by {@link CallHierarchyIncomingCall.from `this.from`}.
-    """
 
 
 @attrs.define
@@ -2168,12 +2151,9 @@ class TypeHierarchyItem:
     but everything else, e.g. comments and code."""
 
     selection_range: "Range" = attrs.field()
-    """The range that should be selected and revealed when this symbol is being picked,
-    e.g. the name of a function.
-
-    Must be contained by the
-    {@link TypeHierarchyItem.range `range`}.
-    """
+    """The range that should be selected and revealed when this symbol is being
+    picked, e.g. the name of a function. Must be contained by the
+    {@link TypeHierarchyItem.range `range`}."""
 
     tags: Optional[List[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
@@ -2714,8 +2694,8 @@ class DidCloseNotebookDocumentParams:
     """The notebook document that got closed."""
 
     cell_text_documents: List["TextDocumentIdentifier"] = attrs.field()
-    """The text documents that represent the content of a notebook cell that got
-    closed."""
+    """The text documents that represent the content
+    of a notebook cell that got closed."""
 
 
 @attrs.define
@@ -2723,8 +2703,7 @@ class InlineCompletionParams:
     """A parameter literal used in inline completion requests.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -2745,56 +2724,42 @@ class InlineCompletionParams:
 
 @attrs.define
 class InlineCompletionList:
-    """Represents a collection of {@link InlineCompletionItem inline completion items}
-    to be presented in the editor.
+    """Represents a collection of {@link InlineCompletionItem inline completion items} to be presented in the editor.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
 
     items: List["InlineCompletionItem"] = attrs.field()
-    """The inline completion items."""
+    """The inline completion items"""
 
 
 @attrs.define
 class InlineCompletionItem:
-    """An inline completion item represents a text snippet that is proposed inline to
-    complete text that is being typed.
+    """An inline completion item represents a text snippet that is proposed inline to complete text that is being typed.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
 
     insert_text: Union[str, "StringValue"] = attrs.field()
-    """The text to replace the range with.
-
-    Must be set.
-    """
+    """The text to replace the range with. Must be set."""
 
     filter_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A text that is used to decide if this inline completion should be shown.
-
-    When `falsy` the {@link InlineCompletionItem.insertText} is used.
-    """
+    """A text that is used to decide if this inline completion should be shown. When `falsy` the {@link InlineCompletionItem.insertText} is used."""
 
     range: Optional["Range"] = attrs.field(default=None)
-    """The range to replace.
-
-    Must begin and end on the same line.
-    """
+    """The range to replace. Must begin and end on the same line."""
 
     command: Optional["Command"] = attrs.field(default=None)
-    """An optional {@link Command} that is executed *after* inserting this
-    completion."""
+    """An optional {@link Command} that is executed *after* inserting this completion."""
 
 
 @attrs.define
@@ -2802,8 +2767,7 @@ class InlineCompletionOptions:
     """Inline completion options used during static registration.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -2819,8 +2783,7 @@ class InlineCompletionRegistrationOptions:
     """Inline completion options used during static or dynamic registration.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -2833,19 +2796,15 @@ class InlineCompletionRegistrationOptions:
     document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
         default=None
     )
-    """A document selector to identify the scope of the registration.
-
-    If set to null the document selector provided on the client side will be used.
-    """
+    """A document selector to identify the scope of the registration. If set to null
+    the document selector provided on the client side will be used."""
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """The id used to register the request.
-
-    The id can be used to deregister the request again. See also Registration#id.
-    """
+    """The id used to register the request. The id can be used to deregister
+    the request again. See also Registration#id."""
 
 
 @attrs.define
@@ -2878,11 +2837,11 @@ class _InitializeParams:
     """The capabilities provided by the client (editor or tool)"""
 
     process_id: Optional[Union[int, None]] = attrs.field(default=None)
-    """The process Id of the parent process that started the server.
-
+    """The process Id of the parent process that started
+    the server.
+    
     Is `null` if the process has not been started by another process.
-    If the parent process is not alive then the server should exit.
-    """
+    If the parent process is not alive then the server should exit."""
 
     client_info: Optional["InitializeParamsClientInfoType"] = attrs.field(default=None)
     """Information about the client
@@ -2948,11 +2907,11 @@ class InitializeParams:
     """The capabilities provided by the client (editor or tool)"""
 
     process_id: Optional[Union[int, None]] = attrs.field(default=None)
-    """The process Id of the parent process that started the server.
-
+    """The process Id of the parent process that started
+    the server.
+    
     Is `null` if the process has not been started by another process.
-    If the parent process is not alive then the server should exit.
-    """
+    If the parent process is not alive then the server should exit."""
 
     client_info: Optional["InitializeParamsClientInfoType"] = attrs.field(default=None)
     """Information about the client
@@ -3343,21 +3302,17 @@ class CompletionItem:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A string that should be used when comparing this item with other items.
-
-    When `falsy` the {@link CompletionItem.label label}
-    is used.
-    """
+    """A string that should be used when comparing this item
+    with other items. When `falsy` the {@link CompletionItem.label label}
+    is used."""
 
     filter_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A string that should be used when filtering a set of completion items.
-
-    When `falsy` the {@link CompletionItem.label label}
-    is used.
-    """
+    """A string that should be used when filtering a set of
+    completion items. When `falsy` the {@link CompletionItem.label label}
+    is used."""
 
     insert_text: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -4053,11 +4008,9 @@ class SymbolInformation:
 @attrs.define
 class DocumentSymbol:
     """Represents programming constructs like variables, classes, interfaces etc.
-
     that appear in a document. Document symbols can be hierarchical and they
     have two ranges: one that encloses its definition and one that points to
-    its most interesting range, e.g. the range of an identifier.
-    """
+    its most interesting range, e.g. the range of an identifier."""
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of this symbol. Will be displayed in the user interface and therefore must not be
@@ -4719,10 +4672,8 @@ class DocumentOnTypeFormattingParams:
 
     position: "Position" = attrs.field()
     """The position around which the on type formatting should happen.
-
     This is not necessarily the exact position where the character denoted
-    by the property `ch` got typed.
-    """
+    by the property `ch` got typed."""
 
     ch: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The character that has been typed that triggered the formatting
@@ -5186,13 +5137,12 @@ class Position:
 
     character: int = attrs.field(validator=validators.uinteger_validator)
     """Character offset on a line in a document (zero-based).
-
+    
     The meaning of this offset is determined by the negotiated
     `PositionEncodingKind`.
-
+    
     If the character value is greater than the line length it defaults back to the
-    line length.
-    """
+    line length."""
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Position):
@@ -5499,12 +5449,9 @@ class InlayHintLabelPart:
     """The value of this label part."""
 
     tooltip: Optional[Union[str, "MarkupContent"]] = attrs.field(default=None)
-    """The tooltip text when you hover over this label part.
-
-    Depending on
+    """The tooltip text when you hover over this label part. Depending on
     the client capability `inlayHint.resolveSupport` clients might resolve
-    this property late using the resolve request.
-    """
+    this property late using the resolve request."""
 
     location: Optional[Location] = attrs.field(default=None)
     """An optional source code location that represents this
@@ -5521,10 +5468,9 @@ class InlayHintLabelPart:
 
     command: Optional[Command] = attrs.field(default=None)
     """An optional command for this label part.
-
+    
     Depending on the client capability `inlayHint.resolveSupport` clients
-    might resolve this property late using the resolve request.
-    """
+    might resolve this property late using the resolve request."""
 
 
 @attrs.define
@@ -5641,11 +5587,6 @@ class UnchangedDocumentDiagnosticReport:
     only return `unchanged` if result ids are
     provided."""
 
-    A server can
-    only return `unchanged` if result ids are
-    provided.
-    """
-
 
 @attrs.define
 class RelatedUnchangedDocumentDiagnosticReport:
@@ -5680,11 +5621,6 @@ class RelatedUnchangedDocumentDiagnosticReport:
     no changes to the last result. A server can
     only return `unchanged` if result ids are
     provided."""
-
-    A server can
-    only return `unchanged` if result ids are
-    provided.
-    """
 
 
 @attrs.define
@@ -5833,12 +5769,10 @@ class NotebookDocumentIdentifier:
 
 @attrs.define
 class InlineCompletionContext:
-    """Provides information about the context in which an inline completion was
-    requested.
+    """Provides information about the context in which an inline completion was requested.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -5849,14 +5783,13 @@ class InlineCompletionContext:
     selected_completion_info: Optional["SelectedCompletionInfo"] = attrs.field(
         default=None
     )
-    """Provides information about the currently selected item in the autocomplete widget
-    if it is visible."""
+    """Provides information about the currently selected item in the autocomplete widget if it is visible."""
 
 
 @attrs.define
 class StringValue:
-    """A string value used as a snippet is a template which allows to insert text and to
-    control the editor cursor when insertion happens.
+    """A string value used as a snippet is a template which allows to insert text
+    and to control the editor cursor when insertion happens.
 
     A snippet can define tab stops and placeholders with `$1`, `$2`
     and `${3:foo}`. `$0` defines the final tab stop, it defaults to
@@ -5864,8 +5797,7 @@ class StringValue:
     `${name:default value}`.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -6004,12 +5936,9 @@ class ServerCapabilities:
     code_action_provider: Optional[Union[bool, CodeActionOptions]] = attrs.field(
         default=None
     )
-    """The server provides code actions.
-
-    CodeActionOptions may only be
+    """The server provides code actions. CodeActionOptions may only be
     specified if the client states that it supports
-    `codeActionLiteralSupport` in its initial `initialize` request.
-    """
+    `codeActionLiteralSupport` in its initial `initialize` request."""
 
     code_lens_provider: Optional[CodeLensOptions] = attrs.field(default=None)
     """The server provides code lens."""
@@ -6043,12 +5972,9 @@ class ServerCapabilities:
     """The server provides document formatting on typing."""
 
     rename_provider: Optional[Union[bool, RenameOptions]] = attrs.field(default=None)
-    """The server provides rename support.
-
-    RenameOptions may only be
+    """The server provides rename support. RenameOptions may only be
     specified if the client states that it supports
-    `prepareSupport` in its initial `initialize` request.
-    """
+    `prepareSupport` in its initial `initialize` request."""
 
     folding_range_provider: Optional[
         Union[bool, FoldingRangeOptions, FoldingRangeRegistrationOptions]
@@ -6133,10 +6059,9 @@ class ServerCapabilities:
         Union[bool, InlineCompletionOptions]
     ] = attrs.field(default=None)
     """Inline completion options used during static registration.
-
+    
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
     # Since: 3.18.0
     # Proposed
 
@@ -6453,13 +6378,6 @@ class OptionalVersionedTextDocumentIdentifier:
     `null` to indicate that the version is unknown and the content on disk is the
     truth (as specified with document content ownership)."""
 
-    If a versioned text document identifier
-    is sent from the server to the client and the file is not open in the editor
-    (the server has not received an open notification before) the server can send
-    `null` to indicate that the version is unknown and the content on disk is the
-    truth (as specified with document content ownership).
-    """
-
 
 @attrs.define
 class AnnotatedTextEdit:
@@ -6616,11 +6534,6 @@ class WorkspaceUnchangedDocumentDiagnosticReport:
     only return `unchanged` if result ids are
     provided."""
 
-    A server can
-    only return `unchanged` if result ids are
-    provided.
-    """
-
 
 @attrs.define
 class NotebookCell:
@@ -6667,7 +6580,7 @@ class NotebookCellArrayChange:
     """The deleted cells"""
 
     cells: Optional[List[NotebookCell]] = attrs.field(default=None)
-    """The new cells, if any."""
+    """The new cells, if any"""
 
 
 @attrs.define
@@ -6675,8 +6588,7 @@ class SelectedCompletionInfo:
     """Describes the currently selected completion item.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -6967,14 +6879,13 @@ class ParameterInformation:
 
     label: Union[str, Tuple[int, int]] = attrs.field()
     """The label of this parameter information.
-
+    
     Either a string or an inclusive start and exclusive end offsets within its containing
     signature label. (see SignatureInformation.label). The offsets are based on a UTF-16
     string representation as `Position` and `Range` does.
-
+    
     *Note*: a label of type string should be a substring of its containing signature label.
-    Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`.
-    """
+    Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`."""
 
     documentation: Optional[Union[str, MarkupContent]] = attrs.field(default=None)
     """The human-readable doc-comment of this parameter. Will be shown
@@ -7319,10 +7230,9 @@ class TextDocumentClientCapabilities:
         default=None
     )
     """Client capabilities specific to inline completions.
-
+    
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
     # Since: 3.18.0
     # Proposed
 
@@ -7557,11 +7467,10 @@ class WorkspaceSymbolClientCapabilitiesSymbolKindType:
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
     to a default value when unknown.
-
+    
     If this property is not present the client only supports
     the symbol kinds from `File` to `Array` as defined in
-    the initial version of the protocol.
-    """
+    the initial version of the protocol."""
 
 
 @attrs.define
@@ -7575,10 +7484,6 @@ class WorkspaceSymbolClientCapabilitiesResolveSupportType:
     properties: List[str] = attrs.field()
     """The properties that a client can resolve lazily. Usually
     `location.range`"""
-
-    Usually
-    `location.range`
-    """
 
 
 @attrs.define
@@ -7918,14 +7823,14 @@ class CompletionClientCapabilitiesCompletionItemType:
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemKindType:
     value_set: Optional[List[CompletionItemKind]] = attrs.field(default=None)
-    """The completion item kind values the client supports. When this property exists
-    the client also guarantees that it will handle values outside its set gracefully and
-    falls back to a default value when unknown.
-
+    """The completion item kind values the client supports. When this
+    property exists the client also guarantees that it will
+    handle values outside its set gracefully and falls back
+    to a default value when unknown.
+    
     If this property is not present the client only supports
     the completion items kinds from `Text` to `Reference` as defined in
-    the initial version of the protocol.
-    """
+    the initial version of the protocol."""
 
 
 @attrs.define
@@ -8074,12 +7979,9 @@ class DeclarationClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether declaration supports dynamic registration.
-
-    If this is set to `true`
+    """Whether declaration supports dynamic registration. If this is set to `true`
     the client supports the new `DeclarationRegistrationOptions` return value
-    for the corresponding server capability as well.
-    """
+    for the corresponding server capability as well."""
 
     link_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8116,12 +8018,9 @@ class TypeDefinitionClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration.
-
-    If this is set to `true`
+    """Whether implementation supports dynamic registration. If this is set to `true`
     the client supports the new `TypeDefinitionRegistrationOptions` return value
-    for the corresponding server capability as well.
-    """
+    for the corresponding server capability as well."""
 
     link_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8142,12 +8041,9 @@ class ImplementationClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration.
-
-    If this is set to `true`
+    """Whether implementation supports dynamic registration. If this is set to `true`
     the client supports the new `ImplementationRegistrationOptions` return value
-    for the corresponding server capability as well.
-    """
+    for the corresponding server capability as well."""
 
     link_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8188,11 +8084,10 @@ class DocumentSymbolClientCapabilitiesSymbolKindType:
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
     to a default value when unknown.
-
+    
     If this property is not present the client only supports
     the symbol kinds from `File` to `Array` as defined in
-    the initial version of the protocol.
-    """
+    the initial version of the protocol."""
 
 
 @attrs.define
@@ -8381,11 +8276,6 @@ class DocumentColorClientCapabilities:
     the client supports the new `DocumentColorRegistrationOptions` return value
     for the corresponding server capability as well."""
 
-    If this is set to `true`
-    the client supports the new `DocumentColorRegistrationOptions` return value
-    for the corresponding server capability as well.
-    """
-
 
 @attrs.define
 class DocumentFormattingClientCapabilities:
@@ -8502,12 +8392,10 @@ class FoldingRangeClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration for folding range providers.
-
-    If this is set to `true` the client supports the new
+    """Whether implementation supports dynamic registration for folding range
+    providers. If this is set to `true` the client supports the new
     `FoldingRangeRegistrationOptions` return value for the corresponding
-    server capability as well.
-    """
+    server capability as well."""
 
     range_limit: Optional[int] = attrs.field(
         validator=attrs.validators.optional(validators.uinteger_validator), default=None
@@ -8521,10 +8409,8 @@ class FoldingRangeClientCapabilities:
         default=None,
     )
     """If set, the client signals that it only supports folding complete lines.
-
     If set, client will ignore specified `startCharacter` and `endCharacter`
-    properties in a FoldingRange.
-    """
+    properties in a FoldingRange."""
 
     folding_range_kind: Optional[
         "FoldingRangeClientCapabilitiesFoldingRangeKindType"
@@ -8552,11 +8438,6 @@ class SelectionRangeClientCapabilities:
     """Whether implementation supports dynamic registration for selection range providers. If this is set to `true`
     the client supports the new `SelectionRangeRegistrationOptions` return value for the corresponding server
     capability as well."""
-
-    If this is set to `true`
-    the client supports the new `SelectionRangeRegistrationOptions` return value for the corresponding server
-    capability as well.
-    """
 
 
 @attrs.define
@@ -8629,11 +8510,6 @@ class CallHierarchyClientCapabilities:
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     return value for the corresponding server capability as well."""
 
-    If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well.
-    """
-
 
 @attrs.define
 class SemanticTokensClientCapabilitiesRequestsTypeFullType1:
@@ -8665,17 +8541,14 @@ class SemanticTokensClientCapabilities:
     # Since: 3.16.0
 
     requests: "SemanticTokensClientCapabilitiesRequestsType" = attrs.field()
-    """Which requests the client supports and might send to the server depending on the
-    server's capability.
-
-    Please note that clients might not
+    """Which requests the client supports and might send to the server
+    depending on the server's capability. Please note that clients might not
     show semantic tokens or degrade some of the user experience if a range
     or full request is advertised by the client but not provided by the
     server. If for example the client capability `requests.full` and
     `request.range` are both set to true but the server only provides a
     range provider the client might not render a minimap correctly or might
-    even decide to not show any semantic tokens at all.
-    """
+    even decide to not show any semantic tokens at all."""
 
     token_types: List[str] = attrs.field()
     """The token types that the client supports."""
@@ -8690,12 +8563,9 @@ class SemanticTokensClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration.
-
-    If this is set to `true`
+    """Whether implementation supports dynamic registration. If this is set to `true`
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well.
-    """
+    return value for the corresponding server capability as well."""
 
     overlapping_token_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8754,11 +8624,6 @@ class LinkedEditingRangeClientCapabilities:
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     return value for the corresponding server capability as well."""
 
-    If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well.
-    """
-
 
 @attrs.define
 class MonikerClientCapabilities:
@@ -8776,11 +8641,6 @@ class MonikerClientCapabilities:
     the client supports the new `MonikerRegistrationOptions` return value
     for the corresponding server capability as well."""
 
-    If this is set to `true`
-    the client supports the new `MonikerRegistrationOptions` return value
-    for the corresponding server capability as well.
-    """
-
 
 @attrs.define
 class TypeHierarchyClientCapabilities:
@@ -8795,11 +8655,6 @@ class TypeHierarchyClientCapabilities:
     """Whether implementation supports dynamic registration. If this is set to `true`
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     return value for the corresponding server capability as well."""
-
-    If this is set to `true`
-    the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well.
-    """
 
 
 @attrs.define
@@ -8856,12 +8711,9 @@ class DiagnosticClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration.
-
-    If this is set to `true`
+    """Whether implementation supports dynamic registration. If this is set to `true`
     the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well.
-    """
+    return value for the corresponding server capability as well."""
 
     related_document_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8875,8 +8727,7 @@ class InlineCompletionClientCapabilities:
     """Client capabilities specific to inline completions.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     # Since: 3.18.0
     # Proposed
@@ -8885,8 +8736,7 @@ class InlineCompletionClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration for inline completion
-    providers."""
+    """Whether implementation supports dynamic registration for inline completion providers."""
 
 
 @attrs.define
@@ -8901,13 +8751,10 @@ class NotebookDocumentSyncClientCapabilities:
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
-    """Whether implementation supports dynamic registration.
-
-    If this is
+    """Whether implementation supports dynamic registration. If this is
     set to `true` the client supports the new
     `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
-    return value for the corresponding server capability as well.
-    """
+    return value for the corresponding server capability as well."""
 
     execution_summary_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9529,10 +9376,8 @@ class WorkspaceWillDeleteFilesResponse:
 @attrs.define
 class TextDocumentMonikerRequest:
     """A request to get the moniker of a symbol at a given text document position.
-
     The request parameter is of type {@link TextDocumentPositionParams}.
-    The response is of type {@link Moniker Moniker[]} or `null`.
-    """
+    The response is of type {@link Moniker Moniker[]} or `null`."""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -9797,13 +9642,12 @@ class WorkspaceDiagnosticRefreshResponse:
 
 @attrs.define
 class TextDocumentInlineCompletionRequest:
-    """A request to provide inline completions in a document. The request's parameter is
-    of type {@link InlineCompletionParams}, the response is of type {@link
-    InlineCompletion InlineCompletion[]} or a Thenable that resolves to such.
+    """A request to provide inline completions in a document. The request's parameter is of
+    type {@link InlineCompletionParams}, the response is of type
+    {@link InlineCompletion InlineCompletion[]} or a Thenable that resolves to such.
 
     @since 3.18.0
-    @proposed
-    """
+    @proposed"""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -9968,8 +9812,7 @@ class TextDocumentCompletionRequest:
     The request can delay the computation of the {@link CompletionItem.detail `detail`}
     and {@link CompletionItem.documentation `documentation`} properties to the `completionItem/resolve`
     request. However, properties that are needed for the initial sorting and filtering, like `sortText`,
-    `filterText`, `insertText`, and `textEdit`, must not be changed during resolve.
-    """
+    `filterText`, `insertText`, and `textEdit`, must not be changed during resolve."""
 
     id: Union[int, str] = attrs.field()
     """The request id."""

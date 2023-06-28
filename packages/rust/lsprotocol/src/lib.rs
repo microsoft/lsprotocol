@@ -332,12 +332,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
     #[serde(rename = "serverToClient")]
     ServerToClient,
     #[serde(rename = "both")]
     Both,
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
 }
 
 /// A set of predefined token types. This set is not fixed

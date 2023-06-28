@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import json
+import os
 import pathlib
 import urllib.request as url_lib
 
@@ -59,24 +60,15 @@ def format(session: nox.Session):
 
 
 def _format_code(session: nox.Session):
-    session.install("isort", "black", "docformatter")
+    session.install("isort", "black")
 
-    session.run("isort", "--profile", "black", ".")
-    session.run("black", ".")
-    session.run("docformatter", "--in-place", "--recursive", "--black", ".")
     session.run("isort", "--profile", "black", ".")
     session.run("black", ".")
 
     # this is for the lsprotocol package only
-    python_package_path = "./packages/python/lsprotocol"
-    session.run("isort", "--profile", "black", python_package_path)
-    session.run("black", python_package_path)
-    session.run(
-        "docformatter", "--in-place", "--recursive", "--black", python_package_path
-    )
-    # do it again to correct any adjustments done by docformatter
-    session.run("isort", "--profile", "black", python_package_path)
-    session.run("black", python_package_path)
+    python_package_path = pathlib.Path("./packages/python/lsprotocol")
+    session.run("isort", "--profile", "black", os.fspath(python_package_path))
+    session.run("black", os.fspath(python_package_path))
 
 
 @nox.session()
@@ -147,7 +139,13 @@ def update_packages(session: nox.Session):
         "--upgrade",
         "./packages/python/requirements.in",
     )
-    session.run("pip-compile", "--generate-hashes", "--upgrade", "./requirements.in")
+    session.run(
+        "pip-compile",
+        "--generate-hashes",
+        "--resolver=backtracking",
+        "--upgrade",
+        "./requirements.in",
+    )
 
 
 @nox.session()

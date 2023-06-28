@@ -260,6 +260,8 @@ pub enum LSPRequestMethods {
     TextDocumentFormatting,
     #[serde(rename = "textDocument/rangeFormatting")]
     TextDocumentRangeFormatting,
+    #[serde(rename = "textDocument/rangesFormatting")]
+    TextDocumentRangesFormatting,
     #[serde(rename = "textDocument/onTypeFormatting")]
     TextDocumentOnTypeFormatting,
     #[serde(rename = "textDocument/rename")]
@@ -330,12 +332,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
     #[serde(rename = "serverToClient")]
     ServerToClient,
     #[serde(rename = "both")]
     Both,
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -3984,6 +3986,34 @@ pub struct DocumentRangeFormattingRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    /// Whether the server supports formatting multiple ranges at once.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
+    pub ranges_support: Option<bool>,
+}
+
+/// The parameters of a [DocumentRangesFormattingRequest].
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct DocumentRangesFormattingParams {
+    /// The format options
+    pub options: FormattingOptions,
+
+    /// The ranges to format
+    pub ranges: Vec<Range>,
+
+    /// The document to format.
+    pub text_document: TextDocumentIdentifier,
+
+    /// An optional token that a server can use to report work done progress.
+    pub work_done_token: Option<ProgressToken>,
 }
 
 /// The parameters of a [DocumentOnTypeFormattingRequest].
@@ -5779,6 +5809,13 @@ pub struct DocumentFormattingOptions {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentRangeFormattingOptions {
+    /// Whether the server supports formatting multiple ranges at once.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
+    pub ranges_support: Option<bool>,
+
     pub work_done_progress: Option<bool>,
 }
 
@@ -7292,6 +7329,13 @@ pub struct DocumentFormattingClientCapabilities {
 pub struct DocumentRangeFormattingClientCapabilities {
     /// Whether range formatting supports dynamic registration.
     pub dynamic_registration: Option<bool>,
+
+    /// Whether the client supports formatting multiple ranges at once.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
+    pub ranges_support: Option<bool>,
 }
 
 /// Client capabilities of a [DocumentOnTypeFormattingRequest].
@@ -10149,6 +10193,43 @@ pub struct TextDocumentRangeFormattingRequest {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentRangeFormattingResponse {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPIdOptional,
+
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result: Option<Vec<TextEdit>>,
+}
+
+/// A request to format ranges in a document.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TextDocumentRangesFormattingRequest {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPId,
+
+    pub params: DocumentRangesFormattingParams,
+}
+
+/// Response to the [TextDocumentRangesFormattingRequest].
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct TextDocumentRangesFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 

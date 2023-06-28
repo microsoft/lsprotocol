@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import json
+import os
 import pathlib
 import urllib.request as url_lib
 
@@ -19,65 +20,60 @@ def _install_requirements(session: nox.Session):
 
 @nox.session()
 def tests(session: nox.Session):
-    """Run tests for lsprotocol and generator."""
+    """Run tests for generator and generated code in all languages."""
     _install_requirements(session)
+
+    session.log("Running tests: generator and generated Python code.")
     session.run("pytest", "./tests")
+
+    # TODO: Uncomment after tests are ready
+    # session.log("Running tests: generated Rust code.")
+    # with session.chdir("./tests/rust/lsprotocol"):
+    #     session.run("cargo", "test", external=True)
+
+    # TODO: Uncomment after tests are ready
+    # session.log("Running tests: generated C# code.")
+    # with session.chdir("./test/dotnet/lsprotocol_tests"):
+    #     session.run("dotnet", "test", external=True)
 
 
 @nox.session()
 def lint(session: nox.Session):
-    """Lint all packages."""
+    """Linting for generator and generated code in all languages."""
     _install_requirements(session)
 
+    session.log("Linting: generator and generated Python code.")
     session.install("isort", "black", "mypy")
     session.run("isort", "--profile", "black", "--check", ".")
     session.run("black", "--check", ".")
     session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")
 
+    session.log("Linting: generated Rust code.")
     with session.chdir("./packages/rust/lsprotocol"):
         session.run("cargo", "fmt", "--check", external=True)
 
 
 @nox.session()
 def format(session: nox.Session):
-    """Format all code."""
-    _format_code(session)
-
-
-def _generate_model(session: nox.Session):
-    _install_requirements(session)
-
-    session.run("python", "-m", "generator")
+    """Format generator and lsprotocol package for PyPI."""
     _format_code(session)
 
 
 def _format_code(session: nox.Session):
-    session.install("isort", "black", "docformatter")
+    session.install("isort", "black")
 
-    session.run("isort", "--profile", "black", ".")
-    session.run("black", ".")
-    session.run("docformatter", "--in-place", "--recursive", "--black", ".")
     session.run("isort", "--profile", "black", ".")
     session.run("black", ".")
 
     # this is for the lsprotocol package only
-    python_package_path = "./packages/python/lsprotocol"
-    session.run("isort", "--profile", "black", python_package_path)
-    session.run("black", python_package_path)
-    session.run(
-        "docformatter", "--in-place", "--recursive", "--black", python_package_path
-    )
-    # do it again to correct any adjustments done by docformatter
-    session.run("isort", "--profile", "black", python_package_path)
-    session.run("black", python_package_path)
-
-    with session.chdir("./packages/rust/lsprotocol"):
-        session.run("cargo", "fmt", external=True)
+    python_package_path = pathlib.Path("./packages/python/lsprotocol")
+    session.run("isort", "--profile", "black", os.fspath(python_package_path))
+    session.run("black", os.fspath(python_package_path))
 
 
 @nox.session()
 def build(session: nox.Session):
-    """Build lsprotocol package."""
+    """Build lsprotocol (python) package for PyPI."""
     session.install("flit")
     with session.chdir("./packages/python"):
         session.run("flit", "build")
@@ -117,15 +113,18 @@ def _download_models(session: nox.session):
 
 @nox.session()
 def build_lsp(session: nox.Session):
-    """Generate lsprotocol package from LSP model."""
-    _generate_model(session)
+    """Generate lsprotocol for all languages."""
+    generate_python(session)
+    generate_dotnet(session)
+    generate_rust(session)
 
 
 @nox.session()
 def update_lsp(session: nox.Session):
-    """Update the LSP model and generate the lsprotocol content."""
+    """Update the LSP model and generate the lsprotocol for all languages."""
+    update_packages(session)
     _download_models(session)
-    _generate_model(session)
+    build_lsp(session)
 
 
 @nox.session()
@@ -136,10 +135,17 @@ def update_packages(session: nox.Session):
     session.run(
         "pip-compile",
         "--generate-hashes",
+        "--resolver=backtracking",
         "--upgrade",
         "./packages/python/requirements.in",
     )
-    session.run("pip-compile", "--generate-hashes", "--upgrade", "./requirements.in")
+    session.run(
+        "pip-compile",
+        "--generate-hashes",
+        "--resolver=backtracking",
+        "--upgrade",
+        "./requirements.in",
+    )
 
 
 @nox.session()
@@ -218,11 +224,29 @@ def create_plugin(session: nox.Session):
 
 
 @nox.session()
-def update_dotnet(session: nox.Session):
+def generate_dotnet(session: nox.Session):
     """Update the dotnet code."""
-    _download_models(session)
     _install_requirements(session)
 
     session.run("python", "-m", "generator", "--plugin", "dotnet")
     with session.chdir("./packages/dotnet/lsprotocol"):
-        session.run("dotnet", "build")
+        session.run("dotnet", "build", external=True)
+
+
+@nox.session()
+def generate_python(session: nox.Session):
+    """Update the python code."""
+    _install_requirements(session)
+
+    session.run("python", "-m", "generator", "--plugin", "python")
+    _format_code(session)
+
+
+@nox.session()
+def generate_rust(session: nox.Session):
+    """Update the rust code."""
+    _install_requirements(session)
+
+    session.run("python", "-m", "generator", "--plugin", "rust")
+    with session.chdir("./packages/rust/lsprotocol"):
+        session.run("cargo", "fmt", external=True)

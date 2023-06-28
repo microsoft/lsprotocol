@@ -401,9 +401,7 @@ class TypesCodeGenerator:
             f"{indent}# Since: {_sanitize_comment(enum_def.since)}"
             if enum_def.since
             else "",
-            f"{indent}# Proposed: {_sanitize_comment(enum_def.proposed)}"
-            if enum_def.proposed
-            else "",
+            f"{indent}# Proposed" if enum_def.proposed else "",
         ]
 
         # Remove unnecessary empty lines
@@ -421,9 +419,7 @@ class TypesCodeGenerator:
                 f"{indent}# Since: {_sanitize_comment(item.since)}"
                 if item.since
                 else "",
-                f"{indent}# Proposed: {_sanitize_comment(item.proposed)}"
-                if item.proposed
-                else "",
+                f"{indent}# Proposed" if item.proposed else "",
             ]
 
             # Remove unnecessary empty lines.
@@ -505,9 +501,7 @@ class TypesCodeGenerator:
                 f"{indent}# Since: {_sanitize_comment(property_def.since)}"
                 if property_def.since
                 else "",
-                f"{indent}# Proposed: {_sanitize_comment(property_def.proposed)}"
-                if property_def.proposed
-                else "",
+                f"{indent}# Proposed" if property_def.proposed else "",
             ]
             # Remove unnecessary empty lines and add a single empty line
             code_lines += [code for code in prop_lines if len(code) > 0] + [""]
@@ -530,9 +524,7 @@ class TypesCodeGenerator:
             f"class {literal_def.name}:",
             f'{indent}"""{doc}"""' if literal_def.documentation else "",
             f"{indent}# Since: {literal_def.since}" if literal_def.since else "",
-            f"{indent}# Proposed: {literal_def.proposed}"
-            if literal_def.proposed
-            else "",
+            f"{indent}# Proposed" if literal_def.proposed else "",
         ]
 
         # Remove unnecessary empty lines. This can happen if doc string or comments are missing.
@@ -560,6 +552,7 @@ class TypesCodeGenerator:
         # TypeAlias definition can contain anonymous types as a part of its
         # definition. We generate them here first before we get to defile the
         # TypeAlias.
+        indent = " " * 4
         count = itertools.count(1)
         if type_alias.type.kind == "or":
             for sub_type in type_alias.type.items or []:
@@ -571,13 +564,10 @@ class TypesCodeGenerator:
                     )
                     self._add_literal_type(sub_type)
 
-            # clean up the docstring for the class itself.
-        doc = _get_indented_documentation(type_alias.documentation)
-
         if type_alias.name == "LSPAny":
             type_name = "Union[Any, None]"
         elif type_alias.name == "LSPObject":
-            type_name = "object"
+            type_name = None
         else:
             type_name = self._generate_type_name(type_alias.type)
         if type_alias.type.kind == "reference" and not self._has_type(
@@ -586,16 +576,28 @@ class TypesCodeGenerator:
             # TODO: remove workaround for lack of TypeAlias in 3.7
             type_name = f"Union[{type_name}, {type_name}]"
 
-        code_lines = [
-            f"{type_alias.name} = {type_name}",
-            f'"""{doc}"""' if type_alias.documentation else "",
-            f"# Since: {_sanitize_comment(type_alias.since)}"
-            if type_alias.since
-            else "",
-            f"# Proposed: {_sanitize_comment(type_alias.proposed)}"
-            if type_alias.proposed
-            else "",
-        ]
+        if type_name:
+            # clean up the docstring for the class itself.
+            doc = _get_indented_documentation(type_alias.documentation)
+            code_lines = [
+                f"{type_alias.name} = {type_name}",
+                f'"""{doc}"""' if type_alias.documentation else "",
+                f"# Since: {_sanitize_comment(type_alias.since)}"
+                if type_alias.since
+                else "",
+                f"# Proposed" if type_alias.proposed else "",
+            ]
+        else:
+            doc = _get_indented_documentation(type_alias.documentation, indent)
+            code_lines = [
+                f"class {type_alias.name}:",
+                f'{indent}"""{doc}"""' if type_alias.documentation else "",
+                f"{indent}# Since: {_sanitize_comment(type_alias.since)}"
+                if type_alias.since
+                else "",
+                f"{indent}# Proposed" if type_alias.proposed else "",
+                f"{indent}pass",
+            ]
         code_lines = [code for code in code_lines if len(code) > 0]
 
         self._add_type_code(type_alias.name, code_lines)
@@ -655,9 +657,7 @@ class TypesCodeGenerator:
             f"{indent}# Since: {_sanitize_comment(struct_def.since)}"
             if struct_def.since
             else "",
-            f"{indent}# Proposed: {_sanitize_comment(struct_def.proposed)}"
-            if struct_def.proposed
-            else "",
+            f"{indent}# Proposed" if struct_def.proposed else "",
         ]
 
         # Remove unnecessary empty lines and add a single empty line

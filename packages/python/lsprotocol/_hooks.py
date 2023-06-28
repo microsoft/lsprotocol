@@ -1008,6 +1008,7 @@ def _register_required_structure_hooks(
             Union[str, Tuple[int, int]],
             _parameter_information_label_hook,
         ),
+        (lsp_types.LSPObject, _lsp_object_hook),
     ]
 
     if sys.version_info > (3, 8):

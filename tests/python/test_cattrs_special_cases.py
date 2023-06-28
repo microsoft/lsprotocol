@@ -219,3 +219,46 @@ def test_completion_item():
         converter.unstructure(obj, lsp.CompletionItem),
         hamcrest.is_(data),
     )
+
+
+def test_notebook_change_event():
+    data = {
+        "notebookDocument": {
+            "uri": "untitled:Untitled-1.ipynb?jupyter-notebook",
+            "notebookType": "jupyter-notebook",
+            "version": 0,
+            "cells": [
+                {
+                    "kind": 2,
+                    "document": "vscode-notebook-cell:Untitled-1.ipynb?jupyter-notebook#W0sdW50aXRsZWQ%3D",
+                    "metadata": {"custom": {"metadata": {}}},
+                }
+            ],
+            "metadata": {
+                "custom": {
+                    "cells": [],
+                    "metadata": {
+                        "orig_nbformat": 4,
+                        "language_info": {"name": "python"},
+                    },
+                },
+                "indentAmount": " ",
+            },
+        },
+        "cellTextDocuments": [
+            {
+                "uri": "vscode-notebook-cell:Untitled-1.ipynb?jupyter-notebook#W0sdW50aXRsZWQ%3D",
+                "languageId": "python",
+                "version": 1,
+                "text": "",
+            }
+        ],
+    }
+
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.DidOpenNotebookDocumentParams)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.DidOpenNotebookDocumentParams))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.DidOpenNotebookDocumentParams),
+        hamcrest.is_(data),
+    )

@@ -1,0 +1,33 @@
+trigger: none
+pr: none
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: microsoft/vscode-engineering
+      ref: main
+      endpoint: Monaco
+
+parameters:
+  - name: publishPackage
+    displayName: 🚀 Publish Package
+    type: boolean
+    default: false
+
+extends:
+  template: azure-pipelines/pypi-package/pipeline.yml@templates
+  parameters:
+    publishPackage: ${{ parameters.publishPackage }}
+    pythonVersion: '3.7'
+    packageLocation: $(Build.SourcesDirectory)/packages/python/dist
+    buildSteps:
+      - script: python -m pip install nox
+        displayName: Install nox
+
+      - script: python -m nox --session build
+        displayName: Build package (sdist and wheels)
+
+      - publish: $(Build.SourcesDirectory)/packages/python/dist
+        artifact: dist
+        displayName: 🚛 Publish artifact

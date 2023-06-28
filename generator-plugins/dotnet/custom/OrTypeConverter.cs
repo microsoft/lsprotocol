@@ -30,13 +30,7 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
                 return ReadStringToken(reader, serializer, types);
         }
 
-        JToken? token = JToken.ReadFrom(reader);
-        while (token is not JObject)
-        {
-            token = JToken.ReadFrom(reader);
-        }
-
-        return OrTypeConverter<T, U>.ReadObjectToken(token, serializer, types);
+        return OrTypeConverter<T, U>.ReadObjectToken(JToken.Load(reader), serializer, types);
     }
 
     private static OrType<T, U> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -124,14 +118,30 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
         {
             try
             {
-                object? value = token.ToObject(type, serializer);
-                if (value is T t)
+                object? value = null;
+                if (token.Type == JTokenType.Array && type == typeof((uint, uint)))
                 {
-                    return new OrType<T, U>(t);
+                    uint[]? o = token.ToObject<uint[]>(serializer);
+                    if (o != null)
+                    {
+                        value = (o[0], o[1]);
+                    }
                 }
-                if (value is U u)
+                else
                 {
-                    return new OrType<T, U>(u);
+                    value = token.ToObject(type, serializer);
+                }
+
+                if (value != null)
+                {
+                    if (value is T t)
+                    {
+                        return new OrType<T, U>(t);
+                    }
+                    if (value is U u)
+                    {
+                        return new OrType<T, U>(u);
+                    }
                 }
             }
             catch
@@ -151,9 +161,14 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
         {
             writer.WriteNull();
         }
+        else if (value?.Value?.GetType() == typeof((uint, uint)))
+        {
+            ValueTuple<uint, uint> o = (ValueTuple<uint, uint>)(value.Value);
+            serializer.Serialize(writer, new uint[] { o.Item1, o.Item2 });
+        }
         else
         {
-            serializer.Serialize(writer, value.Value);
+            serializer.Serialize(writer, value?.Value);
         }
     }
 }
@@ -186,13 +201,7 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
                 return ReadStringToken(reader, serializer, types);
         }
 
-        JToken? token = JToken.ReadFrom(reader);
-        while (token is not JObject)
-        {
-            token = JToken.ReadFrom(reader);
-        }
-
-        return OrTypeConverter<T, U, V>.ReadObjectToken(token, serializer, types);
+        return OrTypeConverter<T, U, V>.ReadObjectToken(JToken.Load(reader), serializer, types);
     }
 
     private static OrType<T, U, V> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -300,18 +309,34 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
         {
             try
             {
-                object? value = token.ToObject(type, serializer);
-                if (value is T t)
+                object? value = null;
+                if (token.Type == JTokenType.Array && type == typeof((uint, uint)))
                 {
-                    return new OrType<T, U, V>(t);
+                    uint[]? o = token.ToObject<uint[]>(serializer);
+                    if (o != null)
+                    {
+                        value = (o[0], o[1]);
+                    }
                 }
-                if (value is U u)
+                else
                 {
-                    return new OrType<T, U, V>(u);
+                    value = token.ToObject(type, serializer);
                 }
-                if (value is V v)
+
+                if (value != null)
                 {
-                    return new OrType<T, U, V>(v);
+                    if (value is T t)
+                    {
+                        return new OrType<T, U, V>(t);
+                    }
+                    if (value is U u)
+                    {
+                        return new OrType<T, U, V>(u);
+                    }
+                    if (value is V v)
+                    {
+                        return new OrType<T, U, V>(v);
+                    }
                 }
             }
             catch
@@ -328,6 +353,11 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
         if (value is null)
         {
             writer.WriteNull();
+        }
+        else if (value?.Value?.GetType() == typeof((uint, uint)))
+        {
+            ValueTuple<uint, uint> o = (ValueTuple<uint, uint>)(value.Value);
+            serializer.Serialize(writer, new uint[] { o.Item1, o.Item2 });
         }
         else
         {
@@ -364,13 +394,7 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
                 return ReadStringToken(reader, serializer, types);
         }
 
-        JToken? token = JToken.ReadFrom(reader);
-        while (token is not JObject)
-        {
-            token = JToken.ReadFrom(reader);
-        }
-
-        return OrTypeConverter<T, U, V, W>.ReadObjectToken(token, serializer, types);
+        return OrTypeConverter<T, U, V, W>.ReadObjectToken(JToken.Load(reader), serializer, types);
     }
 
     private static OrType<T, U, V, W> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -498,23 +522,40 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
         {
             try
             {
-                object? value = token.ToObject(type, serializer);
-                if (value is T t)
+                object? value = null;
+                if (token.Type == JTokenType.Array && type == typeof((uint, uint)))
                 {
-                    return new OrType<T, U, V, W>(t);
+                    uint[]? o = token.ToObject<uint[]>(serializer);
+                    if (o != null)
+                    {
+                        value = (o[0], o[1]);
+                    }
                 }
-                if (value is U u)
+                else
                 {
-                    return new OrType<T, U, V, W>(u);
+                    value = token.ToObject(type, serializer);
                 }
-                if (value is V v)
+
+                if (value != null)
                 {
-                    return new OrType<T, U, V, W>(v);
+                    if (value is T t)
+                    {
+                        return new OrType<T, U, V, W>(t);
+                    }
+                    if (value is U u)
+                    {
+                        return new OrType<T, U, V, W>(u);
+                    }
+                    if (value is V v)
+                    {
+                        return new OrType<T, U, V, W>(v);
+                    }
+                    if (value is W w)
+                    {
+                        return new OrType<T, U, V, W>(w);
+                    }
                 }
-                if (value is W w)
-                {
-                    return new OrType<T, U, V, W>(w);
-                }
+
             }
             catch
             {
@@ -530,6 +571,11 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
         if (value is null)
         {
             writer.WriteNull();
+        }
+        else if (value?.Value?.GetType() == typeof((uint, uint)))
+        {
+            ValueTuple<uint, uint> o = (ValueTuple<uint, uint>)(value.Value);
+            serializer.Serialize(writer, new uint[] { o.Item1, o.Item2 });
         }
         else
         {

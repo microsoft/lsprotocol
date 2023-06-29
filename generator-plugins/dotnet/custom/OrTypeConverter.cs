@@ -104,7 +104,7 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
             {
                 return new OrType<T, U>((T)(object)str);
             }
-            if (typeof(T) == typeof(string))
+            if (typeof(U) == typeof(string))
             {
                 return new OrType<T, U>((U)(object)str);
             }

@@ -76,6 +76,7 @@ def generate_special_class(
             "public Pattern(string value){pattern = value;}",
             "public static implicit operator Pattern(string value) => new Pattern(value);",
             "public static implicit operator string(Pattern pattern) => pattern.pattern;",
+            "public override string ToString() => pattern;",
         ]
         lines = namespace_wrapper(
             NAMESPACE,
@@ -94,6 +95,7 @@ def generate_special_class(
             "public ChangeAnnotationIdentifier(string value){identifier = value;}",
             "public static implicit operator ChangeAnnotationIdentifier(string value) => new ChangeAnnotationIdentifier(value);",
             "public static implicit operator string(ChangeAnnotationIdentifier identifier) => identifier.identifier;",
+            "public override string ToString() => identifier;",
         ]
         lines = namespace_wrapper(
             NAMESPACE,

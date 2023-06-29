@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+import re
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import cattrs
@@ -22,6 +23,8 @@ from .dotnet_helpers import (
     to_camel_case,
     to_upper_camel_case,
 )
+
+CONVERTER_RE = re.compile(r"OrType<(?P<parts>.*)>\[\]")
 
 
 def _get_enum(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
@@ -129,12 +132,7 @@ def get_type_name(
     return name
 
 
-def get_converter(
-    type_def: model.LSP_TYPE_SPEC,
-    types: TypeData,
-    spec: model.LSPModel,
-    name_context: Optional[str] = None,
-) -> Optional[str]:
+def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str]:
     if type_def.kind == "base" and type_def.name in ["DocumentUri", "URI"]:
         return "[JsonConverter(typeof(CustomStringConverter<Uri>))]"
     elif type_def.kind == "reference" and type_def.name in [
@@ -144,13 +142,14 @@ def get_converter(
         return f"[JsonConverter(typeof(CustomStringConverter<{type_def.name}>))]"
     elif type_def.kind == "reference" and type_def.name == "DocumentSelector":
         return "[JsonConverter(typeof(DocumentSelectorConverter))]"
-    elif type_def.kind == "or":
-        subset = filter_null_base_type(type_def.items)
-        if len(subset) >= 2:
-            type_names = ", ".join(
-                get_type_name(item, types, spec, name_context) for item in subset
-            )
-            return f"[JsonConverter(typeof(OrTypeConverter<{type_names}>))]"
+    elif type_def.kind == "or" and type_name.startswith("OrType<"):
+        converter = type_name.replace("OrType<", "OrTypeConverter<")
+        return f"[JsonConverter(typeof({converter}))]"
+    elif type_def.kind == "array" and type_name.startswith("OrType<"):
+        matches = CONVERTER_RE.match(type_name).groupdict()
+        if "parts" in matches:
+            converter = f"OrTypeArrayConverter<{matches['parts']}>"
+            return f"[JsonConverter(typeof({converter}))]"
     return None
 
 
@@ -168,9 +167,7 @@ def generate_property(
     type_name = get_type_name(
         prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
     )
-    converter = get_converter(
-        prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
-    )
+    converter = get_converter(prop_def.type, type_name)
     special_optional = prop_def.type.kind == "or" and has_null_base_type(
         prop_def.type.items
     )

@@ -41,8 +41,12 @@ public class LSPTests
     {
         if (valid)
         {
-            object? deserializedObject = JsonConvert.DeserializeObject(data, type);
-            string newJson = JsonConvert.SerializeObject(deserializedObject);
+            var settings = new JsonSerializerSettings
+            {
+                MissingMemberHandling = MissingMemberHandling.Error
+            };
+            object? deserializedObject = JsonConvert.DeserializeObject(data, type, settings);
+            string newJson = JsonConvert.SerializeObject(deserializedObject, settings);
 
             JToken token1 = JToken.Parse(data);
             JToken token2 = JToken.Parse(newJson);

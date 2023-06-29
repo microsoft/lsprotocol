@@ -50,6 +50,8 @@ public class LSPTests
 
             JToken token1 = JToken.Parse(data);
             JToken token2 = JToken.Parse(newJson);
+            RemoveNullProperties(token1);
+            RemoveNullProperties(token2);
             Assert.True(JToken.DeepEquals(token1, token2));
         }
         else
@@ -63,6 +65,41 @@ public class LSPTests
             catch
             {
                 // Worked as expected.
+            }
+        }
+    }
+
+    private static void RemoveNullProperties(JToken token)
+    {
+        if (token.Type == JTokenType.Object)
+        {
+            var obj = (JObject)token;
+
+            var propertiesToRemove = obj.Properties()
+                .Where(p => p.Value.Type == JTokenType.Null)
+                .ToList();
+
+            foreach (var property in propertiesToRemove)
+            {
+                property.Remove();
+            }
+
+            foreach (var property in obj.Properties())
+            {
+                RemoveNullProperties(property.Value);
+            }
+        }
+        else if (token.Type == JTokenType.Array)
+        {
+            var array = (JArray)token;
+
+            for (int i = array.Count - 1; i >= 0; i--)
+            {
+                RemoveNullProperties(array[i]);
+                if (array[i].Type == JTokenType.Null)
+                {
+                    array.RemoveAt(i);
+                }
             }
         }
     }

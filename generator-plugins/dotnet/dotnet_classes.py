@@ -720,8 +720,6 @@ def generate_request_notification_methods(spec: model.LSPModel, types: TypeData)
 
 def get_message_template(
     obj: Union[model.Request, model.Notification],
-    spec: model.LSPModel,
-    types: TypeData,
     is_request: bool,
 ) -> model.Structure:
     text = "Request" if is_request else "Notification"
@@ -757,10 +755,7 @@ def get_message_template(
         properties.append(
             {
                 "name": "params",
-                "type": {
-                    "kind": "reference",
-                    "name": get_type_name(obj.params, types, spec),
-                },
+                "type": cattrs.unstructure(obj.params),
                 "documentation": f"The {text} parameters.",
             }
         )
@@ -824,13 +819,16 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
     generate_request_notification_methods(spec, types)
 
     for request in spec.requests:
-        struct = get_message_template(request, spec, types, is_request=True)
-        params = struct.properties[3]
+        struct = get_message_template(request, is_request=True)
         generate_class_from_struct(
             struct,
             spec,
             types,
-            f"IRequest<{params.type.name}>",
+            (
+                f"IRequest<{get_type_name(request.params, types, spec)}>"
+                if request.params
+                else "IRequest<LSPAny>"
+            ),
         )
         registration_options = get_registration_options_template(request, spec, types)
         if registration_options:
@@ -841,13 +839,16 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             )
 
     for notification in spec.notifications:
-        struct = get_message_template(notification, spec, types, is_request=False)
-        params = struct.properties[2]
+        struct = get_message_template(notification, is_request=False)
         generate_class_from_struct(
             struct,
             spec,
             types,
-            f"INotification<{params.type.name}>",
+            (
+                f"INotification<{get_type_name(notification.params, types, spec)}>"
+                if notification.params
+                else "INotification<LSPAny>"
+            ),
         )
         registration_options = get_registration_options_template(
             notification, spec, types

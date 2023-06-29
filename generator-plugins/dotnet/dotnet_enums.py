@@ -28,9 +28,13 @@ def _get_enum_doc(enum: Union[model.Enum, model.EnumItem]) -> List[str]:
 
 def generate_enum(enum: model.Enum) -> List[str]:
     use_enum_member = all(isinstance(item.value, str) for item in enum.values)
-    imports = ["using System.Runtime.Serialization;", ""]
+    imports = ["using System.Runtime.Serialization;"]
+    if use_enum_member:
+        imports += ["using Newtonsoft.Json;", "using Newtonsoft.Json.Converters;"]
 
     lines = _get_enum_doc(enum)
+    if use_enum_member:
+        lines += ["[JsonConverter(typeof(StringEnumConverter))]"]
     lines += [f"public enum {enum.name}", "{"]
 
     for item in enum.values:

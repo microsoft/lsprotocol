@@ -14,6 +14,7 @@ logger = logging.getLogger("testdata")
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
     """Generate the code for the given spec."""
+    cleanup(output_dir)
     output = pathlib.Path(output_dir)
     # key is the relative path to the file, value is the content
     code: Dict[str, str] = generate(spec, logger)
@@ -21,3 +22,10 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
         # print file size
         file = output / file_name
         file.write_text(code[file_name], encoding="utf-8")
+
+
+def cleanup(output_dir: str) -> None:
+    """Cleanup the generated C# files."""
+    output = pathlib.Path(output_dir)
+    for file in output.glob("*.json"):
+        file.unlink()

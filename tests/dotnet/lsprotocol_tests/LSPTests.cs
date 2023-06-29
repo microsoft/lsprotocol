@@ -50,7 +50,16 @@ public class LSPTests
         }
         else
         {
-            Assert.Throws<Exception>(() => JsonConvert.DeserializeObject(data, type));
+            try
+            {
+                JsonConvert.DeserializeObject(data, type);
+                // Explicitly fail the test
+                Assert.True(false, "Should have thrown an exception.");
+            }
+            catch
+            {
+                // Worked as expected.
+            }
         }
     }
 }

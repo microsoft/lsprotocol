@@ -416,6 +416,56 @@ def generate_type_alias_constructor(
     return constructor
 
 
+def generate_type_alias_converter(
+    type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
+) -> None:
+    assert type_def.type.kind == "or"
+    subset_types = [
+        get_type_name(i, types, spec, type_def.name)
+        for i in filter_null_base_type(type_def.type.items)
+    ]
+    converter = f"{type_def.name}Converter"
+    or_type_converter = f"OrTypeConverter<{','.join(subset_types)}>"
+    or_type = f"OrType<{','.join(subset_types)}>"
+    code = [
+        f"public class {converter} : JsonConverter<{type_def.name}>",
+        "{",
+        f"private {or_type_converter} _orType;",
+        f"public {converter}()",
+        "{",
+        f"_orType = new {or_type_converter}();",
+        "}",
+        f"public override {type_def.name}? ReadJson(JsonReader reader, Type objectType, {type_def.name}? existingValue, bool hasExistingValue, JsonSerializer serializer)",
+        "{",
+        f"var o = _orType.ReadJson(reader, objectType, existingValue, serializer);",
+        f"if (o is {or_type} orType)",
+        "{",
+    ]
+    for t in subset_types:
+        code += [
+            f"if (orType.Value.GetType() == typeof({t}))",
+            "{",
+            f"return new {type_def.name}(({t})orType.Value);",
+            "}",
+        ]
+    code += [
+        "}",
+        "throw new JsonSerializationException($\"Unexpected token type '{{orType.GetType()}}'.\");",
+        "}",
+        f"public override void WriteJson(JsonWriter writer, {type_def.name}? value, JsonSerializer serializer)",
+        "{",
+        "_orType.WriteJson(writer, value, serializer);",
+        "}",
+        "}",
+    ]
+
+    code = namespace_wrapper(NAMESPACE, get_usings(["JsonConverter"]), code)
+
+    ref = model.Structure(**{"name": converter, "properties": []})
+    types.add_type_info(ref, converter, code)
+    return converter
+
+
 def generate_class_from_type_alias(
     type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
 ) -> None:
@@ -426,7 +476,8 @@ def generate_class_from_type_alias(
     type_name = get_type_name(type_def.type, types, spec, type_def.name)
     class_attributes = []
     if type_def.type.kind == "or":
-        class_attributes += [f"[JsonConverter(typeof({type_name}))]"]
+        converter = generate_type_alias_converter(type_def, spec, types)
+        class_attributes += [f"[JsonConverter(typeof({converter}))]"]
         usings.append("JsonConverter")
 
     inner = generate_type_alias_constructor(type_def, spec, types)

@@ -39,19 +39,35 @@ def generate_special_class(
         lines = namespace_wrapper(
             NAMESPACE,
             get_usings(["Dictionary", "DataContract"]),
-            class_wrapper(type_def, [], "Dictionary<string, object?>"),
+            class_wrapper(
+                type_def,
+                ["public LSPObject(Dictionary<string, object?> value):base(value){}"],
+                "Dictionary<string, object?>",
+            ),
         )
     if type_def.name == "LSPAny":
         lines = namespace_wrapper(
             NAMESPACE,
-            get_usings(["DataContract"]),
-            class_wrapper(type_def, [], "object"),
+            get_usings(["DataContract", "JsonConverter"]),
+            class_wrapper(
+                type_def,
+                [
+                    "public LSPAny(object? value){this.Value = value;}",
+                    "public object? Value { get; set; }",
+                ],
+                "object",
+                ["[JsonConverter(typeof(LSPAnyConverter))]"],
+            ),
         )
     if type_def.name == "LSPArray":
         lines = namespace_wrapper(
             NAMESPACE,
             get_usings(["DataContract", "List"]),
-            class_wrapper(type_def, [], "List<object>"),
+            class_wrapper(
+                type_def,
+                ["public LSPArray(List<object> value):base(value){}"],
+                "List<object>",
+            ),
         )
 
     if type_def.name == "Pattern":

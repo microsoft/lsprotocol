@@ -16,6 +16,7 @@ SPECIAL_CLASSES = [
     "ChangeAnnotationIdentifier",
     "Pattern",
     "DocumentSelector",
+    "InitializedParams",
 ]
 
 
@@ -38,11 +39,25 @@ def generate_special_class(
     if type_def.name == "LSPObject":
         lines = namespace_wrapper(
             NAMESPACE,
-            get_usings(["Dictionary", "DataContract"]),
+            get_usings(["Dictionary", "DataContract", "JsonConverter"]),
             class_wrapper(
                 type_def,
                 ["public LSPObject(Dictionary<string, object?> value):base(value){}"],
                 "Dictionary<string, object?>",
+                ["[JsonConverter(typeof(CustomObjectConverter<LSPObject>))]"],
+            ),
+        )
+    if type_def.name == "InitializedParams":
+        lines = namespace_wrapper(
+            NAMESPACE,
+            get_usings(["Dictionary", "DataContract", "JsonConverter"]),
+            class_wrapper(
+                type_def,
+                [
+                    "public InitializedParams(Dictionary<string, object?> value):base(value){}"
+                ],
+                "Dictionary<string, object?>",
+                ["[JsonConverter(typeof(CustomObjectConverter<InitializedParams>))]"],
             ),
         )
     if type_def.name == "LSPAny":

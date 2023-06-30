@@ -8,7 +8,16 @@ public class LSPTests
 {
     public static IEnumerable<object[]> JsonTestData()
     {
-        string folderPath = "C:\\GIT\\LSP\\lsprotocol\\packages\\testdata";
+        string folderPath;
+        // Read test data path from environment variable
+        if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("LSP_TEST_DATA_PATH")))
+        {
+            folderPath = Environment.GetEnvironmentVariable("LSP_TEST_DATA_PATH");
+        }
+        else
+        {
+            throw new Exception("LSP_TEST_DATA_PATH environment variable not set");
+        }
 
         string[] jsonFiles = Directory.GetFiles(folderPath, "*.json");
         foreach (string filePath in jsonFiles)

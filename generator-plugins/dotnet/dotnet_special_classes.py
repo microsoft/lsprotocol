@@ -16,6 +16,7 @@ SPECIAL_CLASSES = [
     "ChangeAnnotationIdentifier",
     "Pattern",
     "DocumentSelector",
+    "InitializedParams",
 ]
 
 
@@ -38,20 +39,50 @@ def generate_special_class(
     if type_def.name == "LSPObject":
         lines = namespace_wrapper(
             NAMESPACE,
-            get_usings(["Dictionary", "DataContract"]),
-            class_wrapper(type_def, [], "Dictionary<string, object?>"),
+            get_usings(["Dictionary", "DataContract", "JsonConverter"]),
+            class_wrapper(
+                type_def,
+                ["public LSPObject(Dictionary<string, object?> value):base(value){}"],
+                "Dictionary<string, object?>",
+                ["[JsonConverter(typeof(CustomObjectConverter<LSPObject>))]"],
+            ),
+        )
+    if type_def.name == "InitializedParams":
+        lines = namespace_wrapper(
+            NAMESPACE,
+            get_usings(["Dictionary", "DataContract", "JsonConverter"]),
+            class_wrapper(
+                type_def,
+                [
+                    "public InitializedParams(Dictionary<string, object?> value):base(value){}"
+                ],
+                "Dictionary<string, object?>",
+                ["[JsonConverter(typeof(CustomObjectConverter<InitializedParams>))]"],
+            ),
         )
     if type_def.name == "LSPAny":
         lines = namespace_wrapper(
             NAMESPACE,
-            get_usings(["DataContract"]),
-            class_wrapper(type_def, [], "object"),
+            get_usings(["DataContract", "JsonConverter"]),
+            class_wrapper(
+                type_def,
+                [
+                    "public LSPAny(object? value){this.Value = value;}",
+                    "public object? Value { get; set; }",
+                ],
+                "object",
+                ["[JsonConverter(typeof(LSPAnyConverter))]"],
+            ),
         )
     if type_def.name == "LSPArray":
         lines = namespace_wrapper(
             NAMESPACE,
             get_usings(["DataContract", "List"]),
-            class_wrapper(type_def, [], "List<object>"),
+            class_wrapper(
+                type_def,
+                ["public LSPArray(List<object> value):base(value){}"],
+                "List<object>",
+            ),
         )
 
     if type_def.name == "Pattern":
@@ -60,6 +91,7 @@ def generate_special_class(
             "public Pattern(string value){pattern = value;}",
             "public static implicit operator Pattern(string value) => new Pattern(value);",
             "public static implicit operator string(Pattern pattern) => pattern.pattern;",
+            "public override string ToString() => pattern;",
         ]
         lines = namespace_wrapper(
             NAMESPACE,
@@ -78,6 +110,7 @@ def generate_special_class(
             "public ChangeAnnotationIdentifier(string value){identifier = value;}",
             "public static implicit operator ChangeAnnotationIdentifier(string value) => new ChangeAnnotationIdentifier(value);",
             "public static implicit operator string(ChangeAnnotationIdentifier identifier) => identifier.identifier;",
+            "public override string ToString() => identifier;",
         ]
         lines = namespace_wrapper(
             NAMESPACE,

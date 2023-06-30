@@ -176,7 +176,7 @@ def get_all_extends(struct_def: model.Structure, spec) -> List[model.Structure]:
     return extends
 
 
-def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
+def get_all_properties(struct: model.Structure, spec) -> List[model.Property]:
     properties = []
     for prop in struct.properties:
         properties.append(prop)
@@ -196,6 +196,14 @@ def get_all_properties(struct: model.Structure, spec) -> List[model.Structure]:
     return properties
 
 
+def generate_for_property(
+    prop: model.Property, spec: model.LSPModel, visited: List[str]
+):
+    if prop.optional:
+        yield (True, Ignore())
+    yield from generate_for_type(prop.type, spec, visited)
+
+
 def generate_for_reference(
     refname: str,
     spec: model.LSPModel,
@@ -212,7 +220,7 @@ def generate_for_reference(
         if properties:
             names = [prop.name for prop in properties]
             value_variants = [
-                list(generate_for_type(prop.type, spec, visited)) for prop in properties
+                list(generate_for_property(prop, spec, visited)) for prop in properties
             ]
 
             products = zip(*extend_all(value_variants))
@@ -229,7 +237,13 @@ def generate_for_reference(
             yield (True, {"lspExtension": "some value"})
             yield (True, dict())
     elif alias:
-        yield from generate_for_type(alias.type, spec, visited)
+        if refname in ["LSPObject", "LSPAny", "LSPArray"]:
+            yield from (
+                (True, value)
+                for _, value in generate_for_type(alias.type, spec, visited)
+            )
+        else:
+            yield from generate_for_type(alias.type, spec, visited)
     elif enum:
         value = enum.values[0].value
         yield (True, value)
@@ -247,7 +261,7 @@ def generate_for_or(
     visited: List[str],
 ):
     if has_null_base_type(type_defs):
-        yield (True, Ignore())
+        yield (True, None)
 
     subset = filter_null_base_type(type_defs)
     generated = [
@@ -306,7 +320,7 @@ def generate_for_type(
     visited: List[str],
 ):
     if type_def is None:
-        yield (True, Ignore())
+        yield (True, None)
     elif type_def.kind == "base":
         yield from generate_for_base(type_def.name)
     elif type_def.kind == "array":

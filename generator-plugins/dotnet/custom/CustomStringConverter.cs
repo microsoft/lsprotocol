@@ -30,7 +30,7 @@ public class CustomStringConverter<T> : JsonConverter<T> where T : class
         }
         else if (value is T t)
         {
-            writer.WriteValue(t);
+            writer.WriteValue(t.ToString());
         }
         else
         {

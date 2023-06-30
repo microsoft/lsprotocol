@@ -1,6 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+import re
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import cattrs
@@ -22,6 +23,8 @@ from .dotnet_helpers import (
     to_camel_case,
     to_upper_camel_case,
 )
+
+CONVERTER_RE = re.compile(r"OrType<(?P<parts>.*)>\[\]")
 
 
 def _get_enum(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
@@ -129,12 +132,7 @@ def get_type_name(
     return name
 
 
-def get_converter(
-    type_def: model.LSP_TYPE_SPEC,
-    types: TypeData,
-    spec: model.LSPModel,
-    name_context: Optional[str] = None,
-) -> Optional[str]:
+def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str]:
     if type_def.kind == "base" and type_def.name in ["DocumentUri", "URI"]:
         return "[JsonConverter(typeof(CustomStringConverter<Uri>))]"
     elif type_def.kind == "reference" and type_def.name in [
@@ -144,13 +142,14 @@ def get_converter(
         return f"[JsonConverter(typeof(CustomStringConverter<{type_def.name}>))]"
     elif type_def.kind == "reference" and type_def.name == "DocumentSelector":
         return "[JsonConverter(typeof(DocumentSelectorConverter))]"
-    elif type_def.kind == "or":
-        subset = filter_null_base_type(type_def.items)
-        if len(subset) >= 2:
-            type_names = ", ".join(
-                get_type_name(item, types, spec, name_context) for item in subset
-            )
-            return f"[JsonConverter(typeof(OrTypeConverter<{type_names}>))]"
+    elif type_def.kind == "or" and type_name.startswith("OrType<"):
+        converter = type_name.replace("OrType<", "OrTypeConverter<")
+        return f"[JsonConverter(typeof({converter}))]"
+    elif type_def.kind == "array" and type_name.startswith("OrType<"):
+        matches = CONVERTER_RE.match(type_name).groupdict()
+        if "parts" in matches:
+            converter = f"OrTypeArrayConverter<{matches['parts']}>"
+            return f"[JsonConverter(typeof({converter}))]"
     return None
 
 
@@ -168,9 +167,7 @@ def generate_property(
     type_name = get_type_name(
         prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
     )
-    converter = get_converter(
-        prop_def.type, types, spec, f"{class_name}_{prop_def.name}"
-    )
+    converter = get_converter(prop_def.type, type_name)
     special_optional = prop_def.type.kind == "or" and has_null_base_type(
         prop_def.type.items
     )
@@ -416,6 +413,56 @@ def generate_type_alias_constructor(
     return constructor
 
 
+def generate_type_alias_converter(
+    type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
+) -> None:
+    assert type_def.type.kind == "or"
+    subset_types = [
+        get_type_name(i, types, spec, type_def.name)
+        for i in filter_null_base_type(type_def.type.items)
+    ]
+    converter = f"{type_def.name}Converter"
+    or_type_converter = f"OrTypeConverter<{','.join(subset_types)}>"
+    or_type = f"OrType<{','.join(subset_types)}>"
+    code = [
+        f"public class {converter} : JsonConverter<{type_def.name}>",
+        "{",
+        f"private {or_type_converter} _orType;",
+        f"public {converter}()",
+        "{",
+        f"_orType = new {or_type_converter}();",
+        "}",
+        f"public override {type_def.name}? ReadJson(JsonReader reader, Type objectType, {type_def.name}? existingValue, bool hasExistingValue, JsonSerializer serializer)",
+        "{",
+        f"var o = _orType.ReadJson(reader, objectType, existingValue, serializer);",
+        f"if (o is {or_type} orType)",
+        "{",
+    ]
+    for t in subset_types:
+        code += [
+            f"if (orType.Value.GetType() == typeof({t}))",
+            "{",
+            f"return new {type_def.name}(({t})orType.Value);",
+            "}",
+        ]
+    code += [
+        "}",
+        "throw new JsonSerializationException($\"Unexpected token type '{{orType.GetType()}}'.\");",
+        "}",
+        f"public override void WriteJson(JsonWriter writer, {type_def.name}? value, JsonSerializer serializer)",
+        "{",
+        "_orType.WriteJson(writer, value, serializer);",
+        "}",
+        "}",
+    ]
+
+    code = namespace_wrapper(NAMESPACE, get_usings(["JsonConverter"]), code)
+
+    ref = model.Structure(**{"name": converter, "properties": []})
+    types.add_type_info(ref, converter, code)
+    return converter
+
+
 def generate_class_from_type_alias(
     type_def: model.TypeAlias, spec: model.LSPModel, types: TypeData
 ) -> None:
@@ -426,7 +473,8 @@ def generate_class_from_type_alias(
     type_name = get_type_name(type_def.type, types, spec, type_def.name)
     class_attributes = []
     if type_def.type.kind == "or":
-        class_attributes += [f"[JsonConverter(typeof({type_name}))]"]
+        converter = generate_type_alias_converter(type_def, spec, types)
+        class_attributes += [f"[JsonConverter(typeof({converter}))]"]
         usings.append("JsonConverter")
 
     inner = generate_type_alias_constructor(type_def, spec, types)
@@ -672,8 +720,6 @@ def generate_request_notification_methods(spec: model.LSPModel, types: TypeData)
 
 def get_message_template(
     obj: Union[model.Request, model.Notification],
-    spec: model.LSPModel,
-    types: TypeData,
     is_request: bool,
 ) -> model.Structure:
     text = "Request" if is_request else "Notification"
@@ -709,10 +755,7 @@ def get_message_template(
         properties.append(
             {
                 "name": "params",
-                "type": {
-                    "kind": "reference",
-                    "name": get_type_name(obj.params, types, spec),
-                },
+                "type": cattrs.unstructure(obj.params),
                 "documentation": f"The {text} parameters.",
             }
         )
@@ -776,13 +819,16 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
     generate_request_notification_methods(spec, types)
 
     for request in spec.requests:
-        struct = get_message_template(request, spec, types, is_request=True)
-        params = struct.properties[3]
+        struct = get_message_template(request, is_request=True)
         generate_class_from_struct(
             struct,
             spec,
             types,
-            f"IRequest<{params.type.name}>",
+            (
+                f"IRequest<{get_type_name(request.params, types, spec)}>"
+                if request.params
+                else "IRequest<LSPAny>"
+            ),
         )
         registration_options = get_registration_options_template(request, spec, types)
         if registration_options:
@@ -793,13 +839,16 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             )
 
     for notification in spec.notifications:
-        struct = get_message_template(notification, spec, types, is_request=False)
-        params = struct.properties[2]
+        struct = get_message_template(notification, is_request=False)
         generate_class_from_struct(
             struct,
             spec,
             types,
-            f"INotification<{params.type.name}>",
+            (
+                f"INotification<{get_type_name(notification.params, types, spec)}>"
+                if notification.params
+                else "INotification<LSPAny>"
+            ),
         )
         registration_options = get_registration_options_template(
             notification, spec, types

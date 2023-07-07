@@ -153,7 +153,7 @@ def create_plugin(session: nox.Session):
     """Create a new plugin."""
     name = input("Enter the name of the plugin: ")
 
-    plugin_root = pathlib.Path(__file__).parent / "generator-plugins" / name
+    plugin_root = pathlib.Path(__file__).parent / "generator" / "plugins" / name
     plugin_root.mkdir(parents=True, exist_ok=True)
 
     init_text = "\n".join(
@@ -162,6 +162,7 @@ def create_plugin(session: nox.Session):
             "# Licensed under the MIT License.",
             "",
             f"from .{name}_utils import generate_from_spec as generate",
+            "",
         ]
     )
     plugin_root.joinpath("__init__.py").write_text(init_text, encoding="utf-8")
@@ -193,6 +194,7 @@ def create_plugin(session: nox.Session):
             "    return {",
             '        "src/lib.rs": "code for lib.rs",',
             "    }",
+            "",
         ]
     )
 

@@ -45,6 +45,12 @@ def get_parser() -> argparse.ArgumentParser:
         type=str,
         required=True,
     )
+    parser.add_argument(
+        "--output-dir",
+        "-o",
+        help="Path to a directory where the generated content is written.",
+        type=str,
+    )
     return parser
 
 
@@ -73,13 +79,18 @@ def main(argv: Sequence[str]) -> None:
     plugin = args.plugin
     LOGGER.info(f"Running plugin {plugin}.")
 
+    output_dir = args.output_dir or os.fspath(PACKAGES_ROOT / plugin)
+    LOGGER.info(f"Writing output to {output_dir}")
+
     # load model and generate types for each plugin to avoid
     # any conflicts between plugins.
     spec: model.LSPModel = model.create_lsp_model(json_models)
 
     try:
+        LOGGER.info(f"Loading plugin: {plugin}.")
         plugin_module = importlib.import_module(f"generator.plugins.{plugin}")
-        plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
+        LOGGER.info(f"Running plugin: {plugin}.")
+        plugin_module.generate(spec, output_dir)
         LOGGER.info(f"Plugin {plugin} completed.")
     except Exception as e:
         LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)

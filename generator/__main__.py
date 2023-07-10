@@ -89,7 +89,7 @@ def main(argv: Sequence[str]) -> None:
     plugin = args.plugin
     LOGGER.info(f"Running plugin {plugin}.")
 
-    output_dir = args.output or os.fspath(PACKAGES_ROOT / plugin)
+    output_dir = args.output_dir or os.fspath(PACKAGES_ROOT / plugin)
     LOGGER.info(f"Writing output to {output_dir}")
 
     # load model and generate types for each plugin to avoid

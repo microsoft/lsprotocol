@@ -49,7 +49,7 @@ def get_parser() -> argparse.ArgumentParser:
         "-p",
         help="Name of a builtin plugin module. By default uses all plugins.",
         type=str,
-        action="append",
+        required=True,
     )
     return parser
 
@@ -80,35 +80,19 @@ def main(argv: Sequence[str]) -> None:
         jsonschema.validate(json_model, schema)
         json_models.append(json_model)
 
-    plugins = args.plugin or []
+    plugin = args.plugin
+    LOGGER.info(f"Running plugin {plugin}.")
 
-    if not plugins:
-        LOGGER.info("Finding plugins.")
-        plugin_root = pathlib.Path(__file__).parent.parent / "generator-plugins"
+    # load model and generate types for each plugin to avoid
+    # any conflicts between plugins.
+    spec: model.LSPModel = model.create_lsp_model(json_models)
 
-        for item in plugin_root.iterdir():
-            if (
-                item.is_dir()
-                and (item / "__init__.py").exists()
-                and not item.name.startswith("_")
-            ):
-                plugins.append(item.name)
-        LOGGER.info(f"Found plugins: {plugins}")
-        LOGGER.info("Starting code generation.")
-
-    for plugin in plugins:
-        LOGGER.info(f"Running plugin {plugin}.")
-
-        # load model and generate types for each plugin to avoid
-        # any conflicts between plugins.
-        spec: model.LSPModel = model.create_lsp_model(json_models)
-
-        try:
-            plugin_module = importlib.import_module(f"generator-plugins.{plugin}")
-            plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
-            LOGGER.info(f"Plugin {plugin} completed.")
-        except Exception as e:
-            LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)
+    try:
+        plugin_module = importlib.import_module(f"generator.plugins.{plugin}")
+        plugin_module.generate(spec, os.fspath(PACKAGES_ROOT / plugin))
+        LOGGER.info(f"Plugin {plugin} completed.")
+    except Exception as e:
+        LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)
 
 
 if __name__ == "__main__":

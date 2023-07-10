@@ -32,12 +32,6 @@ def setup_logging() -> None:
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Generate types from LSP JSON model.")
     parser.add_argument(
-        "--schema",
-        "-s",
-        help="Path to a model schema file. By default uses packaged schema.",
-        type=str,
-    )
-    parser.add_argument(
         "--model",
         "-m",
         help="Path to a model JSON file. By default uses packaged model file.",
@@ -59,11 +53,7 @@ def main(argv: Sequence[str]) -> None:
     args = parser.parse_args(argv)
 
     # Validate against LSP model JSON schema.
-
-    if args.schema:
-        schema_file = pathlib.Path(args.schema)
-    else:
-        schema_file = ir.files("generator") / "lsp.schema.json"
+    schema_file = ir.files("generator") / "lsp.schema.json"
 
     LOGGER.info("Using schema file %s", os.fspath(schema_file))
     schema = json.load(schema_file.open("rb"))

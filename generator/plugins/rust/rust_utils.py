@@ -22,10 +22,14 @@ PACKAGE_DIR_NAME = "lsprotocol"
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
     code = generate_package_code(spec)
+
+    output_path = pathlib.Path(output_dir, PACKAGE_DIR_NAME)
+    if not output_path.exists():
+        output_path.mkdir(parents=True, exist_ok=True)
+        (output_path / "src").mkdir(parents=True, exist_ok=True)
+
     for file_name in code:
-        pathlib.Path(output_dir, PACKAGE_DIR_NAME, file_name).write_text(
-            code[file_name], encoding="utf-8"
-        )
+        (output_path / file_name).write_text(code[file_name], encoding="utf-8")
 
 
 def generate_package_code(spec: model.LSPModel) -> List[str]:

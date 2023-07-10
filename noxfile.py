@@ -232,6 +232,7 @@ def generate_dotnet(session: nox.Session):
 
     session.run("python", "-m", "generator", "--plugin", "dotnet")
     with session.chdir("./packages/dotnet/lsprotocol"):
+        session.run("dotnet", "format", external=True)
         session.run("dotnet", "build", external=True)
 
 

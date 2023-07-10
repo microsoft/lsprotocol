@@ -21,10 +21,13 @@ custom_request_params_aliases = ["WorkspaceConfigurationParams"]
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
     code = TypesCodeGenerator(spec).get_code()
+
+    output_path = pathlib.Path(output_dir, PACKAGE_NAME)
+    if not output_path.exists():
+        output_path.mkdir(parents=True, exist_ok=True)
+
     for file_name in code:
-        pathlib.Path(output_dir, PACKAGE_NAME, file_name).write_text(
-            code[file_name], encoding="utf-8"
-        )
+        (output_path / file_name).write_text(code[file_name], encoding="utf-8")
 
 
 def _generate_field_validator(

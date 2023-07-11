@@ -3,10 +3,10 @@ name: Push Validation
 on:
   push:
     branches:
-      - "main"
-      - "release"
-      - "release/*"
-      - "release-*"
+      - 'main'
+      - 'release'
+      - 'release/*'
+      - 'release-*'
 
 jobs:
   build-vsix:
@@ -29,24 +29,24 @@ jobs:
       - name: Lint
         uses: ./.github/actions/lint
 
-  tests:
-    name: Tests
+  python-tests:
+    name: Python Tests
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python: ["3.7", "3.8", "3.9", "3.10", "3.11"]
+        python: ['3.7', '3.8', '3.9', '3.10', '3.11']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Update pip, install wheel and nox
-        run: python -m pip install -U pip wheel nox
-        shell: bash
+      - name: Use Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
 
-      # The new python may not have nox so install it again
       - name: Update pip, install wheel and nox
         run: python -m pip install -U pip wheel nox
         shell: bash
@@ -54,3 +54,33 @@ jobs:
       - name: Run tests
         run: python -m nox --session tests
         shell: bash
+
+  dotnet-tests:
+    name: Dotnet Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Dotnet Tool Chain setup
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Generate Test Data
+        run: python -m generator --plugin testdata
+
+      - name: Dotnet Format Check
+        run: dotnet test tests/dotnet/lsprotocol_tests/lsprotocol_tests.csproj
+        shell: bash
+        env:
+          LSP_TEST_DATA_PATH: ./packages/testdata

@@ -84,7 +84,7 @@ jobs:
         run: dotnet test tests/dotnet/lsprotocol_tests/lsprotocol_tests.csproj
         shell: bash
         env:
-          LSP_TEST_DATA_PATH: ./packages/testdata
+          LSP_TEST_DATA_PATH: ${{ github.workspace }}/packages/testdata
 
   smoke-tests:
     name: Smoke Tests (pygls)

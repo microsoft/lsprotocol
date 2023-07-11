@@ -14,8 +14,12 @@ logger = logging.getLogger("testdata")
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
     """Generate the code for the given spec."""
-    cleanup(output_dir)
     output = pathlib.Path(output_dir)
+
+    if not output.exists():
+        output.mkdir(parents=True, exist_ok=True)
+
+    cleanup(output)
     # key is the relative path to the file, value is the content
     code: Dict[str, str] = generate(spec, logger)
     for file_name in code:
@@ -24,8 +28,7 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
         file.write_text(code[file_name], encoding="utf-8")
 
 
-def cleanup(output_dir: str) -> None:
+def cleanup(output_path: pathlib.Path) -> None:
     """Cleanup the generated C# files."""
-    output = pathlib.Path(output_dir)
-    for file in output.glob("*.json"):
+    for file in output_path.glob("*.json"):
         file.unlink()

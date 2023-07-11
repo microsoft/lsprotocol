@@ -61,7 +61,7 @@ public class LSPTests
             JToken token2 = JToken.Parse(newJson);
             RemoveNullProperties(token1);
             RemoveNullProperties(token2);
-            Assert.True(JToken.DeepEquals(token1, token2));
+            Assert.True(JToken.DeepEquals(token1, token2), $"Failed for : {data}");
         }
         else
         {
@@ -69,7 +69,7 @@ public class LSPTests
             {
                 JsonConvert.DeserializeObject(data, type);
                 // Explicitly fail the test
-                Assert.True(false, "Should have thrown an exception.");
+                Assert.True(false, $"Should have thrown an exception for : {data}");
             }
             catch
             {

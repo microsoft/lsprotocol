@@ -8,15 +8,9 @@ This repository contains code to generate Language Server Protocol types and cla
 
 You will need a python environment to run the generator. Here are the steps:
 
-1. Clone this repository.
-2. Create environment using `python -m venv .venv` in the root directory of this project.
-3. Activate the environment using `.venv\Scripts\activate` on Windows or `.venv/bin/activate` on Linux/Mac.
-4. Run this command to install `nox`: `python -m pip install nox`
-5. Run this command to install dependencies:
-
-```
-python -m pip install -r ./packages/python/requirements.txt -r ./requirements.txt
-```
+1. Create a python environment (min supported python 3.7): `python -m venv .venv`
+2. Get this tooL: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
+3. Run your plugin: `python -m generator --plugin dotnet --output-dir ./code`
 
 ### Command line
 
@@ -24,21 +18,21 @@ Clone this repository and run `generator` like a module.
 
 ```console
 >python -m generator --help
-usage: __main__.py [-h] [--schema SCHEMA] [--model MODEL]
+usage: __main__.py [-h] [--model [MODEL [MODEL ...]]] --plugin PLUGIN
+                   [--output-dir OUTPUT_DIR]
 
 Generate types from LSP JSON model.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --schema SCHEMA, -s SCHEMA
-                        Path to a model schema file. By default uses packaged
-                        schema.
-  --model MODEL, -m MODEL
+  --model [MODEL [MODEL ...]], -m [MODEL [MODEL ...]]
                         Path to a model JSON file. By default uses packaged
                         model file.
   --plugin PLUGIN, -p PLUGIN
                         Name of a builtin plugin module. By default uses all
                         plugins.
+  --output-dir OUTPUT_DIR, -o OUTPUT_DIR
+                        Path to a directory where the generated content is
 ```
 
 ### using `nox`
@@ -77,6 +71,8 @@ nox > Session create_plugin was successful.
 
 # Supported plugins
 
-| Language | Plugin                  | Package                                                                                             | Notes  |
-| -------- | ----------------------- | --------------------------------------------------------------------------------------------------- | ------ |
-| Python   | generator-plugin.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active |
+| Language | Plugin Module            | Package                                                                                             | Notes       |
+| -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------- |
+| Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active      |
+| Rust     | generator.plugins.rust   | <in development>                                                                                    | Development |
+| Dotnet   | generator.plugins.dotnet | <in developemnt>                                                                                    | Development |

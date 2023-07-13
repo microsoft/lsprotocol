@@ -9,7 +9,7 @@ This repository contains code to generate Language Server Protocol types and cla
 You will need a python environment to run the generator. Here are the steps:
 
 1. Create a python environment (min supported python 3.7): `python -m venv .venv`
-2. Get this tooL: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
+2. Get this tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
 3. Run your plugin: `python -m generator --plugin dotnet --output-dir ./code`
 
 ### Command line

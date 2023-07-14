@@ -38,6 +38,15 @@ def request_variants(method: str):
     yield False, {"id": 1, "method": method}
 
 
+def response_variants():
+    for id_value in [1, LSP_MAX_INT, LSP_MIN_INT, "string-id-1"]:
+        yield True, {"jsonrpc": "2.0", "id": id_value}
+    for id_value in [LSP_OVER_MAX_INT, LSP_UNDER_MIN_INT, 1.0, True, None]:
+        yield False, {"jsonrpc": "2.0", "id": id_value}
+    yield False, {"jsonrpc": "2.0"}
+    yield False, {"id": 1}
+
+
 def notify_variants(method: str):
     yield True, {"jsonrpc": "2.0", "method": method}
     yield False, {"jsonrpc": "2.0", "id": 1, "method": method}
@@ -384,6 +393,54 @@ def generate_notifications(notify: model.Notification, spec: model.LSPModel) -> 
             yield (valid1 and valid2, message)
 
 
+RESPONSE_ERROR = model.Structure(
+    **{
+        "name": "ResponseError",
+        "properties": [
+            {
+                "name": "code",
+                "type": {"kind": "base", "name": "integer"},
+            },
+            {
+                "name": "message",
+                "type": {"kind": "base", "name": "string"},
+            },
+            {
+                "name": "data",
+                "type": {"kind": "reference", "name": "LSPObject"},
+                "optional": True,
+            },
+        ],
+    }
+)
+
+
+def generate_responses(request: model.Request, spec: model.LSPModel) -> None:
+    variants = zip(
+        *extend_all(
+            [
+                list(response_variants()),
+                list(generate_for_type(request.result, spec, [])),
+                list(
+                    generate_for_type(
+                        model.ReferenceType("reference", "ResponseError"), spec, []
+                    )
+                ),
+            ]
+        )
+    )
+
+    for (valid1, base), (valid2, result), (valid3, error) in variants:
+        valid = valid1 and valid2 and valid3
+        if isinstance(result, Ignore):
+            yield (valid, base)
+        else:
+            message = deepcopy(base)
+            message.update({"result": result})
+            message.update({"error": error})
+            yield (valid, message)
+
+
 PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
 
 
@@ -404,6 +461,7 @@ def lsp_method_to_name(method: str) -> str:
 
 
 def generate(spec: model.LSPModel, logger: logging.Logger):
+    spec.structures.append(RESPONSE_ERROR)
     testdata = {}
     for request in spec.requests:
         counter = 0
@@ -414,7 +472,16 @@ def generate(spec: model.LSPModel, logger: logging.Logger):
                 continue
             testdata[name] = content
             counter += 1
-        logger.info(f"Generated {counter} variants for: {request.method}")
+        logger.info(f"Generated {counter} variants for Request: {request.method}")
+
+        for valid, value in generate_responses(request, spec):
+            content = json.dumps(value, indent=4, ensure_ascii=False)
+            name = f"{lsp_method_to_name(request.method)}Response-{valid}-{get_hash_from(content)}.json"
+            if name in testdata:
+                continue
+            testdata[name] = content
+            counter += 1
+        logger.info(f"Generated {counter} variants for Response: {request.method}")
 
     for notify in spec.notifications:
         counter = 0
@@ -425,7 +492,7 @@ def generate(spec: model.LSPModel, logger: logging.Logger):
                 continue
             testdata[name] = content
             counter += 1
-        logger.info(f"Generated {counter} variants for: {notify.method}")
+        logger.info(f"Generated {counter} variants for Notification: {notify.method}")
 
     logger.info(f"Generated {len(testdata)} test variants")
     return testdata

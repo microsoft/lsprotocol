@@ -145,8 +145,12 @@ def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str
     elif type_def.kind == "reference" and type_def.name == "DocumentSelector":
         return "[JsonConverter(typeof(DocumentSelectorConverter))]"
     elif type_def.kind == "or" and type_name.startswith("OrType<"):
-        converter = type_name.replace("OrType<", "OrTypeConverter<")
-        return f"[JsonConverter(typeof({converter}))]"
+        subset = filter_null_base_type(type_def.items)
+        if len(subset) == 1:
+            return get_converter(subset[0], type_name)
+        elif len(subset) >= 2:
+            converter = type_name.replace("OrType<", "OrTypeConverter<")
+            return f"[JsonConverter(typeof({converter}))]"
     elif type_def.kind == "array" and type_name.startswith("OrType<"):
         matches = CONVERTER_RE.match(type_name).groupdict()
         if "parts" in matches:
@@ -439,6 +443,8 @@ def generate_type_alias_converter(
         "}",
         f"public override {type_def.name}? ReadJson(JsonReader reader, Type objectType, {type_def.name}? existingValue, bool hasExistingValue, JsonSerializer serializer)",
         "{",
+        "reader = reader ?? throw new ArgumentNullException(nameof(reader));",
+        "if (reader.TokenType == JsonToken.Null) { return null; }",
         f"var o = _orType.ReadJson(reader, objectType, existingValue, serializer);",
         f"if (o is {or_type} orType)",
         "{",
@@ -452,7 +458,7 @@ def generate_type_alias_converter(
         ]
     code += [
         "}",
-        "throw new JsonSerializationException($\"Unexpected token type '{{orType.GetType()}}'.\");",
+        'throw new JsonSerializationException($"Unexpected token type.");',
         "}",
         f"public override void WriteJson(JsonWriter writer, {type_def.name}? value, JsonSerializer serializer)",
         "{",

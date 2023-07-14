@@ -15,19 +15,21 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
 
         Type[] types = new Type[] { typeof(T), typeof(U) };
 
-        switch (reader.TokenType)
+        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(uint)) || Validators.HasType(types, typeof(int))))
         {
-            case JsonToken.Integer:
-                return ReadIntegerToken(reader, serializer, types);
-
-            case JsonToken.Float:
-                return ReadFloatToken(reader, serializer, types);
-
-            case JsonToken.Boolean:
-                return ReadBooleanToken(reader, serializer, types);
-
-            case JsonToken.String:
-                return ReadStringToken(reader, serializer, types);
+            return ReadIntegerToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.Float && Validators.HasType(types, typeof(float)))
+        {
+            return ReadFloatToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.Boolean && Validators.HasType(types, typeof(bool)))
+        {
+            return ReadBooleanToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.String && Validators.HasType(types, typeof(string)))
+        {
+            return ReadStringToken(reader, serializer, types);
         }
 
         return OrTypeConverter<T, U>.ReadObjectToken(JToken.Load(reader), serializer, types);
@@ -63,51 +65,42 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
 
     private static OrType<T, U> ReadFloatToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(float)))
+        float real = serializer.Deserialize<float>(reader);
+        if (typeof(T) == typeof(float))
         {
-            float real = serializer.Deserialize<float>(reader);
-            if (typeof(T) == typeof(float))
-            {
-                return new OrType<T, U>((T)(object)real);
-            }
-            if (typeof(U) == typeof(float))
-            {
-                return new OrType<T, U>((U)(object)real);
-            }
+            return new OrType<T, U>((T)(object)real);
+        }
+        if (typeof(U) == typeof(float))
+        {
+            return new OrType<T, U>((U)(object)real);
         }
         throw new InvalidOperationException("Invalid token type for float");
     }
 
     private static OrType<T, U> ReadBooleanToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(bool)))
+        bool boolean = serializer.Deserialize<bool>(reader);
+        if (typeof(T) == typeof(bool))
         {
-            bool boolean = serializer.Deserialize<bool>(reader);
-            if (typeof(T) == typeof(bool))
-            {
-                return new OrType<T, U>((T)(object)boolean);
-            }
-            if (typeof(U) == typeof(bool))
-            {
-                return new OrType<T, U>((U)(object)boolean);
-            }
+            return new OrType<T, U>((T)(object)boolean);
+        }
+        if (typeof(U) == typeof(bool))
+        {
+            return new OrType<T, U>((U)(object)boolean);
         }
         throw new InvalidOperationException("Invalid token type for boolean");
     }
 
     private static OrType<T, U> ReadStringToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(string)))
+        string str = serializer.Deserialize<string>(reader);
+        if (typeof(T) == typeof(string))
         {
-            string str = serializer.Deserialize<string>(reader);
-            if (typeof(T) == typeof(string))
-            {
-                return new OrType<T, U>((T)(object)str);
-            }
-            if (typeof(U) == typeof(string))
-            {
-                return new OrType<T, U>((U)(object)str);
-            }
+            return new OrType<T, U>((T)(object)str);
+        }
+        if (typeof(U) == typeof(string))
+        {
+            return new OrType<T, U>((U)(object)str);
         }
         throw new InvalidOperationException("Invalid token type for string");
     }
@@ -186,19 +179,21 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
 
         Type[] types = new Type[] { typeof(T), typeof(U), typeof(V) };
 
-        switch (reader.TokenType)
+        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(uint)) || Validators.HasType(types, typeof(int))))
         {
-            case JsonToken.Integer:
-                return ReadIntegerToken(reader, serializer, types);
-
-            case JsonToken.Float:
-                return ReadFloatToken(reader, serializer, types);
-
-            case JsonToken.Boolean:
-                return ReadBooleanToken(reader, serializer, types);
-
-            case JsonToken.String:
-                return ReadStringToken(reader, serializer, types);
+            return ReadIntegerToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.Float && Validators.HasType(types, typeof(float)))
+        {
+            return ReadFloatToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.Boolean && Validators.HasType(types, typeof(bool)))
+        {
+            return ReadBooleanToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.String && Validators.HasType(types, typeof(string)))
+        {
+            return ReadStringToken(reader, serializer, types);
         }
 
         return OrTypeConverter<T, U, V>.ReadObjectToken(JToken.Load(reader), serializer, types);
@@ -242,63 +237,54 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
 
     private static OrType<T, U, V> ReadFloatToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(float)))
+        float real = serializer.Deserialize<float>(reader);
+        if (typeof(T) == typeof(float))
         {
-            float real = serializer.Deserialize<float>(reader);
-            if (typeof(T) == typeof(float))
-            {
-                return new OrType<T, U, V>((T)(object)real);
-            }
-            if (typeof(U) == typeof(float))
-            {
-                return new OrType<T, U, V>((U)(object)real);
-            }
-            if (typeof(V) == typeof(float))
-            {
-                return new OrType<T, U, V>((V)(object)real);
-            }
+            return new OrType<T, U, V>((T)(object)real);
+        }
+        if (typeof(U) == typeof(float))
+        {
+            return new OrType<T, U, V>((U)(object)real);
+        }
+        if (typeof(V) == typeof(float))
+        {
+            return new OrType<T, U, V>((V)(object)real);
         }
         throw new InvalidOperationException("Invalid token type for float");
     }
 
     private static OrType<T, U, V> ReadBooleanToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(bool)))
+        bool boolean = serializer.Deserialize<bool>(reader);
+        if (typeof(T) == typeof(bool))
         {
-            bool boolean = serializer.Deserialize<bool>(reader);
-            if (typeof(T) == typeof(bool))
-            {
-                return new OrType<T, U, V>((T)(object)boolean);
-            }
-            if (typeof(U) == typeof(bool))
-            {
-                return new OrType<T, U, V>((U)(object)boolean);
-            }
-            if (typeof(V) == typeof(bool))
-            {
-                return new OrType<T, U, V>((V)(object)boolean);
-            }
+            return new OrType<T, U, V>((T)(object)boolean);
+        }
+        if (typeof(U) == typeof(bool))
+        {
+            return new OrType<T, U, V>((U)(object)boolean);
+        }
+        if (typeof(V) == typeof(bool))
+        {
+            return new OrType<T, U, V>((V)(object)boolean);
         }
         throw new InvalidOperationException("Invalid token type for boolean");
     }
 
     private static OrType<T, U, V> ReadStringToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(string)))
+        string str = serializer.Deserialize<string>(reader);
+        if (typeof(T) == typeof(string))
         {
-            string str = serializer.Deserialize<string>(reader);
-            if (typeof(T) == typeof(string))
-            {
-                return new OrType<T, U, V>((T)(object)str);
-            }
-            if (typeof(U) == typeof(string))
-            {
-                return new OrType<T, U, V>((U)(object)str);
-            }
-            if (typeof(V) == typeof(string))
-            {
-                return new OrType<T, U, V>((V)(object)str);
-            }
+            return new OrType<T, U, V>((T)(object)str);
+        }
+        if (typeof(U) == typeof(string))
+        {
+            return new OrType<T, U, V>((U)(object)str);
+        }
+        if (typeof(V) == typeof(string))
+        {
+            return new OrType<T, U, V>((V)(object)str);
         }
         throw new InvalidOperationException("Invalid token type for string");
     }
@@ -379,19 +365,21 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
 
         Type[] types = new Type[] { typeof(T), typeof(U), typeof(V), typeof(W) };
 
-        switch (reader.TokenType)
+        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(uint)) || Validators.HasType(types, typeof(int))))
         {
-            case JsonToken.Integer:
-                return ReadIntegerToken(reader, serializer, types);
-
-            case JsonToken.Float:
-                return ReadFloatToken(reader, serializer, types);
-
-            case JsonToken.Boolean:
-                return ReadBooleanToken(reader, serializer, types);
-
-            case JsonToken.String:
-                return ReadStringToken(reader, serializer, types);
+            return ReadIntegerToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.Float && Validators.HasType(types, typeof(float)))
+        {
+            return ReadFloatToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.Boolean && Validators.HasType(types, typeof(bool)))
+        {
+            return ReadBooleanToken(reader, serializer, types);
+        }
+        if (reader.TokenType == JsonToken.String && Validators.HasType(types, typeof(string)))
+        {
+            return ReadStringToken(reader, serializer, types);
         }
 
         return OrTypeConverter<T, U, V, W>.ReadObjectToken(JToken.Load(reader), serializer, types);
@@ -443,75 +431,66 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
 
     private static OrType<T, U, V, W> ReadFloatToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(float)))
+        float real = serializer.Deserialize<float>(reader);
+        if (typeof(T) == typeof(float))
         {
-            float real = serializer.Deserialize<float>(reader);
-            if (typeof(T) == typeof(float))
-            {
-                return new OrType<T, U, V, W>((T)(object)real);
-            }
-            if (typeof(U) == typeof(float))
-            {
-                return new OrType<T, U, V, W>((U)(object)real);
-            }
-            if (typeof(V) == typeof(float))
-            {
-                return new OrType<T, U, V, W>((V)(object)real);
-            }
-            if (typeof(W) == typeof(float))
-            {
-                return new OrType<T, U, V, W>((W)(object)real);
-            }
+            return new OrType<T, U, V, W>((T)(object)real);
+        }
+        if (typeof(U) == typeof(float))
+        {
+            return new OrType<T, U, V, W>((U)(object)real);
+        }
+        if (typeof(V) == typeof(float))
+        {
+            return new OrType<T, U, V, W>((V)(object)real);
+        }
+        if (typeof(W) == typeof(float))
+        {
+            return new OrType<T, U, V, W>((W)(object)real);
         }
         throw new InvalidOperationException("Invalid token type for float");
     }
 
     private static OrType<T, U, V, W> ReadBooleanToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(bool)))
+        bool boolean = serializer.Deserialize<bool>(reader);
+        if (typeof(T) == typeof(bool))
         {
-            bool boolean = serializer.Deserialize<bool>(reader);
-            if (typeof(T) == typeof(bool))
-            {
-                return new OrType<T, U, V, W>((T)(object)boolean);
-            }
-            if (typeof(U) == typeof(bool))
-            {
-                return new OrType<T, U, V, W>((U)(object)boolean);
-            }
-            if (typeof(V) == typeof(bool))
-            {
-                return new OrType<T, U, V, W>((V)(object)boolean);
-            }
-            if (typeof(W) == typeof(bool))
-            {
-                return new OrType<T, U, V, W>((W)(object)boolean);
-            }
+            return new OrType<T, U, V, W>((T)(object)boolean);
+        }
+        if (typeof(U) == typeof(bool))
+        {
+            return new OrType<T, U, V, W>((U)(object)boolean);
+        }
+        if (typeof(V) == typeof(bool))
+        {
+            return new OrType<T, U, V, W>((V)(object)boolean);
+        }
+        if (typeof(W) == typeof(bool))
+        {
+            return new OrType<T, U, V, W>((W)(object)boolean);
         }
         throw new InvalidOperationException("Invalid token type for boolean");
     }
 
     private static OrType<T, U, V, W> ReadStringToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        if (Validators.HasType(types, typeof(string)))
+        string str = serializer.Deserialize<string>(reader);
+        if (typeof(T) == typeof(string))
         {
-            string str = serializer.Deserialize<string>(reader);
-            if (typeof(T) == typeof(string))
-            {
-                return new OrType<T, U, V, W>((T)(object)str);
-            }
-            if (typeof(U) == typeof(string))
-            {
-                return new OrType<T, U, V, W>((U)(object)str);
-            }
-            if (typeof(V) == typeof(string))
-            {
-                return new OrType<T, U, V, W>((V)(object)str);
-            }
-            if (typeof(W) == typeof(string))
-            {
-                return new OrType<T, U, V, W>((W)(object)str);
-            }
+            return new OrType<T, U, V, W>((T)(object)str);
+        }
+        if (typeof(U) == typeof(string))
+        {
+            return new OrType<T, U, V, W>((U)(object)str);
+        }
+        if (typeof(V) == typeof(string))
+        {
+            return new OrType<T, U, V, W>((V)(object)str);
+        }
+        if (typeof(W) == typeof(string))
+        {
+            return new OrType<T, U, V, W>((W)(object)str);
         }
         throw new InvalidOperationException("Invalid token type for string");
     }

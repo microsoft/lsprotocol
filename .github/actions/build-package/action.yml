@@ -11,7 +11,7 @@ runs:
         python-version: 3.7
 
     - name: Pip cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements.txt') }}

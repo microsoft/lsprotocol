@@ -80,6 +80,10 @@ jobs:
       - name: Generate C# Code
         run: python -m generator --plugin dotnet
 
+      - name: Dotnet Build Tests
+        run: dotnet build tests/dotnet/lsprotocol_tests/lsprotocol_tests.csproj
+        shell: bash
+
       - name: Dotnet Run Tests
         run: dotnet test tests/dotnet/lsprotocol_tests/lsprotocol_tests.csproj
         shell: bash

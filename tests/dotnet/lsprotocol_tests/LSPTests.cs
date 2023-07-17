@@ -50,18 +50,26 @@ public class LSPTests
     {
         if (valid)
         {
-            var settings = new JsonSerializerSettings
+            try
             {
-                MissingMemberHandling = MissingMemberHandling.Error
-            };
-            object? deserializedObject = JsonConvert.DeserializeObject(data, type, settings);
-            string newJson = JsonConvert.SerializeObject(deserializedObject, settings);
+                var settings = new JsonSerializerSettings
+                {
+                    MissingMemberHandling = MissingMemberHandling.Error
+                };
+                object? deserializedObject = JsonConvert.DeserializeObject(data, type, settings);
+                string newJson = JsonConvert.SerializeObject(deserializedObject, settings);
 
-            JToken token1 = JToken.Parse(data);
-            JToken token2 = JToken.Parse(newJson);
-            RemoveNullProperties(token1);
-            RemoveNullProperties(token2);
-            Assert.True(JToken.DeepEquals(token1, token2), $"Failed for : {data}");
+                JToken token1 = JToken.Parse(data);
+                JToken token2 = JToken.Parse(newJson);
+                RemoveNullProperties(token1);
+                RemoveNullProperties(token2);
+                Assert.True(JToken.DeepEquals(token1, token2), $"Failed for : {data}");
+            }
+            catch (Exception e)
+            {
+                // Explicitly fail the test
+                Assert.True(false, $"Should not have thrown an exception for [{type.Name}]: {data} \r\n{e}");
+            }
         }
         else
         {
@@ -69,7 +77,7 @@ public class LSPTests
             {
                 JsonConvert.DeserializeObject(data, type);
                 // Explicitly fail the test
-                Assert.True(false, $"Should have thrown an exception for : {data}");
+                Assert.True(false, $"Should have thrown an exception for [{type.Name}]: {data}");
             }
             catch
             {

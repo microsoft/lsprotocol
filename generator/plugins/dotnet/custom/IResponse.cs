@@ -1,9 +1,9 @@
 public interface IResponse<TResponse> : IMessage
 {
 
-    OrType<int, string> Id { get; }
+    OrType<string, int> Id { get; }
 
-    TResponse Result { get; }
+    TResponse? Result { get; }
 
-    IResponseError? Error { get; }
+    ResponseError? Error { get; }
 }

@@ -62,6 +62,8 @@ def lsp_to_base_types(lsp_type: model.BaseType):
         return "uint"
     elif lsp_type.name in ["boolean"]:
         return "bool"
+    elif lsp_type.name in ["null"]:
+        return "object"
 
     # null should be handled by the caller as an Option<> type
     raise ValueError(f"Unknown base type: {lsp_type.name}")
@@ -96,9 +98,7 @@ def get_type_name(
     elif type_def.kind == "array":
         name = f"{get_type_name(type_def.element, types, spec, name_context)}[]"
     elif type_def.kind == "map":
-        key_type = get_type_name(type_def.key, types, spec, name_context)
-        value_type = get_type_name(type_def.value, types, spec, name_context)
-        name = f"Dictionary<{key_type}, {value_type}>"
+        name = generate_map_type(type_def, types, spec, name_context)
     elif type_def.kind == "base":
         name = lsp_to_base_types(type_def)
     elif type_def.kind == "literal":
@@ -132,6 +132,33 @@ def get_type_name(
     return name
 
 
+def generate_map_type(
+    type_def: model.LSP_TYPE_SPEC,
+    types: TypeData,
+    spec: model.LSPModel,
+    name_context: Optional[str] = None,
+) -> str:
+    key_type = get_type_name(type_def.key, types, spec, name_context)
+
+    if type_def.value.kind == "or":
+        subset = filter_null_base_type(type_def.value.items)
+        if len(subset) == 1:
+            value_type = get_type_name(type_def.value, types, spec, name_context)
+        else:
+            value_type = to_upper_camel_case(f"{name_context}Value")
+            type_alias = model.TypeAlias(
+                **{
+                    "name": value_type,
+                    "type": type_def.value,
+                }
+            )
+            generate_class_from_type_alias(type_alias, spec, types)
+
+    else:
+        value_type = get_type_name(type_def.value, types, spec, name_context)
+    return f"Dictionary<{key_type}, {value_type}>"
+
+
 def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str]:
     if type_def.kind == "base" and type_def.name in ["DocumentUri", "URI"]:
         return "[JsonConverter(typeof(CustomStringConverter<Uri>))]"
@@ -143,8 +170,12 @@ def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str
     elif type_def.kind == "reference" and type_def.name == "DocumentSelector":
         return "[JsonConverter(typeof(DocumentSelectorConverter))]"
     elif type_def.kind == "or" and type_name.startswith("OrType<"):
-        converter = type_name.replace("OrType<", "OrTypeConverter<")
-        return f"[JsonConverter(typeof({converter}))]"
+        subset = filter_null_base_type(type_def.items)
+        if len(subset) == 1:
+            return get_converter(subset[0], type_name)
+        elif len(subset) >= 2:
+            converter = type_name.replace("OrType<", "OrTypeConverter<")
+            return f"[JsonConverter(typeof({converter}))]"
     elif type_def.kind == "array" and type_name.startswith("OrType<"):
         matches = CONVERTER_RE.match(type_name).groupdict()
         if "parts" in matches:
@@ -190,6 +221,8 @@ def generate_property(
         lines.append(
             f'public {type_name}{optional} {name} {{ get; set; }} = "{prop_def.type.value}";'
         )
+    elif prop_def.type.kind == "base" and prop_def.type.name == "null":
+        lines.append(f"public {type_name}{optional} {name} {{ get; set; }} = null;")
     else:
         lines.append(f"public {type_name}{optional} {name} {{ get; set; }}")
 
@@ -311,6 +344,7 @@ def generate_class_from_struct(
     spec: model.LSPModel,
     types: TypeData,
     derived: Optional[str] = None,
+    attributes: Optional[List[str]] = None,
 ):
     if types.get_by_name(struct.name) or struct.name.startswith("_"):
         return
@@ -331,7 +365,7 @@ def generate_class_from_struct(
     lines = namespace_wrapper(
         NAMESPACE,
         get_usings(usings),
-        class_wrapper(struct, inner, derived),
+        class_wrapper(struct, inner, derived, attributes),
     )
     types.add_type_info(struct, struct.name, lines)
 
@@ -434,6 +468,8 @@ def generate_type_alias_converter(
         "}",
         f"public override {type_def.name}? ReadJson(JsonReader reader, Type objectType, {type_def.name}? existingValue, bool hasExistingValue, JsonSerializer serializer)",
         "{",
+        "reader = reader ?? throw new ArgumentNullException(nameof(reader));",
+        "if (reader.TokenType == JsonToken.Null) { return null; }",
         f"var o = _orType.ReadJson(reader, objectType, existingValue, serializer);",
         f"if (o is {or_type} orType)",
         "{",
@@ -447,7 +483,7 @@ def generate_type_alias_converter(
         ]
     code += [
         "}",
-        "throw new JsonSerializationException($\"Unexpected token type '{{orType.GetType()}}'.\");",
+        'throw new JsonSerializationException($"Unexpected token type.");',
         "}",
         f"public override void WriteJson(JsonWriter writer, {type_def.name}? value, JsonSerializer serializer)",
         "{",
@@ -780,6 +816,64 @@ def get_message_template(
     return model.Structure(**class_template)
 
 
+def get_response_template(
+    obj: model.Request, spec: model.LSPModel, types: TypeData
+) -> model.Structure:
+    properties = [
+        {
+            "name": "jsonrpc",
+            "type": {"kind": "stringLiteral", "value": "2.0"},
+            "documentation": "The jsonrpc version.",
+        },
+        {
+            "name": "id",
+            "type": {
+                "kind": "or",
+                "items": [
+                    {"kind": "base", "name": "string"},
+                    {"kind": "base", "name": "integer"},
+                ],
+            },
+            "documentation": f"The Request id.",
+        },
+    ]
+    if obj.result:
+        properties.append(
+            {
+                "name": "result",
+                "type": cattrs.unstructure(obj.result),
+                "documentation": f"Results for the request.",
+                "optional": True,
+            }
+        )
+    else:
+        properties.append(
+            {
+                "name": "result",
+                "type": {"kind": "base", "name": "null"},
+                "documentation": f"Results for the request.",
+                "optional": True,
+            }
+        )
+    properties.append(
+        {
+            "name": "error",
+            "type": {"kind": "reference", "name": "ResponseError"},
+            "documentation": f"Error while handling the request.",
+            "optional": True,
+        }
+    )
+    class_template = {
+        "name": f"{lsp_method_to_name(obj.method)}Response",
+        "properties": properties,
+        "documentation": obj.documentation,
+        "since": obj.since,
+        "deprecated": obj.deprecated,
+        "proposed": obj.proposed,
+    }
+    return model.Structure(**class_template)
+
+
 def get_registration_options_template(
     obj: Union[model.Request, model.Notification],
     spec: model.LSPModel,
@@ -819,6 +913,10 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
     generate_request_notification_methods(spec, types)
 
     for request in spec.requests:
+        partial_result_name = None
+        if request.partialResult:
+            partial_result_name = get_type_name(request.partialResult, types, spec)
+
         struct = get_message_template(request, is_request=True)
         generate_class_from_struct(
             struct,
@@ -829,6 +927,22 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
                 if request.params
                 else "IRequest<LSPAny>"
             ),
+            [
+                f"[Direction(MessageDirection.{to_upper_camel_case(request.messageDirection)})]",
+                f'[LSPRequest("{request.method}", typeof({lsp_method_to_name(request.method)}Response), typeof({partial_result_name}))]'
+                if partial_result_name
+                else f'[LSPRequest("{request.method}", typeof({lsp_method_to_name(request.method)}Response))]',
+            ],
+        )
+        response = get_response_template(request, spec, types)
+        generate_class_from_struct(
+            response,
+            spec,
+            types,
+            f"IResponse<{get_type_name(request.result, types, spec)}>",
+            [
+                f"[LSPResponse(typeof({lsp_method_to_name(request.method)}Request))]",
+            ],
         )
         registration_options = get_registration_options_template(request, spec, types)
         if registration_options:
@@ -849,6 +963,9 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
                 if notification.params
                 else "INotification<LSPAny>"
             ),
+            [
+                f"[Direction(MessageDirection.{to_upper_camel_case(request.messageDirection)})]",
+            ],
         )
         registration_options = get_registration_options_template(
             notification, spec, types

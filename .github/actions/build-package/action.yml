@@ -36,7 +36,7 @@ runs:
       shell: bash
 
     - name: Upload Packages to Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: pypi-packages
         path: |

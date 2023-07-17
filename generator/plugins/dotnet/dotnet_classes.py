@@ -98,9 +98,7 @@ def get_type_name(
     elif type_def.kind == "array":
         name = f"{get_type_name(type_def.element, types, spec, name_context)}[]"
     elif type_def.kind == "map":
-        key_type = get_type_name(type_def.key, types, spec, name_context)
-        value_type = get_type_name(type_def.value, types, spec, name_context)
-        name = f"Dictionary<{key_type}, {value_type}>"
+        name = generate_map_type(type_def, types, spec, name_context)
     elif type_def.kind == "base":
         name = lsp_to_base_types(type_def)
     elif type_def.kind == "literal":
@@ -132,6 +130,33 @@ def get_type_name(
     else:
         raise ValueError(f"Unknown type kind: {type_def.kind}")
     return name
+
+
+def generate_map_type(
+    type_def: model.LSP_TYPE_SPEC,
+    types: TypeData,
+    spec: model.LSPModel,
+    name_context: Optional[str] = None,
+) -> str:
+    key_type = get_type_name(type_def.key, types, spec, name_context)
+
+    if type_def.value.kind == "or":
+        subset = filter_null_base_type(type_def.value.items)
+        if len(subset) == 1:
+            value_type = get_type_name(type_def.value, types, spec, name_context)
+        else:
+            value_type = to_upper_camel_case(f"{name_context}Value")
+            type_alias = model.TypeAlias(
+                **{
+                    "name": value_type,
+                    "type": type_def.value,
+                }
+            )
+            generate_class_from_type_alias(type_alias, spec, types)
+
+    else:
+        value_type = get_type_name(type_def.value, types, spec, name_context)
+    return f"Dictionary<{key_type}, {value_type}>"
 
 
 def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str]:

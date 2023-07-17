@@ -107,6 +107,7 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
 
     private static OrType<T, U> ReadObjectToken(JToken token, JsonSerializer serializer, Type[] types)
     {
+        var exceptions = new List<Exception>();
         foreach (Type type in types)
         {
             try
@@ -137,13 +138,14 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                exceptions.Add(ex);
                 continue;
             }
         }
 
-        throw new ArgumentException(nameof(token));
+        throw new JsonSerializationException("Unable to deserialize object", new AggregateException(exceptions));
     }
 
 
@@ -291,6 +293,7 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
 
     private static OrType<T, U, V> ReadObjectToken(JToken token, JsonSerializer serializer, Type[] types)
     {
+        var exceptions = new List<Exception>();
         foreach (Type type in types)
         {
             try
@@ -325,13 +328,14 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                exceptions.Add(ex);
                 continue;
             }
         }
 
-        throw new ArgumentException(nameof(token));
+        throw new JsonSerializationException("Unable to deserialize object", new AggregateException(exceptions));
     }
 
     public override void WriteJson(JsonWriter writer, OrType<T, U, V>? value, JsonSerializer serializer)
@@ -497,6 +501,7 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
 
     private static OrType<T, U, V, W> ReadObjectToken(JToken token, JsonSerializer serializer, Type[] types)
     {
+        var exceptions = new List<Exception>();
         foreach (Type type in types)
         {
             try
@@ -536,13 +541,14 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
                 }
 
             }
-            catch
+            catch (Exception ex)
             {
+                exceptions.Add(ex);
                 continue;
             }
         }
 
-        throw new ArgumentException(nameof(token));
+        throw new JsonSerializationException("Unable to deserialize object", new AggregateException(exceptions));
     }
 
     public override void WriteJson(JsonWriter writer, OrType<T, U, V, W>? value, JsonSerializer serializer)

@@ -6,15 +6,28 @@ from typing import List, Optional, Union
 
 from generator import model
 
+BASIC_LINK_RE = re.compile(r"{@link +(\w+) ([\w ]+)}")
+BASIC_LINK_RE2 = re.compile(r"{@link +(\w+)\.(\w+) ([\w \.`]+)}")
+BASIC_LINK_RE3 = re.compile(r"{@link +(\w+)}")
+BASIC_LINK_RE4 = re.compile(r"{@link +(\w+)\.(\w+)}")
 PARTS_RE = re.compile(r"(([a-z0-9])([A-Z]))")
+
+
+def _fix_links(line: str) -> str:
+    line = BASIC_LINK_RE.sub(r'<see cref="\1">\2</see>', line)
+    line = BASIC_LINK_RE2.sub(r'<see cref="\1.\2">\3</see>', line)
+    line = BASIC_LINK_RE3.sub(r'<see cref="\1" />', line)
+    line = BASIC_LINK_RE4.sub(r'<see cref="\1.\2" />', line)
+    return line
 
 
 def lines_to_doc_comments(lines: List[str]) -> List[str]:
     if not lines:
         return []
+
     return (
         ["/// <summary>"]
-        + [f"/// {line}" for line in lines if not line.startswith("@")]
+        + [f"/// {_fix_links(line)}" for line in lines if not line.startswith("@")]
         + ["/// </summary>"]
     )
 

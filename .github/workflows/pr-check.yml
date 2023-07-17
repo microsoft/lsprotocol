@@ -24,31 +24,31 @@ jobs:
       - name: Lint
         uses: ./.github/actions/lint
 
-  # python-tests:
-  #   name: Python Tests
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest]
-  #       python: ['3.7', '3.8', '3.9', '3.10', '3.11']
+  python-tests:
+    name: Python Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.7', '3.8', '3.9', '3.10', '3.11']
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Use Python ${{ matrix.python }}
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: ${{ matrix.python }}
+      - name: Use Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
 
-  #     - name: Update pip, install wheel and nox
-  #       run: python -m pip install -U pip wheel nox
-  #       shell: bash
+      - name: Update pip, install wheel and nox
+        run: python -m pip install -U pip wheel nox
+        shell: bash
 
-  #     - name: Run tests
-  #       run: python -m nox --session tests
-  #       shell: bash
+      - name: Run tests
+        run: python -m nox --session tests
+        shell: bash
 
   dotnet-tests:
     name: Dotnet Tests
@@ -80,58 +80,62 @@ jobs:
       - name: Generate C# Code
         run: python -m generator --plugin dotnet
 
+      - name: Dotnet Build Tests
+        run: dotnet build tests/dotnet/lsprotocol_tests/lsprotocol_tests.csproj
+        shell: bash
+
       - name: Dotnet Run Tests
         run: dotnet test tests/dotnet/lsprotocol_tests/lsprotocol_tests.csproj
         shell: bash
         env:
           LSP_TEST_DATA_PATH: ${{ github.workspace }}/packages/testdata
 
-  # smoke-tests:
-  #   name: Smoke Tests (pygls)
-  #   runs-on: ${{ matrix.os }}
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       os: [ubuntu-latest, windows-latest]
-  #       python: ['3.7', '3.8', '3.9', '3.10', '3.11']
+  smoke-tests:
+    name: Smoke Tests (pygls)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.7', '3.8', '3.9', '3.10', '3.11']
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Checkout Pygls
-  #       uses: actions/checkout@v3
-  #       with:
-  #         repository: openlawlibrary/pygls
-  #         path: smoke_tests
+      - name: Checkout Pygls
+        uses: actions/checkout@v3
+        with:
+          repository: openlawlibrary/pygls
+          path: smoke_tests
 
-  #     - name: Use Python ${{ matrix.python }}
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: ${{ matrix.python }}
+      - name: Use Python ${{ matrix.python }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python }}
 
-  #     - name: Update pip, install wheel
-  #       run: python -m pip install -U pip wheel
-  #       shell: bash
+      - name: Update pip, install wheel
+        run: python -m pip install -U pip wheel
+        shell: bash
 
-  #     - name: Install pip pygls dependencies
-  #       run: python -m pip install typeguard mock pytest pytest-asyncio
-  #       shell: bash
+      - name: Install pip pygls dependencies
+        run: python -m pip install typeguard mock pytest pytest-asyncio
+        shell: bash
 
-  #     - name: Install pip lsprotocol dependencies
-  #       run: python -m pip install -r ./packages/python/requirements.txt
-  #       shell: bash
+      - name: Install pip lsprotocol dependencies
+        run: python -m pip install -r ./packages/python/requirements.txt
+        shell: bash
 
-  #     - name: Install pygls
-  #       run: python -m pip install --no-deps ./smoke_tests
-  #       shell: bash
+      - name: Install pygls
+        run: python -m pip install --no-deps ./smoke_tests
+        shell: bash
 
-  #     - name: Pip List
-  #       run: python -m pip list
-  #       shell: bash
+      - name: Pip List
+        run: python -m pip list
+        shell: bash
 
-  #     - name: Run Tests
-  #       run: python -m pytest smoke_tests/tests
-  #       env:
-  #         PYTHONPATH: ./packages/python
-  #       shell: bash
+      - name: Run Tests
+        run: python -m pytest smoke_tests/tests
+        env:
+          PYTHONPATH: ./packages/python
+        shell: bash

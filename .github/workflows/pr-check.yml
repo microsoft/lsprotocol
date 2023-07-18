@@ -5,14 +5,42 @@ on:
 
 jobs:
   build-package:
-    name: Create Packages
+    name: Create PyPI Packages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Build Packages
-        uses: ./.github/actions/build-package
+      - name: Use Python 3.7
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+
+      - name: Pip cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-build-vsix-
+
+      - name: Install nox
+        run: python -m pip install nox
+        shell: bash
+
+      - name: Build sdist and wheels
+        run: python -m nox --session build
+        shell: bash
+
+      - name: Upload Python Packages to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pypi-packages
+          path: |
+            packages/python/dist/*.gz
+            packages/python/dist/*.whl
+          if-no-files-found: error
+          retention-days: 7
 
   lint:
     name: Lint
@@ -21,8 +49,45 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Lint
-        uses: ./.github/actions/lint
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Pip cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-lint-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-lint-
+
+      - name: Install nox
+        run: python -m pip install nox
+        shell: bash
+
+      - name: Check linting and formatting
+        run: python -m nox --session lint
+        shell: bash
+
+      - name: Rust Tool Chain setup
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          components: rustfmt
+
+      - name: Rustfmt Check
+        uses: actions-rust-lang/rustfmt@v1
+        with:
+          manifest-path: packages/rust/lsprotocol/Cargo.toml
+
+      - name: Dotnet Tool Chain setup
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '6.0.x'
+
+      - name: Dotnet Format Check
+        run: dotnet format packages/dotnet/lsprotocol/lsprotocol.csproj --verify-no-changes
+        shell: bash
 
   python-tests:
     name: Python Tests
@@ -89,6 +154,34 @@ jobs:
         shell: bash
         env:
           LSP_TEST_DATA_PATH: ${{ github.workspace }}/packages/testdata
+
+  dotnet-project:
+    name: Dotnet Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Generator
+        run: python -m pip install -r ./requirements.txt
+
+      - name: Generate C# Code
+        run: python -m generator --plugin dotnet
+
+      - name: Upload Dotnet Project to Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dotnet-project
+          path: |
+            packages/dotnet/lsprotocol/*.csproj
+            packages/dotnet/lsprotocol/*.cs
+          if-no-files-found: error
+          retention-days: 7
 
   smoke-tests:
     name: Smoke Tests (pygls)

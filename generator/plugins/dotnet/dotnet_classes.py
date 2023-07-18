@@ -476,7 +476,7 @@ def generate_type_alias_converter(
     ]
     for t in subset_types:
         code += [
-            f"if (orType.Value.GetType() == typeof({t}))",
+            f"if (orType.Value?.GetType() == typeof({t}))",
             "{",
             f"return new {type_def.name}(({t})orType.Value);",
             "}",

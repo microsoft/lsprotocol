@@ -24,7 +24,8 @@ from .dotnet_helpers import (
     to_upper_camel_case,
 )
 
-CONVERTER_RE = re.compile(r"OrType<(?P<parts>.*)>\[\]")
+ORTYPE_CONVERTER_RE = re.compile(r"OrType<(?P<parts>.*)>")
+IMMUTABLE_ARRAY_CONVERTER_RE = re.compile(r"ImmutableArray<(?P<elements>.*)>")
 
 
 def _get_enum(name: str, spec: model.LSPModel) -> Optional[model.Enum]:
@@ -179,7 +180,7 @@ def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str
         return f"[JsonConverter(typeof(CustomStringConverter<{type_def.name}>))]"
     elif type_def.kind == "reference" and type_def.name == "DocumentSelector":
         return "[JsonConverter(typeof(DocumentSelectorConverter))]"
-    elif type_def.kind == "or" and type_name.startswith("OrType<"):
+    elif type_def.kind == "or":
         subset = filter_null_base_type(type_def.items)
         if len(subset) == 1:
             return get_converter(subset[0], type_name)
@@ -187,9 +188,19 @@ def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str
             converter = type_name.replace("OrType<", "OrTypeConverter<")
             return f"[JsonConverter(typeof({converter}))]"
     elif type_def.kind == "array" and type_name.startswith("OrType<"):
-        matches = CONVERTER_RE.match(type_name).groupdict()
+        matches = ORTYPE_CONVERTER_RE.match(type_name).groupdict()
         if "parts" in matches:
             converter = f"OrTypeArrayConverter<{matches['parts']}>"
+            return f"[JsonConverter(typeof({converter}))]"
+    elif type_def.kind == "array":
+        matches = IMMUTABLE_ARRAY_CONVERTER_RE.match(type_name).groupdict()
+        elements = matches["elements"]
+        if elements.startswith("OrType<"):
+            matches = ORTYPE_CONVERTER_RE.match(elements).groupdict()
+            converter = f"OrTypeArrayConverter<{matches['parts']}>"
+            return f"[JsonConverter(typeof({converter}))]"
+        else:
+            converter = f"CustomArrayConverter<{elements}>"
             return f"[JsonConverter(typeof({converter}))]"
     return None
 

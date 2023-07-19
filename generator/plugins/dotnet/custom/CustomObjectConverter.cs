@@ -9,15 +9,15 @@ class CustomObjectConverter<T> : JsonConverter<T> where T : Dictionary<string, o
     {
         if (reader.TokenType == JsonToken.Null)
         {
-            return default(T);
+            return default(T)!;
         }
 
         Dictionary<string, object?>? o = serializer.Deserialize<Dictionary<string, object?>>(reader);
         if (o == null)
         {
-            return default(T);
+            return default(T)!;
         }
-        return (T)Activator.CreateInstance(typeof(T), o) ?? default(T);
+        return (T)Activator.CreateInstance(typeof(T), o)! ?? default(T)!;
     }
 
     public override void WriteJson(JsonWriter writer, T? value, JsonSerializer serializer)

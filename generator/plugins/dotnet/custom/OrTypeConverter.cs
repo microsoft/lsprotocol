@@ -93,7 +93,7 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
 
     private static OrType<T, U> ReadStringToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        string str = serializer.Deserialize<string>(reader);
+        string str = serializer.Deserialize<string>(reader)!;
         if (typeof(T) == typeof(string))
         {
             return new OrType<T, U>((T)(object)str);
@@ -275,7 +275,7 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
 
     private static OrType<T, U, V> ReadStringToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        string str = serializer.Deserialize<string>(reader);
+        string str = serializer.Deserialize<string>(reader)!;
         if (typeof(T) == typeof(string))
         {
             return new OrType<T, U, V>((T)(object)str);
@@ -351,7 +351,7 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
         }
         else
         {
-            serializer.Serialize(writer, value.Value);
+            serializer.Serialize(writer, value?.Value);
         }
     }
 }
@@ -479,7 +479,7 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
 
     private static OrType<T, U, V, W> ReadStringToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
-        string str = serializer.Deserialize<string>(reader);
+        string str = serializer.Deserialize<string>(reader)!;
         if (typeof(T) == typeof(string))
         {
             return new OrType<T, U, V, W>((T)(object)str);
@@ -564,7 +564,7 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
         }
         else
         {
-            serializer.Serialize(writer, value.Value);
+            serializer.Serialize(writer, value?.Value);
         }
     }
 }

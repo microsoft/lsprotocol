@@ -208,4 +208,8 @@ def get_usings(types: List[str]) -> List[str]:
         if t in types:
             usings.append("using System.Collections.Generic;")
 
+    for t in ["ImmutableArray", "ImmutableDictionary"]:
+        if t in types:
+            usings.append("using System.Collections.Immutable;")
+
     return sorted(list(set(usings)))

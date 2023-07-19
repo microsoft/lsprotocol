@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 
 
-public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]>
+public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]?>
 {
     private OrTypeConverter<T, U> _converter;
 
@@ -12,7 +12,7 @@ public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]>
         _converter = new OrTypeConverter<T, U>();
     }
 
-    public override OrType<T, U>[] ReadJson(JsonReader reader, Type objectType, OrType<T, U>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override OrType<T, U>[]? ReadJson(JsonReader reader, Type objectType, OrType<T, U>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.Null)
         {
@@ -24,7 +24,7 @@ public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]>
 
         for (int i = 0; i < array.Count; i++)
         {
-            result[i] = (OrType<T, U>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U>), null, serializer);
+            result[i] = (OrType<T, U>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U>), null, serializer)!;
         }
 
         return result;
@@ -49,7 +49,7 @@ public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]>
         }
     }
 }
-public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]>
+public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]?>
 {
     private OrTypeConverter<T, U, V> _converter;
 
@@ -58,7 +58,7 @@ public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]>
         _converter = new OrTypeConverter<T, U, V>();
     }
 
-    public override OrType<T, U, V>[] ReadJson(JsonReader reader, Type objectType, OrType<T, U, V>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override OrType<T, U, V>[]? ReadJson(JsonReader reader, Type objectType, OrType<T, U, V>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.Null)
         {
@@ -70,7 +70,7 @@ public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]>
 
         for (int i = 0; i < array.Count; i++)
         {
-            result[i] = (OrType<T, U, V>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V>), null, serializer);
+            result[i] = (OrType<T, U, V>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V>), null, serializer)!;
         }
 
         return result;
@@ -97,7 +97,7 @@ public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]>
 }
 
 
-public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>[]>
+public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>[]?>
 {
     private OrTypeConverter<T, U, V, W> _converter;
 
@@ -106,7 +106,7 @@ public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>
         _converter = new OrTypeConverter<T, U, V, W>();
     }
 
-    public override OrType<T, U, V, W>[] ReadJson(JsonReader reader, Type objectType, OrType<T, U, V, W>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override OrType<T, U, V, W>[]? ReadJson(JsonReader reader, Type objectType, OrType<T, U, V, W>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.Null)
         {
@@ -118,7 +118,7 @@ public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>
 
         for (int i = 0; i < array.Count; i++)
         {
-            result[i] = (OrType<T, U, V, W>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V, W>), null, serializer);
+            result[i] = (OrType<T, U, V, W>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V, W>), null, serializer)!;
         }
 
         return result;

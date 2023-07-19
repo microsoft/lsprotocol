@@ -69,6 +69,16 @@ def lsp_to_base_types(lsp_type: model.BaseType):
     raise ValueError(f"Unknown base type: {lsp_type.name}")
 
 
+def get_types_for_usings(code: List[str]) -> List[str]:
+    immutable = []
+    for line in code:
+        if "ImmutableArray<" in line:
+            immutable.append("ImmutableArray")
+        if "ImmutableDictionary<" in line:
+            immutable.append("ImmutableDictionary")
+    return list(set(immutable))
+
+
 def has_null_base_type(items: List[model.LSP_TYPE_SPEC]) -> bool:
     return any(item.kind == "base" and item.name == "null" for item in items)
 
@@ -96,7 +106,7 @@ def get_type_name(
         else:
             name = get_special_case_class_name(type_def.name)
     elif type_def.kind == "array":
-        name = f"{get_type_name(type_def.element, types, spec, name_context)}[]"
+        name = f"ImmutableArray<{get_type_name(type_def.element, types, spec, name_context)}>"
     elif type_def.kind == "map":
         name = generate_map_type(type_def, types, spec, name_context)
     elif type_def.kind == "base":
@@ -156,7 +166,7 @@ def generate_map_type(
 
     else:
         value_type = get_type_name(type_def.value, types, spec, name_context)
-    return f"Dictionary<{key_type}, {value_type}>"
+    return f"ImmutableDictionary<{key_type}, {value_type}>"
 
 
 def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str]:
@@ -202,7 +212,15 @@ def generate_property(
     special_optional = prop_def.type.kind == "or" and has_null_base_type(
         prop_def.type.items
     )
-    optional = "?" if prop_def.optional or special_optional else ""
+    optional = (
+        "?"
+        if (prop_def.optional or special_optional)
+        and not (
+            type_name.startswith("ImmutableArray<")
+            or type_name.startswith("ImmutableDictionary<")
+        )
+        else ""
+    )
     lines = (
         get_doc(prop_def.documentation)
         + generate_extras(prop_def)
@@ -283,7 +301,7 @@ def generate_literal_type(
 
     lines = namespace_wrapper(
         NAMESPACE,
-        get_usings(usings),
+        get_usings(usings + get_types_for_usings(inner)),
         class_wrapper(literal, inner),
     )
     types.add_type_info(literal, literal.name, lines)
@@ -311,7 +329,12 @@ def generate_constructor(
             prop.type.items
         )
         if prop.optional or special_optional:
-            optional_args += [f"{prop_type}? {name} = null"]
+            if prop_type.startswith("ImmutableArray<") or prop_type.startswith(
+                "ImmutableDictionary<"
+            ):
+                optional_args += [f"{prop_type} {name} = default!"]
+            else:
+                optional_args += [f"{prop_type}? {name} = null"]
             ctor_data += [(prop_type, name, True)]
         elif prop.name == "jsonrpc":
             optional_args += [f'{prop_type} {name} = "2.0"']
@@ -347,6 +370,9 @@ def generate_class_from_struct(
     if types.get_by_name(struct.name) or struct.name.startswith("_"):
         return
 
+    if attributes is None:
+        attributes = []
+
     inner = []
     usings = ["DataContract", "JsonConstructor"]
 
@@ -362,7 +388,7 @@ def generate_class_from_struct(
 
     lines = namespace_wrapper(
         NAMESPACE,
-        get_usings(usings),
+        get_usings(usings + get_types_for_usings(inner + attributes)),
         class_wrapper(struct, inner, derived, attributes),
     )
     types.add_type_info(struct, struct.name, lines)
@@ -410,8 +436,9 @@ def generate_type_alias_constructor(
             for t in subset:
                 sub_type = get_type_name(t, types, spec, type_def.name)
                 arg = get_special_case_property_name(to_camel_case(sub_type))
-                if arg.endswith("[]"):
-                    arg = f"{arg[:-2]}s"
+                matches = re.match(r"ImmutableArray<(?P<arg>\w+)>", arg)
+                if matches:
+                    arg = f"{matches['arg']}s"
 
                 constructor += [
                     f"public {type_name}({sub_type} {arg}): base({arg}) {{}}",
@@ -490,7 +517,9 @@ def generate_type_alias_converter(
         "}",
     ]
 
-    code = namespace_wrapper(NAMESPACE, get_usings(["JsonConverter"]), code)
+    code = namespace_wrapper(
+        NAMESPACE, get_usings(["JsonConverter"] + get_types_for_usings(code)), code
+    )
 
     ref = model.Structure(**{"name": converter, "properties": []})
     types.add_type_info(ref, converter, code)
@@ -514,7 +543,7 @@ def generate_class_from_type_alias(
     inner = generate_type_alias_constructor(type_def, spec, types)
     lines = namespace_wrapper(
         NAMESPACE,
-        get_usings(usings),
+        get_usings(usings + get_types_for_usings(inner)),
         class_wrapper(type_def, inner, type_name, class_attributes),
     )
     types.add_type_info(type_def, type_def.name, lines)
@@ -576,9 +605,17 @@ def generate_code_for_variant_struct(
     conditions = []
     for prop, prop_type in zip(struct.properties, prop_types):
         name = get_special_case_property_name(to_camel_case(prop.name))
-        constructor_args += [f"{prop_type}? {name}"]
+        immutable = prop_type.startswith("ImmutableArray<") or prop_type.startswith(
+            "ImmutableDictionary<"
+        )
+        constructor_args += [
+            f"{prop_type} {name}" if immutable else f"{prop_type}? {name}"
+        ]
         ctor_data = [(prop_type)]
-        conditions += [f"({name} is null)"]
+        if immutable:
+            conditions += [f"({name}.IsDefault)"]
+        else:
+            conditions += [f"({name} is null)"]
 
     sig = ", ".join(constructor_args)
     types.add_ctor(struct.name, ctor_data)
@@ -611,7 +648,7 @@ def generate_code_for_variant_struct(
 
     return namespace_wrapper(
         NAMESPACE,
-        get_usings(usings),
+        get_usings(usings + get_types_for_usings(inner)),
         class_wrapper(struct, inner, None),
     )
 
@@ -738,7 +775,7 @@ def generate_request_notification_methods(spec: model.LSPModel, types: TypeData)
 
     lines = namespace_wrapper(
         NAMESPACE,
-        get_usings(["System"]),
+        get_usings(["System"] + get_types_for_usings(inner_lines)),
         ["public static class LSPMethods", "{", *indent_lines(inner_lines), "}"],
     )
     enum_type = model.Enum(
@@ -923,7 +960,7 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             (
                 f"IRequest<{get_type_name(request.params, types, spec)}>"
                 if request.params
-                else "IRequest<LSPAny>"
+                else "IRequest<LSPAny?>"
             ),
             [
                 f"[Direction(MessageDirection.{to_upper_camel_case(request.messageDirection)})]",

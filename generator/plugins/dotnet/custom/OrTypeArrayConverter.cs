@@ -1,9 +1,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Immutable;
 
-
-public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]?>
+public class OrTypeArrayConverter<T, U> : JsonConverter<ImmutableArray<OrType<T, U>>>
 {
     private OrTypeConverter<T, U> _converter;
 
@@ -12,27 +12,27 @@ public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]?>
         _converter = new OrTypeConverter<T, U>();
     }
 
-    public override OrType<T, U>[]? ReadJson(JsonReader reader, Type objectType, OrType<T, U>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override ImmutableArray<OrType<T, U>> ReadJson(JsonReader reader, Type objectType, ImmutableArray<OrType<T, U>> existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.Null)
         {
-            return null;
+            return default(ImmutableArray<OrType<T, U>>);
         }
 
         JArray array = JArray.Load(reader);
-        var result = new OrType<T, U>[array.Count];
+        ImmutableArray<OrType<T, U>>.Builder builder = ImmutableArray.CreateBuilder<OrType<T, U>>();
 
         for (int i = 0; i < array.Count; i++)
         {
-            result[i] = (OrType<T, U>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U>), null, serializer)!;
+            builder.Add((OrType<T, U>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U>), null, serializer)!);
         }
 
-        return result;
+        return builder.ToImmutable();
     }
 
-    public override void WriteJson(JsonWriter writer, OrType<T, U>[]? value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, ImmutableArray<OrType<T, U>> value, JsonSerializer serializer)
     {
-        if (value is null)
+        if (value.IsDefault)
         {
             writer.WriteNull();
         }
@@ -49,7 +49,7 @@ public class OrTypeArrayConverter<T, U> : JsonConverter<OrType<T, U>[]?>
         }
     }
 }
-public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]?>
+public class OrTypeArrayConverter<T, U, V> : JsonConverter<ImmutableArray<OrType<T, U, V>>>
 {
     private OrTypeConverter<T, U, V> _converter;
 
@@ -58,27 +58,27 @@ public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]?>
         _converter = new OrTypeConverter<T, U, V>();
     }
 
-    public override OrType<T, U, V>[]? ReadJson(JsonReader reader, Type objectType, OrType<T, U, V>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override ImmutableArray<OrType<T, U, V>> ReadJson(JsonReader reader, Type objectType, ImmutableArray<OrType<T, U, V>> existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.Null)
         {
-            return null;
+            return default(ImmutableArray<OrType<T, U, V>>);
         }
 
         JArray array = JArray.Load(reader);
-        var result = new OrType<T, U, V>[array.Count];
+        ImmutableArray<OrType<T, U, V>>.Builder builder = ImmutableArray.CreateBuilder<OrType<T, U, V>>();
 
         for (int i = 0; i < array.Count; i++)
         {
-            result[i] = (OrType<T, U, V>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V>), null, serializer)!;
+            builder.Add((OrType<T, U, V>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V>), null, serializer)!);
         }
 
-        return result;
+        return builder.ToImmutable();
     }
 
-    public override void WriteJson(JsonWriter writer, OrType<T, U, V>[]? value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, ImmutableArray<OrType<T, U, V>> value, JsonSerializer serializer)
     {
-        if (value is null)
+        if (value.IsDefault)
         {
             writer.WriteNull();
         }
@@ -97,7 +97,7 @@ public class OrTypeArrayConverter<T, U, V> : JsonConverter<OrType<T, U, V>[]?>
 }
 
 
-public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>[]?>
+public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<ImmutableArray<OrType<T, U, V, W>>>
 {
     private OrTypeConverter<T, U, V, W> _converter;
 
@@ -106,27 +106,27 @@ public class OrTypeArrayConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>
         _converter = new OrTypeConverter<T, U, V, W>();
     }
 
-    public override OrType<T, U, V, W>[]? ReadJson(JsonReader reader, Type objectType, OrType<T, U, V, W>[]? existingValue, bool hasExistingValue, JsonSerializer serializer)
+    public override ImmutableArray<OrType<T, U, V, W>> ReadJson(JsonReader reader, Type objectType, ImmutableArray<OrType<T, U, V, W>> existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         if (reader.TokenType == JsonToken.Null)
         {
-            return null;
+            return default(ImmutableArray<OrType<T, U, V, W>>);
         }
 
         JArray array = JArray.Load(reader);
-        var result = new OrType<T, U, V, W>[array.Count];
+        ImmutableArray<OrType<T, U, V, W>>.Builder builder = ImmutableArray.CreateBuilder<OrType<T, U, V, W>>();
 
         for (int i = 0; i < array.Count; i++)
         {
-            result[i] = (OrType<T, U, V, W>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V, W>), null, serializer)!;
+            builder.Add((OrType<T, U, V, W>)_converter.ReadJson(array[i].CreateReader(), typeof(OrType<T, U, V, W>), null, serializer)!);
         }
 
-        return result;
+        return builder.ToImmutable();
     }
 
-    public override void WriteJson(JsonWriter writer, OrType<T, U, V, W>[]? value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, ImmutableArray<OrType<T, U, V, W>> value, JsonSerializer serializer)
     {
-        if (value is null)
+        if (value.IsDefault)
         {
             writer.WriteNull();
         }

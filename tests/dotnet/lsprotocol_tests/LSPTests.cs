@@ -63,7 +63,7 @@ public class LSPTests
                 JToken token2 = JToken.Parse(newJson);
                 RemoveNullProperties(token1);
                 RemoveNullProperties(token2);
-                Assert.True(JToken.DeepEquals(token1, token2), $"Failed for : {data}");
+                Assert.True(JToken.DeepEquals(token1, token2), $"JSON before and after serialization don't match:\r\nBEFORE:{data}\r\nAFTER:{newJson}");
             }
             catch (Exception e)
             {

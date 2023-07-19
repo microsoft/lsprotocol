@@ -1,6 +1,28 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+
+internal class OrTypeConverterHelpers
+{
+    public static Type[] SortTypesByHeuristic(Type[] types, JToken jToken)
+    {
+        var typePropertyScores = new Dictionary<Type, int>();
+
+        string[] jTokenPropertyNames = jToken.Children<JProperty>().Select(p => p.Name.ToUpper()).ToArray();
+
+        foreach (Type type in types)
+        {
+            string[] typePropertyNames = type.GetProperties().Select(p => p.Name.ToUpper()).ToArray();
+
+            int score = jTokenPropertyNames.Count(propertyName => typePropertyNames.Contains(propertyName));
+            typePropertyScores[type] = score;
+        }
+
+        return types.OrderByDescending(type => typePropertyScores[type]).ToArray();
+    }
+}
 
 public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
 {
@@ -32,7 +54,8 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
             return ReadStringToken(reader, serializer, types);
         }
 
-        return OrTypeConverter<T, U>.ReadObjectToken(JToken.Load(reader), serializer, types);
+        var token = JToken.Load(reader);
+        return OrTypeConverter<T, U>.ReadObjectToken(token, serializer, OrTypeConverterHelpers.SortTypesByHeuristic(types, token));
     }
 
     private static OrType<T, U> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -198,7 +221,8 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
             return ReadStringToken(reader, serializer, types);
         }
 
-        return OrTypeConverter<T, U, V>.ReadObjectToken(JToken.Load(reader), serializer, types);
+        var token = JToken.Load(reader);
+        return OrTypeConverter<T, U, V>.ReadObjectToken(token, serializer, OrTypeConverterHelpers.SortTypesByHeuristic(types, token));
     }
 
     private static OrType<T, U, V> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -386,7 +410,8 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
             return ReadStringToken(reader, serializer, types);
         }
 
-        return OrTypeConverter<T, U, V, W>.ReadObjectToken(JToken.Load(reader), serializer, types);
+        var token = JToken.Load(reader);
+        return OrTypeConverter<T, U, V, W>.ReadObjectToken(token, serializer, OrTypeConverterHelpers.SortTypesByHeuristic(types, token));
     }
 
     private static OrType<T, U, V, W> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)

@@ -108,19 +108,23 @@ def class_wrapper(
     inner: List[str],
     derived: Optional[str] = None,
     class_attributes: Optional[List[str]] = None,
+    is_record=True,
 ) -> List[str]:
     if hasattr(type_def, "name"):
         name = get_special_case_class_name(type_def.name)
     else:
         raise ValueError(f"Unknown type: {type_def}")
 
+    rec_or_cls = "record" if is_record else "class"
     lines = (
         get_doc(type_def.documentation)
         + generate_extras(type_def)
         + (class_attributes if class_attributes else [])
         + [
             "[DataContract]",
-            f"public class {name}: {derived}" if derived else f"public class {name}",
+            f"public {rec_or_cls} {name}: {derived}"
+            if derived
+            else f"public {rec_or_cls} {name}",
             "{",
         ]
     )

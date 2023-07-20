@@ -1,6 +1,6 @@
 using System;
 
-public class OrType<T, U> : IOrType
+public record OrType<T, U> : IOrType
 {
     public object? Value { get; }
     public OrType(T t)
@@ -32,7 +32,7 @@ public class OrType<T, U> : IOrType
     }
 }
 
-public class OrType<T, U, V> : IOrType
+public record OrType<T, U, V> : IOrType
 {
     public object? Value { get; }
 
@@ -79,7 +79,7 @@ public class OrType<T, U, V> : IOrType
 }
 
 
-public class OrType<T, U, V, W> : IOrType
+public record OrType<T, U, V, W> : IOrType
 {
     public object? Value { get; }
 

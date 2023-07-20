@@ -219,12 +219,10 @@ def generate_property(
 
     if prop_def.type.kind == "stringLiteral":
         lines.append(
-            f'public {type_name}{optional} {name} {{ get; set; }} = "{prop_def.type.value}";'
+            f'public {type_name}{optional} {name} {{ get; init; }} = "{prop_def.type.value}";'
         )
-    elif prop_def.type.kind == "base" and prop_def.type.name == "null":
-        lines.append(f"public {type_name}{optional} {name} {{ get; set; }} = null;")
     else:
-        lines.append(f"public {type_name}{optional} {name} {{ get; set; }}")
+        lines.append(f"public {type_name}{optional} {name} {{ get; init; }}")
 
     usings.append("DataMember")
     if converter:

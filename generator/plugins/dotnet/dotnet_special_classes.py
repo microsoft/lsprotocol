@@ -45,6 +45,7 @@ def generate_special_class(
                 ["public LSPObject(Dictionary<string, object?> value):base(value){}"],
                 "Dictionary<string, object?>",
                 ["[JsonConverter(typeof(CustomObjectConverter<LSPObject>))]"],
+                is_record=False,
             ),
         )
     if type_def.name == "InitializedParams":
@@ -58,6 +59,7 @@ def generate_special_class(
                 ],
                 "Dictionary<string, object?>",
                 ["[JsonConverter(typeof(CustomObjectConverter<InitializedParams>))]"],
+                is_record=False,
             ),
         )
     if type_def.name == "LSPAny":
@@ -82,6 +84,7 @@ def generate_special_class(
                 type_def,
                 ["public LSPArray(List<object> value):base(value){}"],
                 "List<object>",
+                is_record=False,
             ),
         )
 

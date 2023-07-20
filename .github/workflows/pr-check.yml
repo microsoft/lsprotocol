@@ -173,6 +173,10 @@ jobs:
       - name: Generate C# Code
         run: python -m generator --plugin dotnet
 
+      - name: Format generated code
+        run: dotnet format packages/dotnet/lsprotocol/lsprotocol.csproj
+        shell: bash
+
       - name: Upload Dotnet Project to Artifacts
         uses: actions/upload-artifact@v3
         with:

@@ -23,12 +23,12 @@ public record OrType<T, U> : IOrType
         return obj.Value is T x ? x : default;
     }
 
-    public static explicit operator OrType<T, U>(U obj) => obj is null ? null : new OrType<T, U>(obj);
-    public static explicit operator OrType<T, U>(T obj) => obj is null ? null : new OrType<T, U>(obj);
+    public static explicit operator OrType<T, U>(U obj) => obj is null ? null! : new OrType<T, U>(obj);
+    public static explicit operator OrType<T, U>(T obj) => obj is null ? null! : new OrType<T, U>(obj);
 
     public override string ToString()
     {
-        return Value?.ToString();
+        return Value?.ToString()!;
     }
 }
 
@@ -66,15 +66,15 @@ public record OrType<T, U, V> : IOrType
         return obj.Value is V x ? x : default;
     }
 
-    public static explicit operator OrType<T, U, V>(U obj) => obj is null ? null : new OrType<T, U, V>(obj);
+    public static explicit operator OrType<T, U, V>(U obj) => obj is null ? null! : new OrType<T, U, V>(obj);
 
-    public static explicit operator OrType<T, U, V>(T obj) => obj is null ? null : new OrType<T, U, V>(obj);
+    public static explicit operator OrType<T, U, V>(T obj) => obj is null ? null! : new OrType<T, U, V>(obj);
 
-    public static explicit operator OrType<T, U, V>(V obj) => obj is null ? null : new OrType<T, U, V>(obj);
+    public static explicit operator OrType<T, U, V>(V obj) => obj is null ? null! : new OrType<T, U, V>(obj);
 
     public override string ToString()
     {
-        return Value?.ToString();
+        return Value?.ToString()!;
     }
 }
 
@@ -123,16 +123,16 @@ public record OrType<T, U, V, W> : IOrType
         return obj.Value is W x ? x : default;
     }
 
-    public static explicit operator OrType<T, U, V, W>(U obj) => obj is null ? null : new OrType<T, U, V, W>(obj);
+    public static explicit operator OrType<T, U, V, W>(U obj) => obj is null ? null! : new OrType<T, U, V, W>(obj);
 
-    public static explicit operator OrType<T, U, V, W>(T obj) => obj is null ? null : new OrType<T, U, V, W>(obj);
+    public static explicit operator OrType<T, U, V, W>(T obj) => obj is null ? null! : new OrType<T, U, V, W>(obj);
 
-    public static explicit operator OrType<T, U, V, W>(V obj) => obj is null ? null : new OrType<T, U, V, W>(obj);
+    public static explicit operator OrType<T, U, V, W>(V obj) => obj is null ? null! : new OrType<T, U, V, W>(obj);
 
-    public static explicit operator OrType<T, U, V, W>(W obj) => obj is null ? null : new OrType<T, U, V, W>(obj);
+    public static explicit operator OrType<T, U, V, W>(W obj) => obj is null ? null! : new OrType<T, U, V, W>(obj);
 
     public override string ToString()
     {
-        return Value?.ToString();
+        return Value?.ToString()!;
     }
 }

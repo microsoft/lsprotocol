@@ -20,7 +20,7 @@ public class DocumentSelectorConverter : JsonConverter<DocumentSelector>
     {
         if (reader.TokenType == JsonToken.Null)
         {
-            return null;
+            return null!;
         }
         var token = JToken.Load(reader);
         if (token.Type == JTokenType.Array)

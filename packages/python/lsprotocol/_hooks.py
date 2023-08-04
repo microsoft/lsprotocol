@@ -614,6 +614,21 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.WatchKind)
 
+    def _notebook_sync_option_selector_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType1,
+        lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType2,
+    ]:
+        if "notebook" in object_:
+            return converter.structure(
+                object_, lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType1
+            )
+        else:
+            return converter.structure(
+                object_, lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType2
+            )
+
     structure_hooks = [
         (
             Optional[
@@ -903,6 +918,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[Union[lsp_types.WatchKind, int]],
             _watch_kind_hook,
+        ),
+        (
+            Union[
+                lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType1,
+                lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType2,
+            ],
+            _notebook_sync_option_selector_hook,
         ),
     ]
     for type_, hook in structure_hooks:

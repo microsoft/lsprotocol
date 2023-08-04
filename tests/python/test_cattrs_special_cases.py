@@ -262,3 +262,15 @@ def test_notebook_change_event():
         converter.unstructure(obj, lsp.DidOpenNotebookDocumentParams),
         hamcrest.is_(data),
     )
+
+
+def test_notebook_sync_options():
+    data = {"notebookSelector": [{"cells": [{"language": "python"}]}]}
+
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.NotebookDocumentSyncOptions)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.NotebookDocumentSyncOptions))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.NotebookDocumentSyncOptions),
+        hamcrest.is_(data),
+    )

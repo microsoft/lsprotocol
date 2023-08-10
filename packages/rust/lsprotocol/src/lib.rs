@@ -334,10 +334,10 @@ pub enum LSPNotificationMethods {
 pub enum MessageDirection {
     #[serde(rename = "clientToServer")]
     ClientToServer,
-    #[serde(rename = "serverToClient")]
-    ServerToClient,
     #[serde(rename = "both")]
     Both,
+    #[serde(rename = "serverToClient")]
+    ServerToClient,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -1355,7 +1355,7 @@ pub struct StructTextDocumentFilter {
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
 
-    /// A glob pattern, like `*.{ts,js}`.
+    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples`.
     pub pattern: Option<String>,
 }
 
@@ -1368,7 +1368,7 @@ pub struct StructTextDocumentFilterScheme {
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
 
-    /// A glob pattern, like `*.{ts,js}`.
+    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples`.
     pub pattern: Option<String>,
 }
 
@@ -1381,7 +1381,7 @@ pub struct StructTextDocumentFilterPattern {
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
 
-    /// A glob pattern, like `*.{ts,js}`.
+    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples`.
     pub pattern: String,
 }
 
@@ -3864,7 +3864,6 @@ pub struct CodeLens {
 
     /// A data entry field that is preserved on a code lens item between
     /// a [CodeLensRequest] and a [CodeLensResolveRequest]
-    /// (#CodeLensResolveRequest)
     pub data: Option<LSPAny>,
 
     /// The range in which this code lens is valid. Should only span a single line.
@@ -4421,14 +4420,14 @@ pub struct DeclarationOptions {
 /// offset of b is 3 since `𐐀` is represented using two code units in UTF-16.
 /// Since 3.17 clients and servers can agree on a different string encoding
 /// representation (e.g. UTF-8). The client announces it's supported encoding
-/// via the client capability [`general.positionEncodings`](#clientCapabilities).
+/// via the client capability [`general.positionEncodings`](https://microsoft.github.io/language-server-protocol/specifications/specification-current/#clientCapabilities).
 /// The value is an array of position encodings the client supports, with
 /// decreasing preference (e.g. the encoding at index `0` is the most preferred
 /// one). To stay backwards compatible the only mandatory encoding is UTF-16
 /// represented via the string `utf-16`. The server can pick one of the
 /// encodings offered by the client and signals that encoding back to the
 /// client via the initialize result's property
-/// [`capabilities.positionEncoding`](#serverCapabilities). If the string value
+/// [`capabilities.positionEncoding`](https://microsoft.github.io/language-server-protocol/specifications/specification-current/#serverCapabilities). If the string value
 /// `utf-16` is missing from the client's capability `general.positionEncodings`
 /// servers can safely assume that the client supports UTF-16. If the server
 /// omits the position encoding in its initialize result the encoding defaults
@@ -8120,8 +8119,7 @@ pub enum LSPIdOptional {
 
 /// A request to resolve the implementation locations of a symbol at a given text
 /// document position. The request's parameter is of type [TextDocumentPositionParams]
-/// (#TextDocumentPositionParams) the response is of type [Definition] or a
-/// Thenable that resolves to such.
+/// the response is of type [Definition] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentImplementationRequest {
@@ -8156,8 +8154,7 @@ pub struct TextDocumentImplementationResponse {
 
 /// A request to resolve the type definition locations of a symbol at a given text
 /// document position. The request's parameter is of type [TextDocumentPositionParams]
-/// (#TextDocumentPositionParams) the response is of type [Definition] or a
-/// Thenable that resolves to such.
+/// the response is of type [Definition] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentTypeDefinitionRequest {
@@ -8367,9 +8364,8 @@ pub struct TextDocumentFoldingRangeResponse {
 
 /// A request to resolve the type definition locations of a symbol at a given text
 /// document position. The request's parameter is of type [TextDocumentPositionParams]
-/// (#TextDocumentPositionParams) the response is of type [Declaration]
-/// or a typed array of [DeclarationLink] or a Thenable that resolves
-/// to such.
+/// the response is of type [Declaration] or a typed array of [DeclarationLink]
+/// or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentDeclarationRequest {
@@ -9691,9 +9687,8 @@ pub struct TextDocumentSignatureHelpResponse {
 
 /// A request to resolve the definition location of a symbol at a given text
 /// document position. The request's parameter is of type [TextDocumentPosition]
-/// (#TextDocumentPosition) the response is of either type [Definition]
-/// or a typed array of [DefinitionLink] or a Thenable that resolves
-/// to such.
+/// the response is of either type [Definition] or a typed array of
+/// [DefinitionLink] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentDefinitionRequest {
@@ -9764,8 +9759,8 @@ pub struct TextDocumentReferencesResponse {
 
 /// Request to resolve a [DocumentHighlight] for a given
 /// text document position. The request's parameter is of type [TextDocumentPosition]
-/// (#TextDocumentPosition) the request response is of type [DocumentHighlight[]]
-/// (#DocumentHighlight) or a Thenable that resolves to such.
+/// the request response is an array of type [DocumentHighlight]
+/// or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentDocumentHighlightRequest {

@@ -26,16 +26,6 @@ def tests(session: nox.Session):
     session.log("Running tests: generator and generated Python code.")
     session.run("pytest", "./tests")
 
-    # TODO: Uncomment after tests are ready
-    # session.log("Running tests: generated Rust code.")
-    # with session.chdir("./tests/rust/lsprotocol"):
-    #     session.run("cargo", "test", external=True)
-
-    # TODO: Uncomment after tests are ready
-    # session.log("Running tests: generated C# code.")
-    # with session.chdir("./test/dotnet/lsprotocol_tests"):
-    #     session.run("dotnet", "test", external=True)
-
 
 @nox.session()
 def lint(session: nox.Session):
@@ -62,13 +52,22 @@ def format(session: nox.Session):
 def _format_code(session: nox.Session):
     session.install("isort", "black")
 
-    session.run("isort", "--profile", "black", ".")
-    session.run("black", ".")
+    session.run("isort", "--profile", "black", "noxfile.py")
+    session.run("black", "noxfile.py")
+
+    session.run("isort", "--profile", "black", "generator")
+    session.run("black", "generator")
+
+    session.run("isort", "--profile", "black", "tests/generator")
+    session.run("black", "tests/generator")
+
+    session.run("isort", "--profile", "black", "tests/python")
+    session.run("black", "tests/python")
 
     # this is for the lsprotocol package only
-    python_package_path = pathlib.Path("./packages/python/lsprotocol")
-    session.run("isort", "--profile", "black", os.fspath(python_package_path))
-    session.run("black", os.fspath(python_package_path))
+    python_package_path = os.fspath(pathlib.Path("./packages/python/lsprotocol"))
+    session.run("isort", "--profile", "black", python_package_path)
+    session.run("black", python_package_path)
 
 
 @nox.session()
@@ -92,7 +91,7 @@ MODEL_SCHEMA = "https://raw.githubusercontent.com/microsoft/vscode-languageserve
 MODEL = "https://raw.githubusercontent.com/microsoft/vscode-languageserver-node/main/protocol/metaModel.json"
 
 
-def _download_models(session: nox.session):
+def _download_models(session: nox.Session):
     session.log("Downloading LSP model schema.")
     model_schema_text: str = _get_content(MODEL_SCHEMA)
     session.log("Downloading LSP model.")

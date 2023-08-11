@@ -865,7 +865,7 @@ class TextDocumentFilter_Type1:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples`."""
+    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples."""
 
 
 @attrs.define
@@ -883,13 +883,13 @@ class TextDocumentFilter_Type2:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples`."""
+    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples."""
 
 
 @attrs.define
 class TextDocumentFilter_Type3:
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples`."""
+    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples."""
 
     language: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),

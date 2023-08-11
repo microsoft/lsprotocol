@@ -332,10 +332,10 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
     #[serde(rename = "both")]
     Both,
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
     #[serde(rename = "serverToClient")]
     ServerToClient,
 }
@@ -1355,7 +1355,7 @@ pub struct StructTextDocumentFilter {
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
 
-    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples`.
+    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
     pub pattern: Option<String>,
 }
 
@@ -1368,7 +1368,7 @@ pub struct StructTextDocumentFilterScheme {
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
 
-    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples`.
+    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
     pub pattern: Option<String>,
 }
 
@@ -1381,7 +1381,7 @@ pub struct StructTextDocumentFilterPattern {
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
 
-    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples`.
+    /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
     pub pattern: String,
 }
 

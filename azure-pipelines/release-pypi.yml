@@ -22,7 +22,6 @@ extends:
     pythonVersion: '3.7'
     # We don't ship any built in packages.
     generateNotice: false
-    packageLocation: $(Build.SourcesDirectory)/packages/python/dist
     buildSteps:
       - script: python -m pip install nox
         displayName: Install nox

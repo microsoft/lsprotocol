@@ -5024,8 +5024,8 @@ class Range:
     For example:
     ```ts
     {
-        start: { line: 5, character: 23 }
-        end : { line 6, character : 0 }
+        start: { line: 5, character: 23 },
+        end : { line: 6, character : 0 },
     }
     ```"""
 

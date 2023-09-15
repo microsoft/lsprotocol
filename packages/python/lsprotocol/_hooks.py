@@ -656,6 +656,20 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.InlineCompletionOptions)
 
+    def _inline_completion_list_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[lsp_types.InlineCompletionList, List[lsp_types.InlineCompletionItem]]
+    ]:
+        if object_ is None:
+            return None
+        if isinstance(object_, list):
+            return [
+                converter.structure(item, lsp_types.InlineCompletionItem)
+                for item in object_
+            ]
+        return converter.structure(object_, lsp_types.InlineCompletionList)
+
     structure_hooks = [
         (
             Optional[
@@ -969,6 +983,14 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[Union[bool, lsp_types.InlineCompletionOptions]],
             _inline_completion_provider_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    lsp_types.InlineCompletionList, List[lsp_types.InlineCompletionItem]
+                ]
+            ],
+            _inline_completion_list_hook,
         ),
     ]
     for type_, hook in structure_hooks:

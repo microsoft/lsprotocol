@@ -688,7 +688,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         assert isinstance(object_, list)
         if len(object_) == 0:
-            return []
+            return []  # type: ignore[return-value]
         if "location" in object_[0]:
             return [
                 converter.structure(item, lsp_types.SymbolInformation)
@@ -698,6 +698,23 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return [
                 converter.structure(item, lsp_types.WorkspaceSymbol) for item in object_
             ]
+
+    def _notebook_sync_registration_option_selector_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1,
+        lsp_types.NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2,
+    ]:
+        if "notebook" in object_:
+            return converter.structure(
+                object_,
+                lsp_types.NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1,
+            )
+        else:
+            return converter.structure(
+                object_,
+                lsp_types.NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2,
+            )
 
     structure_hooks = [
         (
@@ -1032,6 +1049,13 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _symbol_list_hook,
+        ),
+        (
+            Union[
+                lsp_types.NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1,
+                lsp_types.NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2,
+            ],
+            _notebook_sync_registration_option_selector_hook,
         ),
     ]
     for type_, hook in structure_hooks:

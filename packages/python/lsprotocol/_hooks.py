@@ -670,6 +670,35 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             ]
         return converter.structure(object_, lsp_types.InlineCompletionList)
 
+    def _string_value_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.StringValue]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.StringValue)
+
+    def _symbol_list_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[List[lsp_types.SymbolInformation], List[lsp_types.WorkspaceSymbol]]
+    ]:
+        if object_ is None:
+            return None
+        assert isinstance(object_, list)
+        if len(object_) == 0:
+            return []
+        if "location" in object_[0]:
+            return [
+                converter.structure(item, lsp_types.SymbolInformation)
+                for item in object_
+            ]
+        else:
+            return [
+                converter.structure(item, lsp_types.WorkspaceSymbol) for item in object_
+            ]
+
     structure_hooks = [
         (
             Optional[
@@ -991,6 +1020,18 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _inline_completion_list_hook,
+        ),
+        (
+            Union[str, lsp_types.StringValue],
+            _string_value_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    List[lsp_types.SymbolInformation], List[lsp_types.WorkspaceSymbol]
+                ]
+            ],
+            _symbol_list_hook,
         ),
     ]
     for type_, hook in structure_hooks:

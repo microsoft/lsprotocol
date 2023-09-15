@@ -1,6 +1,9 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+from typing import Optional, Union
+
+import attrs
 import hamcrest
 import pytest
 from cattrs.errors import ClassValidationError
@@ -274,3 +277,30 @@ def test_notebook_sync_options():
         converter.unstructure(obj, lsp.NotebookDocumentSyncOptions),
         hamcrest.is_(data),
     )
+
+
+@attrs.define
+class TestPosEncoding:
+    """Defines the capabilities provided by a language
+    server."""
+
+    position_encoding: Optional[Union[lsp.PositionEncodingKind, str]] = attrs.field(
+        default=None
+    )
+
+
+@pytest.mark.parametrize("e", [None, "utf-8", "utf-16", "utf-32", "something"])
+def test_position_encoding_kind(e):
+    data = {"positionEncoding": e}
+    converter = cv.get_converter()
+    obj = converter.structure(data, TestPosEncoding)
+    hamcrest.assert_that(obj, hamcrest.instance_of(TestPosEncoding))
+
+    if e is None:
+        hamcrest.assert_that(
+            converter.unstructure(obj, TestPosEncoding), hamcrest.is_({})
+        )
+    else:
+        hamcrest.assert_that(
+            converter.unstructure(obj, TestPosEncoding), hamcrest.is_(data)
+        )

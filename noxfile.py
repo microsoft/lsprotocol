@@ -23,6 +23,9 @@ def tests(session: nox.Session):
     """Run tests for generator and generated code in all languages."""
     _install_requirements(session)
 
+    session.log("Running test data generator.")
+    session.run("python", "-m", "generator", "--plugin", "testdata")
+
     session.log("Running tests: generator and generated Python code.")
     session.run("pytest", "./tests")
 

@@ -634,6 +634,28 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 object_, lsp_types.NotebookDocumentSyncOptionsNotebookSelectorType2
             )
 
+    def _semantic_token_registration_options_hook(
+        object_: Any, _: type
+    ) -> Optional[
+        Union[OptionalPrimitive, lsp_types.SemanticTokensRegistrationOptionsFullType1]
+    ]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(
+            object_, lsp_types.SemanticTokensRegistrationOptionsFullType1
+        )
+
+    def _inline_completion_provider_hook(
+        object_: Any, _: type
+    ) -> Optional[Union[OptionalPrimitive, lsp_types.InlineCompletionOptions]]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.InlineCompletionOptions)
+
     structure_hooks = [
         (
             Optional[
@@ -939,6 +961,14 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _position_encoding_hook,
+        ),
+        (
+            Optional[Union[bool, lsp_types.SemanticTokensRegistrationOptionsFullType1]],
+            _semantic_token_registration_options_hook,
+        ),
+        (
+            Optional[Union[bool, lsp_types.InlineCompletionOptions]],
+            _inline_completion_provider_hook,
         ),
     ]
     for type_, hook in structure_hooks:

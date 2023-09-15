@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from typing import Optional, Union
+
 import attrs
 import hamcrest
 import pytest

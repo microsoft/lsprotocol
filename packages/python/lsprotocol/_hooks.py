@@ -147,13 +147,9 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         return converter.structure(object_, lsp_types.ReferenceOptions)
 
     def _position_encoding_hook(
-        object_: Any, _: type
+        object_: Union[lsp_types.PositionEncodingKind, OptionalPrimitive], _: type
     ) -> Union[lsp_types.PositionEncodingKind, OptionalPrimitive]:
-        if object_ is None:
-            return None
-        if isinstance(object_, (bool, int, str, float)):
-            return object_
-        return converter.structure(object_, lsp_types.ReferenceOptions)
+        return object_
 
     def _document_highlight_provider_hook(
         object_: Any, _: type

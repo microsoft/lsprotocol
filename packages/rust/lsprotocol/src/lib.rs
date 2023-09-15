@@ -332,12 +332,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
-    #[serde(rename = "both")]
-    Both,
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
     #[serde(rename = "serverToClient")]
     ServerToClient,
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
+    #[serde(rename = "both")]
+    Both,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -678,6 +678,11 @@ pub enum MessageType {
 
     /// A log message.
     Log = 4,
+
+    /// A debug message.
+    ///
+    /// @since 3.18.0
+    Debug = 5,
 }
 
 /// Defines how the host (editor) should sync

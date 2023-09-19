@@ -154,6 +154,8 @@ pub enum LSPRequestMethods {
     TextDocumentColorPresentation,
     #[serde(rename = "textDocument/foldingRange")]
     TextDocumentFoldingRange,
+    #[serde(rename = "workspace/foldingRange/refresh")]
+    WorkspaceFoldingRangeRefresh,
     #[serde(rename = "textDocument/declaration")]
     TextDocumentDeclaration,
     #[serde(rename = "textDocument/selectionRange")]
@@ -332,12 +334,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
-    #[serde(rename = "serverToClient")]
-    ServerToClient,
     #[serde(rename = "clientToServer")]
     ClientToServer,
     #[serde(rename = "both")]
     Both,
+    #[serde(rename = "serverToClient")]
+    ServerToClient,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -6378,6 +6380,13 @@ pub struct WorkspaceClientCapabilities {
     /// Since 3.16.0
     pub file_operations: Option<FileOperationClientCapabilities>,
 
+    /// Capabilities specific to the folding range requests scoped to the workspace.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
+    pub folding_range: Option<FoldingRangeWorkspaceClientCapabilities>,
+
     /// Capabilities specific to the inlay hint requests scoped to the
     /// workspace.
     ///
@@ -6879,6 +6888,28 @@ pub struct DiagnosticWorkspaceClientCapabilities {
     /// pulled diagnostics currently shown. It should be used with absolute care and
     /// is useful for situation where a server for example detects a project wide
     /// change that requires such a calculation.
+    pub refresh_support: Option<bool>,
+}
+
+/// Client workspace capabilities specific to folding ranges
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct FoldingRangeWorkspaceClientCapabilities {
+    /// Whether the client implementation supports a refresh request sent from the
+    /// server to the client.
+    ///
+    /// Note that this event is global and will force the client to refresh all
+    /// folding ranges currently shown. It should be used with absolute care and is
+    /// useful for situation where a server for example detects a project wide
+    /// change that requires such a calculation.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed", since = "3.18.0")]
     pub refresh_support: Option<bool>,
 }
 
@@ -8365,6 +8396,38 @@ pub struct TextDocumentFoldingRangeResponse {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<Vec<FoldingRange>>,
+}
+
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed", since = "3.18.0")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct WorkspaceFoldingRangeRefreshRequest {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPId,
+}
+
+/// Response to the [WorkspaceFoldingRangeRefreshRequest].
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct WorkspaceFoldingRangeRefreshResponse {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPIdOptional,
+
+    pub result: LSPNull,
 }
 
 /// A request to resolve the type definition locations of a symbol at a given text

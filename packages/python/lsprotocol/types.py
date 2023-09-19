@@ -7056,6 +7056,16 @@ class WorkspaceClientCapabilities:
     @since 3.17.0."""
     # Since: 3.17.0.
 
+    folding_range: Optional["FoldingRangeWorkspaceClientCapabilities"] = attrs.field(
+        default=None
+    )
+    """Capabilities specific to the folding range requests scoped to the workspace.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
 
 @attrs.define
 class TextDocumentClientCapabilities:
@@ -7689,6 +7699,34 @@ class DiagnosticWorkspaceClientCapabilities:
     pulled diagnostics currently shown. It should be used with absolute care and
     is useful for situation where a server for example detects a project wide
     change that requires such a calculation."""
+
+
+@attrs.define
+class FoldingRangeWorkspaceClientCapabilities:
+    """Client workspace capabilities specific to folding ranges
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    refresh_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client implementation supports a refresh request sent from the
+    server to the client.
+    
+    Note that this event is global and will force the client to refresh all
+    folding ranges currently shown. It should be used with absolute care and is
+    useful for situation where a server for example detects a project wide
+    change that requires such a calculation.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
 
 
 @attrs.define
@@ -9037,6 +9075,27 @@ class TextDocumentFoldingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
     result: Union[List[FoldingRange], None] = attrs.field(default=None)
+    jsonrpc: str = attrs.field(default="2.0")
+
+
+@attrs.define
+class WorkspaceFoldingRangeRefreshRequest:
+    """@since 3.18.0
+    @proposed"""
+
+    id: Union[int, str] = attrs.field()
+    """The request id."""
+    params: Optional[None] = attrs.field(default=None)
+    method: str = "workspace/foldingRange/refresh"
+    """The method to be invoked."""
+    jsonrpc: str = attrs.field(default="2.0")
+
+
+@attrs.define
+class WorkspaceFoldingRangeRefreshResponse:
+    id: Optional[Union[int, str]] = attrs.field()
+    """The request id."""
+    result: None = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10814,6 +10873,7 @@ WORKSPACE_DID_CREATE_FILES = "workspace/didCreateFiles"
 WORKSPACE_DID_DELETE_FILES = "workspace/didDeleteFiles"
 WORKSPACE_DID_RENAME_FILES = "workspace/didRenameFiles"
 WORKSPACE_EXECUTE_COMMAND = "workspace/executeCommand"
+WORKSPACE_FOLDING_RANGE_REFRESH = "workspace/foldingRange/refresh"
 WORKSPACE_INLAY_HINT_REFRESH = "workspace/inlayHint/refresh"
 WORKSPACE_INLINE_VALUE_REFRESH = "workspace/inlineValue/refresh"
 WORKSPACE_SEMANTIC_TOKENS_REFRESH = "workspace/semanticTokens/refresh"
@@ -11158,6 +11218,12 @@ METHOD_TO_TYPES = {
         ExecuteCommandParams,
         ExecuteCommandRegistrationOptions,
     ),
+    WORKSPACE_FOLDING_RANGE_REFRESH: (
+        WorkspaceFoldingRangeRefreshRequest,
+        WorkspaceFoldingRangeRefreshResponse,
+        None,
+        None,
+    ),
     WORKSPACE_INLAY_HINT_REFRESH: (
         WorkspaceInlayHintRefreshRequest,
         WorkspaceInlayHintRefreshResponse,
@@ -11383,6 +11449,7 @@ REQUESTS = Union[
     WorkspaceDiagnosticRefreshRequest,
     WorkspaceDiagnosticRequest,
     WorkspaceExecuteCommandRequest,
+    WorkspaceFoldingRangeRefreshRequest,
     WorkspaceInlayHintRefreshRequest,
     WorkspaceInlineValueRefreshRequest,
     WorkspaceSemanticTokensRefreshRequest,
@@ -11451,6 +11518,7 @@ RESPONSES = Union[
     WorkspaceDiagnosticRefreshResponse,
     WorkspaceDiagnosticResponse,
     WorkspaceExecuteCommandResponse,
+    WorkspaceFoldingRangeRefreshResponse,
     WorkspaceInlayHintRefreshResponse,
     WorkspaceInlineValueRefreshResponse,
     WorkspaceSemanticTokensRefreshResponse,
@@ -11688,6 +11756,8 @@ _SPECIAL_CLASSES = [
     WorkspaceExecuteCommandRequest,
     WorkspaceExecuteCommandResponse,
     WorkspaceFoldersInitializeParams,
+    WorkspaceFoldingRangeRefreshRequest,
+    WorkspaceFoldingRangeRefreshResponse,
     WorkspaceFullDocumentDiagnosticReport,
     WorkspaceInlayHintRefreshRequest,
     WorkspaceInlayHintRefreshResponse,
@@ -12050,6 +12120,10 @@ _SPECIAL_PROPERTIES = [
     "WorkspaceExecuteCommandResponse.jsonrpc",
     "WorkspaceExecuteCommandResponse.result",
     "WorkspaceFoldersInitializeParams.workspace_folders",
+    "WorkspaceFoldingRangeRefreshRequest.jsonrpc",
+    "WorkspaceFoldingRangeRefreshRequest.method",
+    "WorkspaceFoldingRangeRefreshResponse.jsonrpc",
+    "WorkspaceFoldingRangeRefreshResponse.result",
     "WorkspaceFullDocumentDiagnosticReport.kind",
     "WorkspaceFullDocumentDiagnosticReport.version",
     "WorkspaceInlayHintRefreshRequest.jsonrpc",
@@ -12306,6 +12380,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "FoldingRangeOptions": FoldingRangeOptions,
     "FoldingRangeParams": FoldingRangeParams,
     "FoldingRangeRegistrationOptions": FoldingRangeRegistrationOptions,
+    "FoldingRangeWorkspaceClientCapabilities": FoldingRangeWorkspaceClientCapabilities,
     "FormattingOptions": FormattingOptions,
     "FullDocumentDiagnosticReport": FullDocumentDiagnosticReport,
     "GeneralClientCapabilities": GeneralClientCapabilities,
@@ -12685,6 +12760,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "WorkspaceFoldersChangeEvent": WorkspaceFoldersChangeEvent,
     "WorkspaceFoldersInitializeParams": WorkspaceFoldersInitializeParams,
     "WorkspaceFoldersServerCapabilities": WorkspaceFoldersServerCapabilities,
+    "WorkspaceFoldingRangeRefreshRequest": WorkspaceFoldingRangeRefreshRequest,
+    "WorkspaceFoldingRangeRefreshResponse": WorkspaceFoldingRangeRefreshResponse,
     "WorkspaceFullDocumentDiagnosticReport": WorkspaceFullDocumentDiagnosticReport,
     "WorkspaceInlayHintRefreshRequest": WorkspaceInlayHintRefreshRequest,
     "WorkspaceInlayHintRefreshResponse": WorkspaceInlayHintRefreshResponse,
@@ -12776,6 +12853,7 @@ _MESSAGE_DIRECTION: Dict[str, str] = {
     WORKSPACE_DIAGNOSTIC: "clientToServer",
     WORKSPACE_DIAGNOSTIC_REFRESH: "serverToClient",
     WORKSPACE_EXECUTE_COMMAND: "clientToServer",
+    WORKSPACE_FOLDING_RANGE_REFRESH: "serverToClient",
     WORKSPACE_INLAY_HINT_REFRESH: "serverToClient",
     WORKSPACE_INLINE_VALUE_REFRESH: "serverToClient",
     WORKSPACE_SEMANTIC_TOKENS_REFRESH: "serverToClient",

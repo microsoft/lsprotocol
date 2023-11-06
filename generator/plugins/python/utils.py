@@ -164,7 +164,7 @@ class TypesCodeGenerator:
         self._imports: List[str] = [
             "import enum",
             "import functools",
-            "from typing import Any, Dict, List, Optional, Tuple, Union",
+            "from typing import Any, Dict, Optional, Sequence, Tuple, Union",
             "import attrs",
             "from . import validators",
         ]
@@ -271,7 +271,7 @@ class TypesCodeGenerator:
             # This is a linear collection type, LSP does not specify if
             # this needs to be ordered. Also, usingList here because
             # cattrs does not work well withIterable for some reason.
-            return f"List[{self._generate_type_name(type_def.element, class_name, prefix)}]"
+            return f"Sequence[{self._generate_type_name(type_def.element, class_name, prefix)}]"
 
         if type_def.kind == "or":
             # This type means that you can have either of the types under `items`

@@ -1212,7 +1212,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
         special = lsp_types.is_special_property(cls, prop)
         return not special
 
-    def _with_custom_unstructure(cls: attrs.AttrsInstance) -> Any:
+    def _with_custom_unstructure(cls: type) -> Any:
         attributes = {
             a.name: cattrs.gen.override(
                 rename=_to_camel_case(a.name),
@@ -1222,7 +1222,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
         }
         return cattrs.gen.make_dict_unstructure_fn(cls, converter, **attributes)
 
-    def _with_custom_structure(cls: attrs.AttrsInstance) -> Any:
+    def _with_custom_structure(cls: type) -> Any:
         attributes = {
             a.name: cattrs.gen.override(
                 rename=_to_camel_case(a.name),

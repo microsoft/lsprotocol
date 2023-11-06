@@ -20,7 +20,7 @@ for line in content.splitlines():
         version = line.split("=")[1].strip().strip('"')
         year, minor, micro = version.split(".")
         today = datetime.date.today()
-        if int(year) in [today.year, today.year + 1]:
+        if int(year) not in [today.year, today.year + 1]:
             print(f"Version {version} year should be {today.year} or {today.year + 1}")
             sys.exit(1)
 

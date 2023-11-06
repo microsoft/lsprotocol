@@ -7,9 +7,9 @@ jobs:
 
     steps:
       - task: UsePythonVersion@0
-        displayName: "Use Python 3.7"
+        displayName: 'Use Python 3.8'
         inputs:
-          versionSpec: 3.7
+          versionSpec: 3.8
 
       - script: python -m pip install -U pip
         displayName: Upgrade Pip
@@ -25,7 +25,7 @@ jobs:
         displayName: Build sdist and wheels
 
       - task: PublishBuildArtifacts@1
-        displayName: "Publish Artifact"
+        displayName: 'Publish Artifact'
         inputs:
-          pathToPublish: "$(Build.SourcesDirectory)/packages/python/dist"
+          pathToPublish: '$(Build.SourcesDirectory)/packages/python/dist'
           artifactName: dist

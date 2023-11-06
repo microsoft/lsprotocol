@@ -8,7 +8,7 @@ This repository contains code to generate Language Server Protocol types and cla
 
 You will need a python environment to run the generator. Here are the steps:
 
-1. Create a python environment (min supported python 3.7): `python -m venv .venv`
+1. Create a python environment (min supported python 3.8): `python -m venv .venv`
 2. Get this tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
 3. Run your plugin: `python -m generator --plugin dotnet --output-dir ./code`
 
@@ -52,10 +52,10 @@ You can format code, run tests, and other tasks using `nox` as well.
 
 Follow these steps to generate boiler plate code for new plugin:
 
-1. Create a virtual environment for python using python 3.7 and activate that environment.
+1. Create a virtual environment for python using python 3.8 and activate that environment.
     1. If you have python extension for VS Code installed then run `Python: Create Environment` command. Be sure to select all the `requirements.txt` files in the repo. This should, install all packages needed and select the environment for you.
 1. Ensure `nox` is installed.
-    1. Run `nox --list`, is nox is installed oyu should see a list of available sessions. Otherwise, run `python -m pip install nox` from the python 3.7 environment you created above.
+    1. Run `nox --list`, is nox is installed oyu should see a list of available sessions. Otherwise, run `python -m pip install nox` from the python 3.8 environment you created above.
 1. Run `nox --session create_plugin` and follow the prompts to create a new plugin.
 
 Example:

@@ -576,8 +576,7 @@ class TypesCodeGenerator:
         if type_alias.type.kind == "reference" and not self._has_type(
             type_alias.type.name
         ):
-            # TODO: remove workaround for lack of TypeAlias in 3.7
-            type_name = f"Union[{type_name}, {type_name}]"
+            type_name = f"TypeAlias[{type_name}]"
 
         if type_name:
             # clean up the docstring for the class itself.

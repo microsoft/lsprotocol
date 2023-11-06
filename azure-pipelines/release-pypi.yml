@@ -19,7 +19,7 @@ extends:
   template: azure-pipelines/pypi-package/pipeline.yml@templates
   parameters:
     publishPackage: ${{ parameters.publishPackage }}
-    pythonVersion: '3.7'
+    pythonVersion: '3.8'
     # We don't ship any built in packages.
     generateNotice: false
     pyProjectTomlPath: $(Build.SourcesDirectory)/packages/python/pyproject.toml

@@ -12,15 +12,15 @@ jobs:
 
     steps:
       - task: DownloadPipelineArtifact@2
-        displayName: "Download Pipeline Artifact"
+        displayName: 'Download Pipeline Artifact'
         inputs:
           artifactName: dist
-          targetPath: "$(Build.SourcesDirectory)/dist"
+          targetPath: '$(Build.SourcesDirectory)/dist'
 
       - task: UsePythonVersion@0
-        displayName: "Use Python 3.7"
+        displayName: 'Use Python 3.8'
         inputs:
-          versionSpec: 3.7
+          versionSpec: 3.8
 
       - script: python -m pip install -U pip
         displayName: Upgrade Pip

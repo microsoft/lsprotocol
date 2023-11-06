@@ -576,7 +576,8 @@ class TypesCodeGenerator:
         if type_alias.type.kind == "reference" and not self._has_type(
             type_alias.type.name
         ):
-            type_name = f"TypeAlias[{type_name}]"
+            # TODO: remove workaround for lack of TypeAlias
+            type_name = f"Union[{type_name}, {type_name}]"
 
         if type_name:
             # clean up the docstring for the class itself.
@@ -587,7 +588,7 @@ class TypesCodeGenerator:
                 f"# Since: {_sanitize_comment(type_alias.since)}"
                 if type_alias.since
                 else "",
-                f"# Proposed" if type_alias.proposed else "",
+                "# Proposed" if type_alias.proposed else "",
             ]
         else:
             doc = _get_indented_documentation(type_alias.documentation, indent)

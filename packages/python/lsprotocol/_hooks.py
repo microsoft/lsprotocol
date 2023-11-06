@@ -1214,7 +1214,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
                 rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
-            for a in attrs.fields(cls)
+            for a in attrs.fields(cls)  # type: ignore
         }
         return cattrs.gen.make_dict_unstructure_fn(cls, converter, **attributes)
 
@@ -1224,7 +1224,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
                 rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
-            for a in attrs.fields(cls)
+            for a in attrs.fields(cls)  # type: ignore
         }
         return cattrs.gen.make_dict_structure_fn(cls, converter, **attributes)
 

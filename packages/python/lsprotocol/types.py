@@ -9,7 +9,7 @@
 
 import enum
 import functools
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Optional, Sequence, Tuple, Union
 
 import attrs
 
@@ -674,7 +674,7 @@ class LSPObject:
     pass
 
 
-Definition = Union["Location", List["Location"]]
+Definition = Union["Location", Sequence["Location"]]
 """The definition of a symbol represented as one or many {@link Location locations}.
 For most programming languages there is only one location at which a symbol is
 defined.
@@ -690,7 +690,7 @@ Provides additional metadata over normal {@link Location location} definitions, 
 the defining symbol"""
 
 
-LSPArray = List["LSPAny"]
+LSPArray = Sequence["LSPAny"]
 """LSP arrays.
 @since 3.17.0"""
 # Since: 3.17.0
@@ -706,7 +706,7 @@ optional as well.
 # Since: 3.17.0
 
 
-Declaration = Union["Location", List["Location"]]
+Declaration = Union["Location", Sequence["Location"]]
 """The declaration of a symbol representation as one or many {@link Location locations}."""
 
 
@@ -763,7 +763,7 @@ PrepareRenameResult = Union[
 ]
 
 
-DocumentSelector = List["DocumentFilter"]
+DocumentSelector = Sequence["DocumentFilter"]
 """A document selector is the combination of one or many document filters.
 
 @sample `let sel:DocumentSelector = [{ language: 'typescript' }, { language: 'json', pattern: '**/tsconfig.json' }]`;
@@ -1200,7 +1200,7 @@ class DidChangeWorkspaceFoldersParams:
 class ConfigurationParams:
     """The parameters of a configuration request."""
 
-    items: List["ConfigurationItem"] = attrs.field()
+    items: Sequence["ConfigurationItem"] = attrs.field()
 
 
 @attrs.define
@@ -1291,7 +1291,7 @@ class ColorPresentation:
     this presentation for the color.  When `falsy` the {@link ColorPresentation.label label}
     is used."""
 
-    additional_text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
+    additional_text_edits: Optional[Sequence["TextEdit"]] = attrs.field(default=None)
     """An optional array of additional {@link TextEdit text edits} that are applied when
     selecting this color presentation. Edits must not overlap with the main {@link ColorPresentation.textEdit edit} nor with themselves."""
 
@@ -1433,7 +1433,7 @@ class SelectionRangeParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The text document."""
 
-    positions: List["Position"] = attrs.field()
+    positions: Sequence["Position"] = attrs.field()
     """The positions inside the text document."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
@@ -1540,7 +1540,7 @@ class CallHierarchyItem:
     """The range that should be selected and revealed when this symbol is being picked, e.g. the name of a function.
     Must be contained by the {@link CallHierarchyItem.range `range`}."""
 
-    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
 
     detail: Optional[str] = attrs.field(
@@ -1624,7 +1624,7 @@ class CallHierarchyIncomingCall:
     from_: CallHierarchyItem = attrs.field()
     """The item that makes the call."""
 
-    from_ranges: List["Range"] = attrs.field()
+    from_ranges: Sequence["Range"] = attrs.field()
     """The ranges at which the calls appear. This is relative to the caller
     denoted by {@link CallHierarchyIncomingCall.from `this.from`}."""
 
@@ -1658,7 +1658,7 @@ class CallHierarchyOutgoingCall:
     to: CallHierarchyItem = attrs.field()
     """The item that is called."""
 
-    from_ranges: List["Range"] = attrs.field()
+    from_ranges: Sequence["Range"] = attrs.field()
     """The range at which this item is called. This is the range relative to the caller, e.g the item
     passed to {@link CallHierarchyItemProvider.provideCallHierarchyOutgoingCalls `provideCallHierarchyOutgoingCalls`}
     and not {@link CallHierarchyOutgoingCall.to `this.to`}."""
@@ -1687,7 +1687,7 @@ class SemanticTokens:
 
     # Since: 3.16.0
 
-    data: List[int] = attrs.field()
+    data: Sequence[int] = attrs.field()
     """The actual tokens."""
 
     result_id: Optional[str] = attrs.field(
@@ -1706,7 +1706,7 @@ class SemanticTokensPartialResult:
 
     # Since: 3.16.0
 
-    data: List[int] = attrs.field()
+    data: Sequence[int] = attrs.field()
 
 
 @attrs.define
@@ -1815,7 +1815,7 @@ class SemanticTokensDelta:
 
     # Since: 3.16.0
 
-    edits: List["SemanticTokensEdit"] = attrs.field()
+    edits: Sequence["SemanticTokensEdit"] = attrs.field()
     """The semantic token edits to transform a previous result into a new result."""
 
     result_id: Optional[str] = attrs.field(
@@ -1830,7 +1830,7 @@ class SemanticTokensDeltaPartialResult:
 
     # Since: 3.16.0
 
-    edits: List["SemanticTokensEdit"] = attrs.field()
+    edits: Sequence["SemanticTokensEdit"] = attrs.field()
 
 
 @attrs.define
@@ -1920,7 +1920,7 @@ class LinkedEditingRanges:
 
     # Since: 3.16.0
 
-    ranges: List["Range"] = attrs.field()
+    ranges: Sequence["Range"] = attrs.field()
     """A list of ranges that can be edited together. The ranges must have
     identical length and contain identical text content. The ranges cannot overlap."""
 
@@ -1971,7 +1971,7 @@ class CreateFilesParams:
 
     # Since: 3.16.0
 
-    files: List["FileCreate"] = attrs.field()
+    files: Sequence["FileCreate"] = attrs.field()
     """An array of all files/folders created in this operation."""
 
 
@@ -1990,11 +1990,11 @@ class WorkspaceEdit:
     cause failure of the operation. How the client recovers from the failure is described by
     the client capability: `workspace.workspaceEdit.failureHandling`"""
 
-    changes: Optional[Dict[str, List["TextEdit"]]] = attrs.field(default=None)
+    changes: Optional[Dict[str, Sequence["TextEdit"]]] = attrs.field(default=None)
     """Holds changes to existing resources."""
 
     document_changes: Optional[
-        List[Union["TextDocumentEdit", "CreateFile", "RenameFile", "DeleteFile"]]
+        Sequence[Union["TextDocumentEdit", "CreateFile", "RenameFile", "DeleteFile"]]
     ] = attrs.field(default=None)
     """Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes
     are either an array of `TextDocumentEdit`s to express changes to n different text documents
@@ -2027,7 +2027,7 @@ class FileOperationRegistrationOptions:
 
     # Since: 3.16.0
 
-    filters: List["FileOperationFilter"] = attrs.field()
+    filters: Sequence["FileOperationFilter"] = attrs.field()
     """The actual filters."""
 
 
@@ -2040,7 +2040,7 @@ class RenameFilesParams:
 
     # Since: 3.16.0
 
-    files: List["FileRename"] = attrs.field()
+    files: Sequence["FileRename"] = attrs.field()
     """An array of all files/folders renamed in this operation. When a folder is renamed, only
     the folder will be included, and not its children."""
 
@@ -2054,7 +2054,7 @@ class DeleteFilesParams:
 
     # Since: 3.16.0
 
-    files: List["FileDelete"] = attrs.field()
+    files: Sequence["FileDelete"] = attrs.field()
     """An array of all files/folders deleted in this operation."""
 
 
@@ -2160,7 +2160,7 @@ class TypeHierarchyItem:
     picked, e.g. the name of a function. Must be contained by the
     {@link TypeHierarchyItem.range `range`}."""
 
-    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[SymbolTag]] = attrs.field(default=None)
     """Tags for this item."""
 
     detail: Optional[str] = attrs.field(
@@ -2345,7 +2345,7 @@ class InlayHint:
     position: "Position" = attrs.field()
     """The position of this hint."""
 
-    label: Union[str, List["InlayHintLabelPart"]] = attrs.field()
+    label: Union[str, Sequence["InlayHintLabelPart"]] = attrs.field()
     """The label of this hint. A human readable string or an array of
     InlayHintLabelPart label parts.
     
@@ -2355,7 +2355,7 @@ class InlayHint:
     """The kind of this hint. Can be omitted in which case the client
     should fall back to a reasonable default."""
 
-    text_edits: Optional[List["TextEdit"]] = attrs.field(default=None)
+    text_edits: Optional[Sequence["TextEdit"]] = attrs.field(default=None)
     """Optional text edits that are performed when accepting this inlay hint.
     
     *Note* that edits are expected to change the document so that the inlay
@@ -2589,7 +2589,7 @@ class WorkspaceDiagnosticParams:
 
     # Since: 3.17.0
 
-    previous_result_ids: List["PreviousResultId"] = attrs.field()
+    previous_result_ids: Sequence["PreviousResultId"] = attrs.field()
     """The currently known diagnostic reports with their
     previous result ids."""
 
@@ -2615,7 +2615,7 @@ class WorkspaceDiagnosticReport:
 
     # Since: 3.17.0
 
-    items: List[WorkspaceDocumentDiagnosticReport] = attrs.field()
+    items: Sequence[WorkspaceDocumentDiagnosticReport] = attrs.field()
 
 
 @attrs.define
@@ -2626,7 +2626,7 @@ class WorkspaceDiagnosticReportPartialResult:
 
     # Since: 3.17.0
 
-    items: List[WorkspaceDocumentDiagnosticReport] = attrs.field()
+    items: Sequence[WorkspaceDocumentDiagnosticReport] = attrs.field()
 
 
 @attrs.define
@@ -2640,7 +2640,7 @@ class DidOpenNotebookDocumentParams:
     notebook_document: "NotebookDocument" = attrs.field()
     """The notebook document that got opened."""
 
-    cell_text_documents: List["TextDocumentItem"] = attrs.field()
+    cell_text_documents: Sequence["TextDocumentItem"] = attrs.field()
     """The text documents that represent the content
     of a notebook cell."""
 
@@ -2698,7 +2698,7 @@ class DidCloseNotebookDocumentParams:
     notebook_document: "NotebookDocumentIdentifier" = attrs.field()
     """The notebook document that got closed."""
 
-    cell_text_documents: List["TextDocumentIdentifier"] = attrs.field()
+    cell_text_documents: Sequence["TextDocumentIdentifier"] = attrs.field()
     """The text documents that represent the content
     of a notebook cell that got closed."""
 
@@ -2737,7 +2737,7 @@ class InlineCompletionList:
     # Since: 3.18.0
     # Proposed
 
-    items: List["InlineCompletionItem"] = attrs.field()
+    items: Sequence["InlineCompletionItem"] = attrs.field()
     """The inline completion items"""
 
 
@@ -2814,12 +2814,12 @@ class InlineCompletionRegistrationOptions:
 
 @attrs.define
 class RegistrationParams:
-    registrations: List["Registration"] = attrs.field()
+    registrations: Sequence["Registration"] = attrs.field()
 
 
 @attrs.define
 class UnregistrationParams:
-    unregisterations: List["Unregistration"] = attrs.field()
+    unregisterations: Sequence["Unregistration"] = attrs.field()
 
 
 @attrs.define
@@ -2893,7 +2893,7 @@ class _InitializeParams:
 
 @attrs.define
 class WorkspaceFoldersInitializeParams:
-    workspace_folders: Optional[Union[List[WorkspaceFolder], None]] = attrs.field(
+    workspace_folders: Optional[Union[Sequence[WorkspaceFolder], None]] = attrs.field(
         default=None
     )
     """The workspace folders configured in the client when the server starts.
@@ -2960,7 +2960,7 @@ class InitializeParams:
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
-    workspace_folders: Optional[Union[List[WorkspaceFolder], None]] = attrs.field(
+    workspace_folders: Optional[Union[Sequence[WorkspaceFolder], None]] = attrs.field(
         default=None
     )
     """The workspace folders configured in the client when the server starts.
@@ -3026,7 +3026,7 @@ class DidChangeConfigurationParams:
 
 @attrs.define
 class DidChangeConfigurationRegistrationOptions:
-    section: Optional[Union[str, List[str]]] = attrs.field(default=None)
+    section: Optional[Union[str, Sequence[str]]] = attrs.field(default=None)
 
 
 @attrs.define
@@ -3048,7 +3048,7 @@ class ShowMessageRequestParams:
     message: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The actual message."""
 
-    actions: Optional[List["MessageActionItem"]] = attrs.field(default=None)
+    actions: Optional[Sequence["MessageActionItem"]] = attrs.field(default=None)
     """The message action items to present."""
 
 
@@ -3086,7 +3086,7 @@ class DidChangeTextDocumentParams:
     to the version after all provided content changes have
     been applied."""
 
-    content_changes: List[TextDocumentContentChangeEvent] = attrs.field()
+    content_changes: Sequence[TextDocumentContentChangeEvent] = attrs.field()
     """The actual content changes. The content changes describe single state changes
     to the document. So if there are two content changes c1 (at array index 0) and
     c2 (at array index 1) for a document in state S then c1 moves the document from
@@ -3193,7 +3193,7 @@ class TextEdit:
 class DidChangeWatchedFilesParams:
     """The watched files change notification's parameters."""
 
-    changes: List["FileEvent"] = attrs.field()
+    changes: Sequence["FileEvent"] = attrs.field()
     """The actual file events."""
 
 
@@ -3201,7 +3201,7 @@ class DidChangeWatchedFilesParams:
 class DidChangeWatchedFilesRegistrationOptions:
     """Describe options to be used when registered for text document change events."""
 
-    watchers: List["FileSystemWatcher"] = attrs.field()
+    watchers: Sequence["FileSystemWatcher"] = attrs.field()
     """The watchers to register."""
 
 
@@ -3212,7 +3212,7 @@ class PublishDiagnosticsParams:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    diagnostics: List["Diagnostic"] = attrs.field()
+    diagnostics: Sequence["Diagnostic"] = attrs.field()
     """An array of diagnostic information items."""
 
     version: Optional[int] = attrs.field(
@@ -3270,7 +3270,7 @@ class CompletionItem:
     """The kind of this completion item. Based of the kind
     an icon is chosen by the editor."""
 
-    tags: Optional[List[CompletionItemTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[CompletionItemTag]] = attrs.field(default=None)
     """Tags for this completion item.
     
     @since 3.15.0"""
@@ -3392,7 +3392,7 @@ class CompletionItem:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    additional_text_edits: Optional[List[TextEdit]] = attrs.field(default=None)
+    additional_text_edits: Optional[Sequence[TextEdit]] = attrs.field(default=None)
     """An optional array of additional {@link TextEdit text edits} that are applied when
     selecting this completion. Edits must not overlap (including the same insert position)
     with the main {@link CompletionItem.textEdit edit} nor with themselves.
@@ -3401,7 +3401,7 @@ class CompletionItem:
     (for example adding an import statement at the top of the file if the completion item will
     insert an unqualified type)."""
 
-    commit_characters: Optional[List[str]] = attrs.field(default=None)
+    commit_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """An optional set of characters that when pressed while this completion is active will accept it first and
     then type that character. *Note* that all commit characters should have `length=1` and that superfluous
     characters will be ignored."""
@@ -3425,7 +3425,7 @@ class CompletionListItemDefaultsTypeEditRangeType1:
 
 @attrs.define
 class CompletionListItemDefaultsType:
-    commit_characters: Optional[List[str]] = attrs.field(default=None)
+    commit_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """A default commit character set.
     
     @since 3.17.0"""
@@ -3469,7 +3469,7 @@ class CompletionList:
     Recomputed lists have all their items replaced (not appended) in the
     incomplete completion sessions."""
 
-    items: List[CompletionItem] = attrs.field()
+    items: Sequence[CompletionItem] = attrs.field()
     """The completion items."""
 
     item_defaults: Optional["CompletionListItemDefaultsType"] = attrs.field(
@@ -3509,7 +3509,7 @@ class CompletionOptionsCompletionItemType:
 class CompletionOptions:
     """Completion options."""
 
-    trigger_characters: Optional[List[str]] = attrs.field(default=None)
+    trigger_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """Most tools trigger completion request automatically without explicitly requesting
     it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
     starts to type an identifier. For example if the user types `c` in a JavaScript file
@@ -3519,7 +3519,7 @@ class CompletionOptions:
     If code complete should automatically be trigger on characters not being valid inside
     an identifier (for example `.` in JavaScript) list them in `triggerCharacters`."""
 
-    all_commit_characters: Optional[List[str]] = attrs.field(default=None)
+    all_commit_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """The list of all possible characters that commit a completion. This field can be used
     if clients don't support individual commit characters per completion item. See
     `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
@@ -3576,7 +3576,7 @@ class CompletionRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    trigger_characters: Optional[List[str]] = attrs.field(default=None)
+    trigger_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """Most tools trigger completion request automatically without explicitly requesting
     it using a keyboard shortcut (e.g. Ctrl+Space). Typically they do so when the user
     starts to type an identifier. For example if the user types `c` in a JavaScript file
@@ -3586,7 +3586,7 @@ class CompletionRegistrationOptions:
     If code complete should automatically be trigger on characters not being valid inside
     an identifier (for example `.` in JavaScript) list them in `triggerCharacters`."""
 
-    all_commit_characters: Optional[List[str]] = attrs.field(default=None)
+    all_commit_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """The list of all possible characters that commit a completion. This field can be used
     if clients don't support individual commit characters per completion item. See
     `ClientCapabilities.textDocument.completion.completionItem.commitCharactersSupport`
@@ -3637,7 +3637,9 @@ class HoverParams:
 class Hover:
     """The result of a hover request."""
 
-    contents: Union["MarkupContent", MarkedString, List[MarkedString]] = attrs.field()
+    contents: Union[
+        "MarkupContent", MarkedString, Sequence[MarkedString]
+    ] = attrs.field()
     """The hover's content"""
 
     range: Optional["Range"] = attrs.field(default=None)
@@ -3698,7 +3700,7 @@ class SignatureHelp:
     callable. There can be multiple signature but only one
     active and only one active parameter."""
 
-    signatures: List["SignatureInformation"] = attrs.field()
+    signatures: Sequence["SignatureInformation"] = attrs.field()
     """One or more signatures."""
 
     active_signature: Optional[int] = attrs.field(
@@ -3730,10 +3732,10 @@ class SignatureHelp:
 class SignatureHelpOptions:
     """Server Capabilities for a {@link SignatureHelpRequest}."""
 
-    trigger_characters: Optional[List[str]] = attrs.field(default=None)
+    trigger_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """List of characters that trigger signature help automatically."""
 
-    retrigger_characters: Optional[List[str]] = attrs.field(default=None)
+    retrigger_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """List of characters that re-trigger signature help.
     
     These trigger characters are only active when signature help is already showing. All trigger characters
@@ -3758,10 +3760,10 @@ class SignatureHelpRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    trigger_characters: Optional[List[str]] = attrs.field(default=None)
+    trigger_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """List of characters that trigger signature help automatically."""
 
-    retrigger_characters: Optional[List[str]] = attrs.field(default=None)
+    retrigger_characters: Optional[Sequence[str]] = attrs.field(default=None)
     """List of characters that re-trigger signature help.
     
     These trigger characters are only active when signature help is already showing. All trigger characters
@@ -3948,7 +3950,7 @@ class BaseSymbolInformation:
     kind: SymbolKind = attrs.field()
     """The kind of this symbol."""
 
-    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
@@ -3994,7 +3996,7 @@ class SymbolInformation:
     
     @deprecated Use tags instead"""
 
-    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
@@ -4039,7 +4041,7 @@ class DocumentSymbol:
     )
     """More detail for this symbol, e.g the signature of a function."""
 
-    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[SymbolTag]] = attrs.field(default=None)
     """Tags for this document symbol.
     
     @since 3.16.0"""
@@ -4053,7 +4055,7 @@ class DocumentSymbol:
     
     @deprecated Use tags instead"""
 
-    children: Optional[List["DocumentSymbol"]] = attrs.field(default=None)
+    children: Optional[Sequence["DocumentSymbol"]] = attrs.field(default=None)
     """Children of this symbol, e.g. properties of a class."""
 
 
@@ -4137,7 +4139,7 @@ class Command:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
-    arguments: Optional[List[LSPAny]] = attrs.field(default=None)
+    arguments: Optional[Sequence[LSPAny]] = attrs.field(default=None)
     """Arguments that the command handler should be
     invoked with."""
 
@@ -4166,7 +4168,7 @@ class CodeAction:
     
     Used to filter code actions."""
 
-    diagnostics: Optional[List["Diagnostic"]] = attrs.field(default=None)
+    diagnostics: Optional[Sequence["Diagnostic"]] = attrs.field(default=None)
     """The diagnostics that this code action resolves."""
 
     is_preferred: Optional[bool] = attrs.field(
@@ -4220,7 +4222,7 @@ class CodeAction:
 class CodeActionOptions:
     """Provider options for a {@link CodeActionRequest}."""
 
-    code_action_kinds: Optional[List[Union[CodeActionKind, str]]] = attrs.field(
+    code_action_kinds: Optional[Sequence[Union[CodeActionKind, str]]] = attrs.field(
         default=None
     )
     """CodeActionKinds that this server may return.
@@ -4254,7 +4256,7 @@ class CodeActionRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    code_action_kinds: Optional[List[Union[CodeActionKind, str]]] = attrs.field(
+    code_action_kinds: Optional[Sequence[Union[CodeActionKind, str]]] = attrs.field(
         default=None
     )
     """CodeActionKinds that this server may return.
@@ -4326,7 +4328,7 @@ class WorkspaceSymbol:
     """A data entry field that is preserved on a workspace symbol between a
     workspace symbol request and a workspace symbol resolve request."""
 
-    tags: Optional[List[SymbolTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[SymbolTag]] = attrs.field(default=None)
     """Tags for this symbol.
     
     @since 3.16.0"""
@@ -4657,7 +4659,7 @@ class DocumentRangesFormattingParams:
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to format."""
 
-    ranges: List["Range"] = attrs.field()
+    ranges: Sequence["Range"] = attrs.field()
     """The ranges to format"""
 
     options: "FormattingOptions" = attrs.field()
@@ -4698,7 +4700,7 @@ class DocumentOnTypeFormattingOptions:
     )
     """A character on which formatting should be triggered, like `{`."""
 
-    more_trigger_character: Optional[List[str]] = attrs.field(default=None)
+    more_trigger_character: Optional[Sequence[str]] = attrs.field(default=None)
     """More trigger characters."""
 
 
@@ -4717,7 +4719,7 @@ class DocumentOnTypeFormattingRegistrationOptions:
     """A document selector to identify the scope of the registration. If set to null
     the document selector provided on the client side will be used."""
 
-    more_trigger_character: Optional[List[str]] = attrs.field(default=None)
+    more_trigger_character: Optional[Sequence[str]] = attrs.field(default=None)
     """More trigger characters."""
 
 
@@ -4803,7 +4805,7 @@ class ExecuteCommandParams:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
-    arguments: Optional[List[LSPAny]] = attrs.field(default=None)
+    arguments: Optional[Sequence[LSPAny]] = attrs.field(default=None)
     """Arguments that the command should be invoked with."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
@@ -4814,7 +4816,7 @@ class ExecuteCommandParams:
 class ExecuteCommandOptions:
     """The server capabilities of a {@link ExecuteCommandRequest}."""
 
-    commands: List[str] = attrs.field()
+    commands: Sequence[str] = attrs.field()
     """The commands to be executed on the server"""
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -4827,7 +4829,7 @@ class ExecuteCommandOptions:
 class ExecuteCommandRegistrationOptions:
     """Registration options for a {@link ExecuteCommandRequest}."""
 
-    commands: List[str] = attrs.field()
+    commands: Sequence[str] = attrs.field()
     """The commands to be executed on the server"""
 
     work_done_progress: Optional[bool] = attrs.field(
@@ -5053,10 +5055,10 @@ class Range:
 class WorkspaceFoldersChangeEvent:
     """The workspace folder change event."""
 
-    added: List[WorkspaceFolder] = attrs.field()
+    added: Sequence[WorkspaceFolder] = attrs.field()
     """The array of added workspace folders"""
 
-    removed: List[WorkspaceFolder] = attrs.field()
+    removed: Sequence[WorkspaceFolder] = attrs.field()
     """The array of the removed workspace folders"""
 
 
@@ -5174,7 +5176,7 @@ class SemanticTokensEdit:
     delete_count: int = attrs.field(validator=validators.uinteger_validator)
     """The count of elements to remove."""
 
-    data: Optional[List[int]] = attrs.field(default=None)
+    data: Optional[Sequence[int]] = attrs.field(default=None)
     """The elements to insert."""
 
 
@@ -5200,7 +5202,7 @@ class TextDocumentEdit:
     text_document: "OptionalVersionedTextDocumentIdentifier" = attrs.field()
     """The text document to change."""
 
-    edits: List[Union[TextEdit, "AnnotatedTextEdit"]] = attrs.field()
+    edits: Sequence[Union[TextEdit, "AnnotatedTextEdit"]] = attrs.field()
     """The edits to be applied.
     
     @since 3.16.0 - support for AnnotatedTextEdit. This is guarded using a
@@ -5517,7 +5519,7 @@ class FullDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    items: List["Diagnostic"] = attrs.field()
+    items: Sequence["Diagnostic"] = attrs.field()
     """The actual items."""
 
     kind: str = attrs.field(validator=attrs.validators.in_(["full"]), default="full")
@@ -5540,7 +5542,7 @@ class RelatedFullDocumentDiagnosticReport:
 
     # Since: 3.17.0
 
-    items: List["Diagnostic"] = attrs.field()
+    items: Sequence["Diagnostic"] = attrs.field()
     """The actual items."""
 
     related_documents: Optional[
@@ -5661,7 +5663,7 @@ class NotebookDocument:
     """The version number of this document (it will increase after each
     change, including undo/redo)."""
 
-    cells: List["NotebookCell"] = attrs.field()
+    cells: Sequence["NotebookCell"] = attrs.field()
     """The cells of a notebook."""
 
     metadata: Optional[LSPObject] = attrs.field(default=None)
@@ -5710,10 +5712,10 @@ class NotebookDocumentChangeEventCellsTypeStructureType:
     array: "NotebookCellArrayChange" = attrs.field()
     """The change to the cell array."""
 
-    did_open: Optional[List[TextDocumentItem]] = attrs.field(default=None)
+    did_open: Optional[Sequence[TextDocumentItem]] = attrs.field(default=None)
     """Additional opened cell text documents."""
 
-    did_close: Optional[List[TextDocumentIdentifier]] = attrs.field(default=None)
+    did_close: Optional[Sequence[TextDocumentIdentifier]] = attrs.field(default=None)
     """Additional closed cell text documents."""
 
 
@@ -5721,7 +5723,7 @@ class NotebookDocumentChangeEventCellsTypeStructureType:
 class NotebookDocumentChangeEventCellsTypeTextContentType:
     document: "VersionedTextDocumentIdentifier" = attrs.field()
 
-    changes: List[TextDocumentContentChangeEvent] = attrs.field()
+    changes: Sequence[TextDocumentContentChangeEvent] = attrs.field()
 
 
 @attrs.define
@@ -5732,12 +5734,12 @@ class NotebookDocumentChangeEventCellsType:
     """Changes to the cell structure to add or
     remove cells."""
 
-    data: Optional[List["NotebookCell"]] = attrs.field(default=None)
+    data: Optional[Sequence["NotebookCell"]] = attrs.field(default=None)
     """Changes to notebook cells properties like its
     kind, execution summary or metadata."""
 
     text_content: Optional[
-        List["NotebookDocumentChangeEventCellsTypeTextContentType"]
+        Sequence["NotebookDocumentChangeEventCellsTypeTextContentType"]
     ] = attrs.field(default=None)
     """Changes to the text content of notebook cells."""
 
@@ -6145,15 +6147,15 @@ class Diagnostic:
     diagnostic, e.g. 'typescript' or 'super lint'. It usually
     appears in the user interface."""
 
-    tags: Optional[List[DiagnosticTag]] = attrs.field(default=None)
+    tags: Optional[Sequence[DiagnosticTag]] = attrs.field(default=None)
     """Additional metadata about the diagnostic.
     
     @since 3.15.0"""
     # Since: 3.15.0
 
-    related_information: Optional[List["DiagnosticRelatedInformation"]] = attrs.field(
-        default=None
-    )
+    related_information: Optional[
+        Sequence["DiagnosticRelatedInformation"]
+    ] = attrs.field(default=None)
     """An array of related diagnostic information, e.g. when symbol-names within
     a scope collide all definitions can be marked via this property."""
 
@@ -6267,7 +6269,7 @@ class SignatureInformation:
     """The human-readable doc-comment of this signature. Will be shown
     in the UI but can be omitted."""
 
-    parameters: Optional[List["ParameterInformation"]] = attrs.field(default=None)
+    parameters: Optional[Sequence["ParameterInformation"]] = attrs.field(default=None)
     """The parameters of this signature."""
 
     active_parameter: Optional[int] = attrs.field(
@@ -6297,14 +6299,14 @@ class CodeActionContext:
     """Contains additional diagnostic information about the context in which
     a {@link CodeActionProvider.provideCodeActions code action} is run."""
 
-    diagnostics: List[Diagnostic] = attrs.field()
+    diagnostics: Sequence[Diagnostic] = attrs.field()
     """An array of diagnostics known on the client side overlapping the range provided to the
     `textDocument/codeAction` request. They are provided so that the server knows which
     errors are currently presented to the user for the given range. There is no guarantee
     that these accurately reflect the error state of the resource. The primary parameter
     to compute code actions is the provided range."""
 
-    only: Optional[List[Union[CodeActionKind, str]]] = attrs.field(default=None)
+    only: Optional[Sequence[Union[CodeActionKind, str]]] = attrs.field(default=None)
     """Requested kind of actions to return.
     
     Actions not of this kind are filtered out by the client before being shown. So servers
@@ -6361,10 +6363,10 @@ class SemanticTokensLegend:
 
     # Since: 3.16.0
 
-    token_types: List[str] = attrs.field()
+    token_types: Sequence[str] = attrs.field()
     """The token types a server uses."""
 
-    token_modifiers: List[str] = attrs.field()
+    token_modifiers: Sequence[str] = attrs.field()
     """The token modifiers a server uses."""
 
 
@@ -6492,7 +6494,7 @@ class WorkspaceFullDocumentDiagnosticReport:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The URI for which diagnostic information is reported."""
 
-    items: List[Diagnostic] = attrs.field()
+    items: Sequence[Diagnostic] = attrs.field()
     """The actual items."""
 
     version: Optional[Union[int, None]] = attrs.field(default=None)
@@ -6583,7 +6585,7 @@ class NotebookCellArrayChange:
     delete_count: int = attrs.field(validator=validators.uinteger_validator)
     """The deleted cells"""
 
-    cells: Optional[List[NotebookCell]] = attrs.field(default=None)
+    cells: Optional[Sequence[NotebookCell]] = attrs.field(default=None)
     """The new cells, if any"""
 
 
@@ -6682,7 +6684,7 @@ class NotebookDocumentSyncOptionsNotebookSelectorType1:
     notebook type. '*' matches every notebook."""
 
     cells: Optional[
-        List["NotebookDocumentSyncOptionsNotebookSelectorType1CellsType"]
+        Sequence["NotebookDocumentSyncOptionsNotebookSelectorType1CellsType"]
     ] = attrs.field(default=None)
     """The cells of the matching notebook to be synced."""
 
@@ -6694,7 +6696,7 @@ class NotebookDocumentSyncOptionsNotebookSelectorType2CellsType:
 
 @attrs.define
 class NotebookDocumentSyncOptionsNotebookSelectorType2:
-    cells: List[
+    cells: Sequence[
         "NotebookDocumentSyncOptionsNotebookSelectorType2CellsType"
     ] = attrs.field()
     """The cells of the matching notebook to be synced."""
@@ -6723,7 +6725,7 @@ class NotebookDocumentSyncOptions:
 
     # Since: 3.17.0
 
-    notebook_selector: List[
+    notebook_selector: Sequence[
         Union[
             "NotebookDocumentSyncOptionsNotebookSelectorType1",
             "NotebookDocumentSyncOptionsNotebookSelectorType2",
@@ -6752,7 +6754,9 @@ class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1:
     notebook type. '*' matches every notebook."""
 
     cells: Optional[
-        List["NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType"]
+        Sequence[
+            "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1CellsType"
+        ]
     ] = attrs.field(default=None)
     """The cells of the matching notebook to be synced."""
 
@@ -6764,7 +6768,7 @@ class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2CellsType:
 
 @attrs.define
 class NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2:
-    cells: List[
+    cells: Sequence[
         "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2CellsType"
     ] = attrs.field()
     """The cells of the matching notebook to be synced."""
@@ -6783,7 +6787,7 @@ class NotebookDocumentSyncRegistrationOptions:
 
     # Since: 3.17.0
 
-    notebook_selector: List[
+    notebook_selector: Sequence[
         Union[
             "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType1",
             "NotebookDocumentSyncRegistrationOptionsNotebookSelectorType2",
@@ -7305,7 +7309,7 @@ class GeneralClientCapabilitiesStaleRequestSupportType:
     cancel: bool = attrs.field(validator=attrs.validators.instance_of(bool))
     """The client will actively cancel the request."""
 
-    retry_on_content_modified: List[str] = attrs.field()
+    retry_on_content_modified: Sequence[str] = attrs.field()
     """The list of requests for which the client
     will retry the request if it receives a
     response with error code `ContentModified`"""
@@ -7344,9 +7348,9 @@ class GeneralClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    position_encodings: Optional[List[Union[PositionEncodingKind, str]]] = attrs.field(
-        default=None
-    )
+    position_encodings: Optional[
+        Sequence[Union[PositionEncodingKind, str]]
+    ] = attrs.field(default=None)
     """The position encodings supported by the client. Client and server
     have to agree on the same position encoding to ensure that offsets
     (e.g. character position in a line) are interpreted the same on both
@@ -7405,7 +7409,7 @@ class WorkspaceEditClientCapabilities:
     )
     """The client supports versioned document changes in `WorkspaceEdit`s"""
 
-    resource_operations: Optional[List[ResourceOperationKind]] = attrs.field(
+    resource_operations: Optional[Sequence[ResourceOperationKind]] = attrs.field(
         default=None
     )
     """The resource operations the client supports. Clients should at least
@@ -7476,7 +7480,7 @@ class DidChangeWatchedFilesClientCapabilities:
 
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesSymbolKindType:
-    value_set: Optional[List[SymbolKind]] = attrs.field(default=None)
+    value_set: Optional[Sequence[SymbolKind]] = attrs.field(default=None)
     """The symbol kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -7489,13 +7493,13 @@ class WorkspaceSymbolClientCapabilitiesSymbolKindType:
 
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesTagSupportType:
-    value_set: List[SymbolTag] = attrs.field()
+    value_set: Sequence[SymbolTag] = attrs.field()
     """The tags supported by the client."""
 
 
 @attrs.define
 class WorkspaceSymbolClientCapabilitiesResolveSupportType:
-    properties: List[str] = attrs.field()
+    properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily. Usually
     `location.range`"""
 
@@ -7760,19 +7764,19 @@ class TextDocumentSyncClientCapabilities:
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemTypeTagSupportType:
-    value_set: List[CompletionItemTag] = attrs.field()
+    value_set: Sequence[CompletionItemTag] = attrs.field()
     """The tags supported by the client."""
 
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemTypeResolveSupportType:
-    properties: List[str] = attrs.field()
+    properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily."""
 
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemTypeInsertTextModeSupportType:
-    value_set: List[InsertTextMode] = attrs.field()
+    value_set: Sequence[InsertTextMode] = attrs.field()
 
 
 @attrs.define
@@ -7794,7 +7798,7 @@ class CompletionClientCapabilitiesCompletionItemType:
     )
     """Client supports commit characters on a completion item."""
 
-    documentation_format: Optional[List[MarkupKind]] = attrs.field(default=None)
+    documentation_format: Optional[Sequence[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
     property. The order describes the preferred format of the client."""
 
@@ -7864,7 +7868,7 @@ class CompletionClientCapabilitiesCompletionItemType:
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionItemKindType:
-    value_set: Optional[List[CompletionItemKind]] = attrs.field(default=None)
+    value_set: Optional[Sequence[CompletionItemKind]] = attrs.field(default=None)
     """The completion item kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -7877,7 +7881,7 @@ class CompletionClientCapabilitiesCompletionItemKindType:
 
 @attrs.define
 class CompletionClientCapabilitiesCompletionListType:
-    item_defaults: Optional[List[str]] = attrs.field(default=None)
+    item_defaults: Optional[Sequence[str]] = attrs.field(default=None)
     """The client supports the following itemDefaults on
     a completion list.
     
@@ -7942,7 +7946,7 @@ class HoverClientCapabilities:
     )
     """Whether hover supports dynamic registration."""
 
-    content_format: Optional[List[MarkupKind]] = attrs.field(default=None)
+    content_format: Optional[Sequence[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the content
     property. The order describes the preferred format of the client."""
 
@@ -7962,7 +7966,7 @@ class SignatureHelpClientCapabilitiesSignatureInformationTypeParameterInformatio
 
 @attrs.define
 class SignatureHelpClientCapabilitiesSignatureInformationType:
-    documentation_format: Optional[List[MarkupKind]] = attrs.field(default=None)
+    documentation_format: Optional[Sequence[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
     property. The order describes the preferred format of the client."""
 
@@ -8121,7 +8125,7 @@ class DocumentHighlightClientCapabilities:
 
 @attrs.define
 class DocumentSymbolClientCapabilitiesSymbolKindType:
-    value_set: Optional[List[SymbolKind]] = attrs.field(default=None)
+    value_set: Optional[Sequence[SymbolKind]] = attrs.field(default=None)
     """The symbol kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -8134,7 +8138,7 @@ class DocumentSymbolClientCapabilitiesSymbolKindType:
 
 @attrs.define
 class DocumentSymbolClientCapabilitiesTagSupportType:
-    value_set: List[SymbolTag] = attrs.field()
+    value_set: Sequence[SymbolTag] = attrs.field()
     """The tags supported by the client."""
 
 
@@ -8183,7 +8187,7 @@ class DocumentSymbolClientCapabilities:
 
 @attrs.define
 class CodeActionClientCapabilitiesCodeActionLiteralSupportTypeCodeActionKindType:
-    value_set: List[Union[CodeActionKind, str]] = attrs.field()
+    value_set: Sequence[Union[CodeActionKind, str]] = attrs.field()
     """The code action kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -8201,7 +8205,7 @@ class CodeActionClientCapabilitiesCodeActionLiteralSupportType:
 
 @attrs.define
 class CodeActionClientCapabilitiesResolveSupportType:
-    properties: List[str] = attrs.field()
+    properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily."""
 
 
@@ -8408,7 +8412,9 @@ class RenameClientCapabilities:
 
 @attrs.define
 class FoldingRangeClientCapabilitiesFoldingRangeKindType:
-    value_set: Optional[List[Union[FoldingRangeKind, str]]] = attrs.field(default=None)
+    value_set: Optional[Sequence[Union[FoldingRangeKind, str]]] = attrs.field(
+        default=None
+    )
     """The folding range kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back
@@ -8484,7 +8490,7 @@ class SelectionRangeClientCapabilities:
 
 @attrs.define
 class PublishDiagnosticsClientCapabilitiesTagSupportType:
-    value_set: List[DiagnosticTag] = attrs.field()
+    value_set: Sequence[DiagnosticTag] = attrs.field()
     """The tags supported by the client."""
 
 
@@ -8592,13 +8598,13 @@ class SemanticTokensClientCapabilities:
     range provider the client might not render a minimap correctly or might
     even decide to not show any semantic tokens at all."""
 
-    token_types: List[str] = attrs.field()
+    token_types: Sequence[str] = attrs.field()
     """The token types that the client supports."""
 
-    token_modifiers: List[str] = attrs.field()
+    token_modifiers: Sequence[str] = attrs.field()
     """The token modifiers that the client supports."""
 
-    formats: List[TokenFormat] = attrs.field()
+    formats: Sequence[TokenFormat] = attrs.field()
     """The token formats the clients supports."""
 
     dynamic_registration: Optional[bool] = attrs.field(
@@ -8716,7 +8722,7 @@ class InlineValueClientCapabilities:
 
 @attrs.define
 class InlayHintClientCapabilitiesResolveSupportType:
-    properties: List[str] = attrs.field()
+    properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily."""
 
 
@@ -8874,7 +8880,7 @@ class MarkdownClientCapabilities:
     )
     """The version of the parser."""
 
-    allowed_tags: Optional[List[str]] = attrs.field(default=None)
+    allowed_tags: Optional[Sequence[str]] = attrs.field(default=None)
     """A list of HTML tags that the client allows / supports in
     Markdown.
     
@@ -8934,7 +8940,9 @@ class TextDocumentImplementationRequest:
 class TextDocumentImplementationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[Definition, List[DefinitionLink], None] = attrs.field(default=None)
+    result: Union[Definition, Sequence[DefinitionLink], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8956,7 +8964,9 @@ class TextDocumentTypeDefinitionRequest:
 class TextDocumentTypeDefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[Definition, List[DefinitionLink], None] = attrs.field(default=None)
+    result: Union[Definition, Sequence[DefinitionLink], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -8976,7 +8986,7 @@ class WorkspaceWorkspaceFoldersRequest:
 class WorkspaceWorkspaceFoldersResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[WorkspaceFolder], None] = attrs.field(default=None)
+    result: Union[Sequence[WorkspaceFolder], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9005,7 +9015,7 @@ class WorkspaceConfigurationRequest:
 class WorkspaceConfigurationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: List[LSPAny] = attrs.field(default=None)
+    result: Sequence[LSPAny] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9028,7 +9038,7 @@ class TextDocumentDocumentColorRequest:
 class TextDocumentDocumentColorResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: List[ColorInformation] = attrs.field(default=None)
+    result: Sequence[ColorInformation] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9051,7 +9061,7 @@ class TextDocumentColorPresentationRequest:
 class TextDocumentColorPresentationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: List[ColorPresentation] = attrs.field(default=None)
+    result: Sequence[ColorPresentation] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9074,7 +9084,7 @@ class TextDocumentFoldingRangeRequest:
 class TextDocumentFoldingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[FoldingRange], None] = attrs.field(default=None)
+    result: Union[Sequence[FoldingRange], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9118,7 +9128,9 @@ class TextDocumentDeclarationRequest:
 class TextDocumentDeclarationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[Declaration, List[DeclarationLink], None] = attrs.field(default=None)
+    result: Union[Declaration, Sequence[DeclarationLink], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9141,7 +9153,7 @@ class TextDocumentSelectionRangeRequest:
 class TextDocumentSelectionRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[SelectionRange], None] = attrs.field(default=None)
+    result: Union[Sequence[SelectionRange], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9185,7 +9197,7 @@ class TextDocumentPrepareCallHierarchyRequest:
 class TextDocumentPrepareCallHierarchyResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[CallHierarchyItem], None] = attrs.field(default=None)
+    result: Union[Sequence[CallHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9207,7 +9219,7 @@ class CallHierarchyIncomingCallsRequest:
 class CallHierarchyIncomingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[CallHierarchyIncomingCall], None] = attrs.field(default=None)
+    result: Union[Sequence[CallHierarchyIncomingCall], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9229,7 +9241,7 @@ class CallHierarchyOutgoingCallsRequest:
 class CallHierarchyOutgoingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[CallHierarchyOutgoingCall], None] = attrs.field(default=None)
+    result: Union[Sequence[CallHierarchyOutgoingCall], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9451,7 +9463,7 @@ class TextDocumentMonikerRequest:
 class TextDocumentMonikerResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[Moniker], None] = attrs.field(default=None)
+    result: Union[Sequence[Moniker], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9474,7 +9486,7 @@ class TextDocumentPrepareTypeHierarchyRequest:
 class TextDocumentPrepareTypeHierarchyResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TypeHierarchyItem], None] = attrs.field(default=None)
+    result: Union[Sequence[TypeHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9496,7 +9508,7 @@ class TypeHierarchySupertypesRequest:
 class TypeHierarchySupertypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TypeHierarchyItem], None] = attrs.field(default=None)
+    result: Union[Sequence[TypeHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9518,7 +9530,7 @@ class TypeHierarchySubtypesRequest:
 class TypeHierarchySubtypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TypeHierarchyItem], None] = attrs.field(default=None)
+    result: Union[Sequence[TypeHierarchyItem], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9542,7 +9554,7 @@ class TextDocumentInlineValueRequest:
 class TextDocumentInlineValueResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[InlineValue], None] = attrs.field(default=None)
+    result: Union[Sequence[InlineValue], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9586,7 +9598,7 @@ class TextDocumentInlayHintRequest:
 class TextDocumentInlayHintResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[InlayHint], None] = attrs.field(default=None)
+    result: Union[Sequence[InlayHint], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9721,9 +9733,9 @@ class TextDocumentInlineCompletionRequest:
 class TextDocumentInlineCompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[InlineCompletionList, List[InlineCompletionItem], None] = attrs.field(
-        default=None
-    )
+    result: Union[
+        InlineCompletionList, Sequence[InlineCompletionItem], None
+    ] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9858,7 +9870,7 @@ class TextDocumentWillSaveWaitUntilRequest:
 class TextDocumentWillSaveWaitUntilResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TextEdit], None] = attrs.field(default=None)
+    result: Union[Sequence[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9886,7 +9898,7 @@ class TextDocumentCompletionRequest:
 class TextDocumentCompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[CompletionItem], CompletionList, None] = attrs.field(
+    result: Union[Sequence[CompletionItem], CompletionList, None] = attrs.field(
         default=None
     )
     jsonrpc: str = attrs.field(default="2.0")
@@ -9973,7 +9985,9 @@ class TextDocumentDefinitionRequest:
 class TextDocumentDefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[Definition, List[DefinitionLink], None] = attrs.field(default=None)
+    result: Union[Definition, Sequence[DefinitionLink], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9996,7 +10010,7 @@ class TextDocumentReferencesRequest:
 class TextDocumentReferencesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[Location], None] = attrs.field(default=None)
+    result: Union[Sequence[Location], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10019,7 +10033,7 @@ class TextDocumentDocumentHighlightRequest:
 class TextDocumentDocumentHighlightResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[DocumentHighlight], None] = attrs.field(default=None)
+    result: Union[Sequence[DocumentHighlight], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10042,9 +10056,9 @@ class TextDocumentDocumentSymbolRequest:
 class TextDocumentDocumentSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[SymbolInformation], List[DocumentSymbol], None] = attrs.field(
-        default=None
-    )
+    result: Union[
+        Sequence[SymbolInformation], Sequence[DocumentSymbol], None
+    ] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10064,7 +10078,9 @@ class TextDocumentCodeActionRequest:
 class TextDocumentCodeActionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[Union[Command, CodeAction]], None] = attrs.field(default=None)
+    result: Union[Sequence[Union[Command, CodeAction]], None] = attrs.field(
+        default=None
+    )
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10113,9 +10129,9 @@ class WorkspaceSymbolRequest:
 class WorkspaceSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[SymbolInformation], List[WorkspaceSymbol], None] = attrs.field(
-        default=None
-    )
+    result: Union[
+        Sequence[SymbolInformation], Sequence[WorkspaceSymbol], None
+    ] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10158,7 +10174,7 @@ class TextDocumentCodeLensRequest:
 class TextDocumentCodeLensResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[CodeLens], None] = attrs.field(default=None)
+    result: Union[Sequence[CodeLens], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10220,7 +10236,7 @@ class TextDocumentDocumentLinkRequest:
 class TextDocumentDocumentLinkResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[DocumentLink], None] = attrs.field(default=None)
+    result: Union[Sequence[DocumentLink], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10262,7 +10278,7 @@ class TextDocumentFormattingRequest:
 class TextDocumentFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TextEdit], None] = attrs.field(default=None)
+    result: Union[Sequence[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10282,7 +10298,7 @@ class TextDocumentRangeFormattingRequest:
 class TextDocumentRangeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TextEdit], None] = attrs.field(default=None)
+    result: Union[Sequence[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10305,7 +10321,7 @@ class TextDocumentRangesFormattingRequest:
 class TextDocumentRangesFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TextEdit], None] = attrs.field(default=None)
+    result: Union[Sequence[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10325,7 +10341,7 @@ class TextDocumentOnTypeFormattingRequest:
 class TextDocumentOnTypeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: Union[List[TextEdit], None] = attrs.field(default=None)
+    result: Union[Sequence[TextEdit], None] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 

@@ -908,7 +908,9 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             _code_action_hook,
         ),
         (
-            Optional[Union[Sequence[lsp_types.CompletionItem], lsp_types.CompletionList]],
+            Optional[
+                Union[Sequence[lsp_types.CompletionItem], lsp_types.CompletionList]
+            ],
             _completion_list_hook,
         ),
         (
@@ -923,7 +925,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         ),
         (
             Optional[
-                Union[Sequence[lsp_types.SymbolInformation], Sequence[lsp_types.DocumentSymbol]]
+                Union[
+                    Sequence[lsp_types.SymbolInformation],
+                    Sequence[lsp_types.DocumentSymbol],
+                ]
             ],
             _symbol_hook,
         ),
@@ -1033,7 +1038,8 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[
                 Union[
-                    lsp_types.InlineCompletionList, Sequence[lsp_types.InlineCompletionItem]
+                    lsp_types.InlineCompletionList,
+                    Sequence[lsp_types.InlineCompletionItem],
                 ]
             ],
             _inline_completion_list_hook,
@@ -1045,7 +1051,8 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[
                 Union[
-                    Sequence[lsp_types.SymbolInformation], Sequence[lsp_types.WorkspaceSymbol]
+                    Sequence[lsp_types.SymbolInformation],
+                    Sequence[lsp_types.WorkspaceSymbol],
                 ]
             ],
             _symbol_list_hook,
@@ -1153,7 +1160,13 @@ def _register_required_structure_hooks(
         ),
         (
             Union[
-                lsp_types.LSPObject, Sequence[lsp_types.LSPAny], str, int, float, bool, None
+                lsp_types.LSPObject,
+                Sequence[lsp_types.LSPAny],
+                str,
+                int,
+                float,
+                bool,
+                None,
             ],
             _lsp_object_hook,
         ),

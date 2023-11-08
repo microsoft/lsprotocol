@@ -667,15 +667,7 @@ def generate_extras(
 ) -> List[str]:
     extras = []
     if type_def.deprecated:
-        extras = ["#[deprecated]"]
-    elif type_def.proposed:
-        if type_def.since:
-            extras = [f'#[cfg(feature = "proposed", since = "{type_def.since}")]']
-        else:
-            extras = [f'#[cfg(feature = "proposed")]']
-    # else:
-    #     if type_def.since:
-    #         extras = [f'#[cfg(feature = "stable", since = "{type_def.since}")]']
-    #     else:
-    #         extras = [f'#[cfg(feature = "stable")]']
+        extras += ["#[deprecated]"]
+    if type_def.proposed:
+        extras += ['#[cfg(feature = "proposed")]']
     return extras

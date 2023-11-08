@@ -18,8 +18,8 @@ mod tests {
             .collect()
     }
 
-    fn validate_type<T: for<'de> Deserialize<'de>>(result_type: &str, data: &Value) {
-        match serde_json::from_value::<T>(data.clone()) {
+    fn validate_type<T: for<'de> Deserialize<'de>>(result_type: &str, data: &str) {
+        match serde_json::from_str::<T>(data) {
             Ok(_) => assert_eq!(
                 result_type, "True",
                 "Expected error, but succeeded deserializing"
@@ -31,7 +31,7 @@ mod tests {
         }
     }
 
-    fn validate(lsp_type: &str, result_type: &str, data: &Value) {
+    fn validate(lsp_type: &str, result_type: &str, data: &str) {
         match lsp_type {
             "CallHierarchyIncomingCallsRequest" => {
                 return validate_type::<CallHierarchyIncomingCallsRequest>(result_type, data)
@@ -61,18 +61,31 @@ mod tests {
             let lsp_type = type_name_result_type[0];
             let result_type = type_name_result_type[1];
             println!("Validating: {}", json_file);
-            let data: Value =
-                serde_json::from_str(&fs::read_to_string(json_file.clone()).unwrap()).unwrap();
+            let data = &fs::read_to_string(json_file.clone()).unwrap();
 
             validate(&lsp_type, &result_type, &data);
         }
     }
 }
 
-use lsprotocol::*;
-use std::fs;
-fn main() {
-    // let file_path: String = "".to_string();
-    // let data = &fs::read_to_string(file_path.clone()).unwrap();
-    // let result: CallHierarchyIncomingCallsRequest = serde_json::from_str(data).unwrap();
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+enum MyEnum {
+    Something = 1,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+struct MyStruct {
+    pub kind: MyEnum,
+}
+
+fn main() {
+    let json_str = "{\"kind\": 1}";
+    let _result: MyStruct = serde_json::from_str(json_str).unwrap();
+}
+
+// let file_path: String = "".to_string();
+// let data = &fs::read_to_string(file_path.clone()).unwrap();
+// let result: CallHierarchyIncomingCallsRequest = serde_json::from_str(data).unwrap();

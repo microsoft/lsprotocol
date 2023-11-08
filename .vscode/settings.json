@@ -19,5 +19,5 @@
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
     "python.analysis.extraPaths": ["packages/python", "tests/python/common"],
-    "rust-analyzer.linkedProjects": ["packages/rust/lsprotocol/Cargo.toml"]
+    "rust-analyzer.linkedProjects": ["packages/rust/lsprotocol/Cargo.toml", "tests/rust/Cargo.toml"]
 }

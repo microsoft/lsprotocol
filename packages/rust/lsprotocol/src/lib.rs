@@ -334,12 +334,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
-    #[serde(rename = "clientToServer")]
-    ClientToServer,
     #[serde(rename = "both")]
     Both,
     #[serde(rename = "serverToClient")]
     ServerToClient,
+    #[serde(rename = "clientToServer")]
+    ClientToServer,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -942,7 +942,7 @@ pub enum MarkupKind {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum InlineCompletionTriggerKind {
     /// Completion was triggered explicitly by a user gesture.
@@ -2660,7 +2660,7 @@ pub struct DidCloseNotebookDocumentParams {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionParams {
@@ -2682,7 +2682,7 @@ pub struct InlineCompletionParams {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionList {
@@ -2694,7 +2694,7 @@ pub struct InlineCompletionList {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionItem {
@@ -2715,7 +2715,7 @@ pub struct InlineCompletionItem {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionRegistrationOptions {
@@ -3997,7 +3997,7 @@ pub struct DocumentRangeFormattingRegistrationOptions {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub ranges_support: Option<bool>,
 }
 
@@ -4005,7 +4005,7 @@ pub struct DocumentRangeFormattingRegistrationOptions {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct DocumentRangesFormattingParams {
@@ -5077,7 +5077,7 @@ pub struct NotebookDocumentIdentifier {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionContext {
@@ -5098,7 +5098,7 @@ pub struct InlineCompletionContext {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct StringValue {
@@ -5113,7 +5113,7 @@ pub struct StringValue {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionOptions {
@@ -5310,7 +5310,7 @@ pub struct ServerCapabilities {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub inline_completion_provider: Option<OR2<bool, InlineCompletionOptions>>,
 
     /// The server provides inline values.
@@ -5819,7 +5819,7 @@ pub struct DocumentRangeFormattingOptions {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub ranges_support: Option<bool>,
 
     pub work_done_progress: Option<bool>,
@@ -6073,7 +6073,7 @@ pub struct NotebookCellArrayChange {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SelectedCompletionInfo {
@@ -6384,7 +6384,7 @@ pub struct WorkspaceClientCapabilities {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub folding_range: Option<FoldingRangeWorkspaceClientCapabilities>,
 
     /// Capabilities specific to the inlay hint requests scoped to the
@@ -6488,7 +6488,7 @@ pub struct TextDocumentClientCapabilities {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub inline_completion: Option<InlineCompletionClientCapabilities>,
 
     /// Capabilities specific to the `textDocument/inlineValue` request.
@@ -6895,7 +6895,7 @@ pub struct DiagnosticWorkspaceClientCapabilities {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct FoldingRangeWorkspaceClientCapabilities {
@@ -6909,7 +6909,7 @@ pub struct FoldingRangeWorkspaceClientCapabilities {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub refresh_support: Option<bool>,
 }
 
@@ -7369,7 +7369,7 @@ pub struct DocumentRangeFormattingClientCapabilities {
     ///
     /// @since 3.18.0
     /// @proposed
-    #[cfg(feature = "proposed", since = "3.18.0")]
+    #[cfg(feature = "proposed")]
     pub ranges_support: Option<bool>,
 }
 
@@ -7678,7 +7678,7 @@ pub struct DiagnosticClientCapabilities {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct InlineCompletionClientCapabilities {
@@ -8400,7 +8400,7 @@ pub struct TextDocumentFoldingRangeResponse {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkspaceFoldingRangeRefreshRequest {
@@ -9371,7 +9371,7 @@ pub struct WorkspaceDiagnosticRefreshResponse {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentInlineCompletionRequest {
@@ -10273,7 +10273,7 @@ pub struct TextDocumentRangeFormattingResponse {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentRangesFormattingRequest {

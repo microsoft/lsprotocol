@@ -21,23 +21,27 @@ mod tests {
         match serde_json::from_str::<T>(data) {
             Ok(_) => assert_eq!(
                 result_type, "True",
-                "Expected error, but succeeded deserializing"
+                "Expected error, but succeeded deserializing:\r\n{}",
+                data
             ),
             Err(e) => assert_eq!(
-                result_type, "False",
-                "Expected success, but failed deserializing: {e}",
+                result_type,
+                "False",
+                "Expected success, but failed deserializing: {}\r\nJSON data:\r\n{}",
+                e.to_string(),
+                data
             ),
         }
     }
 
     fn validate(lsp_type: &str, result_type: &str, data: &str) {
+        println!("Validating: {}", lsp_type);
         match lsp_type {
-            // Start of generated code
-
             // Sample Generated Code:
             // "CallHierarchyIncomingCallsRequest" => {
             //     return validate_type::<CallHierarchyIncomingCallsRequest>(result_type, data)
             // }
+            // GENERATED_TEST_CODE:start
             "TextDocumentImplementationRequest" => {
                 return validate_type::<TextDocumentImplementationRequest>(result_type, data)
             }
@@ -326,7 +330,7 @@ mod tests {
             "ProgressNotification" => {
                 return validate_type::<ProgressNotification>(result_type, data)
             }
-            // End of generated code
+            // GENERATED_TEST_CODE:end
             _ => (),
         }
     }
@@ -350,7 +354,6 @@ mod tests {
             let type_name_result_type: Vec<&str> = basename.split("-").collect();
             let lsp_type = type_name_result_type[0];
             let result_type = type_name_result_type[1];
-            println!("Validating: {}", json_file);
             let data = &fs::read_to_string(json_file.clone()).unwrap();
 
             validate(&lsp_type, &result_type, &data);
@@ -358,4 +361,10 @@ mod tests {
     }
 }
 
-fn main() {}
+fn main() {
+    // Use data from test error report here to debug
+    // let json_data = "";
+
+    // Update the type here to debug
+    // serde_json::from_str::<lsprotocol::TextDocumentCompletionRequest>(json_data).unwrap();
+}

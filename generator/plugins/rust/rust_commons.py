@@ -324,7 +324,7 @@ def generate_extra_types(spec: model.LSPModel, type_data: TypeData) -> None:
         ),
     )
 
-    direction = set([m.messageDirection for m in (spec.requests + spec.notifications)])
+    direction = sorted(set([m.messageDirection for m in (spec.requests + spec.notifications)]))
     type_data.add_type_info(
         model.ReferenceType(kind="reference", name="MessageDirection"),
         "MessageDirection",
@@ -461,7 +461,6 @@ def get_type_name(
                 f"OR type with more than out of range count of subtypes: {type_def}"
             )
         optional = optional or is_special(type_def)
-        print(f"Option<{name}>" if optional else name)
     elif type_def.kind == "literal":
         name = generate_literal_struct_type(type_def, types, spec, name_context)
     elif type_def.kind == "stringLiteral":
@@ -611,7 +610,7 @@ def struct_wrapper(
         + generate_extras(type_def)
         + [
             "#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]",
-            '#[serde(rename_all = "camelCase")]',
+            '#[serde(rename_all = "camelCase", deny_unknown_fields)]',
             f"pub struct {name}",
             "{",
         ]

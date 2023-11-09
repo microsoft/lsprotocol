@@ -334,12 +334,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
+    #[serde(rename = "both")]
+    Both,
     #[serde(rename = "clientToServer")]
     ClientToServer,
     #[serde(rename = "serverToClient")]
     ServerToClient,
-    #[serde(rename = "both")]
-    Both,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -2036,7 +2036,7 @@ pub enum NotebookDocumentFilter {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ImplementationParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2055,7 +2055,7 @@ pub struct ImplementationParams {
 /// Represents a location inside a resource, such as a line
 /// inside a text file.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Location {
     pub range: Range,
 
@@ -2063,7 +2063,7 @@ pub struct Location {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ImplementationRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2076,7 +2076,7 @@ pub struct ImplementationRegistrationOptions {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeDefinitionParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2093,7 +2093,7 @@ pub struct TypeDefinitionParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeDefinitionRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2107,7 +2107,7 @@ pub struct TypeDefinitionRegistrationOptions {
 
 /// A workspace folder inside a client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFolder {
     /// The name of the workspace folder. Used to refer to this
     /// workspace folder in the user interface.
@@ -2119,7 +2119,7 @@ pub struct WorkspaceFolder {
 
 /// The parameters of a `workspace/didChangeWorkspaceFolders` notification.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeWorkspaceFoldersParams {
     /// The actual workspace folder change event.
     pub event: WorkspaceFoldersChangeEvent,
@@ -2127,14 +2127,14 @@ pub struct DidChangeWorkspaceFoldersParams {
 
 /// The parameters of a configuration request.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ConfigurationParams {
     pub items: Vec<ConfigurationItem>,
 }
 
 /// Parameters for a [DocumentColorRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentColorParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2149,7 +2149,7 @@ pub struct DocumentColorParams {
 
 /// Represents a color range from a document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ColorInformation {
     /// The actual color value for this color range.
     pub color: Color,
@@ -2159,7 +2159,7 @@ pub struct ColorInformation {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentColorRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2173,7 +2173,7 @@ pub struct DocumentColorRegistrationOptions {
 
 /// Parameters for a [ColorPresentationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ColorPresentationParams {
     /// The color to request presentations for.
     pub color: Color,
@@ -2193,7 +2193,7 @@ pub struct ColorPresentationParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ColorPresentation {
     /// An optional array of additional [text edits][TextEdit] that are applied when
     /// selecting this color presentation. Edits must not overlap with the main [edit][`ColorPresentation::textEdit`] nor with themselves.
@@ -2211,14 +2211,14 @@ pub struct ColorPresentation {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// General text document registration options.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2228,7 +2228,7 @@ pub struct TextDocumentRegistrationOptions {
 
 /// Parameters for a [FoldingRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRangeParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2244,7 +2244,7 @@ pub struct FoldingRangeParams {
 /// Represents a folding range. To be valid, start and end line must be bigger than zero and smaller
 /// than the number of lines in the document. Clients are free to ignore invalid ranges.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRange {
     /// The text that the client should show when the specified range is
     /// collapsed. If not defined or not supported by the client, a default
@@ -2274,7 +2274,7 @@ pub struct FoldingRange {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRangeRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2287,7 +2287,7 @@ pub struct FoldingRangeRegistrationOptions {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeclarationParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2304,7 +2304,7 @@ pub struct DeclarationParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeclarationRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2318,7 +2318,7 @@ pub struct DeclarationRegistrationOptions {
 
 /// A parameter literal used in selection range requests.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SelectionRangeParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2335,7 +2335,7 @@ pub struct SelectionRangeParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SelectionRangeRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2348,14 +2348,14 @@ pub struct SelectionRangeRegistrationOptions {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressCreateParams {
     /// The token to be used to report progress.
     pub token: ProgressToken,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressCancelParams {
     /// The token to be used to report progress.
     pub token: ProgressToken,
@@ -2365,7 +2365,7 @@ pub struct WorkDoneProgressCancelParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyPrepareParams {
     /// The position inside the text document.
     pub position: Position,
@@ -2382,7 +2382,7 @@ pub struct CallHierarchyPrepareParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyItem {
     /// A data entry field that is preserved between a call hierarchy prepare and
     /// incoming calls or outgoing calls requests.
@@ -2415,7 +2415,7 @@ pub struct CallHierarchyItem {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2431,7 +2431,7 @@ pub struct CallHierarchyRegistrationOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyIncomingCallsParams {
     pub item: CallHierarchyItem,
 
@@ -2447,7 +2447,7 @@ pub struct CallHierarchyIncomingCallsParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyIncomingCall {
     /// The item that makes the call.
     pub from: CallHierarchyItem,
@@ -2461,7 +2461,7 @@ pub struct CallHierarchyIncomingCall {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyOutgoingCallsParams {
     pub item: CallHierarchyItem,
 
@@ -2477,7 +2477,7 @@ pub struct CallHierarchyOutgoingCallsParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyOutgoingCall {
     /// The range at which this item is called. This is the range relative to the caller, e.g the item
     /// passed to [`provideCallHierarchyOutgoingCalls`][`CallHierarchyItemProvider::provideCallHierarchyOutgoingCalls`]
@@ -2490,7 +2490,7 @@ pub struct CallHierarchyOutgoingCall {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2505,7 +2505,7 @@ pub struct SemanticTokensParams {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokens {
     /// The actual tokens.
     pub data: Vec<u32>,
@@ -2519,14 +2519,14 @@ pub struct SemanticTokens {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensPartialResult {
     pub data: Vec<u32>,
 }
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2550,7 +2550,7 @@ pub struct SemanticTokensRegistrationOptions {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensDeltaParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2569,7 +2569,7 @@ pub struct SemanticTokensDeltaParams {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensDelta {
     /// The semantic token edits to transform a previous result into a new result.
     pub edits: Vec<SemanticTokensEdit>,
@@ -2579,14 +2579,14 @@ pub struct SemanticTokensDelta {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensDeltaPartialResult {
     pub edits: Vec<SemanticTokensEdit>,
 }
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensRangeParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2606,7 +2606,7 @@ pub struct SemanticTokensRangeParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShowDocumentParams {
     /// Indicates to show the resource in an external program.
     /// To show, for example, `https://code.visualstudio.com/`
@@ -2633,14 +2633,14 @@ pub struct ShowDocumentParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShowDocumentResult {
     /// A boolean indicating if the show was successful.
     pub success: bool,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LinkedEditingRangeParams {
     /// The position inside the text document.
     pub position: Position,
@@ -2656,7 +2656,7 @@ pub struct LinkedEditingRangeParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LinkedEditingRanges {
     /// A list of ranges that can be edited together. The ranges must have
     /// identical length and contain identical text content. The ranges cannot overlap.
@@ -2669,7 +2669,7 @@ pub struct LinkedEditingRanges {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LinkedEditingRangeRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2686,7 +2686,7 @@ pub struct LinkedEditingRangeRegistrationOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CreateFilesParams {
     /// An array of all files/folders created in this operation.
     pub files: Vec<FileCreate>,
@@ -2705,7 +2705,7 @@ pub struct CreateFilesParams {
 /// cause failure of the operation. How the client recovers from the failure is described by
 /// the client capability: `workspace.workspaceEdit.failureHandling`
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceEdit {
     /// A map of change annotations that can be referenced in `AnnotatedTextEdit`s or create, rename and
     /// delete file / folder operations.
@@ -2735,7 +2735,7 @@ pub struct WorkspaceEdit {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileOperationRegistrationOptions {
     /// The actual filters.
     pub filters: Vec<FileOperationFilter>,
@@ -2746,7 +2746,7 @@ pub struct FileOperationRegistrationOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameFilesParams {
     /// An array of all files/folders renamed in this operation. When a folder is renamed, only
     /// the folder will be included, and not its children.
@@ -2758,14 +2758,14 @@ pub struct RenameFilesParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeleteFilesParams {
     /// An array of all files/folders deleted in this operation.
     pub files: Vec<FileDelete>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MonikerParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -2785,7 +2785,7 @@ pub struct MonikerParams {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Moniker {
     /// The identifier of the moniker. The value is opaque in LSIF however
     /// schema owners are allowed to define the structure if they want.
@@ -2802,7 +2802,7 @@ pub struct Moniker {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MonikerRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2814,7 +2814,7 @@ pub struct MonikerRegistrationOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchyPrepareParams {
     /// The position inside the text document.
     pub position: Position,
@@ -2828,7 +2828,7 @@ pub struct TypeHierarchyPrepareParams {
 
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchyItem {
     /// A data entry field that is preserved between a type hierarchy prepare and
     /// supertypes or subtypes requests. It could also be used to identify the
@@ -2865,7 +2865,7 @@ pub struct TypeHierarchyItem {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchyRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2881,7 +2881,7 @@ pub struct TypeHierarchyRegistrationOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchySupertypesParams {
     pub item: TypeHierarchyItem,
 
@@ -2897,7 +2897,7 @@ pub struct TypeHierarchySupertypesParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchySubtypesParams {
     pub item: TypeHierarchyItem,
 
@@ -2913,7 +2913,7 @@ pub struct TypeHierarchySubtypesParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueParams {
     /// Additional information about the context in which inline values were
     /// requested.
@@ -2933,7 +2933,7 @@ pub struct InlineValueParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -2949,7 +2949,7 @@ pub struct InlineValueRegistrationOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintParams {
     /// The document range for which inlay hints should be computed.
     pub range: Range,
@@ -2965,7 +2965,7 @@ pub struct InlayHintParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHint {
     /// A data entry field that is preserved on an inlay hint between
     /// a `textDocument/inlayHint` and a `inlayHint/resolve` request.
@@ -3013,7 +3013,7 @@ pub struct InlayHint {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3033,7 +3033,7 @@ pub struct InlayHintRegistrationOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentDiagnosticParams {
     /// The additional identifier  provided during registration.
     pub identifier: Option<String>,
@@ -3056,7 +3056,7 @@ pub struct DocumentDiagnosticParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentDiagnosticReportPartialResult {
     pub related_documents:
         HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
@@ -3066,7 +3066,7 @@ pub struct DocumentDiagnosticReportPartialResult {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticServerCancellationData {
     pub retrigger_request: bool,
 }
@@ -3075,7 +3075,7 @@ pub struct DiagnosticServerCancellationData {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3104,7 +3104,7 @@ pub struct DiagnosticRegistrationOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticParams {
     /// The additional identifier provided during registration.
     pub identifier: Option<String>,
@@ -3125,7 +3125,7 @@ pub struct WorkspaceDiagnosticParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticReport {
     pub items: Vec<WorkspaceDocumentDiagnosticReport>,
 }
@@ -3134,7 +3134,7 @@ pub struct WorkspaceDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticReportPartialResult {
     pub items: Vec<WorkspaceDocumentDiagnosticReport>,
 }
@@ -3143,7 +3143,7 @@ pub struct WorkspaceDiagnosticReportPartialResult {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidOpenNotebookDocumentParams {
     /// The text documents that represent the content
     /// of a notebook cell.
@@ -3157,7 +3157,7 @@ pub struct DidOpenNotebookDocumentParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeNotebookDocumentParams {
     /// The actual changes to the notebook document.
     ///
@@ -3185,7 +3185,7 @@ pub struct DidChangeNotebookDocumentParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidSaveNotebookDocumentParams {
     /// The notebook document that got saved.
     pub notebook_document: NotebookDocumentIdentifier,
@@ -3195,7 +3195,7 @@ pub struct DidSaveNotebookDocumentParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidCloseNotebookDocumentParams {
     /// The text documents that represent the content
     /// of a notebook cell that got closed.
@@ -3211,7 +3211,7 @@ pub struct DidCloseNotebookDocumentParams {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionParams {
     /// Additional information about the context in which inline completions were
     /// requested.
@@ -3233,7 +3233,7 @@ pub struct InlineCompletionParams {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionList {
     /// The inline completion items
     pub items: Vec<InlineCompletionItem>,
@@ -3245,7 +3245,7 @@ pub struct InlineCompletionList {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionItem {
     /// An optional [Command] that is executed *after* inserting this completion.
     pub command: Option<Command>,
@@ -3266,7 +3266,7 @@ pub struct InlineCompletionItem {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3279,19 +3279,19 @@ pub struct InlineCompletionRegistrationOptions {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RegistrationParams {
     pub registrations: Vec<Registration>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct UnregistrationParams {
     pub unregisterations: Vec<Unregistration>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializeParams {
     /// The capabilities provided by the client (editor or tool)
     pub capabilities: ClientCapabilities,
@@ -3353,7 +3353,7 @@ pub struct InitializeParams {
 
 /// The result returned from an initialize request.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializeResult {
     /// The capabilities the language server provides.
     pub capabilities: ServerCapabilities,
@@ -3367,7 +3367,7 @@ pub struct InitializeResult {
 /// The data type of the ResponseError if the
 /// initialize request fails.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializeError {
     /// Indicates whether the client execute the following retry logic:
     /// (1) show the message provided by the ResponseError to the user
@@ -3377,26 +3377,26 @@ pub struct InitializeError {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializedParams {}
 
 /// The parameters of a change configuration notification.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeConfigurationParams {
     /// The actual changed settings
     pub settings: LSPAny,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeConfigurationRegistrationOptions {
     pub section: Option<OR2<String, Vec<String>>>,
 }
 
 /// The parameters of a notification message.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShowMessageParams {
     /// The actual message.
     pub message: String,
@@ -3407,7 +3407,7 @@ pub struct ShowMessageParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShowMessageRequestParams {
     /// The message action items to present.
     pub actions: Option<Vec<MessageActionItem>>,
@@ -3421,7 +3421,7 @@ pub struct ShowMessageRequestParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MessageActionItem {
     /// A short title like 'Retry', 'Open Log' etc.
     pub title: String,
@@ -3429,7 +3429,7 @@ pub struct MessageActionItem {
 
 /// The log message parameters.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LogMessageParams {
     /// The actual message.
     pub message: String,
@@ -3441,7 +3441,7 @@ pub struct LogMessageParams {
 
 /// The parameters sent in an open text document notification
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidOpenTextDocumentParams {
     /// The document that was opened.
     pub text_document: TextDocumentItem,
@@ -3449,7 +3449,7 @@ pub struct DidOpenTextDocumentParams {
 
 /// The change text document notification's parameters.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeTextDocumentParams {
     /// The actual content changes. The content changes describe single state changes
     /// to the document. So if there are two content changes c1 (at array index 0) and
@@ -3472,7 +3472,7 @@ pub struct DidChangeTextDocumentParams {
 
 /// Describe options to be used when registered for text document change events.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentChangeRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3485,7 +3485,7 @@ pub struct TextDocumentChangeRegistrationOptions {
 
 /// The parameters sent in a close text document notification
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidCloseTextDocumentParams {
     /// The document that was closed.
     pub text_document: TextDocumentIdentifier,
@@ -3493,7 +3493,7 @@ pub struct DidCloseTextDocumentParams {
 
 /// The parameters sent in a save text document notification
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidSaveTextDocumentParams {
     /// Optional the content when saved. Depends on the includeText value
     /// when the save notification was requested.
@@ -3505,7 +3505,7 @@ pub struct DidSaveTextDocumentParams {
 
 /// Save registration options.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSaveRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3518,7 +3518,7 @@ pub struct TextDocumentSaveRegistrationOptions {
 
 /// The parameters sent in a will save text document notification.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WillSaveTextDocumentParams {
     /// The 'TextDocumentSaveReason'.
     pub reason: TextDocumentSaveReason,
@@ -3529,7 +3529,7 @@ pub struct WillSaveTextDocumentParams {
 
 /// A text edit applicable to a text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextEdit {
     /// The string to be inserted. For delete operations use an
     /// empty string.
@@ -3542,7 +3542,7 @@ pub struct TextEdit {
 
 /// The watched files change notification's parameters.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeWatchedFilesParams {
     /// The actual file events.
     pub changes: Vec<FileEvent>,
@@ -3550,7 +3550,7 @@ pub struct DidChangeWatchedFilesParams {
 
 /// Describe options to be used when registered for text document change events.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeWatchedFilesRegistrationOptions {
     /// The watchers to register.
     pub watchers: Vec<FileSystemWatcher>,
@@ -3558,7 +3558,7 @@ pub struct DidChangeWatchedFilesRegistrationOptions {
 
 /// The publish diagnostic notification's parameters.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PublishDiagnosticsParams {
     /// An array of diagnostic information items.
     pub diagnostics: Vec<Diagnostic>,
@@ -3574,7 +3574,7 @@ pub struct PublishDiagnosticsParams {
 
 /// Completion parameters
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionParams {
     /// The completion context. This is only available it the client specifies
     /// to send this using the client capability `textDocument.completion.contextSupport === true`
@@ -3597,7 +3597,7 @@ pub struct CompletionParams {
 /// A completion item represents a text snippet that is
 /// proposed to complete text that is being typed.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItem {
     /// An optional array of additional [text edits][TextEdit] that are applied when
     /// selecting this completion. Edits must not overlap (including the same insert position)
@@ -3740,7 +3740,7 @@ pub struct CompletionItem {
 /// Represents a collection of [completion items][CompletionItem] to be presented
 /// in the editor.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionList {
     /// This list it not complete. Further typing results in recomputing this list.
     ///
@@ -3769,7 +3769,7 @@ pub struct CompletionList {
 
 /// Registration options for a [CompletionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionRegistrationOptions {
     /// The list of all possible characters that commit a completion. This field can be used
     /// if clients don't support individual commit characters per completion item. See
@@ -3809,7 +3809,7 @@ pub struct CompletionRegistrationOptions {
 
 /// Parameters for a [HoverRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HoverParams {
     /// The position inside the text document.
     pub position: Position,
@@ -3823,7 +3823,7 @@ pub struct HoverParams {
 
 /// The result of a hover request.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Hover {
     /// The hover's content
     pub contents: OR3<MarkupContent, MarkedString, Vec<MarkedString>>,
@@ -3835,7 +3835,7 @@ pub struct Hover {
 
 /// Registration options for a [HoverRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HoverRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3845,7 +3845,7 @@ pub struct HoverRegistrationOptions {
 
 /// Parameters for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelpParams {
     /// The signature help context. This is only available if the client specifies
     /// to send this using the client capability `textDocument.signatureHelp.contextSupport === true`
@@ -3867,7 +3867,7 @@ pub struct SignatureHelpParams {
 /// callable. There can be multiple signature but only one
 /// active and only one active parameter.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelp {
     /// The active parameter of the active signature. If omitted or the value
     /// lies outside the range of `signatures[activeSignature].parameters`
@@ -3895,7 +3895,7 @@ pub struct SignatureHelp {
 
 /// Registration options for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelpRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3916,7 +3916,7 @@ pub struct SignatureHelpRegistrationOptions {
 
 /// Parameters for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DefinitionParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -3934,7 +3934,7 @@ pub struct DefinitionParams {
 
 /// Registration options for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DefinitionRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3944,7 +3944,7 @@ pub struct DefinitionRegistrationOptions {
 
 /// Parameters for a [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ReferenceParams {
     pub context: ReferenceContext,
 
@@ -3964,7 +3964,7 @@ pub struct ReferenceParams {
 
 /// Registration options for a [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ReferenceRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -3974,7 +3974,7 @@ pub struct ReferenceRegistrationOptions {
 
 /// Parameters for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentHighlightParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -3994,7 +3994,7 @@ pub struct DocumentHighlightParams {
 /// special attention. Usually a document highlight is visualized by changing
 /// the background color of its range.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentHighlight {
     /// The highlight kind, default is [text][`DocumentHighlightKind::Text`].
     pub kind: Option<DocumentHighlightKind>,
@@ -4005,7 +4005,7 @@ pub struct DocumentHighlight {
 
 /// Registration options for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentHighlightRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4015,7 +4015,7 @@ pub struct DocumentHighlightRegistrationOptions {
 
 /// Parameters for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentSymbolParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -4031,7 +4031,7 @@ pub struct DocumentSymbolParams {
 /// Represents information about programming constructs like variables, classes,
 /// interfaces etc.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SymbolInformation {
     /// The name of the symbol containing this symbol. This information is for
     /// user interface purposes (e.g. to render a qualifier in the user interface
@@ -4073,7 +4073,7 @@ pub struct SymbolInformation {
 /// have two ranges: one that encloses its definition and one that points to
 /// its most interesting range, e.g. the range of an identifier.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentSymbol {
     /// Children of this symbol, e.g. properties of a class.
     pub children: Option<Vec<DocumentSymbol>>,
@@ -4111,7 +4111,7 @@ pub struct DocumentSymbol {
 
 /// Registration options for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentSymbolRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4127,7 +4127,7 @@ pub struct DocumentSymbolRegistrationOptions {
 
 /// The parameters of a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionParams {
     /// Context carrying additional information.
     pub context: CodeActionContext,
@@ -4151,7 +4151,7 @@ pub struct CodeActionParams {
 /// an array of arguments which will be passed to the command handler
 /// function when invoked.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Command {
     /// Arguments that the command handler should be
     /// invoked with.
@@ -4169,7 +4169,7 @@ pub struct Command {
 ///
 /// A CodeAction must set either `edit` and/or a `command`. If both are supplied, the `edit` is applied first, then the `command` is executed.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeAction {
     /// A command this code action executes. If a code action
     /// provides an edit and a command, first the edit is
@@ -4225,7 +4225,7 @@ pub struct CodeAction {
 
 /// Registration options for a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionRegistrationOptions {
     /// CodeActionKinds that this server may return.
     ///
@@ -4247,7 +4247,7 @@ pub struct CodeActionRegistrationOptions {
 
 /// The parameters of a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -4267,7 +4267,7 @@ pub struct WorkspaceSymbolParams {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbol {
     /// The name of the symbol containing this symbol. This information is for
     /// user interface purposes (e.g. to render a qualifier in the user interface
@@ -4300,7 +4300,7 @@ pub struct WorkspaceSymbol {
 
 /// Registration options for a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolRegistrationOptions {
     /// The server provides support to resolve additional
     /// information for a workspace symbol.
@@ -4311,7 +4311,7 @@ pub struct WorkspaceSymbolRegistrationOptions {
 
 /// The parameters of a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -4330,7 +4330,7 @@ pub struct CodeLensParams {
 /// A code lens is _unresolved_ when no command is associated to it. For performance
 /// reasons the creation of a code lens and resolving should be done in two stages.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLens {
     /// The command this code lens represents.
     pub command: Option<Command>,
@@ -4345,7 +4345,7 @@ pub struct CodeLens {
 
 /// Registration options for a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4358,7 +4358,7 @@ pub struct CodeLensRegistrationOptions {
 
 /// The parameters of a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLinkParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -4374,7 +4374,7 @@ pub struct DocumentLinkParams {
 /// A document link is a range in a text document that links to an internal or external resource, like another
 /// text document or a web site.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLink {
     /// A data entry field that is preserved on a document link between a
     /// DocumentLinkRequest and a DocumentLinkResolveRequest.
@@ -4398,7 +4398,7 @@ pub struct DocumentLink {
 
 /// Registration options for a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLinkRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4411,7 +4411,7 @@ pub struct DocumentLinkRegistrationOptions {
 
 /// The parameters of a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentFormattingParams {
     /// The format options.
     pub options: FormattingOptions,
@@ -4425,7 +4425,7 @@ pub struct DocumentFormattingParams {
 
 /// Registration options for a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentFormattingRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4435,7 +4435,7 @@ pub struct DocumentFormattingRegistrationOptions {
 
 /// The parameters of a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentRangeFormattingParams {
     /// The format options
     pub options: FormattingOptions,
@@ -4452,7 +4452,7 @@ pub struct DocumentRangeFormattingParams {
 
 /// Registration options for a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentRangeFormattingRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4473,7 +4473,7 @@ pub struct DocumentRangeFormattingRegistrationOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentRangesFormattingParams {
     /// The format options
     pub options: FormattingOptions,
@@ -4490,7 +4490,7 @@ pub struct DocumentRangesFormattingParams {
 
 /// The parameters of a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentOnTypeFormattingParams {
     /// The character that has been typed that triggered the formatting
     /// on type request. That is not necessarily the last character that
@@ -4512,7 +4512,7 @@ pub struct DocumentOnTypeFormattingParams {
 
 /// Registration options for a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentOnTypeFormattingRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4528,7 +4528,7 @@ pub struct DocumentOnTypeFormattingRegistrationOptions {
 
 /// The parameters of a [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameParams {
     /// The new name of the symbol. If the given name is not valid the
     /// request must return a [ResponseError] with an
@@ -4547,7 +4547,7 @@ pub struct RenameParams {
 
 /// Registration options for a [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameRegistrationOptions {
     /// A document selector to identify the scope of the registration. If set to null
     /// the document selector provided on the client side will be used.
@@ -4561,7 +4561,7 @@ pub struct RenameRegistrationOptions {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PrepareRenameParams {
     /// The position inside the text document.
     pub position: Position,
@@ -4575,7 +4575,7 @@ pub struct PrepareRenameParams {
 
 /// The parameters of a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExecuteCommandParams {
     /// Arguments that the command should be invoked with.
     pub arguments: Option<Vec<LSPAny>>,
@@ -4589,7 +4589,7 @@ pub struct ExecuteCommandParams {
 
 /// Registration options for a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExecuteCommandRegistrationOptions {
     /// The commands to be executed on the server
     pub commands: Vec<String>,
@@ -4597,7 +4597,7 @@ pub struct ExecuteCommandRegistrationOptions {
 
 /// The parameters passed via an apply workspace edit request.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ApplyWorkspaceEditParams {
     /// The edits to apply.
     pub edit: WorkspaceEdit,
@@ -4612,7 +4612,7 @@ pub struct ApplyWorkspaceEditParams {
 ///
 /// @since 3.17 renamed from ApplyWorkspaceEditResponse
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ApplyWorkspaceEditResult {
     /// Indicates whether the edit was applied or not.
     pub applied: bool,
@@ -4629,7 +4629,7 @@ pub struct ApplyWorkspaceEditResult {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressBegin {
     /// Controls if a cancel button should show to allow the user to cancel the
     /// long running operation. Clients that don't support cancellation are allowed
@@ -4661,7 +4661,7 @@ pub struct WorkDoneProgressBegin {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressReport {
     /// Controls enablement state of a cancel button.
     ///
@@ -4688,7 +4688,7 @@ pub struct WorkDoneProgressReport {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressEnd {
     pub kind: String,
 
@@ -4698,13 +4698,13 @@ pub struct WorkDoneProgressEnd {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SetTraceParams {
     pub value: TraceValues,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LogTraceParams {
     pub message: String,
 
@@ -4712,14 +4712,14 @@ pub struct LogTraceParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CancelParams {
     /// The request id to cancel.
     pub id: OR2<i32, String>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ProgressParams {
     /// The progress token provided by the client or server.
     pub token: ProgressToken,
@@ -4731,7 +4731,7 @@ pub struct ProgressParams {
 /// A parameter literal used in requests to pass a text document and a position inside that
 /// document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPositionParams {
     /// The position inside the text document.
     pub position: Position,
@@ -4741,14 +4741,14 @@ pub struct TextDocumentPositionParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkDoneProgressParams {
     /// An optional token that a server can use to report work done progress.
     pub work_done_token: Option<ProgressToken>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PartialResultParams {
     /// An optional token that a server can use to report partial results (e.g. streaming) to
     /// the client.
@@ -4758,7 +4758,7 @@ pub struct PartialResultParams {
 /// Represents the connection of two locations. Provides additional metadata over normal [locations][Location],
 /// including an origin range.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LocationLink {
     /// Span of the origin of this link.
     ///
@@ -4791,7 +4791,7 @@ pub struct LocationLink {
 /// }
 /// ```
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Range {
     /// The range's end position.
     pub end: Position,
@@ -4801,7 +4801,7 @@ pub struct Range {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ImplementationOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -4809,7 +4809,7 @@ pub struct ImplementationOptions {
 /// Static registration options to be returned in the initialize
 /// request.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct StaticRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
@@ -4817,14 +4817,14 @@ pub struct StaticRegistrationOptions {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeDefinitionOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// The workspace folder change event.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFoldersChangeEvent {
     /// The array of added workspace folders
     pub added: Vec<WorkspaceFolder>,
@@ -4834,7 +4834,7 @@ pub struct WorkspaceFoldersChangeEvent {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ConfigurationItem {
     /// The scope to get the configuration section for.
     pub scope_uri: Option<String>,
@@ -4845,7 +4845,7 @@ pub struct ConfigurationItem {
 
 /// A literal to identify a text document in the client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentIdentifier {
     /// The text document's uri.
     pub uri: String,
@@ -4853,7 +4853,7 @@ pub struct TextDocumentIdentifier {
 
 /// Represents a color in RGBA space.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Color {
     /// The alpha component of this color in the range [0-1].
     pub alpha: Decimal,
@@ -4869,19 +4869,19 @@ pub struct Color {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentColorOptions {
     pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRangeOptions {
     pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeclarationOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -4914,7 +4914,7 @@ pub struct DeclarationOptions {
 ///
 /// @since 3.17.0 - support for negotiated position encoding.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Position {
     /// Character offset on a line in a document (zero-based).
     ///
@@ -4933,7 +4933,7 @@ pub struct Position {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SelectionRangeOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -4942,14 +4942,14 @@ pub struct SelectionRangeOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensOptions {
     /// Server supports providing semantic tokens for a full document.
     pub full: Option<OR2<bool, SemanticTokensFullDelta>>,
@@ -4966,7 +4966,7 @@ pub struct SemanticTokensOptions {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensEdit {
     /// The elements to insert.
     pub data: Option<Vec<u32>>,
@@ -4979,7 +4979,7 @@ pub struct SemanticTokensEdit {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LinkedEditingRangeOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -4988,7 +4988,7 @@ pub struct LinkedEditingRangeOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileCreate {
     /// A file:// URI for the location of the file/folder being created.
     pub uri: String,
@@ -4999,7 +4999,7 @@ pub struct FileCreate {
 /// So the creator of a TextDocumentEdit doesn't need to sort the array of edits or do any
 /// kind of ordering. However the edits must be non overlapping.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentEdit {
     /// The edits to be applied.
     ///
@@ -5013,7 +5013,7 @@ pub struct TextDocumentEdit {
 
 /// Create file operation.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CreateFile {
     /// An optional annotation identifier describing the operation.
     ///
@@ -5032,7 +5032,7 @@ pub struct CreateFile {
 
 /// Rename file operation
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameFile {
     /// An optional annotation identifier describing the operation.
     ///
@@ -5054,7 +5054,7 @@ pub struct RenameFile {
 
 /// Delete file operation
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeleteFile {
     /// An optional annotation identifier describing the operation.
     ///
@@ -5075,7 +5075,7 @@ pub struct DeleteFile {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ChangeAnnotation {
     /// A human-readable string which is rendered less prominent in
     /// the user interface.
@@ -5095,7 +5095,7 @@ pub struct ChangeAnnotation {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileOperationFilter {
     /// The actual file operation pattern.
     pub pattern: FileOperationPattern,
@@ -5108,7 +5108,7 @@ pub struct FileOperationFilter {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileRename {
     /// A file:// URI for the new location of the file/folder being renamed.
     pub new_uri: String,
@@ -5121,14 +5121,14 @@ pub struct FileRename {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileDelete {
     /// A file:// URI for the location of the file/folder being deleted.
     pub uri: String,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MonikerOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -5137,14 +5137,14 @@ pub struct MonikerOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchyOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueContext {
     /// The stack frame (as a DAP Id) where the execution has stopped.
     pub frame_id: i32,
@@ -5158,7 +5158,7 @@ pub struct InlineValueContext {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueText {
     /// The document range for which the inline value applies.
     pub range: Range,
@@ -5173,7 +5173,7 @@ pub struct InlineValueText {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueVariableLookup {
     /// How to perform the lookup.
     pub case_sensitive_lookup: bool,
@@ -5192,7 +5192,7 @@ pub struct InlineValueVariableLookup {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueEvaluatableExpression {
     /// If specified the expression overrides the extracted expression.
     pub expression: Option<String>,
@@ -5206,7 +5206,7 @@ pub struct InlineValueEvaluatableExpression {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -5216,7 +5216,7 @@ pub struct InlineValueOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintLabelPart {
     /// An optional command for this label part.
     ///
@@ -5269,7 +5269,7 @@ pub struct InlayHintLabelPart {
 /// *Please Note* that clients might sanitize the return markdown. A client could decide to
 /// remove HTML from the markdown to avoid script execution.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MarkupContent {
     /// The type of the Markup
     pub kind: MarkupKind,
@@ -5282,7 +5282,7 @@ pub struct MarkupContent {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintOptions {
     /// The server provides support to resolve additional
     /// information for an inlay hint item.
@@ -5295,7 +5295,7 @@ pub struct InlayHintOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RelatedFullDocumentDiagnosticReport {
     /// The actual items.
     pub items: Vec<Diagnostic>,
@@ -5324,7 +5324,7 @@ pub struct RelatedFullDocumentDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RelatedUnchangedDocumentDiagnosticReport {
     /// A document diagnostic report indicating
     /// no changes to the last result. A server can
@@ -5352,7 +5352,7 @@ pub struct RelatedUnchangedDocumentDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FullDocumentDiagnosticReport {
     /// The actual items.
     pub items: Vec<Diagnostic>,
@@ -5371,7 +5371,7 @@ pub struct FullDocumentDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct UnchangedDocumentDiagnosticReport {
     /// A document diagnostic report indicating
     /// no changes to the last result. A server can
@@ -5388,7 +5388,7 @@ pub struct UnchangedDocumentDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticOptions {
     /// An optional identifier under which the diagnostics are
     /// managed by the client.
@@ -5410,7 +5410,7 @@ pub struct DiagnosticOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PreviousResultId {
     /// The URI for which the client knowns a
     /// result id.
@@ -5424,7 +5424,7 @@ pub struct PreviousResultId {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocument {
     /// The cells of a notebook.
     pub cells: Vec<NotebookCell>,
@@ -5449,7 +5449,7 @@ pub struct NotebookDocument {
 /// An item to transfer a text document from the client to the
 /// server.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentItem {
     /// The text document's language identifier.
     pub language_id: String,
@@ -5469,7 +5469,7 @@ pub struct TextDocumentItem {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct VersionedNotebookDocumentIdentifier {
     /// The notebook document's uri.
     pub uri: String,
@@ -5482,7 +5482,7 @@ pub struct VersionedNotebookDocumentIdentifier {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentChangeEvent {
     /// Changes to cells
     pub cells: Option<NotebookDocumentCellChanges>,
@@ -5497,7 +5497,7 @@ pub struct NotebookDocumentChangeEvent {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentIdentifier {
     /// The notebook document's uri.
     pub uri: String,
@@ -5509,7 +5509,7 @@ pub struct NotebookDocumentIdentifier {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionContext {
     /// Provides information about the currently selected item in the autocomplete widget if it is visible.
     pub selected_completion_info: Option<SelectedCompletionInfo>,
@@ -5530,7 +5530,7 @@ pub struct InlineCompletionContext {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct StringValue {
     /// The kind of string value.
     pub kind: String,
@@ -5545,14 +5545,14 @@ pub struct StringValue {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// General parameters to register for a notification or to register a provider.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Registration {
     /// The id used to register the request. The id can be used to deregister
     /// the request again.
@@ -5567,7 +5567,7 @@ pub struct Registration {
 
 /// General parameters to unregister a request or notification.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Unregistration {
     /// The id used to unregister the request or notification. Usually an id
     /// provided during the register request.
@@ -5579,7 +5579,7 @@ pub struct Unregistration {
 
 /// The initialize parameters
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct _InitializeParams {
     /// The capabilities provided by the client (editor or tool)
     pub capabilities: ClientCapabilities,
@@ -5634,7 +5634,7 @@ pub struct _InitializeParams {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFoldersInitializeParams {
     /// The workspace folders configured in the client when the server starts.
     ///
@@ -5649,7 +5649,7 @@ pub struct WorkspaceFoldersInitializeParams {
 /// Defines the capabilities provided by a language
 /// server.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ServerCapabilities {
     /// The server provides call hierarchy support.
     ///
@@ -5813,7 +5813,7 @@ pub struct ServerCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ServerInfo {
     /// The name of the server as defined by the server.
     pub name: String,
@@ -5824,7 +5824,7 @@ pub struct ServerInfo {
 
 /// A text document identifier to denote a specific version of a text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct VersionedTextDocumentIdentifier {
     /// The text document's uri.
     pub uri: String,
@@ -5835,7 +5835,7 @@ pub struct VersionedTextDocumentIdentifier {
 
 /// Save options.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SaveOptions {
     /// The client is supposed to include the content on save.
     pub include_text: Option<bool>,
@@ -5843,7 +5843,7 @@ pub struct SaveOptions {
 
 /// An event describing a file change.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileEvent {
     /// The change type.
     #[serde(rename = "type")]
@@ -5854,7 +5854,7 @@ pub struct FileEvent {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileSystemWatcher {
     /// The glob pattern to watch. See [glob pattern][GlobPattern] for more detail.
     ///
@@ -5870,7 +5870,7 @@ pub struct FileSystemWatcher {
 /// Represents a diagnostic, such as a compiler error or warning. Diagnostic objects
 /// are only valid in the scope of a resource.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Diagnostic {
     /// The diagnostic's code, which usually appear in the user interface.
     pub code: Option<OR2<i32, String>>,
@@ -5914,7 +5914,7 @@ pub struct Diagnostic {
 
 /// Contains additional information about the context in which a completion request is triggered.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionContext {
     /// The trigger character (a single character) that has trigger code complete.
     /// Is undefined if `triggerKind !== CompletionTriggerKind.TriggerCharacter`
@@ -5928,7 +5928,7 @@ pub struct CompletionContext {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItemLabelDetails {
     /// An optional string which is rendered less prominently after [`CompletionItem::detail`]. Should be used
     /// for fully qualified names and file paths.
@@ -5943,7 +5943,7 @@ pub struct CompletionItemLabelDetails {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InsertReplaceEdit {
     /// The range if the insert is requested
     pub insert: Range,
@@ -5969,7 +5969,7 @@ pub struct InsertReplaceEdit {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItemDefaults {
     /// A default commit character set.
     ///
@@ -5999,7 +5999,7 @@ pub struct CompletionItemDefaults {
 
 /// Completion options.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionOptions {
     /// The list of all possible characters that commit a completion. This field can be used
     /// if clients don't support individual commit characters per completion item. See
@@ -6036,7 +6036,7 @@ pub struct CompletionOptions {
 
 /// Hover options.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HoverOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -6045,7 +6045,7 @@ pub struct HoverOptions {
 ///
 /// @since 3.15.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelpContext {
     /// The currently active `SignatureHelp`.
     ///
@@ -6072,7 +6072,7 @@ pub struct SignatureHelpContext {
 /// can have a label, like a function-name, a doc-comment, and
 /// a set of parameters.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureInformation {
     /// The index of the active parameter.
     ///
@@ -6095,7 +6095,7 @@ pub struct SignatureInformation {
 
 /// Server Capabilities for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelpOptions {
     /// List of characters that re-trigger signature help.
     ///
@@ -6113,7 +6113,7 @@ pub struct SignatureHelpOptions {
 
 /// Server Capabilities for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DefinitionOptions {
     pub work_done_progress: Option<bool>,
 }
@@ -6121,7 +6121,7 @@ pub struct DefinitionOptions {
 /// Value-object that contains additional information when
 /// requesting references.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ReferenceContext {
     /// Include the declaration of the current symbol.
     pub include_declaration: bool,
@@ -6129,21 +6129,21 @@ pub struct ReferenceContext {
 
 /// Reference options.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ReferenceOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// Provider options for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentHighlightOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// A base for all symbol information.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct BaseSymbolInformation {
     /// The name of the symbol containing this symbol. This information is for
     /// user interface purposes (e.g. to render a qualifier in the user interface
@@ -6165,7 +6165,7 @@ pub struct BaseSymbolInformation {
 
 /// Provider options for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentSymbolOptions {
     /// A human-readable string that is shown when multiple outlines trees
     /// are shown for the same document.
@@ -6179,7 +6179,7 @@ pub struct DocumentSymbolOptions {
 /// Contains additional diagnostic information about the context in which
 /// a [code action][`CodeActionProvider::provideCodeActions`] is run.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionContext {
     /// An array of diagnostics known on the client side overlapping the range provided to the
     /// `textDocument/codeAction` request. They are provided so that the server knows which
@@ -6206,7 +6206,7 @@ pub struct CodeActionContext {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionDisabled {
     /// Human readable description of why the code action is currently disabled.
     ///
@@ -6216,7 +6216,7 @@ pub struct CodeActionDisabled {
 
 /// Provider options for a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionOptions {
     /// CodeActionKinds that this server may return.
     ///
@@ -6239,14 +6239,14 @@ pub struct CodeActionOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LocationUriOnly {
     pub uri: String,
 }
 
 /// Server capabilities for a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolOptions {
     /// The server provides support to resolve additional
     /// information for a workspace symbol.
@@ -6259,7 +6259,7 @@ pub struct WorkspaceSymbolOptions {
 
 /// Code Lens provider options of a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensOptions {
     /// Code lens has a resolve provider as well.
     pub resolve_provider: Option<bool>,
@@ -6269,7 +6269,7 @@ pub struct CodeLensOptions {
 
 /// Provider options for a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLinkOptions {
     /// Document links have a resolve provider as well.
     pub resolve_provider: Option<bool>,
@@ -6279,7 +6279,7 @@ pub struct DocumentLinkOptions {
 
 /// Value-object describing what options formatting should use.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FormattingOptions {
     /// Insert a newline character at the end of the file if one does not exist.
     ///
@@ -6305,14 +6305,14 @@ pub struct FormattingOptions {
 
 /// Provider options for a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentFormattingOptions {
     pub work_done_progress: Option<bool>,
 }
 
 /// Provider options for a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentRangeFormattingOptions {
     /// Whether the server supports formatting multiple ranges at once.
     ///
@@ -6326,7 +6326,7 @@ pub struct DocumentRangeFormattingOptions {
 
 /// Provider options for a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentOnTypeFormattingOptions {
     /// A character on which formatting should be triggered, like `{`.
     pub first_trigger_character: String,
@@ -6337,7 +6337,7 @@ pub struct DocumentOnTypeFormattingOptions {
 
 /// Provider options for a [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameOptions {
     /// Renames should be checked and tested before being executed.
     ///
@@ -6351,7 +6351,7 @@ pub struct RenameOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PrepareRenamePlaceholder {
     pub placeholder: String,
 
@@ -6362,14 +6362,14 @@ pub struct PrepareRenamePlaceholder {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PrepareRenameDefaultBehavior {
     pub default_behavior: bool,
 }
 
 /// The server capabilities of a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExecuteCommandOptions {
     /// The commands to be executed on the server
     pub commands: Vec<String>,
@@ -6379,7 +6379,7 @@ pub struct ExecuteCommandOptions {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensLegend {
     /// The token modifiers a server uses.
     pub token_modifiers: Vec<String>,
@@ -6394,7 +6394,7 @@ pub struct SemanticTokensLegend {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensFullDelta {
     /// The server supports deltas for full documents.
     pub delta: Option<bool>,
@@ -6402,7 +6402,7 @@ pub struct SemanticTokensFullDelta {
 
 /// A text document identifier to optionally denote a specific version of a text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OptionalVersionedTextDocumentIdentifier {
     /// The text document's uri.
     pub uri: String,
@@ -6420,7 +6420,7 @@ pub struct OptionalVersionedTextDocumentIdentifier {
 ///
 /// @since 3.16.0.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct AnnotatedTextEdit {
     /// The actual identifier of the change annotation
     pub annotation_id: ChangeAnnotationIdentifier,
@@ -6436,7 +6436,7 @@ pub struct AnnotatedTextEdit {
 
 /// A generic resource operation.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ResourceOperation {
     /// An optional annotation identifier describing the operation.
     ///
@@ -6449,7 +6449,7 @@ pub struct ResourceOperation {
 
 /// Options to create a file.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CreateFileOptions {
     /// Ignore if exists.
     pub ignore_if_exists: Option<bool>,
@@ -6460,7 +6460,7 @@ pub struct CreateFileOptions {
 
 /// Rename file options
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameFileOptions {
     /// Ignores if target exists.
     pub ignore_if_exists: Option<bool>,
@@ -6471,7 +6471,7 @@ pub struct RenameFileOptions {
 
 /// Delete file options
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeleteFileOptions {
     /// Ignore the operation if the file doesn't exist.
     pub ignore_if_not_exists: Option<bool>,
@@ -6485,7 +6485,7 @@ pub struct DeleteFileOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileOperationPattern {
     /// The glob pattern to match. Glob patterns can have the following syntax:
     /// - `*` to match one or more characters in a path segment
@@ -6509,7 +6509,7 @@ pub struct FileOperationPattern {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFullDocumentDiagnosticReport {
     /// The actual items.
     pub items: Vec<Diagnostic>,
@@ -6535,7 +6535,7 @@ pub struct WorkspaceFullDocumentDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceUnchangedDocumentDiagnosticReport {
     /// A document diagnostic report indicating
     /// no changes to the last result. A server can
@@ -6564,7 +6564,7 @@ pub struct WorkspaceUnchangedDocumentDiagnosticReport {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookCell {
     /// The URI of the cell's text document
     /// content.
@@ -6589,7 +6589,7 @@ pub struct NotebookCell {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentCellChanges {
     /// Changes to notebook cells properties like its
     /// kind, execution summary or metadata.
@@ -6609,7 +6609,7 @@ pub struct NotebookDocumentCellChanges {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SelectedCompletionInfo {
     /// The range that will be replaced if this completion item is accepted.
     pub range: Range,
@@ -6625,7 +6625,7 @@ pub struct SelectedCompletionInfo {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientInfo {
     /// The name of the client as defined by the client.
     pub name: String,
@@ -6636,7 +6636,7 @@ pub struct ClientInfo {
 
 /// Defines the capabilities provided by the client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCapabilities {
     /// Experimental client capabilities.
     pub experimental: Option<LSPAny>,
@@ -6662,7 +6662,7 @@ pub struct ClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSyncOptions {
     /// Change notifications are sent to the server. See TextDocumentSyncKind.None, TextDocumentSyncKind.Full
     /// and TextDocumentSyncKind.Incremental. If omitted it defaults to TextDocumentSyncKind.None.
@@ -6699,7 +6699,7 @@ pub struct TextDocumentSyncOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentSyncOptions {
     /// The notebooks to be synced
     pub notebook_selector:
@@ -6714,7 +6714,7 @@ pub struct NotebookDocumentSyncOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentSyncRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
@@ -6735,7 +6735,7 @@ pub struct NotebookDocumentSyncRegistrationOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceOptions {
     /// The server is interested in notifications/requests for operations on files.
     ///
@@ -6752,7 +6752,7 @@ pub struct WorkspaceOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentChangePartial {
     /// The range of the document that changed.
     pub range: Range,
@@ -6771,7 +6771,7 @@ pub struct TextDocumentContentChangePartial {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentChangeWholeDocument {
     /// The new text of the whole document.
     pub text: String,
@@ -6781,7 +6781,7 @@ pub struct TextDocumentContentChangeWholeDocument {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeDescription {
     /// An URI to open with more information about the diagnostic error.
     pub href: String,
@@ -6791,7 +6791,7 @@ pub struct CodeDescription {
 /// used to point to code locations that cause or related to a diagnostics, e.g when duplicating
 /// a symbol in a scope.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticRelatedInformation {
     /// The location of this related diagnostic information.
     pub location: Location,
@@ -6806,7 +6806,7 @@ pub struct DiagnosticRelatedInformation {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EditRangeWithInsertReplace {
     pub insert: Range,
 
@@ -6817,7 +6817,7 @@ pub struct EditRangeWithInsertReplace {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ServerCompletionItemOptions {
     /// The server has support for completion item label
     /// details (see also `CompletionItemLabelDetails`) when
@@ -6833,7 +6833,7 @@ pub struct ServerCompletionItemOptions {
 #[deprecated]
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MarkedStringWithLanguage {
     pub language: String,
 
@@ -6843,7 +6843,7 @@ pub struct MarkedStringWithLanguage {
 /// Represents a parameter of a callable-signature. A parameter can
 /// have a label and a doc-comment.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ParameterInformation {
     /// The human-readable doc-comment of this parameter. Will be shown
     /// in the UI but can be omitted.
@@ -6865,7 +6865,7 @@ pub struct ParameterInformation {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookCellTextDocumentFilter {
     /// A language id like `python`.
     ///
@@ -6884,14 +6884,14 @@ pub struct NotebookCellTextDocumentFilter {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileOperationPatternOptions {
     /// The pattern should be matched ignoring casing.
     pub ignore_case: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExecutionSummary {
     /// A strict monotonically increasing value
     /// indicating the execution order of a cell
@@ -6909,7 +6909,7 @@ pub struct ExecutionSummary {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentCellChangeStructure {
     /// The change to the cell array.
     pub array: NotebookCellArrayChange,
@@ -6927,7 +6927,7 @@ pub struct NotebookDocumentCellChangeStructure {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentCellContentChanges {
     pub changes: Vec<TextDocumentContentChangeEvent>,
 
@@ -6936,7 +6936,7 @@ pub struct NotebookDocumentCellContentChanges {
 
 /// Workspace specific client capabilities.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceClientCapabilities {
     /// The client supports applying batch edits
     /// to the workspace by supporting the request
@@ -7013,7 +7013,7 @@ pub struct WorkspaceClientCapabilities {
 
 /// Text document specific client capabilities.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentClientCapabilities {
     /// Capabilities specific to the various call hierarchy requests.
     ///
@@ -7146,7 +7146,7 @@ pub struct TextDocumentClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentClientCapabilities {
     /// Capabilities specific to notebook document synchronization
     ///
@@ -7155,7 +7155,7 @@ pub struct NotebookDocumentClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowClientCapabilities {
     /// Capabilities specific to the showDocument request.
     ///
@@ -7183,7 +7183,7 @@ pub struct WindowClientCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct GeneralClientCapabilities {
     /// Client capabilities specific to the client's markdown parser.
     ///
@@ -7228,7 +7228,7 @@ pub struct GeneralClientCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterWithNotebook {
     /// The cells of the matching notebook to be synced.
     pub cells: Option<Vec<NotebookCellLanguage>>,
@@ -7243,7 +7243,7 @@ pub struct NotebookDocumentFilterWithNotebook {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterWithCells {
     /// The cells of the matching notebook to be synced.
     pub cells: Vec<NotebookCellLanguage>,
@@ -7255,7 +7255,7 @@ pub struct NotebookDocumentFilterWithCells {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFoldersServerCapabilities {
     /// Whether the server wants to receive workspace folder
     /// change notifications.
@@ -7274,7 +7274,7 @@ pub struct WorkspaceFoldersServerCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileOperationOptions {
     /// The server is interested in receiving didCreateFiles notifications.
     pub did_create: Option<FileOperationRegistrationOptions>,
@@ -7301,7 +7301,7 @@ pub struct FileOperationOptions {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RelativePattern {
     /// A workspace folder or a base URI to which this pattern will be matched
     /// against relatively.
@@ -7317,7 +7317,7 @@ pub struct RelativePattern {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFilterLanguage {
     /// A language id, like `typescript`.
     pub language: String,
@@ -7335,7 +7335,7 @@ pub struct TextDocumentFilterLanguage {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFilterScheme {
     /// A language id, like `typescript`.
     pub language: Option<String>,
@@ -7353,7 +7353,7 @@ pub struct TextDocumentFilterScheme {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFilterPattern {
     /// A language id, like `typescript`.
     pub language: Option<String>,
@@ -7370,7 +7370,7 @@ pub struct TextDocumentFilterPattern {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookCellArrayChange {
     /// The new cells, if any
     pub cells: Option<Vec<NotebookCell>>,
@@ -7383,7 +7383,7 @@ pub struct NotebookCellArrayChange {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceEditClientCapabilities {
     /// Whether the client in general supports change annotations on text edits,
     /// create file, rename file and delete file changes.
@@ -7417,14 +7417,14 @@ pub struct WorkspaceEditClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeConfigurationClientCapabilities {
     /// Did change configuration notification supports dynamic registration.
     pub dynamic_registration: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DidChangeWatchedFilesClientCapabilities {
     /// Did change watched files notification supports dynamic registration. Please note
     /// that the current protocol doesn't support static configuration for file changes
@@ -7440,7 +7440,7 @@ pub struct DidChangeWatchedFilesClientCapabilities {
 
 /// Client capabilities for a [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolClientCapabilities {
     /// Symbol request supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7464,7 +7464,7 @@ pub struct WorkspaceSymbolClientCapabilities {
 
 /// The client capabilities of a [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExecuteCommandClientCapabilities {
     /// Execute command supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7472,7 +7472,7 @@ pub struct ExecuteCommandClientCapabilities {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensWorkspaceClientCapabilities {
     /// Whether the client implementation supports a refresh request sent from
     /// the server to the client.
@@ -7486,7 +7486,7 @@ pub struct SemanticTokensWorkspaceClientCapabilities {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensWorkspaceClientCapabilities {
     /// Whether the client implementation supports a refresh request sent from the
     /// server to the client.
@@ -7505,7 +7505,7 @@ pub struct CodeLensWorkspaceClientCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FileOperationClientCapabilities {
     /// The client has support for sending didCreateFiles notifications.
     pub did_create: Option<bool>,
@@ -7533,7 +7533,7 @@ pub struct FileOperationClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueWorkspaceClientCapabilities {
     /// Whether the client implementation supports a refresh request sent from the
     /// server to the client.
@@ -7549,7 +7549,7 @@ pub struct InlineValueWorkspaceClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintWorkspaceClientCapabilities {
     /// Whether the client implementation supports a refresh request sent from
     /// the server to the client.
@@ -7565,7 +7565,7 @@ pub struct InlayHintWorkspaceClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticWorkspaceClientCapabilities {
     /// Whether the client implementation supports a refresh request sent from
     /// the server to the client.
@@ -7583,7 +7583,7 @@ pub struct DiagnosticWorkspaceClientCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRangeWorkspaceClientCapabilities {
     /// Whether the client implementation supports a refresh request sent from the
     /// server to the client.
@@ -7600,7 +7600,7 @@ pub struct FoldingRangeWorkspaceClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSyncClientCapabilities {
     /// The client supports did save notifications.
     pub did_save: Option<bool>,
@@ -7619,7 +7619,7 @@ pub struct TextDocumentSyncClientCapabilities {
 
 /// Completion client capabilities
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionClientCapabilities {
     /// The client supports the following `CompletionItem` specific
     /// capabilities.
@@ -7649,7 +7649,7 @@ pub struct CompletionClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct HoverClientCapabilities {
     /// Client supports the following content formats for the content
     /// property. The order describes the preferred format of the client.
@@ -7661,7 +7661,7 @@ pub struct HoverClientCapabilities {
 
 /// Client Capabilities for a [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelpClientCapabilities {
     /// The client supports to send additional context information for a
     /// `textDocument/signatureHelp` request. A client that opts into
@@ -7681,7 +7681,7 @@ pub struct SignatureHelpClientCapabilities {
 
 /// @since 3.14.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DeclarationClientCapabilities {
     /// Whether declaration supports dynamic registration. If this is set to `true`
     /// the client supports the new `DeclarationRegistrationOptions` return value
@@ -7694,7 +7694,7 @@ pub struct DeclarationClientCapabilities {
 
 /// Client Capabilities for a [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DefinitionClientCapabilities {
     /// Whether definition supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7707,7 +7707,7 @@ pub struct DefinitionClientCapabilities {
 
 /// Since 3.6.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeDefinitionClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `TypeDefinitionRegistrationOptions` return value
@@ -7722,7 +7722,7 @@ pub struct TypeDefinitionClientCapabilities {
 
 /// @since 3.6.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ImplementationClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `ImplementationRegistrationOptions` return value
@@ -7737,7 +7737,7 @@ pub struct ImplementationClientCapabilities {
 
 /// Client Capabilities for a [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ReferenceClientCapabilities {
     /// Whether references supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7745,7 +7745,7 @@ pub struct ReferenceClientCapabilities {
 
 /// Client Capabilities for a [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentHighlightClientCapabilities {
     /// Whether document highlight supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7753,7 +7753,7 @@ pub struct DocumentHighlightClientCapabilities {
 
 /// Client Capabilities for a [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentSymbolClientCapabilities {
     /// Whether document symbol supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7781,7 +7781,7 @@ pub struct DocumentSymbolClientCapabilities {
 
 /// The Client Capabilities of a [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionClientCapabilities {
     /// The client support code action literals of type `CodeAction` as a valid
     /// response of the `textDocument/codeAction` request. If the property is not
@@ -7828,7 +7828,7 @@ pub struct CodeActionClientCapabilities {
 
 /// The client capabilities  of a [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensClientCapabilities {
     /// Whether code lens supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7836,7 +7836,7 @@ pub struct CodeLensClientCapabilities {
 
 /// The client capabilities of a [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLinkClientCapabilities {
     /// Whether document link supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7848,7 +7848,7 @@ pub struct DocumentLinkClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentColorClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `DocumentColorRegistrationOptions` return value
@@ -7858,7 +7858,7 @@ pub struct DocumentColorClientCapabilities {
 
 /// Client capabilities of a [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentFormattingClientCapabilities {
     /// Whether formatting supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7866,7 +7866,7 @@ pub struct DocumentFormattingClientCapabilities {
 
 /// Client capabilities of a [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentRangeFormattingClientCapabilities {
     /// Whether range formatting supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7881,14 +7881,14 @@ pub struct DocumentRangeFormattingClientCapabilities {
 
 /// Client capabilities of a [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentOnTypeFormattingClientCapabilities {
     /// Whether on type formatting supports dynamic registration.
     pub dynamic_registration: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RenameClientCapabilities {
     /// Whether rename supports dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -7918,7 +7918,7 @@ pub struct RenameClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRangeClientCapabilities {
     /// Whether implementation supports dynamic registration for folding range
     /// providers. If this is set to `true` the client supports the new
@@ -7948,7 +7948,7 @@ pub struct FoldingRangeClientCapabilities {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SelectionRangeClientCapabilities {
     /// Whether implementation supports dynamic registration for selection range providers. If this is set to `true`
     /// the client supports the new `SelectionRangeRegistrationOptions` return value for the corresponding server
@@ -7958,7 +7958,7 @@ pub struct SelectionRangeClientCapabilities {
 
 /// The publish diagnostic client capabilities.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PublishDiagnosticsClientCapabilities {
     /// Client supports a codeDescription property
     ///
@@ -7990,7 +7990,7 @@ pub struct PublishDiagnosticsClientCapabilities {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
@@ -8000,7 +8000,7 @@ pub struct CallHierarchyClientCapabilities {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensClientCapabilities {
     /// Whether the client uses semantic tokens to augment existing
     /// syntax tokens. If set to `true` client side created syntax
@@ -8057,7 +8057,7 @@ pub struct SemanticTokensClientCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LinkedEditingRangeClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
@@ -8069,7 +8069,7 @@ pub struct LinkedEditingRangeClientCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MonikerClientCapabilities {
     /// Whether moniker supports dynamic registration. If this is set to `true`
     /// the client supports the new `MonikerRegistrationOptions` return value
@@ -8079,7 +8079,7 @@ pub struct MonikerClientCapabilities {
 
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchyClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
@@ -8091,7 +8091,7 @@ pub struct TypeHierarchyClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineValueClientCapabilities {
     /// Whether implementation supports dynamic registration for inline value providers.
     pub dynamic_registration: Option<bool>,
@@ -8101,7 +8101,7 @@ pub struct InlineValueClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintClientCapabilities {
     /// Whether inlay hints support dynamic registration.
     pub dynamic_registration: Option<bool>,
@@ -8115,7 +8115,7 @@ pub struct InlayHintClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
@@ -8132,7 +8132,7 @@ pub struct DiagnosticClientCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionClientCapabilities {
     /// Whether implementation supports dynamic registration for inline completion providers.
     pub dynamic_registration: Option<bool>,
@@ -8142,7 +8142,7 @@ pub struct InlineCompletionClientCapabilities {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentSyncClientCapabilities {
     /// Whether implementation supports dynamic registration. If this is
     /// set to `true` the client supports the new
@@ -8156,7 +8156,7 @@ pub struct NotebookDocumentSyncClientCapabilities {
 
 /// Show message request client capabilities
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShowMessageRequestClientCapabilities {
     /// Capabilities specific to the `MessageActionItem` type.
     pub message_action_item: Option<ClientShowMessageActionItemOptions>,
@@ -8166,7 +8166,7 @@ pub struct ShowMessageRequestClientCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShowDocumentClientCapabilities {
     /// The client has support for the showDocument
     /// request.
@@ -8177,7 +8177,7 @@ pub struct ShowDocumentClientCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct StaleRequestSupportOptions {
     /// The client will actively cancel the request.
     pub cancel: bool,
@@ -8192,7 +8192,7 @@ pub struct StaleRequestSupportOptions {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RegularExpressionsClientCapabilities {
     /// The engine's name.
     pub engine: String,
@@ -8205,7 +8205,7 @@ pub struct RegularExpressionsClientCapabilities {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MarkdownClientCapabilities {
     /// A list of HTML tags that the client allows / supports in
     /// Markdown.
@@ -8224,7 +8224,7 @@ pub struct MarkdownClientCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookCellLanguage {
     pub language: String,
 }
@@ -8235,7 +8235,7 @@ pub struct NotebookCellLanguage {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterNotebookType {
     /// The type of the enclosing notebook.
     pub notebook_type: String,
@@ -8253,7 +8253,7 @@ pub struct NotebookDocumentFilterNotebookType {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterScheme {
     /// The type of the enclosing notebook.
     pub notebook_type: Option<String>,
@@ -8271,7 +8271,7 @@ pub struct NotebookDocumentFilterScheme {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterPattern {
     /// The type of the enclosing notebook.
     pub notebook_type: Option<String>,
@@ -8287,7 +8287,7 @@ pub struct NotebookDocumentFilterPattern {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ChangeAnnotationsSupportOptions {
     /// Whether the client groups edits with equal labels into tree nodes,
     /// for instance all edits labelled with "Changes in Strings" would
@@ -8299,7 +8299,7 @@ pub struct ChangeAnnotationsSupportOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSymbolKindOptions {
     /// The symbol kind values the client supports. When this
     /// property exists the client also guarantees that it will
@@ -8316,7 +8316,7 @@ pub struct ClientSymbolKindOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSymbolTagOptions {
     /// The tags supported by the client.
     pub value_set: Vec<SymbolTag>,
@@ -8326,7 +8326,7 @@ pub struct ClientSymbolTagOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSymbolResolveOptions {
     /// The properties that a client can resolve lazily. Usually
     /// `location.range`
@@ -8337,7 +8337,7 @@ pub struct ClientSymbolResolveOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemOptions {
     /// Client supports commit characters on a completion item.
     pub commit_characters_support: Option<bool>,
@@ -8399,7 +8399,7 @@ pub struct ClientCompletionItemOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemOptionsKind {
     /// The completion item kind values the client supports. When this
     /// property exists the client also guarantees that it will
@@ -8417,7 +8417,7 @@ pub struct ClientCompletionItemOptionsKind {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionListCapabilities {
     /// The client supports the following itemDefaults on
     /// a completion list.
@@ -8434,7 +8434,7 @@ pub struct CompletionListCapabilities {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSignatureInformationOptions {
     /// The client supports the `activeParameter` property on `SignatureInformation`
     /// literal.
@@ -8454,7 +8454,7 @@ pub struct ClientSignatureInformationOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionLiteralOptions {
     /// The code action kind is support with the following value
     /// set.
@@ -8465,7 +8465,7 @@ pub struct ClientCodeActionLiteralOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionResolveOptions {
     /// The properties that a client can resolve lazily.
     pub properties: Vec<String>,
@@ -8475,7 +8475,7 @@ pub struct ClientCodeActionResolveOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientFoldingRangeKindOptions {
     /// The folding range kind values the client supports. When this
     /// property exists the client also guarantees that it will
@@ -8488,7 +8488,7 @@ pub struct ClientFoldingRangeKindOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientFoldingRangeOptions {
     /// If set, the client signals that it supports setting collapsedText on
     /// folding ranges to display custom labels instead of the default text.
@@ -8501,7 +8501,7 @@ pub struct ClientFoldingRangeOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientDiagnosticsTagOptions {
     /// The tags supported by the client.
     pub value_set: Vec<DiagnosticTag>,
@@ -8511,7 +8511,7 @@ pub struct ClientDiagnosticsTagOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSemanticTokensRequestOptions {
     /// The client will send the `textDocument/semanticTokens/full` request if
     /// the server provides a corresponding handler.
@@ -8526,7 +8526,7 @@ pub struct ClientSemanticTokensRequestOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientInlayHintResolveOptions {
     /// The properties that a client can resolve lazily.
     pub properties: Vec<String>,
@@ -8536,7 +8536,7 @@ pub struct ClientInlayHintResolveOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientShowMessageActionItemOptions {
     /// Whether the client supports additional attributes which
     /// are preserved and send back to the server in the
@@ -8548,7 +8548,7 @@ pub struct ClientShowMessageActionItemOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItemTagOptions {
     /// The tags supported by the client.
     pub value_set: Vec<CompletionItemTag>,
@@ -8558,7 +8558,7 @@ pub struct CompletionItemTagOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemResolveOptions {
     /// The properties that a client can resolve lazily.
     pub properties: Vec<String>,
@@ -8568,7 +8568,7 @@ pub struct ClientCompletionItemResolveOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemInsertTextModeOptions {
     pub value_set: Vec<InsertTextMode>,
 }
@@ -8577,7 +8577,7 @@ pub struct ClientCompletionItemInsertTextModeOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSignatureParameterInformationOptions {
     /// The client supports processing label offsets instead of a
     /// simple label string.
@@ -8590,7 +8590,7 @@ pub struct ClientSignatureParameterInformationOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionKindOptions {
     /// The code action kind values the client supports. When this
     /// property exists the client also guarantees that it will
@@ -8603,7 +8603,7 @@ pub struct ClientCodeActionKindOptions {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSemanticTokensRequestFullDelta {
     /// The client will send the `textDocument/semanticTokens/full/delta` request if
     /// the server provides a corresponding handler.
@@ -8613,7 +8613,7 @@ pub struct ClientSemanticTokensRequestFullDelta {
 /// The `workspace/didChangeWorkspaceFolders` notification is sent from the client to the server when the workspace
 /// folder configuration changes.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDidChangeWorkspaceFoldersNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8627,7 +8627,7 @@ pub struct WorkspaceDidChangeWorkspaceFoldersNotification {
 /// The `window/workDoneProgress/cancel` notification is sent from  the client to the server to cancel a progress
 /// initiated on the server side.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowWorkDoneProgressCancelNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8643,7 +8643,7 @@ pub struct WindowWorkDoneProgressCancelNotification {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDidCreateFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8659,7 +8659,7 @@ pub struct WorkspaceDidCreateFilesNotification {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDidRenameFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8675,7 +8675,7 @@ pub struct WorkspaceDidRenameFilesNotification {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDidDeleteFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8690,7 +8690,7 @@ pub struct WorkspaceDidDeleteFilesNotification {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentDidOpenNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8702,7 +8702,7 @@ pub struct NotebookDocumentDidOpenNotification {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentDidChangeNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8717,7 +8717,7 @@ pub struct NotebookDocumentDidChangeNotification {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentDidSaveNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8732,7 +8732,7 @@ pub struct NotebookDocumentDidSaveNotification {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentDidCloseNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8747,7 +8747,7 @@ pub struct NotebookDocumentDidCloseNotification {
 /// server after the client is fully initialized and the server
 /// is allowed to send requests from the server to the client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializedNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8761,20 +8761,22 @@ pub struct InitializedNotification {
 /// The exit event is sent from the client to the server to
 /// ask the server to exit its process.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ExitNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
     /// The method to be invoked.
     pub method: LSPNotificationMethods,
+
+    pub params: LSPNull,
 }
 
 /// The configuration change notification is sent from the client to the server
 /// when the client's configuration has changed. The notification contains
 /// the changed configuration as defined by the language client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDidChangeConfigurationNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8788,7 +8790,7 @@ pub struct WorkspaceDidChangeConfigurationNotification {
 /// The show message notification is sent from a server to a client to ask
 /// the client to display a particular message in the user interface.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowShowMessageNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8802,7 +8804,7 @@ pub struct WindowShowMessageNotification {
 /// The log message notification is sent from the server to the client to ask
 /// the client to log a particular message.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowLogMessageNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8816,7 +8818,7 @@ pub struct WindowLogMessageNotification {
 /// The telemetry event notification is sent from the server to the client to ask
 /// the client to log telemetry data.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TelemetryEventNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8836,7 +8838,7 @@ pub struct TelemetryEventNotification {
 /// This means open and close notification must be balanced and the max open count
 /// is one.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDidOpenNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8850,7 +8852,7 @@ pub struct TextDocumentDidOpenNotification {
 /// The document change notification is sent from the client to the server to signal
 /// changes to a text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDidChangeNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8869,7 +8871,7 @@ pub struct TextDocumentDidChangeNotification {
 /// doesn't mean that the document was open in an editor before. A close
 /// notification requires a previous open notification to be sent.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDidCloseNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8883,7 +8885,7 @@ pub struct TextDocumentDidCloseNotification {
 /// The document save notification is sent from the client to the server when
 /// the document got saved in the client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDidSaveNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8897,7 +8899,7 @@ pub struct TextDocumentDidSaveNotification {
 /// A document will save notification is sent from the client to the server before
 /// the document is actually saved.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentWillSaveNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8911,7 +8913,7 @@ pub struct TextDocumentWillSaveNotification {
 /// The watched files notification is sent from the client to the server when
 /// the client detects changes to file watched by the language client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDidChangeWatchedFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8925,7 +8927,7 @@ pub struct WorkspaceDidChangeWatchedFilesNotification {
 /// Diagnostics notification are sent from the server to the client to signal
 /// results of validation runs.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPublishDiagnosticsNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8937,7 +8939,7 @@ pub struct TextDocumentPublishDiagnosticsNotification {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SetTraceNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8949,7 +8951,7 @@ pub struct SetTraceNotification {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LogTraceNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8961,7 +8963,7 @@ pub struct LogTraceNotification {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CancelRequestNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -8973,7 +8975,7 @@ pub struct CancelRequestNotification {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ProgressNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9005,7 +9007,7 @@ pub enum LSPIdOptional {
 /// document position. The request's parameter is of type [TextDocumentPositionParams]
 /// the response is of type [Definition] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentImplementationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9021,7 +9023,7 @@ pub struct TextDocumentImplementationRequest {
 
 /// Response to the [TextDocumentImplementationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentImplementationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9040,7 +9042,7 @@ pub struct TextDocumentImplementationResponse {
 /// document position. The request's parameter is of type [TextDocumentPositionParams]
 /// the response is of type [Definition] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentTypeDefinitionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9056,7 +9058,7 @@ pub struct TextDocumentTypeDefinitionRequest {
 
 /// Response to the [TextDocumentTypeDefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentTypeDefinitionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9073,7 +9075,7 @@ pub struct TextDocumentTypeDefinitionResponse {
 
 /// The `workspace/workspaceFolders` is sent from the server to the client to fetch the open workspace folders.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWorkspaceFoldersRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9087,7 +9089,7 @@ pub struct WorkspaceWorkspaceFoldersRequest {
 
 /// Response to the [WorkspaceWorkspaceFoldersRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWorkspaceFoldersResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9110,7 +9112,7 @@ pub struct WorkspaceWorkspaceFoldersResponse {
 /// result of `workspace/configuration` requests) the server should register for an empty configuration
 /// change event and empty the cache if such an event is received.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceConfigurationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9126,7 +9128,7 @@ pub struct WorkspaceConfigurationRequest {
 
 /// Response to the [WorkspaceConfigurationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceConfigurationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9145,7 +9147,7 @@ pub struct WorkspaceConfigurationResponse {
 /// response is of type {@link ColorInformation ColorInformation[]} or a Thenable
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentColorRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9161,7 +9163,7 @@ pub struct TextDocumentDocumentColorRequest {
 
 /// Response to the [TextDocumentDocumentColorRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentColorResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9180,7 +9182,7 @@ pub struct TextDocumentDocumentColorResponse {
 /// response is of type {@link ColorInformation ColorInformation[]} or a Thenable
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentColorPresentationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9196,7 +9198,7 @@ pub struct TextDocumentColorPresentationRequest {
 
 /// Response to the [TextDocumentColorPresentationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentColorPresentationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9215,7 +9217,7 @@ pub struct TextDocumentColorPresentationResponse {
 /// response is of type [FoldingRangeList] or a Thenable
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFoldingRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9231,7 +9233,7 @@ pub struct TextDocumentFoldingRangeRequest {
 
 /// Response to the [TextDocumentFoldingRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFoldingRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9250,7 +9252,7 @@ pub struct TextDocumentFoldingRangeResponse {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFoldingRangeRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9264,7 +9266,7 @@ pub struct WorkspaceFoldingRangeRefreshRequest {
 
 /// Response to the [WorkspaceFoldingRangeRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFoldingRangeRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9283,7 +9285,7 @@ pub struct WorkspaceFoldingRangeRefreshResponse {
 /// the response is of type [Declaration] or a typed array of [DeclarationLink]
 /// or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDeclarationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9299,7 +9301,7 @@ pub struct TextDocumentDeclarationRequest {
 
 /// Response to the [TextDocumentDeclarationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDeclarationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9319,7 +9321,7 @@ pub struct TextDocumentDeclarationResponse {
 /// response is of type {@link SelectionRange SelectionRange[]} or a Thenable
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSelectionRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9335,7 +9337,7 @@ pub struct TextDocumentSelectionRangeRequest {
 
 /// Response to the [TextDocumentSelectionRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSelectionRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9353,7 +9355,7 @@ pub struct TextDocumentSelectionRangeResponse {
 /// The `window/workDoneProgress/create` request is sent from the server to the client to initiate progress
 /// reporting from the server.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowWorkDoneProgressCreateRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9369,7 +9371,7 @@ pub struct WindowWorkDoneProgressCreateRequest {
 
 /// Response to the [WindowWorkDoneProgressCreateRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowWorkDoneProgressCreateResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9388,7 +9390,7 @@ pub struct WindowWorkDoneProgressCreateResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPrepareCallHierarchyRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9404,7 +9406,7 @@ pub struct TextDocumentPrepareCallHierarchyRequest {
 
 /// Response to the [TextDocumentPrepareCallHierarchyRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPrepareCallHierarchyResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9423,7 +9425,7 @@ pub struct TextDocumentPrepareCallHierarchyResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyIncomingCallsRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9439,7 +9441,7 @@ pub struct CallHierarchyIncomingCallsRequest {
 
 /// Response to the [CallHierarchyIncomingCallsRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyIncomingCallsResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9458,7 +9460,7 @@ pub struct CallHierarchyIncomingCallsResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyOutgoingCallsRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9474,7 +9476,7 @@ pub struct CallHierarchyOutgoingCallsRequest {
 
 /// Response to the [CallHierarchyOutgoingCallsRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CallHierarchyOutgoingCallsResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9491,7 +9493,7 @@ pub struct CallHierarchyOutgoingCallsResponse {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSemanticTokensFullRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9507,7 +9509,7 @@ pub struct TextDocumentSemanticTokensFullRequest {
 
 /// Response to the [TextDocumentSemanticTokensFullRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSemanticTokensFullResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9524,7 +9526,7 @@ pub struct TextDocumentSemanticTokensFullResponse {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSemanticTokensFullDeltaRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9540,7 +9542,7 @@ pub struct TextDocumentSemanticTokensFullDeltaRequest {
 
 /// Response to the [TextDocumentSemanticTokensFullDeltaRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSemanticTokensFullDeltaResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9557,7 +9559,7 @@ pub struct TextDocumentSemanticTokensFullDeltaResponse {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSemanticTokensRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9573,7 +9575,7 @@ pub struct TextDocumentSemanticTokensRangeRequest {
 
 /// Response to the [TextDocumentSemanticTokensRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSemanticTokensRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9590,7 +9592,7 @@ pub struct TextDocumentSemanticTokensRangeResponse {
 
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSemanticTokensRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9604,7 +9606,7 @@ pub struct WorkspaceSemanticTokensRefreshRequest {
 
 /// Response to the [WorkspaceSemanticTokensRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSemanticTokensRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9625,7 +9627,7 @@ pub struct WorkspaceSemanticTokensRefreshResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowShowDocumentRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9641,7 +9643,7 @@ pub struct WindowShowDocumentRequest {
 
 /// Response to the [WindowShowDocumentRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowShowDocumentResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9659,7 +9661,7 @@ pub struct WindowShowDocumentResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentLinkedEditingRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9675,7 +9677,7 @@ pub struct TextDocumentLinkedEditingRangeRequest {
 
 /// Response to the [TextDocumentLinkedEditingRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentLinkedEditingRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9699,7 +9701,7 @@ pub struct TextDocumentLinkedEditingRangeResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWillCreateFilesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9715,7 +9717,7 @@ pub struct WorkspaceWillCreateFilesRequest {
 
 /// Response to the [WorkspaceWillCreateFilesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWillCreateFilesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9735,7 +9737,7 @@ pub struct WorkspaceWillCreateFilesResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWillRenameFilesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9751,7 +9753,7 @@ pub struct WorkspaceWillRenameFilesRequest {
 
 /// Response to the [WorkspaceWillRenameFilesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWillRenameFilesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9771,7 +9773,7 @@ pub struct WorkspaceWillRenameFilesResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWillDeleteFilesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9787,7 +9789,7 @@ pub struct WorkspaceWillDeleteFilesRequest {
 
 /// Response to the [WorkspaceWillDeleteFilesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceWillDeleteFilesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9806,7 +9808,7 @@ pub struct WorkspaceWillDeleteFilesResponse {
 /// The request parameter is of type [TextDocumentPositionParams].
 /// The response is of type {@link Moniker Moniker[]} or `null`.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentMonikerRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9822,7 +9824,7 @@ pub struct TextDocumentMonikerRequest {
 
 /// Response to the [TextDocumentMonikerRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentMonikerResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9842,7 +9844,7 @@ pub struct TextDocumentMonikerResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPrepareTypeHierarchyRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9858,7 +9860,7 @@ pub struct TextDocumentPrepareTypeHierarchyRequest {
 
 /// Response to the [TextDocumentPrepareTypeHierarchyRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPrepareTypeHierarchyResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9877,7 +9879,7 @@ pub struct TextDocumentPrepareTypeHierarchyResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchySupertypesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9893,7 +9895,7 @@ pub struct TypeHierarchySupertypesRequest {
 
 /// Response to the [TypeHierarchySupertypesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchySupertypesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9912,7 +9914,7 @@ pub struct TypeHierarchySupertypesResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchySubtypesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9928,7 +9930,7 @@ pub struct TypeHierarchySubtypesRequest {
 
 /// Response to the [TypeHierarchySubtypesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TypeHierarchySubtypesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9949,7 +9951,7 @@ pub struct TypeHierarchySubtypesResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentInlineValueRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9965,7 +9967,7 @@ pub struct TextDocumentInlineValueRequest {
 
 /// Response to the [TextDocumentInlineValueRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentInlineValueResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9982,7 +9984,7 @@ pub struct TextDocumentInlineValueResponse {
 
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceInlineValueRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -9996,7 +9998,7 @@ pub struct WorkspaceInlineValueRefreshRequest {
 
 /// Response to the [WorkspaceInlineValueRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceInlineValueRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10016,7 +10018,7 @@ pub struct WorkspaceInlineValueRefreshResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentInlayHintRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10032,7 +10034,7 @@ pub struct TextDocumentInlayHintRequest {
 
 /// Response to the [TextDocumentInlayHintRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentInlayHintResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10053,7 +10055,7 @@ pub struct TextDocumentInlayHintResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10069,7 +10071,7 @@ pub struct InlayHintResolveRequest {
 
 /// Response to the [InlayHintResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlayHintResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10085,7 +10087,7 @@ pub struct InlayHintResolveResponse {
 
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceInlayHintRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10099,7 +10101,7 @@ pub struct WorkspaceInlayHintRefreshRequest {
 
 /// Response to the [WorkspaceInlayHintRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceInlayHintRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10117,7 +10119,7 @@ pub struct WorkspaceInlayHintRefreshResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDiagnosticRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10133,7 +10135,7 @@ pub struct TextDocumentDiagnosticRequest {
 
 /// Response to the [TextDocumentDiagnosticRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDiagnosticResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10151,7 +10153,7 @@ pub struct TextDocumentDiagnosticResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10167,7 +10169,7 @@ pub struct WorkspaceDiagnosticRequest {
 
 /// Response to the [WorkspaceDiagnosticRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10185,7 +10187,7 @@ pub struct WorkspaceDiagnosticResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10199,7 +10201,7 @@ pub struct WorkspaceDiagnosticRefreshRequest {
 
 /// Response to the [WorkspaceDiagnosticRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceDiagnosticRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10221,7 +10223,7 @@ pub struct WorkspaceDiagnosticRefreshResponse {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentInlineCompletionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10237,7 +10239,7 @@ pub struct TextDocumentInlineCompletionRequest {
 
 /// Response to the [TextDocumentInlineCompletionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentInlineCompletionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10255,7 +10257,7 @@ pub struct TextDocumentInlineCompletionResponse {
 /// The `client/registerCapability` request is sent from the server to the client to register a new capability
 /// handler on the client side.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientRegisterCapabilityRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10271,7 +10273,7 @@ pub struct ClientRegisterCapabilityRequest {
 
 /// Response to the [ClientRegisterCapabilityRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientRegisterCapabilityResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10288,7 +10290,7 @@ pub struct ClientRegisterCapabilityResponse {
 /// The `client/unregisterCapability` request is sent from the server to the client to unregister a previously registered capability
 /// handler on the client side.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientUnregisterCapabilityRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10304,7 +10306,7 @@ pub struct ClientUnregisterCapabilityRequest {
 
 /// Response to the [ClientUnregisterCapabilityRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientUnregisterCapabilityResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10324,7 +10326,7 @@ pub struct ClientUnregisterCapabilityResponse {
 /// the response if of type [InitializeResult] of a Thenable that
 /// resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10340,7 +10342,7 @@ pub struct InitializeRequest {
 
 /// Response to the [InitializeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InitializeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10359,7 +10361,7 @@ pub struct InitializeResponse {
 /// server. The only notification that is sent after a shutdown request
 /// is the exit event.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShutdownRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10373,7 +10375,7 @@ pub struct ShutdownRequest {
 
 /// Response to the [ShutdownRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ShutdownResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10390,7 +10392,7 @@ pub struct ShutdownResponse {
 /// The show message request is sent from the server to the client to show a message
 /// and a set of options actions to the user.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowShowMessageRequestRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10406,7 +10408,7 @@ pub struct WindowShowMessageRequestRequest {
 
 /// Response to the [WindowShowMessageRequestRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WindowShowMessageRequestResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10428,7 +10430,7 @@ pub struct WindowShowMessageRequestResponse {
 /// server constantly fails on this request. This is done to keep the save fast and
 /// reliable.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentWillSaveWaitUntilRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10444,7 +10446,7 @@ pub struct TextDocumentWillSaveWaitUntilRequest {
 
 /// Response to the [TextDocumentWillSaveWaitUntilRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentWillSaveWaitUntilResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10469,7 +10471,7 @@ pub struct TextDocumentWillSaveWaitUntilResponse {
 /// request. However, properties that are needed for the initial sorting and filtering, like `sortText`,
 /// `filterText`, `insertText`, and `textEdit`, must not be changed during resolve.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentCompletionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10485,7 +10487,7 @@ pub struct TextDocumentCompletionRequest {
 
 /// Response to the [TextDocumentCompletionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentCompletionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10504,7 +10506,7 @@ pub struct TextDocumentCompletionResponse {
 /// parameter is of type [CompletionItem] the response
 /// is of type [CompletionItem] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItemResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10520,7 +10522,7 @@ pub struct CompletionItemResolveRequest {
 
 /// Response to the [CompletionItemResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItemResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10538,7 +10540,7 @@ pub struct CompletionItemResolveResponse {
 /// parameter is of type [TextDocumentPosition] the response is of
 /// type [Hover] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentHoverRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10554,7 +10556,7 @@ pub struct TextDocumentHoverRequest {
 
 /// Response to the [TextDocumentHoverRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentHoverResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10570,7 +10572,7 @@ pub struct TextDocumentHoverResponse {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSignatureHelpRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10586,7 +10588,7 @@ pub struct TextDocumentSignatureHelpRequest {
 
 /// Response to the [TextDocumentSignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentSignatureHelpResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10606,7 +10608,7 @@ pub struct TextDocumentSignatureHelpResponse {
 /// the response is of either type [Definition] or a typed array of
 /// [DefinitionLink] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDefinitionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10622,7 +10624,7 @@ pub struct TextDocumentDefinitionRequest {
 
 /// Response to the [TextDocumentDefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDefinitionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10642,7 +10644,7 @@ pub struct TextDocumentDefinitionResponse {
 /// type [ReferenceParams] the response is of type
 /// {@link Location Location[]} or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentReferencesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10658,7 +10660,7 @@ pub struct TextDocumentReferencesRequest {
 
 /// Response to the [TextDocumentReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentReferencesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10678,7 +10680,7 @@ pub struct TextDocumentReferencesResponse {
 /// the request response is an array of type [DocumentHighlight]
 /// or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentHighlightRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10694,7 +10696,7 @@ pub struct TextDocumentDocumentHighlightRequest {
 
 /// Response to the [TextDocumentDocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentHighlightResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10714,7 +10716,7 @@ pub struct TextDocumentDocumentHighlightResponse {
 /// response is of type {@link SymbolInformation SymbolInformation[]} or a Thenable
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentSymbolRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10730,7 +10732,7 @@ pub struct TextDocumentDocumentSymbolRequest {
 
 /// Response to the [TextDocumentDocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentSymbolResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10747,7 +10749,7 @@ pub struct TextDocumentDocumentSymbolResponse {
 
 /// A request to provide commands for the given text document and range.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentCodeActionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10763,7 +10765,7 @@ pub struct TextDocumentCodeActionRequest {
 
 /// Response to the [TextDocumentCodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentCodeActionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10782,7 +10784,7 @@ pub struct TextDocumentCodeActionResponse {
 /// parameter is of type [CodeAction] the response
 /// is of type [CodeAction] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10798,7 +10800,7 @@ pub struct CodeActionResolveRequest {
 
 /// Response to the [CodeActionResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10821,7 +10823,7 @@ pub struct CodeActionResolveResponse {
 ///  need to advertise support for WorkspaceSymbols via the client capability
 ///  `workspace.symbol.resolveSupport`.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10837,7 +10839,7 @@ pub struct WorkspaceSymbolRequest {
 
 /// Response to the [WorkspaceSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10857,7 +10859,7 @@ pub struct WorkspaceSymbolResponse {
 ///
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10873,7 +10875,7 @@ pub struct WorkspaceSymbolResolveRequest {
 
 /// Response to the [WorkspaceSymbolResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceSymbolResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10889,7 +10891,7 @@ pub struct WorkspaceSymbolResolveResponse {
 
 /// A request to provide code lens for the given text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentCodeLensRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10905,7 +10907,7 @@ pub struct TextDocumentCodeLensRequest {
 
 /// Response to the [TextDocumentCodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentCodeLensResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10922,7 +10924,7 @@ pub struct TextDocumentCodeLensResponse {
 
 /// A request to resolve a command for a given code lens.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10938,7 +10940,7 @@ pub struct CodeLensResolveRequest {
 
 /// Response to the [CodeLensResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeLensResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10956,7 +10958,7 @@ pub struct CodeLensResolveResponse {
 ///
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceCodeLensRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10970,7 +10972,7 @@ pub struct WorkspaceCodeLensRefreshRequest {
 
 /// Response to the [WorkspaceCodeLensRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceCodeLensRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -10986,7 +10988,7 @@ pub struct WorkspaceCodeLensRefreshResponse {
 
 /// A request to provide document links
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentLinkRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11002,7 +11004,7 @@ pub struct TextDocumentDocumentLinkRequest {
 
 /// Response to the [TextDocumentDocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentDocumentLinkResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11021,7 +11023,7 @@ pub struct TextDocumentDocumentLinkResponse {
 /// parameter is of type [DocumentLink] the response
 /// is of type [DocumentLink] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLinkResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11037,7 +11039,7 @@ pub struct DocumentLinkResolveRequest {
 
 /// Response to the [DocumentLinkResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentLinkResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11053,7 +11055,7 @@ pub struct DocumentLinkResolveResponse {
 
 /// A request to format a whole document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11069,7 +11071,7 @@ pub struct TextDocumentFormattingRequest {
 
 /// Response to the [TextDocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11086,7 +11088,7 @@ pub struct TextDocumentFormattingResponse {
 
 /// A request to format a range in a document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRangeFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11102,7 +11104,7 @@ pub struct TextDocumentRangeFormattingRequest {
 
 /// Response to the [TextDocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRangeFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11123,7 +11125,7 @@ pub struct TextDocumentRangeFormattingResponse {
 /// @proposed
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRangesFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11139,7 +11141,7 @@ pub struct TextDocumentRangesFormattingRequest {
 
 /// Response to the [TextDocumentRangesFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRangesFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11156,7 +11158,7 @@ pub struct TextDocumentRangesFormattingResponse {
 
 /// A request to format a document on type.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentOnTypeFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11172,7 +11174,7 @@ pub struct TextDocumentOnTypeFormattingRequest {
 
 /// Response to the [TextDocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentOnTypeFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11189,7 +11191,7 @@ pub struct TextDocumentOnTypeFormattingResponse {
 
 /// A request to rename a symbol.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRenameRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11205,7 +11207,7 @@ pub struct TextDocumentRenameRequest {
 
 /// Response to the [TextDocumentRenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentRenameResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11224,7 +11226,7 @@ pub struct TextDocumentRenameResponse {
 ///
 /// @since 3.16 - support for default behavior
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPrepareRenameRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11240,7 +11242,7 @@ pub struct TextDocumentPrepareRenameRequest {
 
 /// Response to the [TextDocumentPrepareRenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentPrepareRenameResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11258,7 +11260,7 @@ pub struct TextDocumentPrepareRenameResponse {
 /// A request send from the client to the server to execute a command. The request might return
 /// a workspace edit which the client will apply to the workspace.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceExecuteCommandRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11274,7 +11276,7 @@ pub struct WorkspaceExecuteCommandRequest {
 
 /// Response to the [WorkspaceExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceExecuteCommandResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11291,7 +11293,7 @@ pub struct WorkspaceExecuteCommandResponse {
 
 /// A request sent from the server to the client to modified certain resources.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceApplyEditRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
@@ -11307,7 +11309,7 @@ pub struct WorkspaceApplyEditRequest {
 
 /// Response to the [WorkspaceApplyEditRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase")]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceApplyEditResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,

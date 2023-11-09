@@ -314,6 +314,13 @@ def generate_notification(
                 type=notification_def.params,
             )
         ]
+    else:
+        properties += [
+            model.Property(
+                name="params",
+                type=model.ReferenceType(kind="reference", name="LSPNull"),
+            )
+        ]
 
     inner = []
     for prop_def in properties:

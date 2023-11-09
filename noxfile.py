@@ -20,7 +20,7 @@ def _install_requirements(session: nox.Session):
 
 @nox.session()
 def tests(session: nox.Session):
-    """Run tests for generator and generated code in all languages."""
+    """Run tests for generator and generated code in python."""
     _install_requirements(session)
 
     session.log("Running test data generator.")
@@ -205,14 +205,14 @@ def create_plugin(session: nox.Session):
     package_root = pathlib.Path(__file__).parent / "packages" / name / "lsprotocol"
     package_root.mkdir(parents=True, exist_ok=True)
     package_root.joinpath("README.md").write_text(
-        f"# your generated code and other package files go under this directory.",
+        "# your generated code and other package files go under this directory.",
         encoding="utf-8",
     )
 
     tests_root = pathlib.Path(__file__).parent / "tests" / name
     tests_root.mkdir(parents=True, exist_ok=True)
     tests_root.joinpath("README.md").write_text(
-        f"# your tests go under this directory.", encoding="utf-8"
+        "# your tests go under this directory.", encoding="utf-8"
     )
 
     launch_json_path = pathlib.Path(__file__).parent / ".vscode" / "launch.json"
@@ -253,5 +253,9 @@ def generate_rust(session: nox.Session):
     _install_requirements(session)
 
     session.run("python", "-m", "generator", "--plugin", "rust")
+
     with session.chdir("./packages/rust/lsprotocol"):
         session.run("cargo", "fmt", external=True)
+    with session.chdir("./tests/rust"):
+        session.run("cargo", "fmt", external=True)
+        session.run("cargo", "build", external=True)

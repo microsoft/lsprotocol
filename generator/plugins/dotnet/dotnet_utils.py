@@ -19,7 +19,7 @@ from .dotnet_special_classes import generate_special_classes
 LOGGER = logging.getLogger("dotnet")
 
 
-def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
+def generate_from_spec(spec: model.LSPModel, output_dir: str, _test_dir: str) -> None:
     """Generate the code for the given spec."""
     output_path = pathlib.Path(output_dir, PACKAGE_DIR_NAME)
     if not output_path.exists():

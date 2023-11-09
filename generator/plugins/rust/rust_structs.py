@@ -213,7 +213,7 @@ def _generate_or_type_alias(
 
         for sub_type in alias_def.type.items:
             if sub_type.kind == "base" and sub_type.name == "null":
-                inner += [f"None,"]
+                inner += ["None,"]
             else:
                 inner += [f"ValueType{index}({get_type_name(sub_type, types, spec)}),"]
             index += 1

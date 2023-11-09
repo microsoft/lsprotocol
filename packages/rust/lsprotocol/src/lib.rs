@@ -5811,7 +5811,7 @@ pub struct ServerCapabilities {
 /// @since 3.15.0
 /// @since 3.18.0 ServerInfo type name added.
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0 ServerInfo type name added.")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ServerInfo {
@@ -6204,7 +6204,7 @@ pub struct CodeActionContext {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CodeActionDisabled {
@@ -6237,7 +6237,7 @@ pub struct CodeActionOptions {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct LocationUriOnly {
@@ -6349,7 +6349,7 @@ pub struct RenameOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PrepareRenamePlaceholder {
@@ -6360,7 +6360,7 @@ pub struct PrepareRenamePlaceholder {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct PrepareRenameDefaultBehavior {
@@ -6392,7 +6392,7 @@ pub struct SemanticTokensLegend {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct SemanticTokensFullDelta {
@@ -6587,7 +6587,7 @@ pub struct NotebookCell {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentCellChanges {
@@ -6623,7 +6623,7 @@ pub struct SelectedCompletionInfo {
 /// @since 3.15.0
 /// @since 3.18.0 ClientInfo type name added.
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0 ClientInfo type name added.")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientInfo {
@@ -6733,7 +6733,7 @@ pub struct NotebookDocumentSyncRegistrationOptions {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct WorkspaceOptions {
@@ -6750,7 +6750,7 @@ pub struct WorkspaceOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentContentChangePartial {
@@ -6769,7 +6769,7 @@ pub struct TextDocumentContentChangePartial {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentContentChangeWholeDocument {
@@ -6804,7 +6804,7 @@ pub struct DiagnosticRelatedInformation {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct EditRangeWithInsertReplace {
@@ -6815,7 +6815,7 @@ pub struct EditRangeWithInsertReplace {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ServerCompletionItemOptions {
@@ -6831,6 +6831,7 @@ pub struct ServerCompletionItemOptions {
 /// @proposed
 /// @deprecated use MarkupContent instead.
 #[deprecated]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct MarkedStringWithLanguage {
@@ -6906,7 +6907,7 @@ pub struct ExecutionSummary {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentCellChangeStructure {
@@ -6924,7 +6925,7 @@ pub struct NotebookDocumentCellChangeStructure {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentCellContentChanges {
@@ -7225,7 +7226,7 @@ pub struct GeneralClientCapabilities {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentFilterWithNotebook {
@@ -7240,7 +7241,7 @@ pub struct NotebookDocumentFilterWithNotebook {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentFilterWithCells {
@@ -7314,7 +7315,7 @@ pub struct RelativePattern {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentFilterLanguage {
@@ -7332,7 +7333,7 @@ pub struct TextDocumentFilterLanguage {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentFilterScheme {
@@ -7350,7 +7351,7 @@ pub struct TextDocumentFilterScheme {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct TextDocumentFilterPattern {
@@ -8174,7 +8175,7 @@ pub struct ShowDocumentClientCapabilities {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct StaleRequestSupportOptions {
@@ -8221,7 +8222,7 @@ pub struct MarkdownClientCapabilities {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookCellLanguage {
@@ -8232,7 +8233,7 @@ pub struct NotebookCellLanguage {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentFilterNotebookType {
@@ -8250,7 +8251,7 @@ pub struct NotebookDocumentFilterNotebookType {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentFilterScheme {
@@ -8268,7 +8269,7 @@ pub struct NotebookDocumentFilterScheme {
 ///
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct NotebookDocumentFilterPattern {
@@ -8284,7 +8285,7 @@ pub struct NotebookDocumentFilterPattern {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ChangeAnnotationsSupportOptions {
@@ -8296,7 +8297,7 @@ pub struct ChangeAnnotationsSupportOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSymbolKindOptions {
@@ -8313,7 +8314,7 @@ pub struct ClientSymbolKindOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSymbolTagOptions {
@@ -8323,7 +8324,7 @@ pub struct ClientSymbolTagOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSymbolResolveOptions {
@@ -8334,7 +8335,7 @@ pub struct ClientSymbolResolveOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCompletionItemOptions {
@@ -8396,7 +8397,7 @@ pub struct ClientCompletionItemOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCompletionItemOptionsKind {
@@ -8431,7 +8432,7 @@ pub struct CompletionListCapabilities {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSignatureInformationOptions {
@@ -8451,7 +8452,7 @@ pub struct ClientSignatureInformationOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCodeActionLiteralOptions {
@@ -8462,7 +8463,7 @@ pub struct ClientCodeActionLiteralOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCodeActionResolveOptions {
@@ -8472,7 +8473,7 @@ pub struct ClientCodeActionResolveOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientFoldingRangeKindOptions {
@@ -8485,7 +8486,7 @@ pub struct ClientFoldingRangeKindOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientFoldingRangeOptions {
@@ -8498,7 +8499,7 @@ pub struct ClientFoldingRangeOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientDiagnosticsTagOptions {
@@ -8508,7 +8509,7 @@ pub struct ClientDiagnosticsTagOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSemanticTokensRequestOptions {
@@ -8523,7 +8524,7 @@ pub struct ClientSemanticTokensRequestOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientInlayHintResolveOptions {
@@ -8533,7 +8534,7 @@ pub struct ClientInlayHintResolveOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientShowMessageActionItemOptions {
@@ -8545,7 +8546,7 @@ pub struct ClientShowMessageActionItemOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct CompletionItemTagOptions {
@@ -8555,7 +8556,7 @@ pub struct CompletionItemTagOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCompletionItemResolveOptions {
@@ -8565,7 +8566,7 @@ pub struct ClientCompletionItemResolveOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCompletionItemInsertTextModeOptions {
@@ -8574,7 +8575,7 @@ pub struct ClientCompletionItemInsertTextModeOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSignatureParameterInformationOptions {
@@ -8587,7 +8588,7 @@ pub struct ClientSignatureParameterInformationOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientCodeActionKindOptions {
@@ -8600,7 +8601,7 @@ pub struct ClientCodeActionKindOptions {
 
 /// @since 3.18.0
 /// @proposed
-#[cfg(feature = "proposed", since = "3.18.0")]
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct ClientSemanticTokensRequestFullDelta {

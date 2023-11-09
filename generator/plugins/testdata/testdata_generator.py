@@ -14,14 +14,14 @@ import generator.model as model
 LSP_MAX_INT = 2**31 - 1
 LSP_MIN_INT = -(2**31)
 
-LSP_MAX_UINT = 2**32 - 1
+LSP_MAX_UINT = 2**31 - 1
 LSP_MIN_UINT = 0
 
-LSP_OVER_MAX_INT = LSP_MAX_INT + 1
-LSP_UNDER_MIN_INT = LSP_MIN_INT - 1
+LSP_OVER_MAX_INT = 2**31
+LSP_UNDER_MIN_INT = -(2**31) - 1
 
-LSP_OVER_MAX_UINT = LSP_MAX_UINT + 1
-LSP_UNDER_MIN_UINT = LSP_MIN_UINT - 1
+LSP_OVER_MAX_UINT = 2**32 + 1
+LSP_UNDER_MIN_UINT = -1
 
 
 def get_hash_from(text: str) -> str:

@@ -2073,6 +2073,8 @@ pub struct ImplementationRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -2103,6 +2105,8 @@ pub struct TypeDefinitionRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// A workspace folder inside a client.
@@ -2169,6 +2173,8 @@ pub struct DocumentColorRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [ColorPresentationRequest].
@@ -2284,6 +2290,8 @@ pub struct FoldingRangeRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -2314,6 +2322,8 @@ pub struct DeclarationRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// A parameter literal used in selection range requests.
@@ -2345,6 +2355,8 @@ pub struct SelectionRangeRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -2425,6 +2437,8 @@ pub struct CallHierarchyRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameter of a `callHierarchy/incomingCalls` request.
@@ -2546,6 +2560,8 @@ pub struct SemanticTokensRegistrationOptions {
     /// Server supports providing semantic tokens for a specific range
     /// of a document.
     pub range: Option<OR2<bool, LSPObject>>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// @since 3.16.0
@@ -2679,6 +2695,8 @@ pub struct LinkedEditingRangeRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters sent in notifications/requests for user-initiated creation of
@@ -2808,6 +2826,8 @@ pub struct MonikerRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameter of a `textDocument/prepareTypeHierarchy` request.
@@ -2875,6 +2895,8 @@ pub struct TypeHierarchyRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameter of a `typeHierarchy/supertypes` request.
@@ -2943,6 +2965,8 @@ pub struct InlineValueRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// A parameter literal used in inlay hint requests.
@@ -3027,6 +3051,8 @@ pub struct InlayHintRegistrationOptions {
     /// The server provides support to resolve additional
     /// information for an inlay hint item.
     pub resolve_provider: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters of the document diagnostic request.
@@ -3095,6 +3121,8 @@ pub struct DiagnosticRegistrationOptions {
     /// set in another file. Inter file dependencies are common for
     /// most programming languages and typically uncommon for linters.
     pub inter_file_dependencies: bool,
+
+    pub work_done_progress: Option<bool>,
 
     /// The server provides support for workspace diagnostics as well.
     pub workspace_diagnostics: bool,
@@ -3276,6 +3304,8 @@ pub struct InlineCompletionRegistrationOptions {
     /// The id used to register the request. The id can be used to deregister
     /// the request again. See also Registration#id.
     pub id: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -3340,6 +3370,9 @@ pub struct InitializeParams {
 
     /// The initial trace setting. If omitted trace is disabled ('off').
     pub trace: Option<TraceValues>,
+
+    /// An optional token that a server can use to report work done progress.
+    pub work_done_token: Option<ProgressToken>,
 
     /// The workspace folders configured in the client when the server starts.
     ///
@@ -3805,6 +3838,8 @@ pub struct CompletionRegistrationOptions {
     /// If code complete should automatically be trigger on characters not being valid inside
     /// an identifier (for example `.` in JavaScript) list them in `triggerCharacters`.
     pub trigger_characters: Option<Vec<String>>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [HoverRequest].
@@ -3841,6 +3876,8 @@ pub struct HoverRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [SignatureHelpRequest].
@@ -3912,6 +3949,8 @@ pub struct SignatureHelpRegistrationOptions {
 
     /// List of characters that trigger signature help automatically.
     pub trigger_characters: Option<Vec<String>>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [DefinitionRequest].
@@ -3940,6 +3979,8 @@ pub struct DefinitionRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [ReferencesRequest].
@@ -3970,6 +4011,8 @@ pub struct ReferenceRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [DocumentHighlightRequest].
@@ -4011,6 +4054,8 @@ pub struct DocumentHighlightRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// Parameters for a [DocumentSymbolRequest].
@@ -4123,6 +4168,8 @@ pub struct DocumentSymbolRegistrationOptions {
     ///
     /// @since 3.16.0
     pub label: Option<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [CodeActionRequest].
@@ -4243,6 +4290,8 @@ pub struct CodeActionRegistrationOptions {
     ///
     /// @since 3.16.0
     pub resolve_provider: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [WorkspaceSymbolRequest].
@@ -4307,6 +4356,8 @@ pub struct WorkspaceSymbolRegistrationOptions {
     ///
     /// @since 3.17.0
     pub resolve_provider: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [CodeLensRequest].
@@ -4354,6 +4405,8 @@ pub struct CodeLensRegistrationOptions {
 
     /// Code lens has a resolve provider as well.
     pub resolve_provider: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [DocumentLinkRequest].
@@ -4407,6 +4460,8 @@ pub struct DocumentLinkRegistrationOptions {
 
     /// Document links have a resolve provider as well.
     pub resolve_provider: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [DocumentFormattingRequest].
@@ -4431,6 +4486,8 @@ pub struct DocumentFormattingRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [DocumentRangeFormattingRequest].
@@ -4465,6 +4522,8 @@ pub struct DocumentRangeFormattingRegistrationOptions {
     /// @proposed
     #[cfg(feature = "proposed")]
     pub ranges_support: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters of a [DocumentRangesFormattingRequest].
@@ -4558,6 +4617,8 @@ pub struct RenameRegistrationOptions {
     ///
     /// @since version 3.12.0
     pub prepare_provider: Option<bool>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -4593,6 +4654,8 @@ pub struct ExecuteCommandParams {
 pub struct ExecuteCommandRegistrationOptions {
     /// The commands to be executed on the server
     pub commands: Vec<String>,
+
+    pub work_done_progress: Option<bool>,
 }
 
 /// The parameters passed via an apply workspace edit request.
@@ -8755,7 +8818,7 @@ pub struct InitializedNotification {
     /// The method to be invoked.
     pub method: LSPNotificationMethods,
 
-    pub params: InitializedParams,
+    pub params: Option<LSPAny>,
 }
 
 /// The exit event is sent from the client to the server to
@@ -8769,7 +8832,7 @@ pub struct ExitNotification {
     /// The method to be invoked.
     pub method: LSPNotificationMethods,
 
-    pub params: LSPNull,
+    pub params: Option<LSPNull>,
 }
 
 /// The configuration change notification is sent from the client to the server
@@ -8826,7 +8889,7 @@ pub struct TelemetryEventNotification {
     /// The method to be invoked.
     pub method: LSPNotificationMethods,
 
-    pub params: LSPAny,
+    pub params: Option<LSPAny>,
 }
 
 /// The document open notification is sent from the client to the server to signal
@@ -9085,6 +9148,8 @@ pub struct WorkspaceWorkspaceFoldersRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceWorkspaceFoldersRequest].
@@ -9262,6 +9327,8 @@ pub struct WorkspaceFoldingRangeRefreshRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceFoldingRangeRefreshRequest].
@@ -9602,6 +9669,8 @@ pub struct WorkspaceSemanticTokensRefreshRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceSemanticTokensRefreshRequest].
@@ -9994,6 +10063,8 @@ pub struct WorkspaceInlineValueRefreshRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceInlineValueRefreshRequest].
@@ -10097,6 +10168,8 @@ pub struct WorkspaceInlayHintRefreshRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceInlayHintRefreshRequest].
@@ -10197,6 +10270,8 @@ pub struct WorkspaceDiagnosticRefreshRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceDiagnosticRefreshRequest].
@@ -10371,6 +10446,8 @@ pub struct ShutdownRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [ShutdownRequest].
@@ -10968,6 +11045,8 @@ pub struct WorkspaceCodeLensRefreshRequest {
 
     /// The request id.
     pub id: LSPId,
+
+    pub params: Option<LSPNull>,
 }
 
 /// Response to the [WorkspaceCodeLensRefreshRequest].

@@ -324,7 +324,9 @@ def generate_extra_types(spec: model.LSPModel, type_data: TypeData) -> None:
         ),
     )
 
-    direction = sorted(set([m.messageDirection for m in (spec.requests + spec.notifications)]))
+    direction = sorted(
+        set([m.messageDirection for m in (spec.requests + spec.notifications)])
+    )
     type_data.add_type_info(
         model.ReferenceType(kind="reference", name="MessageDirection"),
         "MessageDirection",
@@ -380,7 +382,8 @@ def get_extended_properties(
         if t.kind == "reference":
             s = get_from_name(t.name, spec)
             if s:
-                properties += [p for p in s.properties]
+                s_props = get_extended_properties(s, spec)
+                properties += [p for p in s_props]
         elif t.kind == "literal":
             properties += [p for p in t.value.properties]
         else:

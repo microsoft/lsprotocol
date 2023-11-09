@@ -12,6 +12,7 @@ from .rust_commons import (
     generate_literal_struct_name,
     generate_property,
     get_extended_properties,
+    get_from_name,
     get_message_type_name,
     get_type_name,
     struct_wrapper,
@@ -308,17 +309,28 @@ def generate_notification(
 ) -> None:
     properties = required_rpc_properties("LSPNotificationMethods")
     if notification_def.params:
-        properties += [
-            model.Property(
-                name="params",
-                type=notification_def.params,
-            )
-        ]
+        ptype = get_from_name(notification_def.params.name, spec)
+        if hasattr(ptype, "properties") and get_extended_properties(ptype, spec):
+            properties += [
+                model.Property(
+                    name="params",
+                    type=notification_def.params,
+                )
+            ]
+        else:
+            properties += [
+                model.Property(
+                    name="params",
+                    type=model.ReferenceType(kind="reference", name="LSPAny"),
+                    optional=True,
+                )
+            ]
     else:
         properties += [
             model.Property(
                 name="params",
                 type=model.ReferenceType(kind="reference", name="LSPNull"),
+                optional=True,
             )
         ]
 
@@ -388,10 +400,28 @@ def generate_request(
         )
     ]
     if request_def.params:
+        ptype = get_from_name(request_def.params.name, spec)
+        if hasattr(ptype, "properties") and get_extended_properties(ptype, spec):
+            properties += [
+                model.Property(
+                    name="params",
+                    type=request_def.params,
+                )
+            ]
+        else:
+            properties += [
+                model.Property(
+                    name="params",
+                    type=model.ReferenceType(kind="reference", name="LSPAny"),
+                    optional=True,
+                )
+            ]
+    else:
         properties += [
             model.Property(
                 name="params",
-                type=request_def.params,
+                type=model.ReferenceType(kind="reference", name="LSPNull"),
+                optional=True,
             )
         ]
 

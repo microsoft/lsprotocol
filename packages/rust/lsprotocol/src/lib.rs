@@ -334,12 +334,12 @@ pub enum LSPNotificationMethods {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum MessageDirection {
-    #[serde(rename = "both")]
-    Both,
-    #[serde(rename = "serverToClient")]
-    ServerToClient,
     #[serde(rename = "clientToServer")]
     ClientToServer,
+    #[serde(rename = "serverToClient")]
+    ServerToClient,
+    #[serde(rename = "both")]
+    Both,
 }
 
 /// A set of predefined token types. This set is not fixed
@@ -477,7 +477,7 @@ pub enum DocumentDiagnosticReportKind {
 }
 
 /// Predefined error codes.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum ErrorCodes {
     ParseError = -32700,
 
@@ -495,8 +495,42 @@ pub enum ErrorCodes {
 
     UnknownErrorCode = -32001,
 }
+impl Serialize for ErrorCodes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            ErrorCodes::ParseError => serializer.serialize_i32(-32700),
+            ErrorCodes::InvalidRequest => serializer.serialize_i32(-32600),
+            ErrorCodes::MethodNotFound => serializer.serialize_i32(-32601),
+            ErrorCodes::InvalidParams => serializer.serialize_i32(-32602),
+            ErrorCodes::InternalError => serializer.serialize_i32(-32603),
+            ErrorCodes::ServerNotInitialized => serializer.serialize_i32(-32002),
+            ErrorCodes::UnknownErrorCode => serializer.serialize_i32(-32001),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for ErrorCodes {
+    fn deserialize<D>(deserializer: D) -> Result<ErrorCodes, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            -32700 => Ok(ErrorCodes::ParseError),
+            -32600 => Ok(ErrorCodes::InvalidRequest),
+            -32601 => Ok(ErrorCodes::MethodNotFound),
+            -32602 => Ok(ErrorCodes::InvalidParams),
+            -32603 => Ok(ErrorCodes::InternalError),
+            -32002 => Ok(ErrorCodes::ServerNotInitialized),
+            -32001 => Ok(ErrorCodes::UnknownErrorCode),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum LSPErrorCodes {
     /// A request failed but it was syntactically correct, e.g the
     /// method name was known and the parameters were valid. The error
@@ -527,6 +561,34 @@ pub enum LSPErrorCodes {
     /// the cancel.
     RequestCancelled = -32800,
 }
+impl Serialize for LSPErrorCodes {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            LSPErrorCodes::RequestFailed => serializer.serialize_i32(-32803),
+            LSPErrorCodes::ServerCancelled => serializer.serialize_i32(-32802),
+            LSPErrorCodes::ContentModified => serializer.serialize_i32(-32801),
+            LSPErrorCodes::RequestCancelled => serializer.serialize_i32(-32800),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for LSPErrorCodes {
+    fn deserialize<D>(deserializer: D) -> Result<LSPErrorCodes, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            -32803 => Ok(LSPErrorCodes::RequestFailed),
+            -32802 => Ok(LSPErrorCodes::ServerCancelled),
+            -32801 => Ok(LSPErrorCodes::ContentModified),
+            -32800 => Ok(LSPErrorCodes::RequestCancelled),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// A set of predefined range kinds.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -545,7 +607,7 @@ pub enum FoldingRangeKind {
 }
 
 /// A symbol kind.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum SymbolKind {
     File = 1,
 
@@ -599,14 +661,108 @@ pub enum SymbolKind {
 
     TypeParameter = 26,
 }
+impl Serialize for SymbolKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            SymbolKind::File => serializer.serialize_i32(1),
+            SymbolKind::Module => serializer.serialize_i32(2),
+            SymbolKind::Namespace => serializer.serialize_i32(3),
+            SymbolKind::Package => serializer.serialize_i32(4),
+            SymbolKind::Class => serializer.serialize_i32(5),
+            SymbolKind::Method => serializer.serialize_i32(6),
+            SymbolKind::Property => serializer.serialize_i32(7),
+            SymbolKind::Field => serializer.serialize_i32(8),
+            SymbolKind::Constructor => serializer.serialize_i32(9),
+            SymbolKind::Enum => serializer.serialize_i32(10),
+            SymbolKind::Interface => serializer.serialize_i32(11),
+            SymbolKind::Function => serializer.serialize_i32(12),
+            SymbolKind::Variable => serializer.serialize_i32(13),
+            SymbolKind::Constant => serializer.serialize_i32(14),
+            SymbolKind::String => serializer.serialize_i32(15),
+            SymbolKind::Number => serializer.serialize_i32(16),
+            SymbolKind::Boolean => serializer.serialize_i32(17),
+            SymbolKind::Array => serializer.serialize_i32(18),
+            SymbolKind::Object => serializer.serialize_i32(19),
+            SymbolKind::Key => serializer.serialize_i32(20),
+            SymbolKind::Null => serializer.serialize_i32(21),
+            SymbolKind::EnumMember => serializer.serialize_i32(22),
+            SymbolKind::Struct => serializer.serialize_i32(23),
+            SymbolKind::Event => serializer.serialize_i32(24),
+            SymbolKind::Operator => serializer.serialize_i32(25),
+            SymbolKind::TypeParameter => serializer.serialize_i32(26),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for SymbolKind {
+    fn deserialize<D>(deserializer: D) -> Result<SymbolKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(SymbolKind::File),
+            2 => Ok(SymbolKind::Module),
+            3 => Ok(SymbolKind::Namespace),
+            4 => Ok(SymbolKind::Package),
+            5 => Ok(SymbolKind::Class),
+            6 => Ok(SymbolKind::Method),
+            7 => Ok(SymbolKind::Property),
+            8 => Ok(SymbolKind::Field),
+            9 => Ok(SymbolKind::Constructor),
+            10 => Ok(SymbolKind::Enum),
+            11 => Ok(SymbolKind::Interface),
+            12 => Ok(SymbolKind::Function),
+            13 => Ok(SymbolKind::Variable),
+            14 => Ok(SymbolKind::Constant),
+            15 => Ok(SymbolKind::String),
+            16 => Ok(SymbolKind::Number),
+            17 => Ok(SymbolKind::Boolean),
+            18 => Ok(SymbolKind::Array),
+            19 => Ok(SymbolKind::Object),
+            20 => Ok(SymbolKind::Key),
+            21 => Ok(SymbolKind::Null),
+            22 => Ok(SymbolKind::EnumMember),
+            23 => Ok(SymbolKind::Struct),
+            24 => Ok(SymbolKind::Event),
+            25 => Ok(SymbolKind::Operator),
+            26 => Ok(SymbolKind::TypeParameter),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// Symbol tags are extra annotations that tweak the rendering of a symbol.
 ///
 /// @since 3.16
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum SymbolTag {
     /// Render a symbol as obsolete, usually using a strike-out.
     Deprecated = 1,
+}
+impl Serialize for SymbolTag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            SymbolTag::Deprecated => serializer.serialize_i32(1),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for SymbolTag {
+    fn deserialize<D>(deserializer: D) -> Result<SymbolTag, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(SymbolTag::Deprecated),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 /// Moniker uniqueness level to define scope of the moniker.
@@ -657,7 +813,7 @@ pub enum MonikerKind {
 /// Inlay hint kinds.
 ///
 /// @since 3.17.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum InlayHintKind {
     /// An inlay hint that for a type annotation.
     Type = 1,
@@ -665,9 +821,33 @@ pub enum InlayHintKind {
     /// An inlay hint that is for a parameter.
     Parameter = 2,
 }
+impl Serialize for InlayHintKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            InlayHintKind::Type => serializer.serialize_i32(1),
+            InlayHintKind::Parameter => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for InlayHintKind {
+    fn deserialize<D>(deserializer: D) -> Result<InlayHintKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(InlayHintKind::Type),
+            2 => Ok(InlayHintKind::Parameter),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// The message type
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum MessageType {
     /// An error message.
     Error = 1,
@@ -686,10 +866,40 @@ pub enum MessageType {
     /// @since 3.18.0
     Debug = 5,
 }
+impl Serialize for MessageType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            MessageType::Error => serializer.serialize_i32(1),
+            MessageType::Warning => serializer.serialize_i32(2),
+            MessageType::Info => serializer.serialize_i32(3),
+            MessageType::Log => serializer.serialize_i32(4),
+            MessageType::Debug => serializer.serialize_i32(5),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for MessageType {
+    fn deserialize<D>(deserializer: D) -> Result<MessageType, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(MessageType::Error),
+            2 => Ok(MessageType::Warning),
+            3 => Ok(MessageType::Info),
+            4 => Ok(MessageType::Log),
+            5 => Ok(MessageType::Debug),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// Defines how the host (editor) should sync
 /// document changes to the language server.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum TextDocumentSyncKind {
     /// Documents should not be synced at all.
     None = 0,
@@ -703,9 +913,35 @@ pub enum TextDocumentSyncKind {
     /// send.
     Incremental = 2,
 }
+impl Serialize for TextDocumentSyncKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            TextDocumentSyncKind::None => serializer.serialize_i32(0),
+            TextDocumentSyncKind::Full => serializer.serialize_i32(1),
+            TextDocumentSyncKind::Incremental => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for TextDocumentSyncKind {
+    fn deserialize<D>(deserializer: D) -> Result<TextDocumentSyncKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            0 => Ok(TextDocumentSyncKind::None),
+            1 => Ok(TextDocumentSyncKind::Full),
+            2 => Ok(TextDocumentSyncKind::Incremental),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// Represents reasons why a text document is saved.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum TextDocumentSaveReason {
     /// Manually triggered, e.g. by the user pressing save, by starting debugging,
     /// or by an API call.
@@ -717,9 +953,35 @@ pub enum TextDocumentSaveReason {
     /// When the editor lost focus.
     FocusOut = 3,
 }
+impl Serialize for TextDocumentSaveReason {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            TextDocumentSaveReason::Manual => serializer.serialize_i32(1),
+            TextDocumentSaveReason::AfterDelay => serializer.serialize_i32(2),
+            TextDocumentSaveReason::FocusOut => serializer.serialize_i32(3),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for TextDocumentSaveReason {
+    fn deserialize<D>(deserializer: D) -> Result<TextDocumentSaveReason, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(TextDocumentSaveReason::Manual),
+            2 => Ok(TextDocumentSaveReason::AfterDelay),
+            3 => Ok(TextDocumentSaveReason::FocusOut),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// The kind of a completion entry.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum CompletionItemKind {
     Text = 1,
 
@@ -771,20 +1033,112 @@ pub enum CompletionItemKind {
 
     TypeParameter = 25,
 }
+impl Serialize for CompletionItemKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            CompletionItemKind::Text => serializer.serialize_i32(1),
+            CompletionItemKind::Method => serializer.serialize_i32(2),
+            CompletionItemKind::Function => serializer.serialize_i32(3),
+            CompletionItemKind::Constructor => serializer.serialize_i32(4),
+            CompletionItemKind::Field => serializer.serialize_i32(5),
+            CompletionItemKind::Variable => serializer.serialize_i32(6),
+            CompletionItemKind::Class => serializer.serialize_i32(7),
+            CompletionItemKind::Interface => serializer.serialize_i32(8),
+            CompletionItemKind::Module => serializer.serialize_i32(9),
+            CompletionItemKind::Property => serializer.serialize_i32(10),
+            CompletionItemKind::Unit => serializer.serialize_i32(11),
+            CompletionItemKind::Value => serializer.serialize_i32(12),
+            CompletionItemKind::Enum => serializer.serialize_i32(13),
+            CompletionItemKind::Keyword => serializer.serialize_i32(14),
+            CompletionItemKind::Snippet => serializer.serialize_i32(15),
+            CompletionItemKind::Color => serializer.serialize_i32(16),
+            CompletionItemKind::File => serializer.serialize_i32(17),
+            CompletionItemKind::Reference => serializer.serialize_i32(18),
+            CompletionItemKind::Folder => serializer.serialize_i32(19),
+            CompletionItemKind::EnumMember => serializer.serialize_i32(20),
+            CompletionItemKind::Constant => serializer.serialize_i32(21),
+            CompletionItemKind::Struct => serializer.serialize_i32(22),
+            CompletionItemKind::Event => serializer.serialize_i32(23),
+            CompletionItemKind::Operator => serializer.serialize_i32(24),
+            CompletionItemKind::TypeParameter => serializer.serialize_i32(25),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for CompletionItemKind {
+    fn deserialize<D>(deserializer: D) -> Result<CompletionItemKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(CompletionItemKind::Text),
+            2 => Ok(CompletionItemKind::Method),
+            3 => Ok(CompletionItemKind::Function),
+            4 => Ok(CompletionItemKind::Constructor),
+            5 => Ok(CompletionItemKind::Field),
+            6 => Ok(CompletionItemKind::Variable),
+            7 => Ok(CompletionItemKind::Class),
+            8 => Ok(CompletionItemKind::Interface),
+            9 => Ok(CompletionItemKind::Module),
+            10 => Ok(CompletionItemKind::Property),
+            11 => Ok(CompletionItemKind::Unit),
+            12 => Ok(CompletionItemKind::Value),
+            13 => Ok(CompletionItemKind::Enum),
+            14 => Ok(CompletionItemKind::Keyword),
+            15 => Ok(CompletionItemKind::Snippet),
+            16 => Ok(CompletionItemKind::Color),
+            17 => Ok(CompletionItemKind::File),
+            18 => Ok(CompletionItemKind::Reference),
+            19 => Ok(CompletionItemKind::Folder),
+            20 => Ok(CompletionItemKind::EnumMember),
+            21 => Ok(CompletionItemKind::Constant),
+            22 => Ok(CompletionItemKind::Struct),
+            23 => Ok(CompletionItemKind::Event),
+            24 => Ok(CompletionItemKind::Operator),
+            25 => Ok(CompletionItemKind::TypeParameter),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// Completion item tags are extra annotations that tweak the rendering of a completion
 /// item.
 ///
 /// @since 3.15.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum CompletionItemTag {
     /// Render a completion as obsolete, usually using a strike-out.
     Deprecated = 1,
 }
+impl Serialize for CompletionItemTag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            CompletionItemTag::Deprecated => serializer.serialize_i32(1),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for CompletionItemTag {
+    fn deserialize<D>(deserializer: D) -> Result<CompletionItemTag, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(CompletionItemTag::Deprecated),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// Defines whether the insert text in a completion item should be interpreted as
 /// plain text or a snippet.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum InsertTextFormat {
     /// The primary text to be inserted is treated as a plain string.
     PlainText = 1,
@@ -799,12 +1153,36 @@ pub enum InsertTextFormat {
     /// See also: https://microsoft.github.io/language-server-protocol/specifications/specification-current/#snippet_syntax
     Snippet = 2,
 }
+impl Serialize for InsertTextFormat {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            InsertTextFormat::PlainText => serializer.serialize_i32(1),
+            InsertTextFormat::Snippet => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for InsertTextFormat {
+    fn deserialize<D>(deserializer: D) -> Result<InsertTextFormat, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(InsertTextFormat::PlainText),
+            2 => Ok(InsertTextFormat::Snippet),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// How whitespace and indentation is handled during completion
 /// item insertion.
 ///
 /// @since 3.16.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum InsertTextMode {
     /// The insertion or replace strings is taken as it is. If the
     /// value is multi line the lines below the cursor will be
@@ -822,9 +1200,33 @@ pub enum InsertTextMode {
     /// following lines inserted will be indented using 2 tabs as well.
     AdjustIndentation = 2,
 }
+impl Serialize for InsertTextMode {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            InsertTextMode::AsIs => serializer.serialize_i32(1),
+            InsertTextMode::AdjustIndentation => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for InsertTextMode {
+    fn deserialize<D>(deserializer: D) -> Result<InsertTextMode, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(InsertTextMode::AsIs),
+            2 => Ok(InsertTextMode::AdjustIndentation),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// A document highlight kind.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum DocumentHighlightKind {
     /// A textual occurrence.
     Text = 1,
@@ -834,6 +1236,32 @@ pub enum DocumentHighlightKind {
 
     /// Write-access of a symbol, like writing to a variable.
     Write = 3,
+}
+impl Serialize for DocumentHighlightKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            DocumentHighlightKind::Text => serializer.serialize_i32(1),
+            DocumentHighlightKind::Read => serializer.serialize_i32(2),
+            DocumentHighlightKind::Write => serializer.serialize_i32(3),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for DocumentHighlightKind {
+    fn deserialize<D>(deserializer: D) -> Result<DocumentHighlightKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(DocumentHighlightKind::Text),
+            2 => Ok(DocumentHighlightKind::Read),
+            3 => Ok(DocumentHighlightKind::Write),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 /// A set of predefined code action kinds
@@ -943,13 +1371,37 @@ pub enum MarkupKind {
 /// @since 3.18.0
 /// @proposed
 #[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum InlineCompletionTriggerKind {
     /// Completion was triggered explicitly by a user gesture.
     Invoked = 0,
 
     /// Completion was triggered automatically while editing.
     Automatic = 1,
+}
+impl Serialize for InlineCompletionTriggerKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            InlineCompletionTriggerKind::Invoked => serializer.serialize_i32(0),
+            InlineCompletionTriggerKind::Automatic => serializer.serialize_i32(1),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for InlineCompletionTriggerKind {
+    fn deserialize<D>(deserializer: D) -> Result<InlineCompletionTriggerKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            0 => Ok(InlineCompletionTriggerKind::Invoked),
+            1 => Ok(InlineCompletionTriggerKind::Automatic),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 /// A set of predefined position encoding kinds.
@@ -978,7 +1430,7 @@ pub enum PositionEncodingKind {
 }
 
 /// The file event type
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum FileChangeType {
     /// The file got created.
     Created = 1,
@@ -989,8 +1441,34 @@ pub enum FileChangeType {
     /// The file got deleted.
     Deleted = 3,
 }
+impl Serialize for FileChangeType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            FileChangeType::Created => serializer.serialize_i32(1),
+            FileChangeType::Changed => serializer.serialize_i32(2),
+            FileChangeType::Deleted => serializer.serialize_i32(3),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for FileChangeType {
+    fn deserialize<D>(deserializer: D) -> Result<FileChangeType, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(FileChangeType::Created),
+            2 => Ok(FileChangeType::Changed),
+            3 => Ok(FileChangeType::Deleted),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum WatchKind {
     /// Interested in create events.
     Create = 1,
@@ -1001,9 +1479,35 @@ pub enum WatchKind {
     /// Interested in delete events
     Delete = 4,
 }
+impl Serialize for WatchKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            WatchKind::Create => serializer.serialize_i32(1),
+            WatchKind::Change => serializer.serialize_i32(2),
+            WatchKind::Delete => serializer.serialize_i32(4),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for WatchKind {
+    fn deserialize<D>(deserializer: D) -> Result<WatchKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(WatchKind::Create),
+            2 => Ok(WatchKind::Change),
+            4 => Ok(WatchKind::Delete),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// The diagnostic's severity.
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum DiagnosticSeverity {
     /// Reports an error.
     Error = 1,
@@ -1017,11 +1521,39 @@ pub enum DiagnosticSeverity {
     /// Reports a hint.
     Hint = 4,
 }
+impl Serialize for DiagnosticSeverity {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            DiagnosticSeverity::Error => serializer.serialize_i32(1),
+            DiagnosticSeverity::Warning => serializer.serialize_i32(2),
+            DiagnosticSeverity::Information => serializer.serialize_i32(3),
+            DiagnosticSeverity::Hint => serializer.serialize_i32(4),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for DiagnosticSeverity {
+    fn deserialize<D>(deserializer: D) -> Result<DiagnosticSeverity, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(DiagnosticSeverity::Error),
+            2 => Ok(DiagnosticSeverity::Warning),
+            3 => Ok(DiagnosticSeverity::Information),
+            4 => Ok(DiagnosticSeverity::Hint),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// The diagnostic tags.
 ///
 /// @since 3.15.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum DiagnosticTag {
     /// Unused or unnecessary code.
     ///
@@ -1034,9 +1566,33 @@ pub enum DiagnosticTag {
     /// Clients are allowed to rendered diagnostics with this tag strike through.
     Deprecated = 2,
 }
+impl Serialize for DiagnosticTag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            DiagnosticTag::Unnecessary => serializer.serialize_i32(1),
+            DiagnosticTag::Deprecated => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for DiagnosticTag {
+    fn deserialize<D>(deserializer: D) -> Result<DiagnosticTag, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(DiagnosticTag::Unnecessary),
+            2 => Ok(DiagnosticTag::Deprecated),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// How a completion was triggered
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum CompletionTriggerKind {
     /// Completion was triggered by typing an identifier (24x7 code
     /// complete), manual invocation (e.g Ctrl+Space) or via API.
@@ -1049,11 +1605,37 @@ pub enum CompletionTriggerKind {
     /// Completion was re-triggered as current completion list is incomplete
     TriggerForIncompleteCompletions = 3,
 }
+impl Serialize for CompletionTriggerKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            CompletionTriggerKind::Invoked => serializer.serialize_i32(1),
+            CompletionTriggerKind::TriggerCharacter => serializer.serialize_i32(2),
+            CompletionTriggerKind::TriggerForIncompleteCompletions => serializer.serialize_i32(3),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for CompletionTriggerKind {
+    fn deserialize<D>(deserializer: D) -> Result<CompletionTriggerKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(CompletionTriggerKind::Invoked),
+            2 => Ok(CompletionTriggerKind::TriggerCharacter),
+            3 => Ok(CompletionTriggerKind::TriggerForIncompleteCompletions),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// How a signature help was triggered.
 ///
 /// @since 3.15.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum SignatureHelpTriggerKind {
     /// Signature help was invoked manually by the user or by a command.
     Invoked = 1,
@@ -1064,11 +1646,37 @@ pub enum SignatureHelpTriggerKind {
     /// Signature help was triggered by the cursor moving or by the document content changing.
     ContentChange = 3,
 }
+impl Serialize for SignatureHelpTriggerKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            SignatureHelpTriggerKind::Invoked => serializer.serialize_i32(1),
+            SignatureHelpTriggerKind::TriggerCharacter => serializer.serialize_i32(2),
+            SignatureHelpTriggerKind::ContentChange => serializer.serialize_i32(3),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for SignatureHelpTriggerKind {
+    fn deserialize<D>(deserializer: D) -> Result<SignatureHelpTriggerKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(SignatureHelpTriggerKind::Invoked),
+            2 => Ok(SignatureHelpTriggerKind::TriggerCharacter),
+            3 => Ok(SignatureHelpTriggerKind::ContentChange),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
 
 /// The reason why code actions were requested.
 ///
 /// @since 3.17.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum CodeActionTriggerKind {
     /// Code actions were explicitly requested by the user or by an extension.
     Invoked = 1,
@@ -1078,6 +1686,30 @@ pub enum CodeActionTriggerKind {
     /// This typically happens when current selection in a file changes, but can
     /// also be triggered when file content changes.
     Automatic = 2,
+}
+impl Serialize for CodeActionTriggerKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            CodeActionTriggerKind::Invoked => serializer.serialize_i32(1),
+            CodeActionTriggerKind::Automatic => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for CodeActionTriggerKind {
+    fn deserialize<D>(deserializer: D) -> Result<CodeActionTriggerKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(CodeActionTriggerKind::Invoked),
+            2 => Ok(CodeActionTriggerKind::Automatic),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 /// A pattern kind describing if a glob pattern matches a file a folder or
@@ -1098,13 +1730,37 @@ pub enum FileOperationPatternKind {
 /// A notebook cell kind.
 ///
 /// @since 3.17.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum NotebookCellKind {
     /// A markup-cell is formatted source that is used for display.
     Markup = 1,
 
     /// A code-cell is source code.
     Code = 2,
+}
+impl Serialize for NotebookCellKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            NotebookCellKind::Markup => serializer.serialize_i32(1),
+            NotebookCellKind::Code => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for NotebookCellKind {
+    fn deserialize<D>(deserializer: D) -> Result<NotebookCellKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(NotebookCellKind::Markup),
+            2 => Ok(NotebookCellKind::Code),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -1146,11 +1802,33 @@ pub enum FailureHandlingKind {
     Undo,
 }
 
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum PrepareSupportDefaultBehavior {
     /// The client's default behavior is to select the identifier
     /// according the to language's syntax rule.
     Identifier = 1,
+}
+impl Serialize for PrepareSupportDefaultBehavior {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            PrepareSupportDefaultBehavior::Identifier => serializer.serialize_i32(1),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for PrepareSupportDefaultBehavior {
+    fn deserialize<D>(deserializer: D) -> Result<PrepareSupportDefaultBehavior, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(PrepareSupportDefaultBehavior::Identifier),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]

@@ -14,17 +14,47 @@ def _get_enum_docs(enum: Union[model.Enum, model.EnumItem]) -> List[str]:
     return lines_to_doc_comments(doc)
 
 
+def generate_serde(enum: model.Enum) -> List[str]:
+    ser = [
+        f"impl Serialize for {enum.name} " "{",
+        "fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: serde::Serializer,{",
+        "match self {",
+    ]
+
+    de = [
+        f"impl<'de> Deserialize<'de> for {enum.name} " "{",
+        f"fn deserialize<D>(deserializer: D) -> Result<{enum.name}, D::Error> where D: serde::Deserializer<'de>,"
+        "{",
+        "let value = i32::deserialize(deserializer)?;",
+        "match value {",
+    ]
+    for item in enum.values:
+        full_name = f"{enum.name}::{to_upper_camel_case(item.name)}"
+        ser += [f"{full_name} => serializer.serialize_i32({item.value}),"]
+        de += [f"{item.value} => Ok({full_name}),"]
+    ser += [
+        "}",  # match
+        "}",  # fn
+        "}",  # impl
+    ]
+    de += [
+        '_ => Err(serde::de::Error::custom("Unexpected value"))',
+        "}",  # match
+        "}",  # fn
+        "}",  # impl
+    ]
+    return ser + de
+
+
 def generate_enum(enum: model.Enum, types: TypeData) -> None:
     is_int = all(isinstance(item.value, int) for item in enum.values)
 
-    lines = (
-        _get_enum_docs(enum)
-        + generate_extras(enum)
-        + [
-            "#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]",
-            f"pub enum {enum.name} " "{",
-        ]
-    )
+    lines = _get_enum_docs(enum) + generate_extras(enum)
+    if is_int:
+        lines += ["#[derive(PartialEq, Debug, Eq, Clone)]"]
+    else:
+        lines += ["#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]"]
+    lines += [f"pub enum {enum.name} " "{"]
 
     for item in enum.values:
         if is_int:
@@ -42,6 +72,9 @@ def generate_enum(enum: model.Enum, types: TypeData) -> None:
         )
 
     lines += ["}"]
+
+    if is_int:
+        lines += generate_serde(enum)
 
     types.add_type_info(enum, enum.name, lines)
 

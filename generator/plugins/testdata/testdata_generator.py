@@ -7,14 +7,14 @@ import json
 import logging
 import re
 from copy import deepcopy
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, List, Optional
 
 import generator.model as model
 
 LSP_MAX_INT = 2**31 - 1
 LSP_MIN_INT = -(2**31)
 
-LSP_MAX_UINT = 2**31 - 1
+LSP_MAX_UINT = 2**32 - 1
 LSP_MIN_UINT = 0
 
 LSP_OVER_MAX_INT = LSP_MAX_INT + 1

@@ -17,6 +17,7 @@ import jsonschema
 from . import model
 
 PACKAGES_ROOT = pathlib.Path(__file__).parent.parent / "packages"
+TESTS_ROOT = pathlib.Path(__file__).parent.parent / "tests"
 LOGGER = logging.getLogger("generator")
 
 
@@ -51,6 +52,12 @@ def get_parser() -> argparse.ArgumentParser:
         help="Path to a directory where the generated content is written.",
         type=str,
     )
+    parser.add_argument(
+        "--test-dir",
+        "-t",
+        help="Path to a directory where the generated tests are written.",
+        type=str,
+    )
     return parser
 
 
@@ -80,6 +87,7 @@ def main(argv: Sequence[str]) -> None:
     LOGGER.info(f"Running plugin {plugin}.")
 
     output_dir = args.output_dir or os.fspath(PACKAGES_ROOT / plugin)
+    test_dir = args.test_dir or os.fspath(TESTS_ROOT / plugin)
     LOGGER.info(f"Writing output to {output_dir}")
 
     # load model and generate types for each plugin to avoid
@@ -90,7 +98,7 @@ def main(argv: Sequence[str]) -> None:
         LOGGER.info(f"Loading plugin: {plugin}.")
         plugin_module = importlib.import_module(f"generator.plugins.{plugin}")
         LOGGER.info(f"Running plugin: {plugin}.")
-        plugin_module.generate(spec, output_dir)
+        plugin_module.generate(spec, output_dir, test_dir)
         LOGGER.info(f"Plugin {plugin} completed.")
     except Exception as e:
         LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)

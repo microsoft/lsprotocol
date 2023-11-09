@@ -19,7 +19,7 @@ PACKAGE_NAME = "lsprotocol"
 custom_request_params_aliases = ["WorkspaceConfigurationParams"]
 
 
-def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
+def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
     code = TypesCodeGenerator(spec).get_code()
 
     output_path = pathlib.Path(output_dir, PACKAGE_NAME)

@@ -27,7 +27,6 @@ def generate_test_code(spec: model.LSPModel, test_path: pathlib.Path) -> str:
             "}",
         ]
 
-    
     code = test_path.read_text(encoding="utf-8").splitlines()
     start_marker = "GENERATED_TEST_CODE:start"
     end_marker = "GENERATED_TEST_CODE:end"
@@ -36,7 +35,7 @@ def generate_test_code(spec: model.LSPModel, test_path: pathlib.Path) -> str:
     end_index = -1
     for i, line in enumerate(code):
         if line.endswith(start_marker):
-            start_index = i+1
+            start_index = i + 1
         elif line.endswith(end_marker):
             end_index = i
     code[start_index:end_index] = lines

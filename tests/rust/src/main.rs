@@ -335,6 +335,20 @@ mod tests {
         }
     }
 
+    fn validate_file(file_path: &str) {
+        let basename = std::path::Path::new(&file_path)
+            .file_name()
+            .unwrap()
+            .to_str()
+            .unwrap();
+        let type_name_result_type: Vec<&str> = basename.split("-").collect();
+        let lsp_type = type_name_result_type[0];
+        let result_type = type_name_result_type[1];
+        let data = &fs::read_to_string(file_path.clone()).unwrap();
+
+        validate(&lsp_type, &result_type, &data);
+    }
+
     #[test]
 
     fn test_generated_data() {
@@ -346,17 +360,7 @@ mod tests {
             .unwrap_or_else(|_| cwd.to_str().unwrap().to_string());
         println!("TEST_DATA_ROOT: {}", env_value);
         for json_file in get_all_json_files(env_value.as_str()) {
-            let basename = std::path::Path::new(&json_file)
-                .file_name()
-                .unwrap()
-                .to_str()
-                .unwrap();
-            let type_name_result_type: Vec<&str> = basename.split("-").collect();
-            let lsp_type = type_name_result_type[0];
-            let result_type = type_name_result_type[1];
-            let data = &fs::read_to_string(json_file.clone()).unwrap();
-
-            validate(&lsp_type, &result_type, &data);
+            validate_file(&json_file);
         }
     }
 }

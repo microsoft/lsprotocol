@@ -74,7 +74,7 @@ def _format_code(session: nox.Session):
 
 
 @nox.session()
-def build(session: nox.Session):
+def build_python_package(session: nox.Session):
     """Build lsprotocol (python) package for PyPI."""
     session.install("flit")
     with session.chdir("./packages/python"):

@@ -3,7 +3,7 @@
 
 import logging
 import pathlib
-from typing import Dict, List
+from typing import Dict
 
 import generator.model as model
 

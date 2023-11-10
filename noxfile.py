@@ -36,7 +36,8 @@ def lint(session: nox.Session):
     _install_requirements(session)
 
     session.log("Linting: generator and generated Python code.")
-    session.install("isort", "black", "mypy")
+    session.install("isort", "black", "mypy", "ruff")
+    session.run("ruff", "check", ".")
     session.run("isort", "--profile", "black", "--check", ".")
     session.run("black", "--check", ".")
     session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")

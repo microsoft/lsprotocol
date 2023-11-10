@@ -17,7 +17,6 @@ def test_model_loading():
 
 
 def test_model_loading_failure():
-    root = pathlib.Path(__file__).parent.parent / "generator"
     json_model = json.loads((lsp_json_path).read_text(encoding="utf-8"))
 
     del json_model["structures"][0]["name"]

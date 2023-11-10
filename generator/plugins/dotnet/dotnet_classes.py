@@ -101,9 +101,9 @@ def get_type_name(
         enum_def = _get_enum(type_def.name, spec)
         if enum_def and enum_def.supportsCustomValues:
             if _is_str_enum(enum_def):
-                name = f"string"
+                name = "string"
             elif _is_int_enum(enum_def):
-                name = f"int"
+                name = "int"
         else:
             name = get_special_case_class_name(type_def.name)
     elif type_def.kind == "array":
@@ -506,7 +506,7 @@ def generate_type_alias_converter(
         "{",
         "reader = reader ?? throw new ArgumentNullException(nameof(reader));",
         "if (reader.TokenType == JsonToken.Null) { return null; }",
-        f"var o = _orType.ReadJson(reader, objectType, existingValue, serializer);",
+        "var o = _orType.ReadJson(reader, objectType, existingValue, serializer);",
         f"if (o is {or_type} orType)",
         "{",
     ]
@@ -631,7 +631,7 @@ def generate_code_for_variant_struct(
     sig = ", ".join(constructor_args)
     types.add_ctor(struct.name, ctor_data)
     ctor = [
-        f"[JsonConstructor]",
+        "[JsonConstructor]",
         f"public {struct.name}({sig})",
         "{",
         *indent_lines(
@@ -640,7 +640,7 @@ def generate_code_for_variant_struct(
                 "{",
                 *indent_lines(
                     [
-                        f'throw new ArgumentException("At least one of the arguments must be non-null");'
+                        'throw new ArgumentException("At least one of the arguments must be non-null");'
                     ]
                 ),
                 "}",
@@ -880,7 +880,7 @@ def get_response_template(
                     {"kind": "base", "name": "integer"},
                 ],
             },
-            "documentation": f"The Request id.",
+            "documentation": "The Request id.",
         },
     ]
     if obj.result:
@@ -888,7 +888,7 @@ def get_response_template(
             {
                 "name": "result",
                 "type": cattrs.unstructure(obj.result),
-                "documentation": f"Results for the request.",
+                "documentation": "Results for the request.",
                 "optional": True,
             }
         )
@@ -897,7 +897,7 @@ def get_response_template(
             {
                 "name": "result",
                 "type": {"kind": "base", "name": "null"},
-                "documentation": f"Results for the request.",
+                "documentation": "Results for the request.",
                 "optional": True,
             }
         )
@@ -905,7 +905,7 @@ def get_response_template(
         {
             "name": "error",
             "type": {"kind": "reference", "name": "ResponseError"},
-            "documentation": f"Error while handling the request.",
+            "documentation": "Error while handling the request.",
             "optional": True,
         }
     )

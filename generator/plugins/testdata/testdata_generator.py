@@ -83,9 +83,9 @@ def extend(arr: List[Any], length: int) -> List[Any]:
 
 
 def extend_all(lists: List[List[Any]]) -> List[List[Any]]:
-    max_len = max(len(l) for l in lists)
+    max_len = max(len(part) for part in lists)
     max_len = min(1000, max_len)
-    return [extend(l, max_len) for l in lists]
+    return [extend(part, max_len) for part in lists]
 
 
 def has_null_base_type(items: List[model.LSP_TYPE_SPEC]) -> bool:

@@ -176,7 +176,7 @@ def generate_extras(
     elif deprecated:
         extras += [f'[Obsolete("{cleanup_str(deprecated)}")]']
     if type_def.proposed:
-        extras += [f"[Proposed]"]
+        extras += ["[Proposed]"]
     if type_def.since:
         extras += [f'[Since("{cleanup_str(type_def.since)}")]']
 

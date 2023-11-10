@@ -570,7 +570,7 @@ def generate_property(
         prop_def.type, types, spec, prop_def.optional, prop_def.name
     )
     optional = (
-        [f'#[serde(skip_serializing_if = "Option::is_none")]']
+        ['#[serde(skip_serializing_if = "Option::is_none")]']
         if is_special_property(prop_def) and not prop_def.optional
         else []
     )

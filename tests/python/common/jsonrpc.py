@@ -21,7 +21,7 @@ def to_json(
 
     if hasattr(obj, "result"):
         if method is None:
-            raise ValueError(f"`method` must not be None for response type objects.")
+            raise ValueError("`method` must not be None for response type objects.")
         obj_type = types.METHOD_TO_TYPES[method][1]
     elif hasattr(obj, "error"):
         obj_type = types.ResponseErrorMessage
@@ -43,7 +43,7 @@ def from_json(json_str: str, method: str = None, converter=None) -> types.MESSAG
 
     if "result" in obj:
         if method is None:
-            raise ValueError(f"`method` must not be None for response type objects.")
+            raise ValueError("`method` must not be None for response type objects.")
         obj_type = types.METHOD_TO_TYPES[method][1]
     elif "error" in obj:
         obj_type = types.ResponseErrorMessage

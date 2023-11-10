@@ -2,10 +2,8 @@
 # Licensed under the MIT License.
 
 import logging
-import os
 import pathlib
-import subprocess
-from typing import Dict, List
+from typing import Dict
 
 import generator.model as model
 

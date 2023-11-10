@@ -686,7 +686,7 @@ class TypesCodeGenerator:
             code_lines += [f"{indent}pass"]
 
         if methods:
-            code_lines += [f"{indent}{l}" for l in methods]
+            code_lines += [f"{indent}{method}" for method in methods]
 
         # Detect if the class has properties that might be keywords.
         self._add_type_code(class_name, code_lines)
@@ -777,7 +777,7 @@ class TypesCodeGenerator:
             "ResponseError",
             [
                 "@attrs.define",
-                f"class ResponseError:",
+                "class ResponseError:",
                 f"{indent}code: int = attrs.field(validator=validators.integer_validator)",
                 f'{indent}"""A number indicating the error type that occurred."""',
                 f"{indent}message: str = attrs.field(validator=attrs.validators.instance_of(str))",

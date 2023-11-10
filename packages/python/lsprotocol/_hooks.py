@@ -454,7 +454,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         if isinstance(object_, list):
             if len(object_) == 0:
-                return []  # type: ignore[return-value]
+                return []
             if "targetUri" in object_[0]:
                 return [
                     converter.structure(item, lsp_types.LocationLink)
@@ -476,7 +476,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         if isinstance(object_, list):
             if len(object_) == 0:
-                return []  # type: ignore[return-value]
+                return []
             if "location" in object_[0]:
                 return [
                     converter.structure(item, lsp_types.SymbolInformation)
@@ -687,7 +687,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         assert isinstance(object_, list)
         if len(object_) == 0:
-            return []  # type: ignore[return-value]
+            return []
         if "location" in object_[0]:
             return [
                 converter.structure(item, lsp_types.SymbolInformation)

@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import json
-import os
 import pathlib
 import urllib.request as url_lib
 
@@ -50,6 +49,7 @@ def lint(session: nox.Session):
 @nox.session()
 def format(session: nox.Session):
     """Format generator and lsprotocol package for PyPI."""
+    _install_requirements(session)
     _format_code(session)
 
 
@@ -58,6 +58,7 @@ def _format_code(session: nox.Session):
 
     session.run("ruff", "check", "--fix", "--select=I001", ".")
     session.run("ruff", "format", ".")
+    session.run("ruff", "check", "--fix", ".")
 
 
 @nox.session()

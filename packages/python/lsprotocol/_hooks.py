@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import sys
-from typing import Any, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Sequence, Tuple, Union
 
 import attrs
 import cattrs
@@ -888,7 +888,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             _inlay_hint_provider_hook,
         ),
         (
-            Union[str, List[lsp_types.InlayHintLabelPart]],
+            Union[str, Sequence[lsp_types.InlayHintLabelPart]],
             _inlay_hint_label_part_hook,
         ),
         (
@@ -908,22 +908,27 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             _code_action_hook,
         ),
         (
-            Optional[Union[List[lsp_types.CompletionItem], lsp_types.CompletionList]],
+            Optional[
+                Union[Sequence[lsp_types.CompletionItem], lsp_types.CompletionList]
+            ],
             _completion_list_hook,
         ),
         (
             Optional[
                 Union[
                     lsp_types.Location,
-                    List[lsp_types.Location],
-                    List[lsp_types.LocationLink],
+                    Sequence[lsp_types.Location],
+                    Sequence[lsp_types.LocationLink],
                 ]
             ],
             _location_hook,
         ),
         (
             Optional[
-                Union[List[lsp_types.SymbolInformation], List[lsp_types.DocumentSymbol]]
+                Union[
+                    Sequence[lsp_types.SymbolInformation],
+                    Sequence[lsp_types.DocumentSymbol],
+                ]
             ],
             _symbol_hook,
         ),
@@ -932,7 +937,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 lsp_types.MarkupContent,
                 str,
                 lsp_types.MarkedString_Type1,
-                List[Union[str, lsp_types.MarkedString_Type1]],
+                Sequence[Union[str, lsp_types.MarkedString_Type1]],
             ],
             _markup_content_hook,
         ),
@@ -1033,7 +1038,8 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[
                 Union[
-                    lsp_types.InlineCompletionList, List[lsp_types.InlineCompletionItem]
+                    lsp_types.InlineCompletionList,
+                    Sequence[lsp_types.InlineCompletionItem],
                 ]
             ],
             _inline_completion_list_hook,
@@ -1045,7 +1051,8 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Optional[
                 Union[
-                    List[lsp_types.SymbolInformation], List[lsp_types.WorkspaceSymbol]
+                    Sequence[lsp_types.SymbolInformation],
+                    Sequence[lsp_types.WorkspaceSymbol],
                 ]
             ],
             _symbol_list_hook,
@@ -1148,12 +1155,18 @@ def _register_required_structure_hooks(
         ),
         (NotebookSelectorItem, _notebook_filter_hook),
         (
-            Union[lsp_types.LSPObject, List["LSPAny"], str, int, float, bool, None],
+            Union[lsp_types.LSPObject, Sequence["LSPAny"], str, int, float, bool, None],
             _lsp_object_hook,
         ),
         (
             Union[
-                lsp_types.LSPObject, List[lsp_types.LSPAny], str, int, float, bool, None
+                lsp_types.LSPObject,
+                Sequence[lsp_types.LSPAny],
+                str,
+                int,
+                float,
+                bool,
+                None,
             ],
             _lsp_object_hook,
         ),
@@ -1169,10 +1182,10 @@ def _register_required_structure_hooks(
             (
                 Union[
                     lsp_types.LSPObject,
-                    List[
+                    Sequence[
                         Union[
                             lsp_types.LSPObject,
-                            List["LSPAny"],
+                            Sequence["LSPAny"],
                             str,
                             int,
                             float,

@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import sys
-from typing import Any, List, Optional, Sequence, Tuple, Union
+from typing import Any, Optional, Sequence, Tuple, Union
 
 import attrs
 import cattrs
@@ -390,7 +390,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
 
     def _inlay_hint_label_part_hook(
         object_: Any, _: type
-    ) -> Union[str, List[lsp_types.InlayHintLabelPart]]:
+    ) -> Union[str, Sequence[lsp_types.InlayHintLabelPart]]:
         if isinstance(object_, str):
             return object_
 
@@ -431,7 +431,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
 
     def _completion_list_hook(
         object_: Any, _: type
-    ) -> Optional[Union[lsp_types.CompletionList, List[lsp_types.CompletionItem]]]:
+    ) -> Optional[Union[lsp_types.CompletionList, Sequence[lsp_types.CompletionItem]]]:
         if object_ is None:
             return None
         if isinstance(object_, list):
@@ -446,8 +446,8 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
     ) -> Optional[
         Union[
             lsp_types.Location,
-            List[lsp_types.Location],
-            List[lsp_types.LocationLink],
+            Sequence[lsp_types.Location],
+            Sequence[lsp_types.LocationLink],
         ]
     ]:
         if object_ is None:
@@ -470,7 +470,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
     def _symbol_hook(
         object_: Any, _: type
     ) -> Optional[
-        Union[List[lsp_types.DocumentSymbol], List[lsp_types.SymbolInformation]]
+        Union[Sequence[lsp_types.DocumentSymbol], Sequence[lsp_types.SymbolInformation]]
     ]:
         if object_ is None:
             return None
@@ -497,7 +497,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             OptionalPrimitive,
             lsp_types.MarkupContent,
             lsp_types.MarkedStringWithLanguage,
-            List[Union[OptionalPrimitive, lsp_types.MarkedStringWithLanguage]],
+            Sequence[Union[OptionalPrimitive, lsp_types.MarkedStringWithLanguage]],
         ]
     ]:
         if object_ is None:
@@ -656,7 +656,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
     def _inline_completion_list_hook(
         object_: Any, _: type
     ) -> Optional[
-        Union[lsp_types.InlineCompletionList, List[lsp_types.InlineCompletionItem]]
+        Union[lsp_types.InlineCompletionList, Sequence[lsp_types.InlineCompletionItem]]
     ]:
         if object_ is None:
             return None
@@ -679,7 +679,9 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
     def _symbol_list_hook(
         object_: Any, _: type
     ) -> Optional[
-        Union[List[lsp_types.SymbolInformation], List[lsp_types.WorkspaceSymbol]]
+        Union[
+            Sequence[lsp_types.SymbolInformation], Sequence[lsp_types.WorkspaceSymbol]
+        ]
     ]:
         if object_ is None:
             return None
@@ -934,7 +936,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 lsp_types.MarkupContent,
                 str,
                 lsp_types.MarkedStringWithLanguage,
-                List[Union[str, lsp_types.MarkedStringWithLanguage]],
+                Sequence[Union[str, lsp_types.MarkedStringWithLanguage]],
             ],
             _markup_content_hook,
         ),

@@ -36,10 +36,10 @@ def lint(session: nox.Session):
     _install_requirements(session)
 
     session.log("Linting: generator and generated Python code.")
-    session.install("isort", "black", "mypy", "ruff")
+    session.install("mypy", "ruff")
     session.run("ruff", "check", ".")
-    session.run("isort", "--profile", "black", "--check", ".")
-    session.run("black", "--check", ".")
+    session.run("ruff", "check", "--select=I001", ".")
+    session.run("ruff", "format", "--check", ".")
     session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")
 
     session.log("Linting: generated Rust code.")
@@ -54,24 +54,10 @@ def format(session: nox.Session):
 
 
 def _format_code(session: nox.Session):
-    session.install("isort", "black")
+    session.install("ruff")
 
-    session.run("isort", "--profile", "black", "noxfile.py")
-    session.run("black", "noxfile.py")
-
-    session.run("isort", "--profile", "black", "generator")
-    session.run("black", "generator")
-
-    session.run("isort", "--profile", "black", "tests/generator")
-    session.run("black", "tests/generator")
-
-    session.run("isort", "--profile", "black", "tests/python")
-    session.run("black", "tests/python")
-
-    # this is for the lsprotocol package only
-    python_package_path = os.fspath(pathlib.Path("./packages/python/lsprotocol"))
-    session.run("isort", "--profile", "black", python_package_path)
-    session.run("black", python_package_path)
+    session.run("ruff", "check", "--fix", "--select=I001", ".")
+    session.run("ruff", "format", ".")
 
 
 @nox.session()

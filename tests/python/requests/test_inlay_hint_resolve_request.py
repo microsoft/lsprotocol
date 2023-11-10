@@ -7,7 +7,6 @@ import uuid
 import hamcrest
 import jsonrpc
 import pytest
-from cattrs.errors import ClassValidationError
 
 ID = str(uuid.uuid4())
 

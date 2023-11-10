@@ -1,7 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 import json
-import os
 import pathlib
 import urllib.request as url_lib
 
@@ -20,7 +19,7 @@ def _install_requirements(session: nox.Session):
 
 @nox.session()
 def tests(session: nox.Session):
-    """Run tests for generator and generated code in all languages."""
+    """Run tests for generator and generated code in python."""
     _install_requirements(session)
 
     session.log("Running test data generator.")
@@ -36,9 +35,10 @@ def lint(session: nox.Session):
     _install_requirements(session)
 
     session.log("Linting: generator and generated Python code.")
-    session.install("isort", "black", "mypy")
-    session.run("isort", "--profile", "black", "--check", ".")
-    session.run("black", "--check", ".")
+    session.install("mypy", "ruff")
+    session.run("ruff", "check", ".")
+    session.run("ruff", "check", "--select=I001", ".")
+    session.run("ruff", "format", "--check", ".")
     session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")
 
     session.log("Linting: generated Rust code.")
@@ -49,32 +49,20 @@ def lint(session: nox.Session):
 @nox.session()
 def format(session: nox.Session):
     """Format generator and lsprotocol package for PyPI."""
+    _install_requirements(session)
     _format_code(session)
 
 
 def _format_code(session: nox.Session):
-    session.install("isort", "black")
+    session.install("ruff")
 
-    session.run("isort", "--profile", "black", "noxfile.py")
-    session.run("black", "noxfile.py")
-
-    session.run("isort", "--profile", "black", "generator")
-    session.run("black", "generator")
-
-    session.run("isort", "--profile", "black", "tests/generator")
-    session.run("black", "tests/generator")
-
-    session.run("isort", "--profile", "black", "tests/python")
-    session.run("black", "tests/python")
-
-    # this is for the lsprotocol package only
-    python_package_path = os.fspath(pathlib.Path("./packages/python/lsprotocol"))
-    session.run("isort", "--profile", "black", python_package_path)
-    session.run("black", python_package_path)
+    session.run("ruff", "check", "--fix", "--select=I001", ".")
+    session.run("ruff", "format", ".")
+    session.run("ruff", "check", "--fix", ".")
 
 
 @nox.session()
-def build(session: nox.Session):
+def build_python_package(session: nox.Session):
     """Build lsprotocol (python) package for PyPI."""
     session.install("flit")
     with session.chdir("./packages/python"):
@@ -205,14 +193,14 @@ def create_plugin(session: nox.Session):
     package_root = pathlib.Path(__file__).parent / "packages" / name / "lsprotocol"
     package_root.mkdir(parents=True, exist_ok=True)
     package_root.joinpath("README.md").write_text(
-        f"# your generated code and other package files go under this directory.",
+        "# your generated code and other package files go under this directory.",
         encoding="utf-8",
     )
 
     tests_root = pathlib.Path(__file__).parent / "tests" / name
     tests_root.mkdir(parents=True, exist_ok=True)
     tests_root.joinpath("README.md").write_text(
-        f"# your tests go under this directory.", encoding="utf-8"
+        "# your tests go under this directory.", encoding="utf-8"
     )
 
     launch_json_path = pathlib.Path(__file__).parent / ".vscode" / "launch.json"
@@ -253,5 +241,9 @@ def generate_rust(session: nox.Session):
     _install_requirements(session)
 
     session.run("python", "-m", "generator", "--plugin", "rust")
+
     with session.chdir("./packages/rust/lsprotocol"):
         session.run("cargo", "fmt", external=True)
+    with session.chdir("./tests/rust"):
+        session.run("cargo", "fmt", external=True)
+        session.run("cargo", "build", external=True)

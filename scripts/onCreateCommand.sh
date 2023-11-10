@@ -15,10 +15,10 @@ curl https://sh.rustup.rs -sSf | bash -s -- -y
 echo 'source $HOME/.cargo/env' >> ~/.bashrc
 
 # Install Python via pyenv .
-pyenv install 3.8:latest 3.9:latest 3.10:latest 3.11:latest
+pyenv install 3.8:latest 3.9:latest 3.10:latest 3.11:latest 3.12:latest
 
 # Set default Python version to 3.8 .
-pyenv global 3.8.18
+pyenv global 3.8:latest
 
 # Create Virutal environment.
 pyenv exec python3.8 -m venv .venv

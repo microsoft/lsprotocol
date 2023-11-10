@@ -3,12 +3,11 @@
 
 import json
 import pathlib
-from typing import Generator, List, Union
-
-import pytest
+from typing import List, Union
 
 import lsprotocol.converters as cv
 import lsprotocol.types as lsp
+import pytest
 
 TEST_DATA_ROOT = pathlib.Path(__file__).parent.parent.parent / "packages" / "testdata"
 
@@ -30,5 +29,5 @@ def test_generated_data(json_file: str) -> None:
     try:
         converter.structure(data, lsp_type)
         assert result_type == "True", "Expected error, but succeeded structuring"
-    except Exception as e:
+    except Exception:
         assert result_type == "False", "Expected success, but failed structuring"

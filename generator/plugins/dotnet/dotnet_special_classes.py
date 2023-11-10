@@ -151,7 +151,7 @@ def generate_special_class(
                 type_def,
                 inner,
                 "IEnumerable<DocumentFilter>",
-                [f"[JsonConverter(typeof(DocumentSelectorConverter))]"],
+                ["[JsonConverter(typeof(DocumentSelectorConverter))]"],
             ),
         )
 

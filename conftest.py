@@ -5,8 +5,6 @@ import os
 import pathlib
 import sys
 
-import pytest
-
 sys.path.append(os.fspath(pathlib.Path(__file__).parent / "packages" / "python"))
 sys.path.append(
     os.fspath(pathlib.Path(__file__).parent / "tests" / "python" / "common")

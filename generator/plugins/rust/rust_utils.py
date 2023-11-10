@@ -16,11 +16,12 @@ from .rust_structs import (
     generate_structures,
     generate_type_aliases,
 )
+from .rust_tests import generate_test_code
 
 PACKAGE_DIR_NAME = "lsprotocol"
 
 
-def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
+def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
     code = generate_package_code(spec)
 
     output_path = pathlib.Path(output_dir, PACKAGE_DIR_NAME)
@@ -30,6 +31,11 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
 
     for file_name in code:
         (output_path / file_name).write_text(code[file_name], encoding="utf-8")
+
+    # update tests if exists
+    test_path = pathlib.Path(test_dir) / "src" / "main.rs"
+    if test_path.exists():
+        generate_test_code(spec, test_path)
 
 
 def generate_package_code(spec: model.LSPModel) -> List[str]:

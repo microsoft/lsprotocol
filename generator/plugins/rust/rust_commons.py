@@ -324,7 +324,9 @@ def generate_extra_types(spec: model.LSPModel, type_data: TypeData) -> None:
         ),
     )
 
-    direction = set([m.messageDirection for m in (spec.requests + spec.notifications)])
+    direction = sorted(
+        set([m.messageDirection for m in (spec.requests + spec.notifications)])
+    )
     type_data.add_type_info(
         model.ReferenceType(kind="reference", name="MessageDirection"),
         "MessageDirection",
@@ -380,7 +382,8 @@ def get_extended_properties(
         if t.kind == "reference":
             s = get_from_name(t.name, spec)
             if s:
-                properties += [p for p in s.properties]
+                s_props = get_extended_properties(s, spec)
+                properties += [p for p in s_props]
         elif t.kind == "literal":
             properties += [p for p in t.value.properties]
         else:
@@ -461,7 +464,6 @@ def get_type_name(
                 f"OR type with more than out of range count of subtypes: {type_def}"
             )
         optional = optional or is_special(type_def)
-        print(f"Option<{name}>" if optional else name)
     elif type_def.kind == "literal":
         name = generate_literal_struct_type(type_def, types, spec, name_context)
     elif type_def.kind == "stringLiteral":
@@ -568,7 +570,7 @@ def generate_property(
         prop_def.type, types, spec, prop_def.optional, prop_def.name
     )
     optional = (
-        [f'#[serde(skip_serializing_if = "Option::is_none")]']
+        ['#[serde(skip_serializing_if = "Option::is_none")]']
         if is_special_property(prop_def) and not prop_def.optional
         else []
     )
@@ -611,7 +613,7 @@ def struct_wrapper(
         + generate_extras(type_def)
         + [
             "#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]",
-            '#[serde(rename_all = "camelCase")]',
+            '#[serde(rename_all = "camelCase", deny_unknown_fields)]',
             f"pub struct {name}",
             "{",
         ]
@@ -663,19 +665,11 @@ def generate_literal_struct_type(
 def generate_extras(
     type_def: Union[
         model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
-    ]
+    ],
 ) -> List[str]:
     extras = []
     if type_def.deprecated:
-        extras = ["#[deprecated]"]
-    elif type_def.proposed:
-        if type_def.since:
-            extras = [f'#[cfg(feature = "proposed", since = "{type_def.since}")]']
-        else:
-            extras = [f'#[cfg(feature = "proposed")]']
-    # else:
-    #     if type_def.since:
-    #         extras = [f'#[cfg(feature = "stable", since = "{type_def.since}")]']
-    #     else:
-    #         extras = [f'#[cfg(feature = "stable")]']
+        extras += ["#[deprecated]"]
+    if type_def.proposed:
+        extras += ['#[cfg(feature = "proposed")]']
     return extras

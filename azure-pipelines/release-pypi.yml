@@ -19,7 +19,7 @@ extends:
   template: azure-pipelines/pypi-package/pipeline.yml@templates
   parameters:
     publishPackage: ${{ parameters.publishPackage }}
-    pythonVersion: '3.7'
+    pythonVersion: '3.8'
     # We don't ship any built in packages.
     generateNotice: false
     pyProjectTomlPath: $(Build.SourcesDirectory)/packages/python/pyproject.toml
@@ -27,9 +27,9 @@ extends:
       - script: python -m pip install nox
         displayName: Install nox
 
-      - script: python -m nox --session build
+      - script: python -m nox --session build_python_package
         displayName: Build package (sdist and wheels)
 
       - publish: $(Build.SourcesDirectory)/packages/python/dist
         artifact: dist
-        displayName: 🚛 Publish artifact
+        displayName: 🚛 Publish pypi artifact

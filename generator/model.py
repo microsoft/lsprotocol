@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import uuid
-from typing import Any, Dict, Iterable, List, Optional, Type, TypeVar, Union
+from typing import Any, Dict, Iterable, List, Optional, Type, Union
 
 import attrs
 

@@ -7,7 +7,7 @@ import json
 import logging
 import re
 from copy import deepcopy
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, List, Optional
 
 import generator.model as model
 
@@ -17,11 +17,11 @@ LSP_MIN_INT = -(2**31)
 LSP_MAX_UINT = 2**31 - 1
 LSP_MIN_UINT = 0
 
-LSP_OVER_MAX_INT = LSP_MAX_INT + 1
-LSP_UNDER_MIN_INT = LSP_MIN_INT - 1
+LSP_OVER_MAX_INT = 2**31
+LSP_UNDER_MIN_INT = -(2**31) - 1
 
-LSP_OVER_MAX_UINT = LSP_MAX_UINT + 1
-LSP_UNDER_MIN_UINT = LSP_MIN_UINT - 1
+LSP_OVER_MAX_UINT = 2**32 + 1
+LSP_UNDER_MIN_UINT = -1
 
 
 def get_hash_from(text: str) -> str:
@@ -83,9 +83,9 @@ def extend(arr: List[Any], length: int) -> List[Any]:
 
 
 def extend_all(lists: List[List[Any]]) -> List[List[Any]]:
-    max_len = max(len(l) for l in lists)
+    max_len = max(len(part) for part in lists)
     max_len = min(1000, max_len)
-    return [extend(l, max_len) for l in lists]
+    return [extend(part, max_len) for part in lists]
 
 
 def has_null_base_type(items: List[model.LSP_TYPE_SPEC]) -> bool:

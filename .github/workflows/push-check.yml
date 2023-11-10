@@ -16,10 +16,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Python 3.7
+      - name: Use Python 3.8
         uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Pip cache
         uses: actions/cache@v3
@@ -34,7 +34,7 @@ jobs:
         shell: bash
 
       - name: Build sdist and wheels
-        run: python -m nox --session build
+        run: python -m nox --session build_python_package
         shell: bash
 
       - name: Upload Python Packages to Artifacts
@@ -101,7 +101,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python: ['3.7', '3.8', '3.9', '3.10', '3.11']
+        python: ['3.8', '3.9', '3.10', '3.11', '3.12']
 
     steps:
       - name: Checkout
@@ -119,6 +119,37 @@ jobs:
       - name: Run tests
         run: python -m nox --session tests
         shell: bash
+
+  rust-tests:
+    name: 'Rust Tests'
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Rust Tool Chain setup
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install Generator
+        run: python -m pip install -r ./requirements.txt
+
+      - name: Generate Test Data
+        run: python -m generator --plugin testdata
+
+      - name: Rust Run Tests
+        run: cargo test --manifest-path tests/rust/Cargo.toml
+        shell: bash
+        env:
+          LSP_TEST_DATA_PATH: ${{ github.workspace }}/packages/testdata
 
   dotnet-tests:
     name: Dotnet Tests

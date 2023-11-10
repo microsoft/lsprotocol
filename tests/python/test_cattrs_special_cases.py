@@ -7,7 +7,6 @@ import attrs
 import hamcrest
 import pytest
 from cattrs.errors import ClassValidationError
-
 from lsprotocol import converters as cv
 from lsprotocol import types as lsp
 

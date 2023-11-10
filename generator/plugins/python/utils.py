@@ -19,7 +19,7 @@ PACKAGE_NAME = "lsprotocol"
 custom_request_params_aliases = ["WorkspaceConfigurationParams"]
 
 
-def generate_from_spec(spec: model.LSPModel, output_dir: str) -> None:
+def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
     code = TypesCodeGenerator(spec).get_code()
 
     output_path = pathlib.Path(output_dir, PACKAGE_NAME)
@@ -576,7 +576,7 @@ class TypesCodeGenerator:
         if type_alias.type.kind == "reference" and not self._has_type(
             type_alias.type.name
         ):
-            # TODO: remove workaround for lack of TypeAlias in 3.7
+            # TODO: remove workaround for lack of TypeAlias
             type_name = f"Union[{type_name}, {type_name}]"
 
         if type_name:
@@ -588,7 +588,7 @@ class TypesCodeGenerator:
                 f"# Since: {_sanitize_comment(type_alias.since)}"
                 if type_alias.since
                 else "",
-                f"# Proposed" if type_alias.proposed else "",
+                "# Proposed" if type_alias.proposed else "",
             ]
         else:
             doc = _get_indented_documentation(type_alias.documentation, indent)
@@ -686,7 +686,7 @@ class TypesCodeGenerator:
             code_lines += [f"{indent}pass"]
 
         if methods:
-            code_lines += [f"{indent}{l}" for l in methods]
+            code_lines += [f"{indent}{method}" for method in methods]
 
         # Detect if the class has properties that might be keywords.
         self._add_type_code(class_name, code_lines)
@@ -777,7 +777,7 @@ class TypesCodeGenerator:
             "ResponseError",
             [
                 "@attrs.define",
-                f"class ResponseError:",
+                "class ResponseError:",
                 f"{indent}code: int = attrs.field(validator=validators.integer_validator)",
                 f'{indent}"""A number indicating the error type that occurred."""',
                 f"{indent}message: str = attrs.field(validator=attrs.validators.instance_of(str))",

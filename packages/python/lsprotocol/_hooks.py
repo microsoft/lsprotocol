@@ -553,7 +553,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
 
     def _semantic_tokens_capabilities_hook(
         object_: Any, _: type
-    ) -> Union[OptionalPrimitive, lsp_types.ClientSemanticTokensRequestFullDelta,]:
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.ClientSemanticTokensRequestFullDelta,
+    ]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):

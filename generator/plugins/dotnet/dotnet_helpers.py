@@ -167,7 +167,7 @@ def generate_extras(
         model.Structure,
         model.Request,
         model.Notification,
-    ]
+    ],
 ) -> List[str]:
     deprecated = get_deprecated(type_def.documentation)
     extras = []

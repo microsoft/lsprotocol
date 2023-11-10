@@ -665,7 +665,7 @@ def generate_literal_struct_type(
 def generate_extras(
     type_def: Union[
         model.Enum, model.EnumItem, model.Property, model.TypeAlias, model.Structure
-    ]
+    ],
 ) -> List[str]:
     extras = []
     if type_def.deprecated:

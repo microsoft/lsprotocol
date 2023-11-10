@@ -34,7 +34,7 @@ jobs:
         shell: bash
 
       - name: Build sdist and wheels
-        run: python -m nox --session build
+        run: python -m nox --session build_python_package
         shell: bash
 
       - name: Upload Python Packages to Artifacts

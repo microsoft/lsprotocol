@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "lsprotocol"
-description = 'Python-based Language Server Protocol types code generator for various languages.'
+description = 'Python types for Language Server Protocol.'
 version = "2024.0.0a1"
 authors = [
   { name = "Microsoft Corporation", email = "lsprotocol-help@microsoft.com" },

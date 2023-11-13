@@ -6,7 +6,6 @@
         "**/.pytest_cache": true,
         "**/.nox": true
     },
-    "python.formatting.provider": "none",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true

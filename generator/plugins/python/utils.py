@@ -833,7 +833,19 @@ class TypesCodeGenerator:
 
             result_type = None
             if request.result:
-                result_type = self._generate_type_name(request.result)
+                if request.result.kind == "reference" or (
+                    request.result.kind == "base" and request.result.name == "null"
+                ):
+                    result_type = self._generate_type_name(request.result)
+                else:
+                    result_type = f"{class_name}Result"
+                    self._add_type_alias(
+                        model.TypeAlias(
+                            name=result_type,
+                            type=request.result,
+                        )
+                    )
+
                 result_field = "attrs.field(default=None)"
             else:
                 result_type = "Optional[None]"

@@ -2,7 +2,7 @@
 
 This repository contains a Python implementation of a Language Server Protocol types and classes code generator for various languages.
 
-It simplifies the process of creating language servers for different programming languages by providing a robust and easy-to-use type generation system.
+It simplifies the creation of language servers for different programming languages by providing a robust and easy-to-use type generation system.
 
 # Usage
 
@@ -51,12 +51,12 @@ You can also use Nox to format code, run tests and run various tasks. Run `nox -
 
 ## Adding a new plugin
 
-Follow these steps to generate a boilerplate code for a new plugin:
+Follow these steps to generate boilerplate code for a new plugin:
 
 1. Create a virtual environment for Python using Python >= 3.8 and activate that environment.
     1. If you are using the Python extension for VS Code, you can just run the **Python: Create Environment** command from the Command Palette. Be sure to select all the `requirements.txt` files in the repo. This command will install all packages needed and select the newly created environment for you.
 1. Ensure `nox` is installed.
-    1. Run `nox --list` in the terminal. If Nox is installed you should see a list of all available sessions. Otherwise, run `python -m pip install nox` in the activated environment you created above.
+    1. Run `nox --list` in the terminal. If Nox is installed, you should see a list of all available sessions. Otherwise, run `python -m pip install nox` in the activated environment you created above.
 1. Run `nox --session create_plugin` and follow the prompts to create a new plugin.
 
 Example:

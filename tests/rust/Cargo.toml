@@ -2,8 +2,10 @@
 name = "lsprotocol-test"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Tests for generated Rust types for Language Server Protocol."
+authors = ["Microsoft Corporation <lsprotocol-help@microsoft.com>"]
+license = "MIT"
+repository = "https://github.com/microsoft/lsprotocol"
 
 [dependencies]
 glob = "0.3.1"

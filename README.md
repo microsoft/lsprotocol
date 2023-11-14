@@ -1,20 +1,21 @@
 # Language Server Protocol types code generator
 
-This repository contains code to generate Language Server Protocol types and classes for various languages.
+This repository contains a Python implementation of a Language Server Protocol types and classes code generator for various languages.
 
-# Code Generator usage
+It simplifies the creation of language servers for different programming languages by providing a robust and easy-to-use type generation system.
 
-## Usage
+# Usage
 
-You will need a python environment to run the generator. Here are the steps:
+You will need a Python environment to run the generator. Here are the steps:
 
-1. Create a python environment (min supported python 3.8): `python -m venv .venv`
-2. Get this tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
-3. Run your plugin: `python -m generator --plugin dotnet --output-dir ./code`
+1. Create a Python environment: `python -m venv .venv`
+    > **Note**: Python 3.8 is the minimum supported version
+2. Install this repo's tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
+3. Run your plugin. For example: `python -m generator --plugin dotnet --output-dir ./code`
 
-### Command line
+## Command line
 
-Clone this repository and run `generator` like a module.
+Clone this repository and run `generator` as a Python module.
 
 ```console
 >python -m generator --help
@@ -35,27 +36,27 @@ optional arguments:
                         Path to a directory where the generated content is
 ```
 
-### using `nox`
+## Using Nox
 
-This project uses `nox` as a task runner to run the code generator. You can install `nox` and run `build_lsp` session to generate code from spec available in the repo.
+This project uses Nox as a task runner to run the code generator. You can install Nox and run a `build_lsp` session to generate code from the spec available in this repo.
 
 ```console
 > python -m pip install nox
 > nox --session build_lsp
 ```
 
-You can format code, run tests, and other tasks using `nox` as well.
+You can also use Nox to format code, run tests and run various tasks. Run `nox --list` to see all available tasks.
 
 # Contributing plugins
 
 ## Adding a new plugin
 
-Follow these steps to generate boiler plate code for new plugin:
+Follow these steps to generate boilerplate code for a new plugin:
 
-1. Create a virtual environment for python using python 3.8 and activate that environment.
-    1. If you have python extension for VS Code installed then run `Python: Create Environment` command. Be sure to select all the `requirements.txt` files in the repo. This should, install all packages needed and select the environment for you.
+1. Create a virtual environment for Python using Python >= 3.8 and activate that environment.
+    1. If you are using the Python extension for VS Code, you can just run the **Python: Create Environment** command from the Command Palette. Be sure to select all the `requirements.txt` files in the repo. This command will install all packages needed and select the newly created environment for you.
 1. Ensure `nox` is installed.
-    1. Run `nox --list`, is nox is installed oyu should see a list of available sessions. Otherwise, run `python -m pip install nox` from the python 3.8 environment you created above.
+    1. Run `nox --list` in the terminal. If Nox is installed, you should see a list of all available sessions. Otherwise, run `python -m pip install nox` in the activated environment you created above.
 1. Run `nox --session create_plugin` and follow the prompts to create a new plugin.
 
 Example:
@@ -71,8 +72,10 @@ nox > Session create_plugin was successful.
 
 # Supported plugins
 
-| Language | Plugin Module            | Package                                                                                             | Notes       |
-| -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------- |
-| Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active      |
-| Rust     | generator.plugins.rust   | <in development>                                                                                    | Development |
-| Dotnet   | generator.plugins.dotnet | <in developemnt>                                                                                    | Development |
+Below is the list of plugins already created using this package.
+
+| Language | Plugin Module            | Package                                                                                             | Status            |
+| -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- |
+| Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            |
+| Rust     | generator.plugins.rust   | <in development>                                                                                    | Under development |
+| Dotnet   | generator.plugins.dotnet | <in development>                                                                                    | Under development |

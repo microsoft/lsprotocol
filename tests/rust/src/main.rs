@@ -344,7 +344,7 @@ mod tests {
         let type_name_result_type: Vec<&str> = basename.split("-").collect();
         let lsp_type = type_name_result_type[0];
         let result_type = type_name_result_type[1];
-        let data = &fs::read_to_string(file_path.clone()).unwrap();
+        let data = &fs::read_to_string(file_path).unwrap();
 
         validate(&lsp_type, &result_type, &data);
     }

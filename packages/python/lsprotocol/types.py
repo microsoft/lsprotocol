@@ -9208,9 +9208,6 @@ class WorkspaceWorkspaceFoldersResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WorkspaceConfigurationParams = ConfigurationParams
-
-
 WorkspaceConfigurationResult = Sequence[LSPAny]
 
 
@@ -9226,7 +9223,7 @@ class WorkspaceConfigurationRequest:
 
     id: Union[int, str] = attrs.field()
     """The request id."""
-    params: WorkspaceConfigurationParams = attrs.field()
+    params: ConfigurationParams = attrs.field()
     method: str = "workspace/configuration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
@@ -13125,7 +13122,6 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "WorkspaceClientCapabilities": WorkspaceClientCapabilities,
     "WorkspaceCodeLensRefreshRequest": WorkspaceCodeLensRefreshRequest,
     "WorkspaceCodeLensRefreshResponse": WorkspaceCodeLensRefreshResponse,
-    "WorkspaceConfigurationParams": WorkspaceConfigurationParams,
     "WorkspaceConfigurationRequest": WorkspaceConfigurationRequest,
     "WorkspaceConfigurationResponse": WorkspaceConfigurationResponse,
     "WorkspaceConfigurationResult": WorkspaceConfigurationResult,

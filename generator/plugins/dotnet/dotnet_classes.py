@@ -60,7 +60,7 @@ def lsp_to_base_types(lsp_type: model.BaseType):
     elif lsp_type.name in ["integer"]:
         return "int"
     elif lsp_type.name in ["uinteger"]:
-        return "uint"
+        return "long"
     elif lsp_type.name in ["boolean"]:
         return "bool"
     elif lsp_type.name in ["null"]:
@@ -250,6 +250,12 @@ def generate_property(
         lines.append(
             f'public {type_name}{optional} {name} {{ get; init; }} = "{prop_def.type.value}";'
         )
+    elif prop_def.type.kind == "base" and prop_def.type.name == "uinteger":
+        private_name = f"_{prop_def.name}" if prop_def.name == name else prop_def.name
+        lines.append(
+            f"public {type_name}{optional} {name} {{ get => {private_name}; set => {private_name} = Validators.validUInteger(value); }}"
+        )
+        lines.append(f"private {type_name}{optional} {private_name};")
     else:
         lines.append(f"public {type_name}{optional} {name} {{ get; init; }}")
 

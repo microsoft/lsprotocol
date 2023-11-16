@@ -17,4 +17,24 @@ public static class Validators
     {
         return value >= uint.MinValue && value <= uint.MaxValue;
     }
+
+    public static long? validUInteger(long? value){
+        if(value == null){
+            return null;
+        }
+
+        if (Validators.InUIntegerRange((long)value))
+        {
+            return value;
+        }
+        throw new ArgumentOutOfRangeException("value", value, "Value is not in the range of LSP uinteger");
+    }
+
+    public static long validUInteger(long value){
+        if (Validators.InUIntegerRange(value))
+        {
+            return value;
+        }
+        throw new ArgumentOutOfRangeException("value", value, "Value is not in the range of LSP uinteger");
+    }
 }

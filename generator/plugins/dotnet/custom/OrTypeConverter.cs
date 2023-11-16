@@ -37,7 +37,7 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
 
         Type[] types = new Type[] { typeof(T), typeof(U) };
 
-        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(uint)) || Validators.HasType(types, typeof(int))))
+        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(long)) || Validators.HasType(types, typeof(int))))
         {
             return ReadIntegerToken(reader, serializer, types);
         }
@@ -61,15 +61,15 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
     private static OrType<T, U> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
         long integer = serializer.Deserialize<long>(reader);
-        if (Validators.InUIntegerRange(integer) && Validators.HasType(types, typeof(uint)))
+        if (Validators.InUIntegerRange(integer) && Validators.HasType(types, typeof(long)))
         {
-            if (typeof(T) == typeof(uint))
+            if (typeof(T) == typeof(long))
             {
-                return new OrType<T, U>((T)(object)(uint)integer);
+                return new OrType<T, U>((T)(object)(long)integer);
             }
-            if (typeof(U) == typeof(uint))
+            if (typeof(U) == typeof(long))
             {
-                return new OrType<T, U>((U)(object)(uint)integer);
+                return new OrType<T, U>((U)(object)(long)integer);
             }
         }
         if (Validators.InIntegerRange(integer) && Validators.HasType(types, typeof(int)))
@@ -83,7 +83,7 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
                 return new OrType<T, U>((U)(object)(int)integer);
             }
         }
-        throw new ArgumentOutOfRangeException($"Integer out-of-range of LSP Signed Integer[{int.MinValue}:{int.MaxValue}] and out-of-range of LSP Unsigned Integer [{uint.MinValue}:{uint.MaxValue}] => {integer}");
+        throw new ArgumentOutOfRangeException($"Integer out-of-range of LSP Signed Integer[{int.MinValue}:{int.MaxValue}] and out-of-range of LSP Unsigned Integer [{long.MinValue}:{long.MaxValue}] => {integer}");
     }
 
     private static OrType<T, U> ReadFloatToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -136,9 +136,9 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
             try
             {
                 object? value = null;
-                if (token.Type == JTokenType.Array && type == typeof((uint, uint)))
+                if (token.Type == JTokenType.Array && type == typeof((long, long)))
                 {
-                    uint[]? o = token.ToObject<uint[]>(serializer);
+                    long[]? o = token.ToObject<long[]>(serializer);
                     if (o != null)
                     {
                         value = (o[0], o[1]);
@@ -179,10 +179,10 @@ public class OrTypeConverter<T, U> : JsonConverter<OrType<T, U>>
         {
             writer.WriteNull();
         }
-        else if (value?.Value?.GetType() == typeof((uint, uint)))
+        else if (value?.Value?.GetType() == typeof((long, long)))
         {
-            ValueTuple<uint, uint> o = (ValueTuple<uint, uint>)(value.Value);
-            serializer.Serialize(writer, new uint[] { o.Item1, o.Item2 });
+            ValueTuple<long, long> o = (ValueTuple<long, long>)(value.Value);
+            serializer.Serialize(writer, new long[] { o.Item1, o.Item2 });
         }
         else
         {
@@ -204,7 +204,7 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
 
         Type[] types = new Type[] { typeof(T), typeof(U), typeof(V) };
 
-        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(uint)) || Validators.HasType(types, typeof(int))))
+        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(long)) || Validators.HasType(types, typeof(int))))
         {
             return ReadIntegerToken(reader, serializer, types);
         }
@@ -228,19 +228,19 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
     private static OrType<T, U, V> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
         long integer = serializer.Deserialize<long>(reader);
-        if (Validators.InUIntegerRange(integer) && Validators.HasType(types, typeof(uint)))
+        if (Validators.InUIntegerRange(integer) && Validators.HasType(types, typeof(long)))
         {
-            if (typeof(T) == typeof(uint))
+            if (typeof(T) == typeof(long))
             {
-                return new OrType<T, U, V>((T)(object)(uint)integer);
+                return new OrType<T, U, V>((T)(object)(long)integer);
             }
-            if (typeof(U) == typeof(uint))
+            if (typeof(U) == typeof(long))
             {
-                return new OrType<T, U, V>((U)(object)(uint)integer);
+                return new OrType<T, U, V>((U)(object)(long)integer);
             }
-            if (typeof(V) == typeof(uint))
+            if (typeof(V) == typeof(long))
             {
-                return new OrType<T, U, V>((V)(object)(uint)integer);
+                return new OrType<T, U, V>((V)(object)(long)integer);
             }
         }
         if (Validators.InIntegerRange(integer) && Validators.HasType(types, typeof(int)))
@@ -258,7 +258,7 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
                 return new OrType<T, U, V>((V)(object)(int)integer);
             }
         }
-        throw new ArgumentOutOfRangeException($"Integer out-of-range of LSP Signed Integer[{int.MinValue}:{int.MaxValue}] and out-of-range of LSP Unsigned Integer [{uint.MinValue}:{uint.MaxValue}] => {integer}");
+        throw new ArgumentOutOfRangeException($"Integer out-of-range of LSP Signed Integer[{int.MinValue}:{int.MaxValue}] and out-of-range of LSP Unsigned Integer [{long.MinValue}:{long.MaxValue}] => {integer}");
     }
 
     private static OrType<T, U, V> ReadFloatToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -323,9 +323,9 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
             try
             {
                 object? value = null;
-                if (token.Type == JTokenType.Array && type == typeof((uint, uint)))
+                if (token.Type == JTokenType.Array && type == typeof((long, long)))
                 {
-                    uint[]? o = token.ToObject<uint[]>(serializer);
+                    long[]? o = token.ToObject<long[]>(serializer);
                     if (o != null)
                     {
                         value = (o[0], o[1]);
@@ -368,10 +368,10 @@ public class OrTypeConverter<T, U, V> : JsonConverter<OrType<T, U, V>>
         {
             writer.WriteNull();
         }
-        else if (value?.Value?.GetType() == typeof((uint, uint)))
+        else if (value?.Value?.GetType() == typeof((long, long)))
         {
-            ValueTuple<uint, uint> o = (ValueTuple<uint, uint>)(value.Value);
-            serializer.Serialize(writer, new uint[] { o.Item1, o.Item2 });
+            ValueTuple<long, long> o = (ValueTuple<long, long>)(value.Value);
+            serializer.Serialize(writer, new long[] { o.Item1, o.Item2 });
         }
         else
         {
@@ -393,7 +393,7 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
 
         Type[] types = new Type[] { typeof(T), typeof(U), typeof(V), typeof(W) };
 
-        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(uint)) || Validators.HasType(types, typeof(int))))
+        if (reader.TokenType == JsonToken.Integer && (Validators.HasType(types, typeof(long)) || Validators.HasType(types, typeof(int))))
         {
             return ReadIntegerToken(reader, serializer, types);
         }
@@ -417,23 +417,23 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
     private static OrType<T, U, V, W> ReadIntegerToken(JsonReader reader, JsonSerializer serializer, Type[] types)
     {
         long integer = serializer.Deserialize<long>(reader);
-        if (Validators.InUIntegerRange(integer) && Validators.HasType(types, typeof(uint)))
+        if (Validators.InUIntegerRange(integer) && Validators.HasType(types, typeof(long)))
         {
-            if (typeof(T) == typeof(uint))
+            if (typeof(T) == typeof(long))
             {
-                return new OrType<T, U, V, W>((T)(object)(uint)integer);
+                return new OrType<T, U, V, W>((T)(object)(long)integer);
             }
-            if (typeof(U) == typeof(uint))
+            if (typeof(U) == typeof(long))
             {
-                return new OrType<T, U, V, W>((U)(object)(uint)integer);
+                return new OrType<T, U, V, W>((U)(object)(long)integer);
             }
-            if (typeof(V) == typeof(uint))
+            if (typeof(V) == typeof(long))
             {
-                return new OrType<T, U, V, W>((V)(object)(uint)integer);
+                return new OrType<T, U, V, W>((V)(object)(long)integer);
             }
-            if (typeof(W) == typeof(uint))
+            if (typeof(W) == typeof(long))
             {
-                return new OrType<T, U, V, W>((W)(object)(uint)integer);
+                return new OrType<T, U, V, W>((W)(object)(long)integer);
             }
         }
         if (Validators.InIntegerRange(integer) && Validators.HasType(types, typeof(int)))
@@ -455,7 +455,7 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
                 return new OrType<T, U, V, W>((W)(object)(int)integer);
             }
         }
-        throw new ArgumentOutOfRangeException($"Integer out-of-range of LSP Signed Integer[{int.MinValue}:{int.MaxValue}] and out-of-range of LSP Unsigned Integer [{uint.MinValue}:{uint.MaxValue}] => {integer}");
+        throw new ArgumentOutOfRangeException($"Integer out-of-range of LSP Signed Integer[{int.MinValue}:{int.MaxValue}] and out-of-range of LSP Unsigned Integer [{long.MinValue}:{long.MaxValue}] => {integer}");
     }
 
     private static OrType<T, U, V, W> ReadFloatToken(JsonReader reader, JsonSerializer serializer, Type[] types)
@@ -532,9 +532,9 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
             try
             {
                 object? value = null;
-                if (token.Type == JTokenType.Array && type == typeof((uint, uint)))
+                if (token.Type == JTokenType.Array && type == typeof((long, long)))
                 {
-                    uint[]? o = token.ToObject<uint[]>(serializer);
+                    long[]? o = token.ToObject<long[]>(serializer);
                     if (o != null)
                     {
                         value = (o[0], o[1]);
@@ -582,10 +582,10 @@ public class OrTypeConverter<T, U, V, W> : JsonConverter<OrType<T, U, V, W>>
         {
             writer.WriteNull();
         }
-        else if (value?.Value?.GetType() == typeof((uint, uint)))
+        else if (value?.Value?.GetType() == typeof((long, long)))
         {
-            ValueTuple<uint, uint> o = (ValueTuple<uint, uint>)(value.Value);
-            serializer.Serialize(writer, new uint[] { o.Item1, o.Item2 });
+            ValueTuple<long, long> o = (ValueTuple<long, long>)(value.Value);
+            serializer.Serialize(writer, new long[] { o.Item1, o.Item2 });
         }
         else
         {

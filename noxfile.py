@@ -10,11 +10,8 @@ import nox
 def _install_requirements(session: nox.Session):
     session.install(
         "-r",
-        "./packages/python/requirements.txt",
-        "-r",
         "./requirements.txt",
     )
-    session.run("pip", "list")
 
 
 @nox.session()
@@ -121,14 +118,6 @@ def update_lsp(session: nox.Session):
 def update_packages(session: nox.Session):
     """Update dependencies of generator and lsprotocol."""
     session.install("wheel", "pip-tools")
-
-    session.run(
-        "pip-compile",
-        "--generate-hashes",
-        "--resolver=backtracking",
-        "--upgrade",
-        "./packages/python/requirements.in",
-    )
     session.run(
         "pip-compile",
         "--generate-hashes",

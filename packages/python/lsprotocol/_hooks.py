@@ -454,7 +454,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         if isinstance(object_, list):
             if len(object_) == 0:
-                return []  # type: ignore[return-value]
+                return []
             if "targetUri" in object_[0]:
                 return [
                     converter.structure(item, lsp_types.LocationLink)
@@ -476,7 +476,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         if isinstance(object_, list):
             if len(object_) == 0:
-                return []  # type: ignore[return-value]
+                return []
             if "location" in object_[0]:
                 return [
                     converter.structure(item, lsp_types.SymbolInformation)
@@ -688,7 +688,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return None
         assert isinstance(object_, list)
         if len(object_) == 0:
-            return []  # type: ignore[return-value]
+            return []
         if "location" in object_[0]:
             return [
                 converter.structure(item, lsp_types.SymbolInformation)
@@ -1214,7 +1214,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
                 rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
-            for a in attrs.fields(cls)  # type: ignore
+            for a in attrs.fields(cls)
         }
         return cattrs.gen.make_dict_unstructure_fn(cls, converter, **attributes)
 
@@ -1224,7 +1224,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
                 rename=_to_camel_case(a.name),
                 omit_if_default=_omit(cls, a.name),
             )
-            for a in attrs.fields(cls)  # type: ignore
+            for a in attrs.fields(cls)
         }
         return cattrs.gen.make_dict_structure_fn(cls, converter, **attributes)
 

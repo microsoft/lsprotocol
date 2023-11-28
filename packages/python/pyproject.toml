@@ -29,7 +29,7 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = ["attrs>=21.3.0", "cattrs"]
+dependencies = ["attrs>=21.3.0", "cattrs!=23.2.1"]
 
 [project.urls]
 Issues = "https://github.com/microsoft/lsprotocol/issues"

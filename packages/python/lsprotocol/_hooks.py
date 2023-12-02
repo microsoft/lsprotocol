@@ -691,15 +691,19 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         assert isinstance(object_, list)
         if len(object_) == 0:
             return []
-        if "location" in object_[0]:
+        if "deprecated" in object_[0]:
             return [
                 converter.structure(item, lsp_types.SymbolInformation)
                 for item in object_
             ]
-        else:
+        elif ("data" in object_[0]) or ("range" not in object_[0]["location"]):
             return [
                 converter.structure(item, lsp_types.WorkspaceSymbol) for item in object_
             ]
+
+        return [
+            converter.structure(item, lsp_types.SymbolInformation) for item in object_
+        ]
 
     def _notebook_sync_registration_option_selector_hook(
         object_: Any, _: type

@@ -205,6 +205,7 @@ jobs:
         with:
           repository: openlawlibrary/pygls
           path: smoke_tests
+          ref: 'v1.1.2'
 
       - name: Use Python ${{ matrix.python }}
         uses: actions/setup-python@v4

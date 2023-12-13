@@ -415,7 +415,7 @@ class ReferenceMapKeyType:
 
 
 def convert_map_key(
-    key_info: Dict[str, Any]
+    key_info: Dict[str, Any],
 ) -> Union[BaseMapKeyType, ReferenceMapKeyType]:
     if key_info["kind"] == "base":
         return BaseMapKeyType(**key_info)

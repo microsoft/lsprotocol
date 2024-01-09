@@ -722,6 +722,18 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 lsp_types.NotebookDocumentFilterWithCells,
             )
 
+    def _language_kind_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.LanguageKind,
+        OptionalPrimitive,
+    ]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.LanguageKind)
+
     structure_hooks = [
         (
             Optional[
@@ -1062,6 +1074,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 ]
             ],
             _symbol_list_hook,
+        ),
+        (
+            Union[lsp_types.LanguageKind, str],
+            _language_kind_hook,
         ),
     ]
     for type_, hook in structure_hooks:

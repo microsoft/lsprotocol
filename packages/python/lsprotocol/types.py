@@ -480,7 +480,6 @@ class MarkupKind(str, enum.Enum):
     """Markdown is supported as a content format"""
 
 
-@enum.unique
 class LanguageKind(str, enum.Enum):
     """Predefined Language kinds
     @since 3.18.0

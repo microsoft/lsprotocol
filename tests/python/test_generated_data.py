@@ -5,9 +5,10 @@ import json
 import pathlib
 from typing import List, Union
 
+import pytest
+
 import lsprotocol.converters as cv
 import lsprotocol.types as lsp
-import pytest
 
 TEST_DATA_ROOT = pathlib.Path(__file__).parent.parent.parent / "packages" / "testdata"
 

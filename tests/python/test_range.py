@@ -3,6 +3,7 @@
 
 import hamcrest
 import pytest
+
 from lsprotocol import types as lsp
 
 

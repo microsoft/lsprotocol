@@ -176,6 +176,7 @@ def get_converter(type_def: model.LSP_TYPE_SPEC, type_name: str) -> Optional[str
     elif type_def.kind == "reference" and type_def.name in [
         "Pattern",
         "ChangeAnnotationIdentifier",
+        "RegularExpressionEngineKind",
     ]:
         return f"[JsonConverter(typeof(CustomStringConverter<{type_def.name}>))]"
     elif type_def.kind == "reference" and type_def.name == "DocumentSelector":

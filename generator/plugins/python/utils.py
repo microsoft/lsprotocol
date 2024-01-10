@@ -16,7 +16,10 @@ METHOD_NAME_RE_2 = re.compile(r"([a-z0-9])([A-Z])")
 PACKAGE_NAME = "lsprotocol"
 
 # These are special type aliases to preserve backward compatibility.
-custom_request_params_aliases = []
+CUSTOM_REQUEST_PARAMS_ALIASES = []
+
+# Special enums with duplicates
+SPECIAL_ENUMS = ["LanguageKind", "ErrorCodes", "LSPErrorCodes"]
 
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
@@ -388,7 +391,7 @@ class TypesCodeGenerator:
 
     def _add_enum(self, enum_def: model.Enum) -> None:
         code_lines = [
-            "" if "ErrorCodes" in enum_def.name else "@enum.unique",
+            "" if enum_def.name in SPECIAL_ENUMS else "@enum.unique",
         ]
         if enum_def.type.name == "string":
             code_lines += [f"class {enum_def.name}(str, enum.Enum):"]
@@ -810,7 +813,7 @@ class TypesCodeGenerator:
             if request.params:
                 if (
                     request.params.kind == "reference"
-                    and f"{class_name}Params" in custom_request_params_aliases
+                    and f"{class_name}Params" in CUSTOM_REQUEST_PARAMS_ALIASES
                 ):
                     params_type = f"{class_name}Params"
 

@@ -864,6 +864,8 @@ pub enum MessageType {
     /// A debug message.
     ///
     /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
     Debug = 5,
 }
 impl Serialize for MessageType {
@@ -1302,6 +1304,21 @@ pub enum CodeActionKind {
     #[serde(rename = "refactor.inline")]
     RefactorInline,
 
+    /// Base kind for refactoring move actions: `refactor.move`
+    ///
+    /// Example move actions:
+    ///
+    /// - Move a function to a new file
+    /// - Move a property between classes
+    /// - Move method to base class
+    /// - ...
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    #[serde(rename = "refactor.move")]
+    RefactorMove,
+
     /// Base kind for refactoring rewrite actions: 'refactor.rewrite'
     ///
     /// Example rewrite actions:
@@ -1336,7 +1353,7 @@ pub enum CodeActionKind {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-pub enum TraceValues {
+pub enum TraceValue {
     /// Turn tracing off.
     #[serde(rename = "off")]
     Off,
@@ -1366,6 +1383,202 @@ pub enum MarkupKind {
     Markdown,
 }
 
+/// Predefined Language kinds
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+pub enum LanguageKind {
+    #[serde(rename = "abap")]
+    Abap,
+
+    #[serde(rename = "bat")]
+    WindowsBat,
+
+    #[serde(rename = "bibtex")]
+    BibTeX,
+
+    #[serde(rename = "clojure")]
+    Clojure,
+
+    #[serde(rename = "coffeescript")]
+    Coffeescript,
+
+    #[serde(rename = "c")]
+    C,
+
+    #[serde(rename = "cpp")]
+    Cpp,
+
+    #[serde(rename = "csharp")]
+    Csharp,
+
+    #[serde(rename = "css")]
+    Css,
+
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    #[serde(rename = "d")]
+    D,
+
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    #[serde(rename = "pascal")]
+    Delphi,
+
+    #[serde(rename = "diff")]
+    Diff,
+
+    #[serde(rename = "dart")]
+    Dart,
+
+    #[serde(rename = "dockerfile")]
+    Dockerfile,
+
+    #[serde(rename = "elixir")]
+    Elixir,
+
+    #[serde(rename = "erlang")]
+    Erlang,
+
+    #[serde(rename = "fsharp")]
+    Fsharp,
+
+    #[serde(rename = "git-commit")]
+    GitCommit,
+
+    #[serde(rename = "rebase")]
+    GitRebase,
+
+    #[serde(rename = "go")]
+    Go,
+
+    #[serde(rename = "groovy")]
+    Groovy,
+
+    #[serde(rename = "handlebars")]
+    Handlebars,
+
+    #[serde(rename = "html")]
+    Html,
+
+    #[serde(rename = "ini")]
+    Ini,
+
+    #[serde(rename = "java")]
+    Java,
+
+    #[serde(rename = "javascript")]
+    JavaScript,
+
+    #[serde(rename = "javascriptreact")]
+    JavaScriptReact,
+
+    #[serde(rename = "json")]
+    Json,
+
+    #[serde(rename = "latex")]
+    LaTeX,
+
+    #[serde(rename = "less")]
+    Less,
+
+    #[serde(rename = "lua")]
+    Lua,
+
+    #[serde(rename = "makefile")]
+    Makefile,
+
+    #[serde(rename = "markdown")]
+    Markdown,
+
+    #[serde(rename = "objective-c")]
+    ObjectiveC,
+
+    #[serde(rename = "objective-cpp")]
+    ObjectiveCpp,
+
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    #[serde(rename = "pascal")]
+    Pascal,
+
+    #[serde(rename = "perl")]
+    Perl,
+
+    #[serde(rename = "perl6")]
+    Perl6,
+
+    #[serde(rename = "php")]
+    Php,
+
+    #[serde(rename = "powershell")]
+    Powershell,
+
+    #[serde(rename = "jade")]
+    Pug,
+
+    #[serde(rename = "python")]
+    Python,
+
+    #[serde(rename = "r")]
+    R,
+
+    #[serde(rename = "razor")]
+    Razor,
+
+    #[serde(rename = "ruby")]
+    Ruby,
+
+    #[serde(rename = "rust")]
+    Rust,
+
+    #[serde(rename = "scss")]
+    Scss,
+
+    #[serde(rename = "sass")]
+    Sass,
+
+    #[serde(rename = "scala")]
+    Scala,
+
+    #[serde(rename = "shaderlab")]
+    ShaderLab,
+
+    #[serde(rename = "shellscript")]
+    ShellScript,
+
+    #[serde(rename = "sql")]
+    Sql,
+
+    #[serde(rename = "swift")]
+    Swift,
+
+    #[serde(rename = "typescript")]
+    TypeScript,
+
+    #[serde(rename = "typescriptreact")]
+    TypeScriptReact,
+
+    #[serde(rename = "tex")]
+    TeX,
+
+    #[serde(rename = "vb")]
+    VisualBasic,
+
+    #[serde(rename = "xml")]
+    Xml,
+
+    #[serde(rename = "xsl")]
+    Xsl,
+
+    #[serde(rename = "yaml")]
+    Yaml,
+}
+
 /// Describes how an [inline completion provider][InlineCompletionItemProvider] was triggered.
 ///
 /// @since 3.18.0
@@ -1374,10 +1587,10 @@ pub enum MarkupKind {
 #[derive(PartialEq, Debug, Eq, Clone)]
 pub enum InlineCompletionTriggerKind {
     /// Completion was triggered explicitly by a user gesture.
-    Invoked = 0,
+    Invoked = 1,
 
     /// Completion was triggered automatically while editing.
-    Automatic = 1,
+    Automatic = 2,
 }
 impl Serialize for InlineCompletionTriggerKind {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
@@ -1385,8 +1598,8 @@ impl Serialize for InlineCompletionTriggerKind {
         S: serde::Serializer,
     {
         match self {
-            InlineCompletionTriggerKind::Invoked => serializer.serialize_i32(0),
-            InlineCompletionTriggerKind::Automatic => serializer.serialize_i32(1),
+            InlineCompletionTriggerKind::Invoked => serializer.serialize_i32(1),
+            InlineCompletionTriggerKind::Automatic => serializer.serialize_i32(2),
         }
     }
 }
@@ -1397,8 +1610,8 @@ impl<'de> Deserialize<'de> for InlineCompletionTriggerKind {
     {
         let value = i32::deserialize(deserializer)?;
         match value {
-            0 => Ok(InlineCompletionTriggerKind::Invoked),
-            1 => Ok(InlineCompletionTriggerKind::Automatic),
+            1 => Ok(InlineCompletionTriggerKind::Invoked),
+            2 => Ok(InlineCompletionTriggerKind::Automatic),
             _ => Err(serde::de::Error::custom("Unexpected value")),
         }
     }
@@ -2011,17 +2224,6 @@ pub enum TextDocumentFilter {
     Pattern(TextDocumentFilterPattern),
 }
 
-/// The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
-/// - `*` to match one or more characters in a path segment
-/// - `?` to match on one character in a path segment
-/// - `**` to match any number of path segments, including none
-/// - `{}` to group conditions (e.g. `**​/*.{ts,js}` matches all TypeScript and JavaScript files)
-/// - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
-/// - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
-///
-/// @since 3.17.0
-pub type Pattern = String;
-
 /// A notebook document filter denotes a notebook document by
 /// different properties. The properties will be match
 /// against the notebook's URI (same as with documents)
@@ -2034,6 +2236,19 @@ pub enum NotebookDocumentFilter {
     Scheme(NotebookDocumentFilterScheme),
     Pattern(NotebookDocumentFilterPattern),
 }
+
+/// The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
+/// - `*` to match one or more characters in a path segment
+/// - `?` to match on one character in a path segment
+/// - `**` to match any number of path segments, including none
+/// - `{}` to group conditions (e.g. `**​/*.{ts,js}` matches all TypeScript and JavaScript files)
+/// - `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
+/// - `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
+///
+/// @since 3.17.0
+pub type Pattern = String;
+
+pub type RegularExpressionEngineKind = String;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -2266,7 +2481,7 @@ pub struct FoldingRange {
     /// To be valid, the end must be zero or larger and smaller than the number of lines in the document.
     pub end_line: u32,
 
-    /// Describes the kind of the folding range such as `comment' or 'region'. The kind
+    /// Describes the kind of the folding range such as 'comment' or 'region'. The kind
     /// is used to categorize folding ranges and used by commands like 'Fold all comments'.
     /// See [FoldingRangeKind] for an enumeration of standardized kinds.
     pub kind: Option<CustomStringEnum<FoldingRangeKind>>,
@@ -3020,6 +3235,9 @@ pub struct InlayHint {
     pub padding_right: Option<bool>,
 
     /// The position of this hint.
+    ///
+    /// If multiple hints have the same position, they will be shown in the order
+    /// they appear in the response.
     pub position: Position,
 
     /// Optional text edits that are performed when accepting this inlay hint.
@@ -3179,6 +3397,25 @@ pub struct DidOpenNotebookDocumentParams {
 
     /// The notebook document that got opened.
     pub notebook_document: NotebookDocument,
+}
+
+/// Registration options specific to a notebook.
+///
+/// @since 3.17.0
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentSyncRegistrationOptions {
+    /// The id used to register the request. The id can be used to deregister
+    /// the request again. See also Registration#id.
+    pub id: Option<String>,
+
+    /// The notebooks to be synced
+    pub notebook_selector:
+        Vec<OR2<NotebookDocumentFilterWithNotebook, NotebookDocumentFilterWithCells>>,
+
+    /// Whether save notification should be forwarded to
+    /// the server. Will only be honored if mode === `notebook`.
+    pub save: Option<bool>,
 }
 
 /// The params sent in a change notebook document notification.
@@ -3369,7 +3606,7 @@ pub struct InitializeParams {
     pub root_uri: Option<String>,
 
     /// The initial trace setting. If omitted trace is disabled ('off').
-    pub trace: Option<TraceValues>,
+    pub trace: Option<TraceValue>,
 
     /// An optional token that a server can use to report work done progress.
     pub work_done_token: Option<ProgressToken>,
@@ -3906,13 +4143,22 @@ pub struct SignatureHelpParams {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SignatureHelp {
-    /// The active parameter of the active signature. If omitted or the value
-    /// lies outside the range of `signatures[activeSignature].parameters`
-    /// defaults to 0 if the active signature has parameters. If
-    /// the active signature has no parameters it is ignored.
+    /// The active parameter of the active signature.
+    ///
+    /// If `null`, no parameter of the signature is active (for example a named
+    /// argument that does not match any declared parameters). This is only valid
+    /// if the client specifies the client capability
+    /// `textDocument.signatureHelp.noActiveParameterSupport === true`
+    ///
+    /// If omitted or the value lies outside the range of
+    /// `signatures[activeSignature].parameters` defaults to 0 if the active
+    /// signature has parameters.
+    ///
+    /// If the active signature has no parameters it is ignored.
+    ///
     /// In future version of the protocol this property might become
-    /// mandatory to better express the active parameter if the
-    /// active signature does have any.
+    /// mandatory (but still nullable) to better express the active parameter if
+    /// the active signature does have any.
     pub active_parameter: Option<u32>,
 
     /// The active signature. If omitted or the value lies outside the
@@ -4763,7 +5009,7 @@ pub struct WorkDoneProgressEnd {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SetTraceParams {
-    pub value: TraceValues,
+    pub value: TraceValue,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -5515,7 +5761,7 @@ pub struct NotebookDocument {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentItem {
     /// The text document's language identifier.
-    pub language_id: String,
+    pub language_id: CustomStringEnum<LanguageKind>,
 
     /// The content of the opened text document.
     pub text: String,
@@ -5526,6 +5772,31 @@ pub struct TextDocumentItem {
     /// The version number of this document (it will increase after each
     /// change, including undo/redo).
     pub version: i32,
+}
+
+/// Options specific to a notebook plus its cells
+/// to be synced to the server.
+///
+/// If a selector provides a notebook document
+/// filter but no cell selector all cells of a
+/// matching notebook document will be synced.
+///
+/// If a selector provides no notebook document
+/// filter but only a cell selector all notebook
+/// document that contain at least one matching
+/// cell will be synced.
+///
+/// @since 3.17.0
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentSyncOptions {
+    /// The notebooks to be synced
+    pub notebook_selector:
+        Vec<OR2<NotebookDocumentFilterWithNotebook, NotebookDocumentFilterWithCells>>,
+
+    /// Whether save notification should be forwarded to
+    /// the server. Will only be honored if mode === `notebook`.
+    pub save: Option<bool>,
 }
 
 /// A versioned notebook document identifier.
@@ -5690,7 +5961,7 @@ pub struct _InitializeParams {
     pub root_uri: Option<String>,
 
     /// The initial trace setting. If omitted trace is disabled ('off').
-    pub trace: Option<TraceValues>,
+    pub trace: Option<TraceValue>,
 
     /// An optional token that a server can use to report work done progress.
     pub work_done_token: Option<ProgressToken>,
@@ -6139,7 +6410,13 @@ pub struct SignatureHelpContext {
 pub struct SignatureInformation {
     /// The index of the active parameter.
     ///
-    /// If provided, this is used in place of `SignatureHelp.activeParameter`.
+    /// If `null`, no parameter of the signature is active (for example a named
+    /// argument that does not match any declared parameters). This is only valid
+    /// if the client specifies the client capability
+    /// `textDocument.signatureHelp.noActiveParameterSupport === true`
+    ///
+    /// If provided (or `null`), this is used in place of
+    /// `SignatureHelp.activeParameter`.
     ///
     /// @since 3.16.0
     pub active_parameter: Option<u32>,
@@ -6646,6 +6923,36 @@ pub struct NotebookCell {
     pub metadata: Option<LSPObject>,
 }
 
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentFilterWithNotebook {
+    /// The cells of the matching notebook to be synced.
+    pub cells: Option<Vec<NotebookCellLanguage>>,
+
+    /// The notebook to be synced If a string
+    /// value is provided it matches against the
+    /// notebook type. '*' matches every notebook.
+    pub notebook: OR2<String, NotebookDocumentFilter>,
+}
+
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentFilterWithCells {
+    /// The cells of the matching notebook to be synced.
+    pub cells: Vec<NotebookCellLanguage>,
+
+    /// The notebook to be synced If a string
+    /// value is provided it matches against the
+    /// notebook type. '*' matches every notebook.
+    pub notebook: Option<OR2<String, NotebookDocumentFilter>>,
+}
+
 /// Cell changes to a notebook document.
 ///
 /// @since 3.18.0
@@ -6746,50 +7053,6 @@ pub struct TextDocumentSyncOptions {
     /// If present will save wait until requests are sent to the server. If omitted the request should not be
     /// sent.
     pub will_save_wait_until: Option<bool>,
-}
-
-/// Options specific to a notebook plus its cells
-/// to be synced to the server.
-///
-/// If a selector provides a notebook document
-/// filter but no cell selector all cells of a
-/// matching notebook document will be synced.
-///
-/// If a selector provides no notebook document
-/// filter but only a cell selector all notebook
-/// document that contain at least one matching
-/// cell will be synced.
-///
-/// @since 3.17.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentSyncOptions {
-    /// The notebooks to be synced
-    pub notebook_selector:
-        Vec<OR2<NotebookDocumentFilterWithNotebook, NotebookDocumentFilterWithCells>>,
-
-    /// Whether save notification should be forwarded to
-    /// the server. Will only be honored if mode === `notebook`.
-    pub save: Option<bool>,
-}
-
-/// Registration options specific to a notebook.
-///
-/// @since 3.17.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentSyncRegistrationOptions {
-    /// The id used to register the request. The id can be used to deregister
-    /// the request again. See also Registration#id.
-    pub id: Option<String>,
-
-    /// The notebooks to be synced
-    pub notebook_selector:
-        Vec<OR2<NotebookDocumentFilterWithNotebook, NotebookDocumentFilterWithCells>>,
-
-    /// Whether save notification should be forwarded to
-    /// the server. Will only be honored if mode === `notebook`.
-    pub save: Option<bool>,
 }
 
 /// Defines workspace specific capabilities of the server.
@@ -6964,6 +7227,15 @@ pub struct ExecutionSummary {
     /// Whether the execution was successful or
     /// not if known by the client.
     pub success: Option<bool>,
+}
+
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookCellLanguage {
+    pub language: String,
 }
 
 /// Structural changes to cells in a notebook document.
@@ -7287,36 +7559,6 @@ pub struct GeneralClientCapabilities {
     pub stale_request_support: Option<StaleRequestSupportOptions>,
 }
 
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentFilterWithNotebook {
-    /// The cells of the matching notebook to be synced.
-    pub cells: Option<Vec<NotebookCellLanguage>>,
-
-    /// The notebook to be synced If a string
-    /// value is provided it matches against the
-    /// notebook type. '*' matches every notebook.
-    pub notebook: OR2<String, NotebookDocumentFilter>,
-}
-
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentFilterWithCells {
-    /// The cells of the matching notebook to be synced.
-    pub cells: Vec<NotebookCellLanguage>,
-
-    /// The notebook to be synced If a string
-    /// value is provided it matches against the
-    /// notebook type. '*' matches every notebook.
-    pub notebook: Option<OR2<String, NotebookDocumentFilter>>,
-}
-
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceFoldersServerCapabilities {
@@ -7422,6 +7664,60 @@ pub struct TextDocumentFilterPattern {
     pub language: Option<String>,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
+    pub pattern: String,
+
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
+    pub scheme: Option<String>,
+}
+
+/// A notebook document filter where `notebookType` is required field.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentFilterNotebookType {
+    /// The type of the enclosing notebook.
+    pub notebook_type: String,
+
+    /// A glob pattern.
+    pub pattern: Option<String>,
+
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
+    pub scheme: Option<String>,
+}
+
+/// A notebook document filter where `scheme` is required field.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentFilterScheme {
+    /// The type of the enclosing notebook.
+    pub notebook_type: Option<String>,
+
+    /// A glob pattern.
+    pub pattern: Option<String>,
+
+    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
+    pub scheme: String,
+}
+
+/// A notebook document filter where `pattern` is required field.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct NotebookDocumentFilterPattern {
+    /// The type of the enclosing notebook.
+    pub notebook_type: Option<String>,
+
+    /// A glob pattern.
     pub pattern: String,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
@@ -8258,7 +8554,7 @@ pub struct StaleRequestSupportOptions {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RegularExpressionsClientCapabilities {
     /// The engine's name.
-    pub engine: String,
+    pub engine: RegularExpressionEngineKind,
 
     /// The engine's version.
     pub version: Option<String>,
@@ -8281,69 +8577,6 @@ pub struct MarkdownClientCapabilities {
 
     /// The version of the parser.
     pub version: Option<String>,
-}
-
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookCellLanguage {
-    pub language: String,
-}
-
-/// A notebook document filter where `notebookType` is required field.
-///
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentFilterNotebookType {
-    /// The type of the enclosing notebook.
-    pub notebook_type: String,
-
-    /// A glob pattern.
-    pub pattern: Option<String>,
-
-    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
-    pub scheme: Option<String>,
-}
-
-/// A notebook document filter where `scheme` is required field.
-///
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentFilterScheme {
-    /// The type of the enclosing notebook.
-    pub notebook_type: Option<String>,
-
-    /// A glob pattern.
-    pub pattern: Option<String>,
-
-    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
-    pub scheme: String,
-}
-
-/// A notebook document filter where `pattern` is required field.
-///
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentFilterPattern {
-    /// The type of the enclosing notebook.
-    pub notebook_type: Option<String>,
-
-    /// A glob pattern.
-    pub pattern: String,
-
-    /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
-    pub scheme: Option<String>,
 }
 
 /// @since 3.18.0
@@ -8508,6 +8741,15 @@ pub struct ClientSignatureInformationOptions {
     /// Client supports the following content formats for the documentation
     /// property. The order describes the preferred format of the client.
     pub documentation_format: Option<Vec<MarkupKind>>,
+
+    /// The client supports the `activeParameter` property on
+    /// `SignatureHelp`/`SignatureInformation` being set to `null` to
+    /// indicate that no parameter should be active.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub no_active_parameter_support: Option<bool>,
 
     /// Client capabilities specific to parameter information.
     pub parameter_information: Option<ClientSignatureParameterInformationOptions>,

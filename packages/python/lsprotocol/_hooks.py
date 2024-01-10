@@ -27,7 +27,7 @@ def _resolve_forward_references() -> None:
         items = list(filter(_filter, lsp_types.ALL_TYPES_MAP.items()))
         for _, value in items:
             if isinstance(value, type):
-                attrs.resolve_types(value, lsp_types.ALL_TYPES_MAP, {})  # type: ignore
+                attrs.resolve_types(value, lsp_types.ALL_TYPES_MAP, {})
         _resolved_forward_references = True
 
 
@@ -722,6 +722,18 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
                 lsp_types.NotebookDocumentFilterWithCells,
             )
 
+    def _language_kind_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.LanguageKind,
+        OptionalPrimitive,
+    ]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.LanguageKind)
+
     structure_hooks = [
         (
             Optional[
@@ -1063,6 +1075,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             ],
             _symbol_list_hook,
         ),
+        (
+            Union[lsp_types.LanguageKind, str],
+            _language_kind_hook,
+        ),
     ]
     for type_, hook in structure_hooks:
         converter.register_structure_hook(type_, hook)
@@ -1229,7 +1245,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
             )
             for a in attrs.fields(cls)
         }
-        return cattrs.gen.make_dict_unstructure_fn(cls, converter, **attributes)
+        return cattrs.gen.make_dict_unstructure_fn(cls, converter, **attributes)  # type: ignore
 
     def _with_custom_structure(cls: type) -> Any:
         attributes = {
@@ -1239,7 +1255,7 @@ def _register_custom_property_hooks(converter: cattrs.Converter) -> cattrs.Conve
             )
             for a in attrs.fields(cls)
         }
-        return cattrs.gen.make_dict_structure_fn(cls, converter, **attributes)
+        return cattrs.gen.make_dict_structure_fn(cls, converter, **attributes)  # type: ignore
 
     converter.register_unstructure_hook_factory(attrs.has, _with_custom_unstructure)
     converter.register_structure_hook_factory(attrs.has, _with_custom_structure)

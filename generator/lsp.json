@@ -1935,6 +1935,10 @@
                 "name": "DidOpenNotebookDocumentParams"
             },
             "registrationMethod": "notebookDocument/sync",
+            "registrationOptions": {
+                "kind": "reference",
+                "name": "NotebookDocumentSyncRegistrationOptions"
+            },
             "documentation": "A notification sent when a notebook opens.\n\n@since 3.17.0",
             "since": "3.17.0"
         },
@@ -1945,7 +1949,11 @@
                 "kind": "reference",
                 "name": "DidChangeNotebookDocumentParams"
             },
-            "registrationMethod": "notebookDocument/sync"
+            "registrationMethod": "notebookDocument/sync",
+            "registrationOptions": {
+                "kind": "reference",
+                "name": "NotebookDocumentSyncRegistrationOptions"
+            }
         },
         {
             "method": "notebookDocument/didSave",
@@ -1955,6 +1963,10 @@
                 "name": "DidSaveNotebookDocumentParams"
             },
             "registrationMethod": "notebookDocument/sync",
+            "registrationOptions": {
+                "kind": "reference",
+                "name": "NotebookDocumentSyncRegistrationOptions"
+            },
             "documentation": "A notification sent when a notebook document is saved.\n\n@since 3.17.0",
             "since": "3.17.0"
         },
@@ -1966,6 +1978,10 @@
                 "name": "DidCloseNotebookDocumentParams"
             },
             "registrationMethod": "notebookDocument/sync",
+            "registrationOptions": {
+                "kind": "reference",
+                "name": "NotebookDocumentSyncRegistrationOptions"
+            },
             "documentation": "A notification sent when a notebook closes.\n\n@since 3.17.0",
             "since": "3.17.0"
         },
@@ -2540,7 +2556,7 @@
                         "name": "FoldingRangeKind"
                     },
                     "optional": true,
-                    "documentation": "Describes the kind of the folding range such as `comment' or 'region'. The kind\nis used to categorize folding ranges and used by commands like 'Fold all comments'.\nSee {@link FoldingRangeKind} for an enumeration of standardized kinds."
+                    "documentation": "Describes the kind of the folding range such as 'comment' or 'region'. The kind\nis used to categorize folding ranges and used by commands like 'Fold all comments'.\nSee {@link FoldingRangeKind} for an enumeration of standardized kinds."
                 },
                 {
                     "name": "collapsedText",
@@ -3735,7 +3751,7 @@
                         "kind": "reference",
                         "name": "Position"
                     },
-                    "documentation": "The position of this hint."
+                    "documentation": "The position of this hint.\n\nIf multiple hints have the same position, they will be shown in the order\nthey appear in the response."
                 },
                 {
                     "name": "label",
@@ -4053,6 +4069,24 @@
                 }
             ],
             "documentation": "The params sent in an open notebook document notification.\n\n@since 3.17.0",
+            "since": "3.17.0"
+        },
+        {
+            "name": "NotebookDocumentSyncRegistrationOptions",
+            "properties": [],
+            "extends": [
+                {
+                    "kind": "reference",
+                    "name": "NotebookDocumentSyncOptions"
+                }
+            ],
+            "mixins": [
+                {
+                    "kind": "reference",
+                    "name": "StaticRegistrationOptions"
+                }
+            ],
+            "documentation": "Registration options specific to a notebook.\n\n@since 3.17.0",
             "since": "3.17.0"
         },
         {
@@ -5095,11 +5129,20 @@
                 {
                     "name": "activeParameter",
                     "type": {
-                        "kind": "base",
-                        "name": "uinteger"
+                        "kind": "or",
+                        "items": [
+                            {
+                                "kind": "base",
+                                "name": "uinteger"
+                            },
+                            {
+                                "kind": "base",
+                                "name": "null"
+                            }
+                        ]
                     },
                     "optional": true,
-                    "documentation": "The active parameter of the active signature. If omitted or the value\nlies outside the range of `signatures[activeSignature].parameters`\ndefaults to 0 if the active signature has parameters. If\nthe active signature has no parameters it is ignored.\nIn future version of the protocol this property might become\nmandatory to better express the active parameter if the\nactive signature does have any."
+                    "documentation": "The active parameter of the active signature.\n\nIf `null`, no parameter of the signature is active (for example a named\nargument that does not match any declared parameters). This is only valid\nif the client specifies the client capability\n`textDocument.signatureHelp.noActiveParameterSupport === true`\n\nIf omitted or the value lies outside the range of\n`signatures[activeSignature].parameters` defaults to 0 if the active\nsignature has parameters.\n\nIf the active signature has no parameters it is ignored.\n\nIn future version of the protocol this property might become\nmandatory (but still nullable) to better express the active parameter if\nthe active signature does have any."
                 }
             ],
             "documentation": "Signature help represents the signature of something\ncallable. There can be multiple signature but only one\nactive and only one active parameter."
@@ -6275,7 +6318,7 @@
                     "name": "value",
                     "type": {
                         "kind": "reference",
-                        "name": "TraceValues"
+                        "name": "TraceValue"
                     }
                 }
             ]
@@ -7528,8 +7571,8 @@
                 {
                     "name": "languageId",
                     "type": {
-                        "kind": "base",
-                        "name": "string"
+                        "kind": "reference",
+                        "name": "LanguageKind"
                     },
                     "documentation": "The text document's language identifier."
                 },
@@ -7551,6 +7594,42 @@
                 }
             ],
             "documentation": "An item to transfer a text document from the client to the\nserver."
+        },
+        {
+            "name": "NotebookDocumentSyncOptions",
+            "properties": [
+                {
+                    "name": "notebookSelector",
+                    "type": {
+                        "kind": "array",
+                        "element": {
+                            "kind": "or",
+                            "items": [
+                                {
+                                    "kind": "reference",
+                                    "name": "NotebookDocumentFilterWithNotebook"
+                                },
+                                {
+                                    "kind": "reference",
+                                    "name": "NotebookDocumentFilterWithCells"
+                                }
+                            ]
+                        }
+                    },
+                    "documentation": "The notebooks to be synced"
+                },
+                {
+                    "name": "save",
+                    "type": {
+                        "kind": "base",
+                        "name": "boolean"
+                    },
+                    "optional": true,
+                    "documentation": "Whether save notification should be forwarded to\nthe server. Will only be honored if mode === `notebook`."
+                }
+            ],
+            "documentation": "Options specific to a notebook plus its cells\nto be synced to the server.\n\nIf a selector provides a notebook document\nfilter but no cell selector all cells of a\nmatching notebook document will be synced.\n\nIf a selector provides no notebook document\nfilter but only a cell selector all notebook\ndocument that contain at least one matching\ncell will be synced.\n\n@since 3.17.0",
+            "since": "3.17.0"
         },
         {
             "name": "VersionedNotebookDocumentIdentifier",
@@ -7828,7 +7907,7 @@
                     "name": "trace",
                     "type": {
                         "kind": "reference",
-                        "name": "TraceValues"
+                        "name": "TraceValue"
                     },
                     "optional": true,
                     "documentation": "The initial trace setting. If omitted trace is disabled ('off')."
@@ -9010,11 +9089,20 @@
                 {
                     "name": "activeParameter",
                     "type": {
-                        "kind": "base",
-                        "name": "uinteger"
+                        "kind": "or",
+                        "items": [
+                            {
+                                "kind": "base",
+                                "name": "uinteger"
+                            },
+                            {
+                                "kind": "base",
+                                "name": "null"
+                            }
+                        ]
                     },
                     "optional": true,
-                    "documentation": "The index of the active parameter.\n\nIf provided, this is used in place of `SignatureHelp.activeParameter`.\n\n@since 3.16.0",
+                    "documentation": "The index of the active parameter.\n\nIf `null`, no parameter of the signature is active (for example a named\nargument that does not match any declared parameters). This is only valid\nif the client specifies the client capability\n`textDocument.signatureHelp.noActiveParameterSupport === true`\n\nIf provided (or `null`), this is used in place of\n`SignatureHelp.activeParameter`.\n\n@since 3.16.0",
                     "since": "3.16.0"
                 }
             ],
@@ -9875,6 +9963,80 @@
             "since": "3.17.0"
         },
         {
+            "name": "NotebookDocumentFilterWithNotebook",
+            "properties": [
+                {
+                    "name": "notebook",
+                    "type": {
+                        "kind": "or",
+                        "items": [
+                            {
+                                "kind": "base",
+                                "name": "string"
+                            },
+                            {
+                                "kind": "reference",
+                                "name": "NotebookDocumentFilter"
+                            }
+                        ]
+                    },
+                    "documentation": "The notebook to be synced If a string\nvalue is provided it matches against the\nnotebook type. '*' matches every notebook."
+                },
+                {
+                    "name": "cells",
+                    "type": {
+                        "kind": "array",
+                        "element": {
+                            "kind": "reference",
+                            "name": "NotebookCellLanguage"
+                        }
+                    },
+                    "optional": true,
+                    "documentation": "The cells of the matching notebook to be synced."
+                }
+            ],
+            "documentation": "@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
+        },
+        {
+            "name": "NotebookDocumentFilterWithCells",
+            "properties": [
+                {
+                    "name": "notebook",
+                    "type": {
+                        "kind": "or",
+                        "items": [
+                            {
+                                "kind": "base",
+                                "name": "string"
+                            },
+                            {
+                                "kind": "reference",
+                                "name": "NotebookDocumentFilter"
+                            }
+                        ]
+                    },
+                    "optional": true,
+                    "documentation": "The notebook to be synced If a string\nvalue is provided it matches against the\nnotebook type. '*' matches every notebook."
+                },
+                {
+                    "name": "cells",
+                    "type": {
+                        "kind": "array",
+                        "element": {
+                            "kind": "reference",
+                            "name": "NotebookCellLanguage"
+                        }
+                    },
+                    "documentation": "The cells of the matching notebook to be synced."
+                }
+            ],
+            "documentation": "@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
+        },
+        {
             "name": "NotebookDocumentCellChanges",
             "properties": [
                 {
@@ -10084,60 +10246,6 @@
                     "documentation": "If present save notifications are sent to the server. If omitted the notification should not be\nsent."
                 }
             ]
-        },
-        {
-            "name": "NotebookDocumentSyncOptions",
-            "properties": [
-                {
-                    "name": "notebookSelector",
-                    "type": {
-                        "kind": "array",
-                        "element": {
-                            "kind": "or",
-                            "items": [
-                                {
-                                    "kind": "reference",
-                                    "name": "NotebookDocumentFilterWithNotebook"
-                                },
-                                {
-                                    "kind": "reference",
-                                    "name": "NotebookDocumentFilterWithCells"
-                                }
-                            ]
-                        }
-                    },
-                    "documentation": "The notebooks to be synced"
-                },
-                {
-                    "name": "save",
-                    "type": {
-                        "kind": "base",
-                        "name": "boolean"
-                    },
-                    "optional": true,
-                    "documentation": "Whether save notification should be forwarded to\nthe server. Will only be honored if mode === `notebook`."
-                }
-            ],
-            "documentation": "Options specific to a notebook plus its cells\nto be synced to the server.\n\nIf a selector provides a notebook document\nfilter but no cell selector all cells of a\nmatching notebook document will be synced.\n\nIf a selector provides no notebook document\nfilter but only a cell selector all notebook\ndocument that contain at least one matching\ncell will be synced.\n\n@since 3.17.0",
-            "since": "3.17.0"
-        },
-        {
-            "name": "NotebookDocumentSyncRegistrationOptions",
-            "properties": [],
-            "extends": [
-                {
-                    "kind": "reference",
-                    "name": "NotebookDocumentSyncOptions"
-                }
-            ],
-            "mixins": [
-                {
-                    "kind": "reference",
-                    "name": "StaticRegistrationOptions"
-                }
-            ],
-            "documentation": "Registration options specific to a notebook.\n\n@since 3.17.0",
-            "since": "3.17.0"
         },
         {
             "name": "WorkspaceOptions",
@@ -10437,6 +10545,21 @@
                     "documentation": "Whether the execution was successful or\nnot if known by the client."
                 }
             ]
+        },
+        {
+            "name": "NotebookCellLanguage",
+            "properties": [
+                {
+                    "name": "language",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    }
+                }
+            ],
+            "documentation": "@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
         },
         {
             "name": "NotebookDocumentCellChangeStructure",
@@ -11056,80 +11179,6 @@
             "since": "3.16.0"
         },
         {
-            "name": "NotebookDocumentFilterWithNotebook",
-            "properties": [
-                {
-                    "name": "notebook",
-                    "type": {
-                        "kind": "or",
-                        "items": [
-                            {
-                                "kind": "base",
-                                "name": "string"
-                            },
-                            {
-                                "kind": "reference",
-                                "name": "NotebookDocumentFilter"
-                            }
-                        ]
-                    },
-                    "documentation": "The notebook to be synced If a string\nvalue is provided it matches against the\nnotebook type. '*' matches every notebook."
-                },
-                {
-                    "name": "cells",
-                    "type": {
-                        "kind": "array",
-                        "element": {
-                            "kind": "reference",
-                            "name": "NotebookCellLanguage"
-                        }
-                    },
-                    "optional": true,
-                    "documentation": "The cells of the matching notebook to be synced."
-                }
-            ],
-            "documentation": "@since 3.18.0\n@proposed",
-            "since": "3.18.0",
-            "proposed": true
-        },
-        {
-            "name": "NotebookDocumentFilterWithCells",
-            "properties": [
-                {
-                    "name": "notebook",
-                    "type": {
-                        "kind": "or",
-                        "items": [
-                            {
-                                "kind": "base",
-                                "name": "string"
-                            },
-                            {
-                                "kind": "reference",
-                                "name": "NotebookDocumentFilter"
-                            }
-                        ]
-                    },
-                    "optional": true,
-                    "documentation": "The notebook to be synced If a string\nvalue is provided it matches against the\nnotebook type. '*' matches every notebook."
-                },
-                {
-                    "name": "cells",
-                    "type": {
-                        "kind": "array",
-                        "element": {
-                            "kind": "reference",
-                            "name": "NotebookCellLanguage"
-                        }
-                    },
-                    "documentation": "The cells of the matching notebook to be synced."
-                }
-            ],
-            "documentation": "@since 3.18.0\n@proposed",
-            "since": "3.18.0",
-            "proposed": true
-        },
-        {
             "name": "WorkspaceFoldersServerCapabilities",
             "properties": [
                 {
@@ -11353,6 +11402,108 @@
                 }
             ],
             "documentation": "A document filter where `pattern` is required field.\n\n@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
+        },
+        {
+            "name": "NotebookDocumentFilterNotebookType",
+            "properties": [
+                {
+                    "name": "notebookType",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "documentation": "The type of the enclosing notebook."
+                },
+                {
+                    "name": "scheme",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "optional": true,
+                    "documentation": "A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."
+                },
+                {
+                    "name": "pattern",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "optional": true,
+                    "documentation": "A glob pattern."
+                }
+            ],
+            "documentation": "A notebook document filter where `notebookType` is required field.\n\n@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
+        },
+        {
+            "name": "NotebookDocumentFilterScheme",
+            "properties": [
+                {
+                    "name": "notebookType",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "optional": true,
+                    "documentation": "The type of the enclosing notebook."
+                },
+                {
+                    "name": "scheme",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "documentation": "A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."
+                },
+                {
+                    "name": "pattern",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "optional": true,
+                    "documentation": "A glob pattern."
+                }
+            ],
+            "documentation": "A notebook document filter where `scheme` is required field.\n\n@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
+        },
+        {
+            "name": "NotebookDocumentFilterPattern",
+            "properties": [
+                {
+                    "name": "notebookType",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "optional": true,
+                    "documentation": "The type of the enclosing notebook."
+                },
+                {
+                    "name": "scheme",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "optional": true,
+                    "documentation": "A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."
+                },
+                {
+                    "name": "pattern",
+                    "type": {
+                        "kind": "base",
+                        "name": "string"
+                    },
+                    "documentation": "A glob pattern."
+                }
+            ],
+            "documentation": "A notebook document filter where `pattern` is required field.\n\n@since 3.18.0\n@proposed",
             "since": "3.18.0",
             "proposed": true
         },
@@ -12739,8 +12890,8 @@
                 {
                     "name": "engine",
                     "type": {
-                        "kind": "base",
-                        "name": "string"
+                        "kind": "reference",
+                        "name": "RegularExpressionEngineKind"
                     },
                     "documentation": "The engine's name."
                 },
@@ -12793,123 +12944,6 @@
             ],
             "documentation": "Client capabilities specific to the used markdown parser.\n\n@since 3.16.0",
             "since": "3.16.0"
-        },
-        {
-            "name": "NotebookCellLanguage",
-            "properties": [
-                {
-                    "name": "language",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    }
-                }
-            ],
-            "documentation": "@since 3.18.0\n@proposed",
-            "since": "3.18.0",
-            "proposed": true
-        },
-        {
-            "name": "NotebookDocumentFilterNotebookType",
-            "properties": [
-                {
-                    "name": "notebookType",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "documentation": "The type of the enclosing notebook."
-                },
-                {
-                    "name": "scheme",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "optional": true,
-                    "documentation": "A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."
-                },
-                {
-                    "name": "pattern",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "optional": true,
-                    "documentation": "A glob pattern."
-                }
-            ],
-            "documentation": "A notebook document filter where `notebookType` is required field.\n\n@since 3.18.0\n@proposed",
-            "since": "3.18.0",
-            "proposed": true
-        },
-        {
-            "name": "NotebookDocumentFilterScheme",
-            "properties": [
-                {
-                    "name": "notebookType",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "optional": true,
-                    "documentation": "The type of the enclosing notebook."
-                },
-                {
-                    "name": "scheme",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "documentation": "A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."
-                },
-                {
-                    "name": "pattern",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "optional": true,
-                    "documentation": "A glob pattern."
-                }
-            ],
-            "documentation": "A notebook document filter where `scheme` is required field.\n\n@since 3.18.0\n@proposed",
-            "since": "3.18.0",
-            "proposed": true
-        },
-        {
-            "name": "NotebookDocumentFilterPattern",
-            "properties": [
-                {
-                    "name": "notebookType",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "optional": true,
-                    "documentation": "The type of the enclosing notebook."
-                },
-                {
-                    "name": "scheme",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "optional": true,
-                    "documentation": "A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."
-                },
-                {
-                    "name": "pattern",
-                    "type": {
-                        "kind": "base",
-                        "name": "string"
-                    },
-                    "documentation": "A glob pattern."
-                }
-            ],
-            "documentation": "A notebook document filter where `pattern` is required field.\n\n@since 3.18.0\n@proposed",
-            "since": "3.18.0",
-            "proposed": true
         },
         {
             "name": "ChangeAnnotationsSupportOptions",
@@ -13165,6 +13199,17 @@
                     "optional": true,
                     "documentation": "The client supports the `activeParameter` property on `SignatureInformation`\nliteral.\n\n@since 3.16.0",
                     "since": "3.16.0"
+                },
+                {
+                    "name": "noActiveParameterSupport",
+                    "type": {
+                        "kind": "base",
+                        "name": "boolean"
+                    },
+                    "optional": true,
+                    "documentation": "The client supports the `activeParameter` property on\n`SignatureHelp`/`SignatureInformation` being set to `null` to\nindicate that no parameter should be active.\n\n@since 3.18.0\n@proposed",
+                    "since": "3.18.0",
+                    "proposed": true
                 }
             ],
             "documentation": "@since 3.18.0\n@proposed",
@@ -13978,8 +14023,9 @@
                 {
                     "name": "Debug",
                     "value": 5,
-                    "documentation": "A debug message.\n\n@since 3.18.0",
-                    "since": "3.18.0"
+                    "documentation": "A debug message.\n\n@since 3.18.0\n@proposed",
+                    "since": "3.18.0",
+                    "proposed": true
                 }
             ],
             "documentation": "The message type"
@@ -14259,6 +14305,13 @@
                     "documentation": "Base kind for refactoring inline actions: 'refactor.inline'\n\nExample inline actions:\n\n- Inline function\n- Inline variable\n- Inline constant\n- ..."
                 },
                 {
+                    "name": "RefactorMove",
+                    "value": "refactor.move",
+                    "documentation": "Base kind for refactoring move actions: `refactor.move`\n\nExample move actions:\n\n- Move a function to a new file\n- Move a property between classes\n- Move method to base class\n- ...\n\n@since 3.18.0\n@proposed",
+                    "since": "3.18.0",
+                    "proposed": true
+                },
+                {
                     "name": "RefactorRewrite",
                     "value": "refactor.rewrite",
                     "documentation": "Base kind for refactoring rewrite actions: 'refactor.rewrite'\n\nExample rewrite actions:\n\n- Convert JavaScript function to class\n- Add or remove parameter\n- Encapsulate field\n- Make method static\n- Move method to base class\n- ..."
@@ -14284,7 +14337,7 @@
             "documentation": "A set of predefined code action kinds"
         },
         {
-            "name": "TraceValues",
+            "name": "TraceValue",
             "type": {
                 "kind": "base",
                 "name": "string"
@@ -14328,6 +14381,268 @@
             "documentation": "Describes the content type that a client supports in various\nresult literals like `Hover`, `ParameterInfo` or `CompletionItem`.\n\nPlease note that `MarkupKinds` must not start with a `$`. This kinds\nare reserved for internal usage."
         },
         {
+            "name": "LanguageKind",
+            "type": {
+                "kind": "base",
+                "name": "string"
+            },
+            "values": [
+                {
+                    "name": "ABAP",
+                    "value": "abap"
+                },
+                {
+                    "name": "WindowsBat",
+                    "value": "bat"
+                },
+                {
+                    "name": "BibTeX",
+                    "value": "bibtex"
+                },
+                {
+                    "name": "Clojure",
+                    "value": "clojure"
+                },
+                {
+                    "name": "Coffeescript",
+                    "value": "coffeescript"
+                },
+                {
+                    "name": "C",
+                    "value": "c"
+                },
+                {
+                    "name": "CPP",
+                    "value": "cpp"
+                },
+                {
+                    "name": "CSharp",
+                    "value": "csharp"
+                },
+                {
+                    "name": "CSS",
+                    "value": "css"
+                },
+                {
+                    "name": "D",
+                    "value": "d",
+                    "documentation": "@since 3.18.0\n@proposed",
+                    "since": "3.18.0",
+                    "proposed": true
+                },
+                {
+                    "name": "Delphi",
+                    "value": "pascal",
+                    "documentation": "@since 3.18.0\n@proposed",
+                    "since": "3.18.0",
+                    "proposed": true
+                },
+                {
+                    "name": "Diff",
+                    "value": "diff"
+                },
+                {
+                    "name": "Dart",
+                    "value": "dart"
+                },
+                {
+                    "name": "Dockerfile",
+                    "value": "dockerfile"
+                },
+                {
+                    "name": "Elixir",
+                    "value": "elixir"
+                },
+                {
+                    "name": "Erlang",
+                    "value": "erlang"
+                },
+                {
+                    "name": "FSharp",
+                    "value": "fsharp"
+                },
+                {
+                    "name": "GitCommit",
+                    "value": "git-commit"
+                },
+                {
+                    "name": "GitRebase",
+                    "value": "rebase"
+                },
+                {
+                    "name": "Go",
+                    "value": "go"
+                },
+                {
+                    "name": "Groovy",
+                    "value": "groovy"
+                },
+                {
+                    "name": "Handlebars",
+                    "value": "handlebars"
+                },
+                {
+                    "name": "HTML",
+                    "value": "html"
+                },
+                {
+                    "name": "Ini",
+                    "value": "ini"
+                },
+                {
+                    "name": "Java",
+                    "value": "java"
+                },
+                {
+                    "name": "JavaScript",
+                    "value": "javascript"
+                },
+                {
+                    "name": "JavaScriptReact",
+                    "value": "javascriptreact"
+                },
+                {
+                    "name": "JSON",
+                    "value": "json"
+                },
+                {
+                    "name": "LaTeX",
+                    "value": "latex"
+                },
+                {
+                    "name": "Less",
+                    "value": "less"
+                },
+                {
+                    "name": "Lua",
+                    "value": "lua"
+                },
+                {
+                    "name": "Makefile",
+                    "value": "makefile"
+                },
+                {
+                    "name": "Markdown",
+                    "value": "markdown"
+                },
+                {
+                    "name": "ObjectiveC",
+                    "value": "objective-c"
+                },
+                {
+                    "name": "ObjectiveCPP",
+                    "value": "objective-cpp"
+                },
+                {
+                    "name": "Pascal",
+                    "value": "pascal",
+                    "documentation": "@since 3.18.0\n@proposed",
+                    "since": "3.18.0",
+                    "proposed": true
+                },
+                {
+                    "name": "Perl",
+                    "value": "perl"
+                },
+                {
+                    "name": "Perl6",
+                    "value": "perl6"
+                },
+                {
+                    "name": "PHP",
+                    "value": "php"
+                },
+                {
+                    "name": "Powershell",
+                    "value": "powershell"
+                },
+                {
+                    "name": "Pug",
+                    "value": "jade"
+                },
+                {
+                    "name": "Python",
+                    "value": "python"
+                },
+                {
+                    "name": "R",
+                    "value": "r"
+                },
+                {
+                    "name": "Razor",
+                    "value": "razor"
+                },
+                {
+                    "name": "Ruby",
+                    "value": "ruby"
+                },
+                {
+                    "name": "Rust",
+                    "value": "rust"
+                },
+                {
+                    "name": "SCSS",
+                    "value": "scss"
+                },
+                {
+                    "name": "SASS",
+                    "value": "sass"
+                },
+                {
+                    "name": "Scala",
+                    "value": "scala"
+                },
+                {
+                    "name": "ShaderLab",
+                    "value": "shaderlab"
+                },
+                {
+                    "name": "ShellScript",
+                    "value": "shellscript"
+                },
+                {
+                    "name": "SQL",
+                    "value": "sql"
+                },
+                {
+                    "name": "Swift",
+                    "value": "swift"
+                },
+                {
+                    "name": "TypeScript",
+                    "value": "typescript"
+                },
+                {
+                    "name": "TypeScriptReact",
+                    "value": "typescriptreact"
+                },
+                {
+                    "name": "TeX",
+                    "value": "tex"
+                },
+                {
+                    "name": "VisualBasic",
+                    "value": "vb"
+                },
+                {
+                    "name": "XML",
+                    "value": "xml"
+                },
+                {
+                    "name": "XSL",
+                    "value": "xsl"
+                },
+                {
+                    "name": "YAML",
+                    "value": "yaml"
+                }
+            ],
+            "supportsCustomValues": true,
+            "documentation": "Predefined Language kinds\n@since 3.18.0\n@proposed",
+            "since": "3.18.0",
+            "proposed": true
+        },
+        {
             "name": "InlineCompletionTriggerKind",
             "type": {
                 "kind": "base",
@@ -14336,12 +14651,12 @@
             "values": [
                 {
                     "name": "Invoked",
-                    "value": 0,
+                    "value": 1,
                     "documentation": "Completion was triggered explicitly by a user gesture."
                 },
                 {
                     "name": "Automatic",
-                    "value": 1,
+                    "value": 2,
                     "documentation": "Completion was triggered automatically while editing."
                 }
             ],
@@ -15007,15 +15322,6 @@
             "since": "3.17.0"
         },
         {
-            "name": "Pattern",
-            "type": {
-                "kind": "base",
-                "name": "string"
-            },
-            "documentation": "The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:\n- `*` to match one or more characters in a path segment\n- `?` to match on one character in a path segment\n- `**` to match any number of path segments, including none\n- `{}` to group conditions (e.g. `**​/*.{ts,js}` matches all TypeScript and JavaScript files)\n- `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)\n- `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)\n\n@since 3.17.0",
-            "since": "3.17.0"
-        },
-        {
             "name": "NotebookDocumentFilter",
             "type": {
                 "kind": "or",
@@ -15036,6 +15342,22 @@
             },
             "documentation": "A notebook document filter denotes a notebook document by\ndifferent properties. The properties will be match\nagainst the notebook's URI (same as with documents)\n\n@since 3.17.0",
             "since": "3.17.0"
+        },
+        {
+            "name": "Pattern",
+            "type": {
+                "kind": "base",
+                "name": "string"
+            },
+            "documentation": "The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:\n- `*` to match one or more characters in a path segment\n- `?` to match on one character in a path segment\n- `**` to match any number of path segments, including none\n- `{}` to group conditions (e.g. `**​/*.{ts,js}` matches all TypeScript and JavaScript files)\n- `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)\n- `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)\n\n@since 3.17.0",
+            "since": "3.17.0"
+        },
+        {
+            "name": "RegularExpressionEngineKind",
+            "type": {
+                "kind": "base",
+                "name": "string"
+            }
         }
     ]
 }

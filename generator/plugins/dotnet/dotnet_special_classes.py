@@ -15,6 +15,7 @@ SPECIAL_CLASSES = [
     "LSPArray",
     "ChangeAnnotationIdentifier",
     "Pattern",
+    "RegularExpressionEngineKind",
     "DocumentSelector",
     "InitializedParams",
 ]
@@ -88,33 +89,38 @@ def generate_special_class(
             ),
         )
 
-    if type_def.name == "Pattern":
-        inner = [
-            "private string pattern;",
-            "public Pattern(string value){pattern = value;}",
-            "public static implicit operator Pattern(string value) => new Pattern(value);",
-            "public static implicit operator string(Pattern pattern) => pattern.pattern;",
-            "public override string ToString() => pattern;",
-        ]
-        lines = namespace_wrapper(
-            NAMESPACE,
-            get_usings(["JsonConverter", "DataContract"]),
-            class_wrapper(
-                type_def,
-                inner,
-                None,
-                [f"[JsonConverter(typeof(CustomStringConverter<{type_def.name}>))]"],
-            ),
-        )
+    if type_def.name in [
+        "Pattern",
+        "RegularExpressionEngineKind",
+        "ChangeAnnotationIdentifier",
+    ]:
+        if type_def.name == "Pattern":
+            inner = [
+                "private string pattern;",
+                "public Pattern(string value){pattern = value;}",
+                "public static implicit operator Pattern(string value) => new Pattern(value);",
+                "public static implicit operator string(Pattern pattern) => pattern.pattern;",
+                "public override string ToString() => pattern;",
+            ]
 
-    if type_def.name == "ChangeAnnotationIdentifier":
-        inner = [
-            "private string identifier;",
-            "public ChangeAnnotationIdentifier(string value){identifier = value;}",
-            "public static implicit operator ChangeAnnotationIdentifier(string value) => new ChangeAnnotationIdentifier(value);",
-            "public static implicit operator string(ChangeAnnotationIdentifier identifier) => identifier.identifier;",
-            "public override string ToString() => identifier;",
-        ]
+        if type_def.name == "ChangeAnnotationIdentifier":
+            inner = [
+                "private string identifier;",
+                "public ChangeAnnotationIdentifier(string value){identifier = value;}",
+                "public static implicit operator ChangeAnnotationIdentifier(string value) => new ChangeAnnotationIdentifier(value);",
+                "public static implicit operator string(ChangeAnnotationIdentifier identifier) => identifier.identifier;",
+                "public override string ToString() => identifier;",
+            ]
+
+        if type_def.name == "RegularExpressionEngineKind":
+            inner = [
+                "private string engineKind;",
+                "public RegularExpressionEngineKind(string value){engineKind = value;}",
+                "public static implicit operator RegularExpressionEngineKind(string value) => new RegularExpressionEngineKind(value);",
+                "public static implicit operator string(RegularExpressionEngineKind engineKind) => engineKind.engineKind;",
+                "public override string ToString() => engineKind;",
+            ]
+
         lines = namespace_wrapper(
             NAMESPACE,
             get_usings(["JsonConverter", "DataContract"]),

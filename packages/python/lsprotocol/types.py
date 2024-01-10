@@ -254,8 +254,10 @@ class MessageType(int, enum.Enum):
     Debug = 5
     """A debug message.
     
-    @since 3.18.0"""
+    @since 3.18.0
+    @proposed"""
     # Since: 3.18.0
+    # Proposed
 
 
 @enum.unique
@@ -413,6 +415,20 @@ class CodeActionKind(str, enum.Enum):
     - Inline variable
     - Inline constant
     - ..."""
+    RefactorMove = "refactor.move"
+    """Base kind for refactoring move actions: `refactor.move`
+    
+    Example move actions:
+    
+    - Move a function to a new file
+    - Move a property between classes
+    - Move method to base class
+    - ...
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
     RefactorRewrite = "refactor.rewrite"
     """Base kind for refactoring rewrite actions: 'refactor.rewrite'
     
@@ -441,7 +457,7 @@ class CodeActionKind(str, enum.Enum):
 
 
 @enum.unique
-class TraceValues(str, enum.Enum):
+class TraceValue(str, enum.Enum):
     Off = "off"
     """Turn tracing off."""
     Messages = "messages"
@@ -464,6 +480,87 @@ class MarkupKind(str, enum.Enum):
     """Markdown is supported as a content format"""
 
 
+class LanguageKind(str, enum.Enum):
+    """Predefined Language kinds
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+    Abap = "abap"
+    WindowsBat = "bat"
+    BibTeX = "bibtex"
+    Clojure = "clojure"
+    Coffeescript = "coffeescript"
+    C = "c"
+    Cpp = "cpp"
+    CSharp = "csharp"
+    Css = "css"
+    D = "d"
+    """@since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+    Delphi = "pascal"
+    """@since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+    Diff = "diff"
+    Dart = "dart"
+    Dockerfile = "dockerfile"
+    Elixir = "elixir"
+    Erlang = "erlang"
+    FSharp = "fsharp"
+    GitCommit = "git-commit"
+    GitRebase = "rebase"
+    Go = "go"
+    Groovy = "groovy"
+    Handlebars = "handlebars"
+    Html = "html"
+    Ini = "ini"
+    Java = "java"
+    JavaScript = "javascript"
+    JavaScriptReact = "javascriptreact"
+    Json = "json"
+    LaTeX = "latex"
+    Less = "less"
+    Lua = "lua"
+    Makefile = "makefile"
+    Markdown = "markdown"
+    ObjectiveC = "objective-c"
+    ObjectiveCpp = "objective-cpp"
+    Pascal = "pascal"
+    """@since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+    Perl = "perl"
+    Perl6 = "perl6"
+    Php = "php"
+    Powershell = "powershell"
+    Pug = "jade"
+    Python = "python"
+    R = "r"
+    Razor = "razor"
+    Ruby = "ruby"
+    Rust = "rust"
+    Scss = "scss"
+    Sass = "sass"
+    Scala = "scala"
+    ShaderLab = "shaderlab"
+    ShellScript = "shellscript"
+    Sql = "sql"
+    Swift = "swift"
+    TypeScript = "typescript"
+    TypeScriptReact = "typescriptreact"
+    TeX = "tex"
+    VisualBasic = "vb"
+    Xml = "xml"
+    Xsl = "xsl"
+    Yaml = "yaml"
+
+
 @enum.unique
 class InlineCompletionTriggerKind(int, enum.Enum):
     """Describes how an {@link InlineCompletionItemProvider inline completion provider} was triggered.
@@ -473,9 +570,9 @@ class InlineCompletionTriggerKind(int, enum.Enum):
 
     # Since: 3.18.0
     # Proposed
-    Invoked = 0
+    Invoked = 1
     """Completion was triggered explicitly by a user gesture."""
-    Automatic = 1
+    Automatic = 2
     """Completion was triggered automatically while editing."""
 
 
@@ -838,6 +935,19 @@ Glob patterns can have the following syntax:
 # Since: 3.17.0
 
 
+NotebookDocumentFilter = Union[
+    "NotebookDocumentFilterNotebookType",
+    "NotebookDocumentFilterScheme",
+    "NotebookDocumentFilterPattern",
+]
+"""A notebook document filter denotes a notebook document by
+different properties. The properties will be match
+against the notebook's URI (same as with documents)
+
+@since 3.17.0"""
+# Since: 3.17.0
+
+
 Pattern = str
 """The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
 - `*` to match one or more characters in a path segment
@@ -851,17 +961,7 @@ Pattern = str
 # Since: 3.17.0
 
 
-NotebookDocumentFilter = Union[
-    "NotebookDocumentFilterNotebookType",
-    "NotebookDocumentFilterScheme",
-    "NotebookDocumentFilterPattern",
-]
-"""A notebook document filter denotes a notebook document by
-different properties. The properties will be match
-against the notebook's URI (same as with documents)
-
-@since 3.17.0"""
-# Since: 3.17.0
+RegularExpressionEngineKind = str
 
 
 @attrs.define
@@ -1188,7 +1288,7 @@ class FoldingRange:
     """The zero-based character offset before the folded range ends. If not defined, defaults to the length of the end line."""
 
     kind: Optional[Union[FoldingRangeKind, str]] = attrs.field(default=None)
-    """Describes the kind of the folding range such as `comment' or 'region'. The kind
+    """Describes the kind of the folding range such as 'comment' or 'region'. The kind
     is used to categorize folding ranges and used by commands like 'Fold all comments'.
     See {@link FoldingRangeKind} for an enumeration of standardized kinds."""
 
@@ -2173,7 +2273,10 @@ class InlayHint:
     # Since: 3.17.0
 
     position: "Position" = attrs.field()
-    """The position of this hint."""
+    """The position of this hint.
+    
+    If multiple hints have the same position, they will be shown in the order
+    they appear in the response."""
 
     label: Union[str, Sequence["InlayHintLabelPart"]] = attrs.field()
     """The label of this hint. A human readable string or an array of
@@ -2476,6 +2579,65 @@ class DidOpenNotebookDocumentParams:
 
 
 @attrs.define
+class NotebookDocumentSyncOptions:
+    """Options specific to a notebook plus its cells
+    to be synced to the server.
+
+    If a selector provides a notebook document
+    filter but no cell selector all cells of a
+    matching notebook document will be synced.
+
+    If a selector provides no notebook document
+    filter but only a cell selector all notebook
+    document that contain at least one matching
+    cell will be synced.
+
+    @since 3.17.0"""
+
+    # Since: 3.17.0
+
+    notebook_selector: Sequence[
+        Union["NotebookDocumentFilterWithNotebook", "NotebookDocumentFilterWithCells"]
+    ] = attrs.field()
+    """The notebooks to be synced"""
+
+    save: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether save notification should be forwarded to
+    the server. Will only be honored if mode === `notebook`."""
+
+
+@attrs.define
+class NotebookDocumentSyncRegistrationOptions:
+    """Registration options specific to a notebook.
+
+    @since 3.17.0"""
+
+    # Since: 3.17.0
+
+    notebook_selector: Sequence[
+        Union["NotebookDocumentFilterWithNotebook", "NotebookDocumentFilterWithCells"]
+    ] = attrs.field()
+    """The notebooks to be synced"""
+
+    save: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether save notification should be forwarded to
+    the server. Will only be honored if mode === `notebook`."""
+
+    id: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """The id used to register the request. The id can be used to deregister
+    the request again. See also Registration#id."""
+
+
+@attrs.define
 class DidChangeNotebookDocumentParams:
     """The params sent in a change notebook document notification.
 
@@ -2702,7 +2864,7 @@ class _InitializeParams:
     initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
-    trace: Optional[TraceValues] = attrs.field(default=None)
+    trace: Optional[TraceValue] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
@@ -2772,7 +2934,7 @@ class InitializeParams:
     initialization_options: Optional[LSPAny] = attrs.field(default=None)
     """User provided initialization options."""
 
-    trace: Optional[TraceValues] = attrs.field(default=None)
+    trace: Optional[TraceValue] = attrs.field(default=None)
     """The initial trace setting. If omitted trace is disabled ('off')."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
@@ -3446,16 +3608,23 @@ class SignatureHelp:
     In future version of the protocol this property might become
     mandatory to better express this."""
 
-    active_parameter: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator), default=None
-    )
-    """The active parameter of the active signature. If omitted or the value
-    lies outside the range of `signatures[activeSignature].parameters`
-    defaults to 0 if the active signature has parameters. If
-    the active signature has no parameters it is ignored.
+    active_parameter: Optional[Union[int, None]] = attrs.field(default=None)
+    """The active parameter of the active signature.
+    
+    If `null`, no parameter of the signature is active (for example a named
+    argument that does not match any declared parameters). This is only valid
+    if the client specifies the client capability
+    `textDocument.signatureHelp.noActiveParameterSupport === true`
+    
+    If omitted or the value lies outside the range of
+    `signatures[activeSignature].parameters` defaults to 0 if the active
+    signature has parameters.
+    
+    If the active signature has no parameters it is ignored.
+    
     In future version of the protocol this property might become
-    mandatory to better express the active parameter if the
-    active signature does have any."""
+    mandatory (but still nullable) to better express the active parameter if
+    the active signature does have any."""
 
 
 @attrs.define
@@ -4686,7 +4855,7 @@ class WorkDoneProgressEnd:
 
 @attrs.define
 class SetTraceParams:
-    value: TraceValues = attrs.field()
+    value: TraceValue = attrs.field()
 
 
 @attrs.define
@@ -5397,7 +5566,7 @@ class TextDocumentItem:
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The text document's uri."""
 
-    language_id: str = attrs.field(validator=attrs.validators.instance_of(str))
+    language_id: Union[LanguageKind, str] = attrs.field()
     """The text document's language identifier."""
 
     version: int = attrs.field(validator=validators.integer_validator)
@@ -5550,7 +5719,7 @@ class ServerCapabilities:
     TextDocumentSyncKind number."""
 
     notebook_document_sync: Optional[
-        Union["NotebookDocumentSyncOptions", "NotebookDocumentSyncRegistrationOptions"]
+        Union[NotebookDocumentSyncOptions, NotebookDocumentSyncRegistrationOptions]
     ] = attrs.field(default=None)
     """Defines how notebook documents are synced.
     
@@ -6006,12 +6175,16 @@ class SignatureInformation:
     parameters: Optional[Sequence["ParameterInformation"]] = attrs.field(default=None)
     """The parameters of this signature."""
 
-    active_parameter: Optional[int] = attrs.field(
-        validator=attrs.validators.optional(validators.uinteger_validator), default=None
-    )
+    active_parameter: Optional[Union[int, None]] = attrs.field(default=None)
     """The index of the active parameter.
     
-    If provided, this is used in place of `SignatureHelp.activeParameter`.
+    If `null`, no parameter of the signature is active (for example a named
+    argument that does not match any declared parameters). This is only valid
+    if the client specifies the client capability
+    `textDocument.signatureHelp.noActiveParameterSupport === true`
+    
+    If provided (or `null`), this is used in place of
+    `SignatureHelp.activeParameter`.
     
     @since 3.16.0"""
     # Since: 3.16.0
@@ -6375,6 +6548,40 @@ class NotebookCell:
 
 
 @attrs.define
+class NotebookDocumentFilterWithNotebook:
+    """@since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
+    """The notebook to be synced If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+    cells: Optional[Sequence["NotebookCellLanguage"]] = attrs.field(default=None)
+    """The cells of the matching notebook to be synced."""
+
+
+@attrs.define
+class NotebookDocumentFilterWithCells:
+    """@since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    cells: Sequence["NotebookCellLanguage"] = attrs.field()
+    """The cells of the matching notebook to be synced."""
+
+    notebook: Optional[Union[str, NotebookDocumentFilter]] = attrs.field(default=None)
+    """The notebook to be synced If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+
+@attrs.define
 class NotebookDocumentCellChanges:
     """Cell changes to a notebook document.
 
@@ -6501,65 +6708,6 @@ class TextDocumentSyncOptions:
     save: Optional[Union[bool, SaveOptions]] = attrs.field(default=None)
     """If present save notifications are sent to the server. If omitted the notification should not be
     sent."""
-
-
-@attrs.define
-class NotebookDocumentSyncOptions:
-    """Options specific to a notebook plus its cells
-    to be synced to the server.
-
-    If a selector provides a notebook document
-    filter but no cell selector all cells of a
-    matching notebook document will be synced.
-
-    If a selector provides no notebook document
-    filter but only a cell selector all notebook
-    document that contain at least one matching
-    cell will be synced.
-
-    @since 3.17.0"""
-
-    # Since: 3.17.0
-
-    notebook_selector: Sequence[
-        Union["NotebookDocumentFilterWithNotebook", "NotebookDocumentFilterWithCells"]
-    ] = attrs.field()
-    """The notebooks to be synced"""
-
-    save: Optional[bool] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
-        default=None,
-    )
-    """Whether save notification should be forwarded to
-    the server. Will only be honored if mode === `notebook`."""
-
-
-@attrs.define
-class NotebookDocumentSyncRegistrationOptions:
-    """Registration options specific to a notebook.
-
-    @since 3.17.0"""
-
-    # Since: 3.17.0
-
-    notebook_selector: Sequence[
-        Union["NotebookDocumentFilterWithNotebook", "NotebookDocumentFilterWithCells"]
-    ] = attrs.field()
-    """The notebooks to be synced"""
-
-    save: Optional[bool] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
-        default=None,
-    )
-    """Whether save notification should be forwarded to
-    the server. Will only be honored if mode === `notebook`."""
-
-    id: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """The id used to register the request. The id can be used to deregister
-    the request again. See also Registration#id."""
 
 
 @attrs.define
@@ -6768,6 +6916,17 @@ class ExecutionSummary:
     )
     """Whether the execution was successful or
     not if known by the client."""
+
+
+@attrs.define
+class NotebookCellLanguage:
+    """@since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    language: str = attrs.field(validator=attrs.validators.instance_of(str))
 
 
 @attrs.define
@@ -7212,40 +7371,6 @@ class GeneralClientCapabilities:
 
 
 @attrs.define
-class NotebookDocumentFilterWithNotebook:
-    """@since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
-    """The notebook to be synced If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
-
-    cells: Optional[Sequence["NotebookCellLanguage"]] = attrs.field(default=None)
-    """The cells of the matching notebook to be synced."""
-
-
-@attrs.define
-class NotebookDocumentFilterWithCells:
-    """@since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    cells: Sequence["NotebookCellLanguage"] = attrs.field()
-    """The cells of the matching notebook to be synced."""
-
-    notebook: Optional[Union[str, NotebookDocumentFilter]] = attrs.field(default=None)
-    """The notebook to be synced If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
-
-
-@attrs.define
 class WorkspaceFoldersServerCapabilities:
     supported: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -7378,6 +7503,84 @@ class TextDocumentFilterPattern:
         default=None,
     )
     """A language id, like `typescript`."""
+
+    scheme: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
+
+
+@attrs.define
+class NotebookDocumentFilterNotebookType:
+    """A notebook document filter where `notebookType` is required field.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    notebook_type: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The type of the enclosing notebook."""
+
+    scheme: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
+
+    pattern: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A glob pattern."""
+
+
+@attrs.define
+class NotebookDocumentFilterScheme:
+    """A notebook document filter where `scheme` is required field.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
+
+    notebook_type: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """The type of the enclosing notebook."""
+
+    pattern: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A glob pattern."""
+
+
+@attrs.define
+class NotebookDocumentFilterPattern:
+    """A notebook document filter where `pattern` is required field.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """A glob pattern."""
+
+    notebook_type: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """The type of the enclosing notebook."""
 
     scheme: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -8551,7 +8754,7 @@ class RegularExpressionsClientCapabilities:
 
     # Since: 3.16.0
 
-    engine: str = attrs.field(validator=attrs.validators.instance_of(str))
+    engine: RegularExpressionEngineKind = attrs.field()
     """The engine's name."""
 
     version: Optional[str] = attrs.field(
@@ -8584,95 +8787,6 @@ class MarkdownClientCapabilities:
     
     @since 3.17.0"""
     # Since: 3.17.0
-
-
-@attrs.define
-class NotebookCellLanguage:
-    """@since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    language: str = attrs.field(validator=attrs.validators.instance_of(str))
-
-
-@attrs.define
-class NotebookDocumentFilterNotebookType:
-    """A notebook document filter where `notebookType` is required field.
-
-    @since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    notebook_type: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The type of the enclosing notebook."""
-
-    scheme: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
-
-    pattern: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A glob pattern."""
-
-
-@attrs.define
-class NotebookDocumentFilterScheme:
-    """A notebook document filter where `scheme` is required field.
-
-    @since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
-
-    notebook_type: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """The type of the enclosing notebook."""
-
-    pattern: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A glob pattern."""
-
-
-@attrs.define
-class NotebookDocumentFilterPattern:
-    """A notebook document filter where `pattern` is required field.
-
-    @since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A glob pattern."""
-
-    notebook_type: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """The type of the enclosing notebook."""
-
-    scheme: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
 
 @attrs.define
@@ -8893,6 +9007,19 @@ class ClientSignatureInformationOptions:
     
     @since 3.16.0"""
     # Since: 3.16.0
+
+    no_active_parameter_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """The client supports the `activeParameter` property on
+    `SignatureHelp`/`SignatureInformation` being set to `null` to
+    indicate that no parameter should be active.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
 
 
 @attrs.define
@@ -11641,25 +11768,25 @@ METHOD_TO_TYPES = {
         NotebookDocumentDidChangeNotification,
         None,
         DidChangeNotebookDocumentParams,
-        None,
+        NotebookDocumentSyncRegistrationOptions,
     ),
     NOTEBOOK_DOCUMENT_DID_CLOSE: (
         NotebookDocumentDidCloseNotification,
         None,
         DidCloseNotebookDocumentParams,
-        None,
+        NotebookDocumentSyncRegistrationOptions,
     ),
     NOTEBOOK_DOCUMENT_DID_OPEN: (
         NotebookDocumentDidOpenNotification,
         None,
         DidOpenNotebookDocumentParams,
-        None,
+        NotebookDocumentSyncRegistrationOptions,
     ),
     NOTEBOOK_DOCUMENT_DID_SAVE: (
         NotebookDocumentDidSaveNotification,
         None,
         DidSaveNotebookDocumentParams,
-        None,
+        NotebookDocumentSyncRegistrationOptions,
     ),
     PROGRESS: (ProgressNotification, None, ProgressParams, None),
     SET_TRACE: (SetTraceNotification, None, SetTraceParams, None),
@@ -11989,7 +12116,9 @@ _SPECIAL_CLASSES = [
     SetTraceNotification,
     ShutdownRequest,
     ShutdownResponse,
+    SignatureHelp,
     SignatureHelpRegistrationOptions,
+    SignatureInformation,
     StringValue,
     TelemetryEventNotification,
     TextDocumentChangeRegistrationOptions,
@@ -12245,7 +12374,9 @@ _SPECIAL_PROPERTIES = [
     "ShutdownRequest.method",
     "ShutdownResponse.jsonrpc",
     "ShutdownResponse.result",
+    "SignatureHelp.active_parameter",
     "SignatureHelpRegistrationOptions.document_selector",
+    "SignatureInformation.active_parameter",
     "StringValue.kind",
     "TelemetryEventNotification.jsonrpc",
     "TelemetryEventNotification.method",
@@ -12800,6 +12931,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "LSPArray": LSPArray,
     "LSPErrorCodes": LSPErrorCodes,
     "LSPObject": LSPObject,
+    "LanguageKind": LanguageKind,
     "LinkedEditingRangeClientCapabilities": LinkedEditingRangeClientCapabilities,
     "LinkedEditingRangeOptions": LinkedEditingRangeOptions,
     "LinkedEditingRangeParams": LinkedEditingRangeParams,
@@ -12875,6 +13007,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "ReferenceRegistrationOptions": ReferenceRegistrationOptions,
     "Registration": Registration,
     "RegistrationParams": RegistrationParams,
+    "RegularExpressionEngineKind": RegularExpressionEngineKind,
     "RegularExpressionsClientCapabilities": RegularExpressionsClientCapabilities,
     "RelatedFullDocumentDiagnosticReport": RelatedFullDocumentDiagnosticReport,
     "RelatedUnchangedDocumentDiagnosticReport": RelatedUnchangedDocumentDiagnosticReport,
@@ -13073,7 +13206,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "TextDocumentWillSaveWaitUntilResult": TextDocumentWillSaveWaitUntilResult,
     "TextEdit": TextEdit,
     "TokenFormat": TokenFormat,
-    "TraceValues": TraceValues,
+    "TraceValue": TraceValue,
     "TypeDefinitionClientCapabilities": TypeDefinitionClientCapabilities,
     "TypeDefinitionOptions": TypeDefinitionOptions,
     "TypeDefinitionParams": TypeDefinitionParams,

@@ -35,7 +35,7 @@ def lint(session: nox.Session):
     _install_requirements(session)
 
     session.log("Linting: generator and generated Python code.")
-    session.install("mypy", "ruff==0.1.7")
+    session.install("mypy", "ruff")
     session.run("ruff", "--version")
     session.run("mypy", "--version")
 
@@ -57,7 +57,7 @@ def format(session: nox.Session):
 
 
 def _format_code(session: nox.Session):
-    session.install("ruff==0.1.7")
+    session.install("ruff")
     session.run("ruff", "--version")
 
     session.run("ruff", "check", "--fix", "--select=I001", ".")

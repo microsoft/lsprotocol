@@ -4,7 +4,6 @@
 import hamcrest
 import pytest
 from cattrs import ClassValidationError
-
 from lsprotocol import converters as cv
 from lsprotocol import types as lsp
 

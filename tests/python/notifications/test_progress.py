@@ -6,7 +6,6 @@ import json
 import hamcrest
 import jsonrpc
 import pytest
-
 from lsprotocol.types import (
     ProgressNotification,
     ProgressParams,

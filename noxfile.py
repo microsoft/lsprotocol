@@ -39,9 +39,8 @@ def lint(session: nox.Session):
     session.run("ruff", "--version")
     session.run("mypy", "--version")
 
-    session.run("ruff", "check", ".")
-    session.run("ruff", "check", "--select=I001", ".")
     session.run("ruff", "format", "--check", ".")
+
     session.run("mypy", "--strict", "--no-incremental", "./packages/python/lsprotocol")
 
     session.log("Linting: generated Rust code.")
@@ -59,10 +58,7 @@ def format(session: nox.Session):
 def _format_code(session: nox.Session):
     session.install("ruff")
     session.run("ruff", "--version")
-
-    session.run("ruff", "check", "--fix", "--select=I001", ".")
     session.run("ruff", "format", ".")
-    session.run("ruff", "check", "--fix", ".")
 
 
 @nox.session()

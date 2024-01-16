@@ -1350,6 +1350,13 @@ pub enum CodeActionKind {
     /// @since 3.15.0
     #[serde(rename = "source.fixAll")]
     SourceFixAll,
+
+    /// Base kind for all code actions applying to the entire notebook's scope. CodeActionKinds using
+    /// this should always begin with `notebook.`
+    ///
+    /// @since 3.18.0
+    #[serde(rename = "notebook")]
+    Notebook,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -4455,6 +4462,13 @@ pub struct Command {
 
     /// Title of the command, like `save`.
     pub title: String,
+
+    /// An optional tooltip.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub tooltip: Option<String>,
 }
 
 /// A code action represents a change that can be performed in code, e.g. to fix a problem or
@@ -4530,6 +4544,24 @@ pub struct CodeActionRegistrationOptions {
     /// the document selector provided on the client side will be used.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_selector: Option<DocumentSelector>,
+
+    /// Static documentation for a class of code actions.
+    ///
+    /// Documentation from the provider should be shown in the code actions menu if either:
+    ///
+    /// - Code actions of `kind` are requested by the editor. In this case, the editor will show the documentation that
+    ///   most closely matches the requested code action kind. For example, if a provider has documentation for
+    ///   both `Refactor` and `RefactorExtract`, when the user requests code actions for `RefactorExtract`,
+    ///   the editor will use the documentation for `RefactorExtract` instead of the documentation for `Refactor`.
+    ///
+    /// - Any code actions of `kind` are returned by the provider.
+    ///
+    /// At most one documentation entry should be shown per provider.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub documentation: Option<Vec<CodeActionKindDocumentation>>,
 
     /// The server provides support to resolve additional
     /// information for a code action.
@@ -6564,6 +6596,24 @@ pub struct CodeActionOptions {
     /// may list out every specific kind they provide.
     pub code_action_kinds: Option<Vec<CustomStringEnum<CodeActionKind>>>,
 
+    /// Static documentation for a class of code actions.
+    ///
+    /// Documentation from the provider should be shown in the code actions menu if either:
+    ///
+    /// - Code actions of `kind` are requested by the editor. In this case, the editor will show the documentation that
+    ///   most closely matches the requested code action kind. For example, if a provider has documentation for
+    ///   both `Refactor` and `RefactorExtract`, when the user requests code actions for `RefactorExtract`,
+    ///   the editor will use the documentation for `RefactorExtract` instead of the documentation for `Refactor`.
+    ///
+    /// - Any code actions of `kind` are returned by the provider.
+    ///
+    /// At most one documentation entry should be shown per provider.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub documentation: Option<Vec<CodeActionKindDocumentation>>,
+
     /// The server provides support to resolve additional
     /// information for a code action.
     ///
@@ -7181,9 +7231,34 @@ pub struct ParameterInformation {
     /// signature label. (see SignatureInformation.label). The offsets are based on a UTF-16
     /// string representation as `Position` and `Range` does.
     ///
+    /// To avoid ambiguities a server should use the [start, end] offset value instead of using
+    /// a substring. Whether a client support this is controlled via `labelOffsetSupport` client
+    /// capability.
+    ///
     /// *Note*: a label of type string should be a substring of its containing signature label.
     /// Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`.
     pub label: OR2<String, (u32, u32)>,
+}
+
+/// Documentation for a class of code actions.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct CodeActionKindDocumentation {
+    /// Command that is ued to display the documentation to the user.
+    ///
+    /// The title of this documentation code action is taken from {@linkcode Command.title}
+    pub command: Command,
+
+    /// The kind of the code action being documented.
+    ///
+    /// If the kind is generic, such as `CodeActionKind.Refactor`, the documentation will be shown whenever any
+    /// refactorings are returned. If the kind if more specific, such as `CodeActionKind.RefactorExtract`, the
+    /// documentation will only be shown when extract refactoring code actions are returned.
+    pub kind: CustomStringEnum<CodeActionKind>,
 }
 
 /// A notebook cell text document filter denotes a cell text
@@ -8160,6 +8235,14 @@ pub struct CodeActionClientCapabilities {
     ///
     /// @since 3.16.0
     pub disabled_support: Option<bool>,
+
+    /// Whether the client supports documentation for a class of
+    /// code actions.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub documentation_support: Option<bool>,
 
     /// Whether code action supports dynamic registration.
     pub dynamic_registration: Option<bool>,

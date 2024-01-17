@@ -10,9 +10,7 @@
 import enum
 import functools
 from typing import Any, Dict, Optional, Sequence, Tuple, Union
-
 import attrs
-
 from . import validators
 
 __lsp_version__ = "3.17.0"
@@ -454,6 +452,12 @@ class CodeActionKind(str, enum.Enum):
     
     @since 3.15.0"""
     # Since: 3.15.0
+    Notebook = "notebook"
+    """Base kind for all code actions applying to the entire notebook's scope. CodeActionKinds using
+    this should always begin with `notebook.`
+    
+    @since 3.18.0"""
+    # Since: 3.18.0
 
 
 @enum.unique
@@ -4038,6 +4042,17 @@ class Command:
     command: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The identifier of the actual command handler."""
 
+    tooltip: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """An optional tooltip.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
     arguments: Optional[Sequence[LSPAny]] = attrs.field(default=None)
     """Arguments that the command handler should be
     invoked with."""
@@ -4120,6 +4135,27 @@ class CodeActionOptions:
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
     may list out every specific kind they provide."""
 
+    documentation: Optional[Sequence["CodeActionKindDocumentation"]] = attrs.field(
+        default=None
+    )
+    """Static documentation for a class of code actions.
+    
+    Documentation from the provider should be shown in the code actions menu if either:
+    
+    - Code actions of `kind` are requested by the editor. In this case, the editor will show the documentation that
+      most closely matches the requested code action kind. For example, if a provider has documentation for
+      both `Refactor` and `RefactorExtract`, when the user requests code actions for `RefactorExtract`,
+      the editor will use the documentation for `RefactorExtract` instead of the documentation for `Refactor`.
+    
+    - Any code actions of `kind` are returned by the provider.
+    
+    At most one documentation entry should be shown per provider.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -4153,6 +4189,27 @@ class CodeActionRegistrationOptions:
     
     The list of kinds may be generic, such as `CodeActionKind.Refactor`, or the server
     may list out every specific kind they provide."""
+
+    documentation: Optional[Sequence["CodeActionKindDocumentation"]] = attrs.field(
+        default=None
+    )
+    """Static documentation for a class of code actions.
+    
+    Documentation from the provider should be shown in the code actions menu if either:
+    
+    - Code actions of `kind` are requested by the editor. In this case, the editor will show the documentation that
+      most closely matches the requested code action kind. For example, if a provider has documentation for
+      both `Refactor` and `RefactorExtract`, when the user requests code actions for `RefactorExtract`,
+      the editor will use the documentation for `RefactorExtract` instead of the documentation for `Refactor`.
+    
+    - Any code actions of `kind` are returned by the provider.
+    
+    At most one documentation entry should be shown per provider.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -6855,12 +6912,39 @@ class ParameterInformation:
     signature label. (see SignatureInformation.label). The offsets are based on a UTF-16
     string representation as `Position` and `Range` does.
     
+    To avoid ambiguities a server should use the [start, end] offset value instead of using
+    a substring. Whether a client support this is controlled via `labelOffsetSupport` client
+    capability.
+    
     *Note*: a label of type string should be a substring of its containing signature label.
     Its intended use case is to highlight the parameter label part in the `SignatureInformation.label`."""
 
     documentation: Optional[Union[str, MarkupContent]] = attrs.field(default=None)
     """The human-readable doc-comment of this parameter. Will be shown
     in the UI but can be omitted."""
+
+
+@attrs.define
+class CodeActionKindDocumentation:
+    """Documentation for a class of code actions.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    kind: Union[CodeActionKind, str] = attrs.field()
+    """The kind of the code action being documented.
+    
+    If the kind is generic, such as `CodeActionKind.Refactor`, the documentation will be shown whenever any
+    refactorings are returned. If the kind if more specific, such as `CodeActionKind.RefactorExtract`, the
+    documentation will only be shown when extract refactoring code actions are returned."""
+
+    command: Command = attrs.field()
+    """Command that is ued to display the documentation to the user.
+    
+    The title of this documentation code action is taken from {@linkcode Command.title}"""
 
 
 @attrs.define
@@ -8237,6 +8321,18 @@ class CodeActionClientCapabilities:
     
     @since 3.16.0"""
     # Since: 3.16.0
+
+    documentation_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client supports documentation for a class of
+    code actions.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
 
 
 @attrs.define
@@ -12726,6 +12822,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "CodeActionContext": CodeActionContext,
     "CodeActionDisabled": CodeActionDisabled,
     "CodeActionKind": CodeActionKind,
+    "CodeActionKindDocumentation": CodeActionKindDocumentation,
     "CodeActionOptions": CodeActionOptions,
     "CodeActionParams": CodeActionParams,
     "CodeActionRegistrationOptions": CodeActionRegistrationOptions,

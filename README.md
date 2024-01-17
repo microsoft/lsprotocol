@@ -1,6 +1,6 @@
 # Language Server Protocol types code generator
 
-This repository contains a Python implementation of a Language Server Protocol types and classes code generator for various languages.
+This repository contains a Python implementation of [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) types and classes, and code generators for various languages.
 
 It simplifies the creation of language servers for different programming languages by providing a robust and easy-to-use type generation system.
 
@@ -77,5 +77,5 @@ Below is the list of plugins already created using this package.
 | Language | Plugin Module            | Package                                                                                             | Status            |
 | -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- |
 | Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            |
-| Rust     | generator.plugins.rust   | <in development>                                                                                    | Under development |
+| Rust     | generator.plugins.rust   | [![Crate](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)         | Active            |
 | Dotnet   | generator.plugins.dotnet | <in development>                                                                                    | Under development |

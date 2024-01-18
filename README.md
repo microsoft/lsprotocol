@@ -77,5 +77,5 @@ Below is the list of plugins already created using this package.
 | Language | Plugin Module            | Package                                                                                             | Status            |
 | -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- |
 | Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            |
-| Rust     | generator.plugins.rust   | [![Crate](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)         | Active            |
+| Rust     | generator.plugins.rust   | [![Crates](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)         | Active            |
 | Dotnet   | generator.plugins.dotnet | <in development>                                                                                    | Under development |

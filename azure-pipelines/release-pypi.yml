@@ -23,6 +23,7 @@ extends:
     # We don't ship any built in packages.
     generateNotice: false
     pyProjectTomlPath: $(Build.SourcesDirectory)/packages/python/pyproject.toml
+    packageName: lsprotocol
     buildSteps:
       - script: python -m pip install nox
         displayName: Install nox

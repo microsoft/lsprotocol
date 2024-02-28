@@ -22,7 +22,7 @@ jobs:
           python-version: 3.8
 
       - name: Pip cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-build-vsix-${{ hashFiles('**/requirements.txt') }}
@@ -60,7 +60,7 @@ jobs:
           python-version: '3.x'
 
       - name: Pip cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-lint-${{ hashFiles('**/requirements.txt') }}

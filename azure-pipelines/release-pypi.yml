@@ -22,7 +22,8 @@ extends:
     pythonVersion: '3.8'
     # We don't ship any built in packages.
     generateNotice: false
-    pyProjectTomlPath: $(Build.SourcesDirectory)/packages/python/pyproject.toml
+    # Build output is expected to be in the `dist` directory under the project root.
+    projectRootDirectory: $(Build.SourcesDirectory)/packages/python
     packageName: lsprotocol
     buildSteps:
       - script: python -m pip install nox
@@ -30,7 +31,3 @@ extends:
 
       - script: python -m nox --session build_python_package
         displayName: Build package (sdist and wheels)
-
-      - publish: $(Build.SourcesDirectory)/packages/python/dist
-        artifact: dist
-        displayName: 🚛 Publish pypi artifact

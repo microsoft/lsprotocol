@@ -1,7 +1,5 @@
 # Language Server Protocol types code generator & packages
 
-<!-- This repository contains a Python implementation of [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) types and classes, and code generators for various languages. -->
-
 This repository contains packages and tools to generate code for [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) types and classes.
 
 It simplifies the creation of language servers for different programming languages by providing a robust and easy-to-use type generation system.

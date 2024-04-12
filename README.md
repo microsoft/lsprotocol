@@ -1,21 +1,30 @@
-# Language Server Protocol types code generator
+# Language Server Protocol types code generator & packages
 
-This repository contains a Python implementation of [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) types and classes, and code generators for various languages.
+This repository contains packages and tools to generate code for [Language Server Protocol](https://microsoft.github.io/language-server-protocol/) types and classes.
 
 It simplifies the creation of language servers for different programming languages by providing a robust and easy-to-use type generation system.
 
-# Usage
+➡️ For instructions on how to use the **code generator**, refer to the [Usage](#usage) section.
+
+➡️ For instructions on existing **plugins and packages** for different languages, refer to the table in the [Existing packages/plugins](#existing-packagesplugins) section.
+
+➡️ For instructions on how to **create additional plugins** to support more languages, refer to the [Contributing plugins](#contributing-plugins) section.
+
+# Code Generator Usage
 
 You will need a Python environment to run the generator. Here are the steps:
 
 1. Create a Python environment: `python -m venv .venv`
     > **Note**: Python 3.8 is the minimum supported version
-2. Install this repo's tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
-3. Run your plugin. For example: `python -m generator --plugin dotnet --output-dir ./code`
+2. Activate the environment: `.venv\Scripts\activate` (Windows) or `source .venv/bin/activate` (Linux/macOS)
+3. Install this repo's tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
+4. Run your plugin. You can use the [command line](#command-line) or [Nox](#using-nox) to run the generator.
 
 ## Command line
 
 Clone this repository and run `generator` as a Python module.
+
+For example: `python -m generator --plugin dotnet --output-dir ./code`
 
 ```console
 >python -m generator --help
@@ -70,12 +79,13 @@ nox > Created plugin java.
 nox > Session create_plugin was successful.
 ```
 
-# Supported plugins
+# Existing packages/plugins
 
-Below is the list of plugins already created using this package.
+Below is the list of plugins already created using this package, with their respective package links.
 
-| Language | Plugin Module            | Package                                                                                             | Status            |
-| -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- |
-| Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            |
-| Rust     | generator.plugins.rust   | [![Crates](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)         | Active            |
-| Dotnet   | generator.plugins.dotnet | <in development>                                                                                    | Under development |
+| Language         | Plugin Module            | Package                                                                                             | Status            | Documentation                                               |
+| ---------------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- | ----------------------------------------------------------- |
+| Python           | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            | [Python package README](./packages/python/README.md)        |
+| Rust             | generator.plugins.rust   | [![Crates](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)        | Active            | [Rust package README](./packages/rust/lsprotocol/README.md) |
+| Dotnet           | generator.plugins.dotnet | <in development>                                                                                    | Under development |
+| <in development> |

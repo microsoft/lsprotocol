@@ -1,6 +1,6 @@
 # Language Server Protocol Types implementation for Python
 
-`lsprotocol` is a python implementation of object types used in the Language Server Protocol (LSP). This repository contains the code generator and the generated types for LSP.
+`lsprotocol` is a Python implementation of object types used in the Language Server Protocol (LSP). This repository contains the code generator and the generated types for LSP.
 
 ## Overview
 

@@ -10,7 +10,9 @@
 import enum
 import functools
 from typing import Any, Dict, Optional, Sequence, Tuple, Union
+
 import attrs
+
 from . import validators
 
 __lsp_version__ = "3.17.0"
@@ -3533,9 +3535,9 @@ class HoverParams:
 class Hover:
     """The result of a hover request."""
 
-    contents: Union[
-        "MarkupContent", MarkedString, Sequence[MarkedString]
-    ] = attrs.field()
+    contents: Union["MarkupContent", MarkedString, Sequence[MarkedString]] = (
+        attrs.field()
+    )
     """The hover's content"""
 
     range: Optional["Range"] = attrs.field(default=None)
@@ -5817,14 +5819,14 @@ class ServerCapabilities:
     )
     """The server provides find references support."""
 
-    document_highlight_provider: Optional[
-        Union[bool, DocumentHighlightOptions]
-    ] = attrs.field(default=None)
+    document_highlight_provider: Optional[Union[bool, DocumentHighlightOptions]] = (
+        attrs.field(default=None)
+    )
     """The server provides document highlight support."""
 
-    document_symbol_provider: Optional[
-        Union[bool, DocumentSymbolOptions]
-    ] = attrs.field(default=None)
+    document_symbol_provider: Optional[Union[bool, DocumentSymbolOptions]] = (
+        attrs.field(default=None)
+    )
     """The server provides document symbol support."""
 
     code_action_provider: Optional[Union[bool, CodeActionOptions]] = attrs.field(
@@ -5845,14 +5847,14 @@ class ServerCapabilities:
     ] = attrs.field(default=None)
     """The server provides color provider support."""
 
-    workspace_symbol_provider: Optional[
-        Union[bool, WorkspaceSymbolOptions]
-    ] = attrs.field(default=None)
+    workspace_symbol_provider: Optional[Union[bool, WorkspaceSymbolOptions]] = (
+        attrs.field(default=None)
+    )
     """The server provides workspace symbol support."""
 
-    document_formatting_provider: Optional[
-        Union[bool, DocumentFormattingOptions]
-    ] = attrs.field(default=None)
+    document_formatting_provider: Optional[Union[bool, DocumentFormattingOptions]] = (
+        attrs.field(default=None)
+    )
     """The server provides document formatting."""
 
     document_range_formatting_provider: Optional[
@@ -5860,9 +5862,9 @@ class ServerCapabilities:
     ] = attrs.field(default=None)
     """The server provides document range formatting."""
 
-    document_on_type_formatting_provider: Optional[
-        DocumentOnTypeFormattingOptions
-    ] = attrs.field(default=None)
+    document_on_type_formatting_provider: Optional[DocumentOnTypeFormattingOptions] = (
+        attrs.field(default=None)
+    )
     """The server provides document formatting on typing."""
 
     rename_provider: Optional[Union[bool, RenameOptions]] = attrs.field(default=None)
@@ -5949,9 +5951,9 @@ class ServerCapabilities:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    inline_completion_provider: Optional[
-        Union[bool, InlineCompletionOptions]
-    ] = attrs.field(default=None)
+    inline_completion_provider: Optional[Union[bool, InlineCompletionOptions]] = (
+        attrs.field(default=None)
+    )
     """Inline completion options used during static registration.
     
     @since 3.18.0
@@ -6062,9 +6064,9 @@ class Diagnostic:
     @since 3.15.0"""
     # Since: 3.15.0
 
-    related_information: Optional[
-        Sequence["DiagnosticRelatedInformation"]
-    ] = attrs.field(default=None)
+    related_information: Optional[Sequence["DiagnosticRelatedInformation"]] = (
+        attrs.field(default=None)
+    )
     """An array of related diagnostic information, e.g. when symbol-names within
     a scope collide all definitions can be marked via this property."""
 
@@ -6658,9 +6660,9 @@ class NotebookDocumentCellChanges:
     """Changes to notebook cells properties like its
     kind, execution summary or metadata."""
 
-    text_content: Optional[
-        Sequence["NotebookDocumentCellContentChanges"]
-    ] = attrs.field(default=None)
+    text_content: Optional[Sequence["NotebookDocumentCellContentChanges"]] = (
+        attrs.field(default=None)
+    )
     """Changes to the text content of notebook cells."""
 
 
@@ -7065,14 +7067,14 @@ class WorkspaceClientCapabilities:
     )
     """Capabilities specific to `WorkspaceEdit`s."""
 
-    did_change_configuration: Optional[
-        "DidChangeConfigurationClientCapabilities"
-    ] = attrs.field(default=None)
+    did_change_configuration: Optional["DidChangeConfigurationClientCapabilities"] = (
+        attrs.field(default=None)
+    )
     """Capabilities specific to the `workspace/didChangeConfiguration` notification."""
 
-    did_change_watched_files: Optional[
-        "DidChangeWatchedFilesClientCapabilities"
-    ] = attrs.field(default=None)
+    did_change_watched_files: Optional["DidChangeWatchedFilesClientCapabilities"] = (
+        attrs.field(default=None)
+    )
     """Capabilities specific to the `workspace/didChangeWatchedFiles` notification."""
 
     symbol: Optional["WorkspaceSymbolClientCapabilities"] = attrs.field(default=None)
@@ -7101,9 +7103,9 @@ class WorkspaceClientCapabilities:
     @since 3.6.0"""
     # Since: 3.6.0
 
-    semantic_tokens: Optional[
-        "SemanticTokensWorkspaceClientCapabilities"
-    ] = attrs.field(default=None)
+    semantic_tokens: Optional["SemanticTokensWorkspaceClientCapabilities"] = (
+        attrs.field(default=None)
+    )
     """Capabilities specific to the semantic token requests scoped to the
     workspace.
     
@@ -7247,14 +7249,14 @@ class TextDocumentClientCapabilities:
     )
     """Capabilities specific to the `textDocument/formatting` request."""
 
-    range_formatting: Optional[
-        "DocumentRangeFormattingClientCapabilities"
-    ] = attrs.field(default=None)
+    range_formatting: Optional["DocumentRangeFormattingClientCapabilities"] = (
+        attrs.field(default=None)
+    )
     """Capabilities specific to the `textDocument/rangeFormatting` request."""
 
-    on_type_formatting: Optional[
-        "DocumentOnTypeFormattingClientCapabilities"
-    ] = attrs.field(default=None)
+    on_type_formatting: Optional["DocumentOnTypeFormattingClientCapabilities"] = (
+        attrs.field(default=None)
+    )
     """Capabilities specific to the `textDocument/onTypeFormatting` request."""
 
     rename: Optional["RenameClientCapabilities"] = attrs.field(default=None)
@@ -7297,9 +7299,9 @@ class TextDocumentClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    linked_editing_range: Optional[
-        "LinkedEditingRangeClientCapabilities"
-    ] = attrs.field(default=None)
+    linked_editing_range: Optional["LinkedEditingRangeClientCapabilities"] = (
+        attrs.field(default=None)
+    )
     """Capabilities specific to the `textDocument/linkedEditingRange` request.
     
     @since 3.16.0"""
@@ -7430,9 +7432,9 @@ class GeneralClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    position_encodings: Optional[
-        Sequence[Union[PositionEncodingKind, str]]
-    ] = attrs.field(default=None)
+    position_encodings: Optional[Sequence[Union[PositionEncodingKind, str]]] = (
+        attrs.field(default=None)
+    )
     """The position encodings supported by the client. Client and server
     have to agree on the same position encoding to ensure that offsets
     (e.g. character position in a line) are interpreted the same on both
@@ -7729,9 +7731,9 @@ class WorkspaceEditClientCapabilities:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    change_annotation_support: Optional[
-        "ChangeAnnotationsSupportOptions"
-    ] = attrs.field(default=None)
+    change_annotation_support: Optional["ChangeAnnotationsSupportOptions"] = (
+        attrs.field(default=None)
+    )
     """Whether the client in general supports change annotations on text edits,
     create file, rename file and delete file changes.
     
@@ -8261,9 +8263,9 @@ class CodeActionClientCapabilities:
     )
     """Whether code action supports dynamic registration."""
 
-    code_action_literal_support: Optional[
-        "ClientCodeActionLiteralOptions"
-    ] = attrs.field(default=None)
+    code_action_literal_support: Optional["ClientCodeActionLiteralOptions"] = (
+        attrs.field(default=None)
+    )
     """The client support code action literals of type `CodeAction` as a valid
     response of the `textDocument/codeAction` request. If the property is not
     set the request can only return `Command` literals.
@@ -8439,9 +8441,9 @@ class RenameClientCapabilities:
     @since 3.12.0"""
     # Since: 3.12.0
 
-    prepare_support_default_behavior: Optional[
-        PrepareSupportDefaultBehavior
-    ] = attrs.field(default=None)
+    prepare_support_default_behavior: Optional[PrepareSupportDefaultBehavior] = (
+        attrs.field(default=None)
+    )
     """Client supports the default behavior result.
     
     The value indicates the default behavior used by the
@@ -9016,9 +9018,9 @@ class ClientCompletionItemOptions:
     @since 3.16.0"""
     # Since: 3.16.0
 
-    insert_text_mode_support: Optional[
-        "ClientCompletionItemInsertTextModeOptions"
-    ] = attrs.field(default=None)
+    insert_text_mode_support: Optional["ClientCompletionItemInsertTextModeOptions"] = (
+        attrs.field(default=None)
+    )
     """The client supports the `insertTextMode` property on
     a completion item to override the whitespace handling mode
     as defined by the client (see `insertTextMode`).
@@ -9089,9 +9091,9 @@ class ClientSignatureInformationOptions:
     """Client supports the following content formats for the documentation
     property. The order describes the preferred format of the client."""
 
-    parameter_information: Optional[
-        "ClientSignatureParameterInformationOptions"
-    ] = attrs.field(default=None)
+    parameter_information: Optional["ClientSignatureParameterInformationOptions"] = (
+        attrs.field(default=None)
+    )
     """Client capabilities specific to parameter information."""
 
     active_parameter_support: Optional[bool] = attrs.field(

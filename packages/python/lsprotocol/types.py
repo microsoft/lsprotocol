@@ -521,6 +521,7 @@ class LanguageKind(str, enum.Enum):
     Go = "go"
     Groovy = "groovy"
     Handlebars = "handlebars"
+    Haskell = "haskell"
     Html = "html"
     Ini = "ini"
     Java = "java"
@@ -4795,6 +4796,14 @@ class ApplyWorkspaceEditParams:
     presented in the user interface for example on an undo
     stack to undo the workspace edit."""
 
+    metadata: Optional["WorkspaceEditMetadata"] = attrs.field(default=None)
+    """Additional data about the edit.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
 
 @attrs.define
 class ApplyWorkspaceEditResult:
@@ -5144,12 +5153,17 @@ class TextDocumentEdit:
     text_document: "OptionalVersionedTextDocumentIdentifier" = attrs.field()
     """The text document to change."""
 
-    edits: Sequence[Union[TextEdit, "AnnotatedTextEdit"]] = attrs.field()
+    edits: Sequence[Union[TextEdit, "AnnotatedTextEdit", "SnippetTextEdit"]] = (
+        attrs.field()
+    )
     """The edits to be applied.
     
     @since 3.16.0 - support for AnnotatedTextEdit. This is guarded using a
+    client capability.
+    
+    @since 3.18.0 - support for SnippetTextEdit. This is guarded using a
     client capability."""
-    # Since: 3.16.0 - support for AnnotatedTextEdit. This is guarded using aclient capability.
+    # Since: 3.18.0 - support for SnippetTextEdit. This is guarded using aclient capability.
 
 
 @attrs.define
@@ -5971,11 +5985,9 @@ class ServerInfo:
     """Information about the server
 
     @since 3.15.0
-    @since 3.18.0 ServerInfo type name added.
-    @proposed"""
+    @since 3.18.0 ServerInfo type name added."""
 
     # Since: 3.18.0 ServerInfo type name added.
-    # Proposed
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of the server as defined by the server."""
@@ -6287,11 +6299,9 @@ class CodeActionContext:
 class CodeActionDisabled:
     """Captures why the code action is currently disabled.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     reason: str = attrs.field(validator=attrs.validators.instance_of(str))
     """Human readable description of why the code action is currently disabled.
@@ -6303,11 +6313,9 @@ class CodeActionDisabled:
 class LocationUriOnly:
     """Location with only uri and does not include range.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
 
@@ -6352,11 +6360,9 @@ class FormattingOptions:
 
 @attrs.define
 class PrepareRenamePlaceholder:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     range: Range = attrs.field()
 
@@ -6365,13 +6371,28 @@ class PrepareRenamePlaceholder:
 
 @attrs.define
 class PrepareRenameDefaultBehavior:
-    """@since 3.18.0
+    """@since 3.18.0"""
+
+    # Since: 3.18.0
+
+    default_behavior: bool = attrs.field(validator=attrs.validators.instance_of(bool))
+
+
+@attrs.define
+class WorkspaceEditMetadata:
+    """Additional data about a workspace edit.
+
+    @since 3.18.0
     @proposed"""
 
     # Since: 3.18.0
     # Proposed
 
-    default_behavior: bool = attrs.field(validator=attrs.validators.instance_of(bool))
+    is_refactoring: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Signal to the editor that this edit is a refactoring."""
 
 
 @attrs.define
@@ -6391,11 +6412,9 @@ class SemanticTokensLegend:
 class SemanticTokensFullDelta:
     """Semantic tokens options to support deltas for full documents
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     delta: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -6437,6 +6456,26 @@ class AnnotatedTextEdit:
     new_text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The string to be inserted. For delete operations use an
     empty string."""
+
+
+@attrs.define
+class SnippetTextEdit:
+    """An interactive text edit.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    range: Range = attrs.field()
+    """The range of the text document to be manipulated."""
+
+    snippet: StringValue = attrs.field()
+    """The snippet to be inserted."""
+
+    annotation_id: Optional[ChangeAnnotationIdentifier] = attrs.field(default=None)
+    """The actual identifier of the snippet edit."""
 
 
 @attrs.define
@@ -6606,11 +6645,9 @@ class NotebookCell:
 
 @attrs.define
 class NotebookDocumentFilterWithNotebook:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     notebook: Union[str, NotebookDocumentFilter] = attrs.field()
     """The notebook to be synced If a string
@@ -6623,11 +6660,9 @@ class NotebookDocumentFilterWithNotebook:
 
 @attrs.define
 class NotebookDocumentFilterWithCells:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     cells: Sequence["NotebookCellLanguage"] = attrs.field()
     """The cells of the matching notebook to be synced."""
@@ -6642,11 +6677,9 @@ class NotebookDocumentFilterWithCells:
 class NotebookDocumentCellChanges:
     """Cell changes to a notebook document.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     structure: Optional["NotebookDocumentCellChangeStructure"] = attrs.field(
         default=None
@@ -6686,11 +6719,9 @@ class ClientInfo:
     """Information about the client
 
     @since 3.15.0
-    @since 3.18.0 ClientInfo type name added.
-    @proposed"""
+    @since 3.18.0 ClientInfo type name added."""
 
     # Since: 3.18.0 ClientInfo type name added.
-    # Proposed
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of the client as defined by the client."""
@@ -6771,11 +6802,9 @@ class TextDocumentSyncOptions:
 class WorkspaceOptions:
     """Defines workspace specific capabilities of the server.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     workspace_folders: Optional["WorkspaceFoldersServerCapabilities"] = attrs.field(
         default=None
@@ -6794,11 +6823,9 @@ class WorkspaceOptions:
 
 @attrs.define
 class TextDocumentContentChangePartial:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     range: Range = attrs.field()
     """The range of the document that changed."""
@@ -6816,11 +6843,9 @@ class TextDocumentContentChangePartial:
 
 @attrs.define
 class TextDocumentContentChangeWholeDocument:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The new text of the whole document."""
@@ -6855,11 +6880,9 @@ class DiagnosticRelatedInformation:
 class EditRangeWithInsertReplace:
     """Edit range variant that includes ranges for insert and replace operations.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     insert: Range = attrs.field()
 
@@ -6868,11 +6891,9 @@ class EditRangeWithInsertReplace:
 
 @attrs.define
 class ServerCompletionItemOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     label_details_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -6889,11 +6910,9 @@ class ServerCompletionItemOptions:
 @attrs.define
 class MarkedStringWithLanguage:
     """@since 3.18.0
-    @proposed
     @deprecated use MarkupContent instead."""
 
     # Since: 3.18.0
-    # Proposed
 
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
 
@@ -7004,11 +7023,9 @@ class ExecutionSummary:
 
 @attrs.define
 class NotebookCellLanguage:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
 
@@ -7017,11 +7034,9 @@ class NotebookCellLanguage:
 class NotebookDocumentCellChangeStructure:
     """Structural changes to cells in a notebook document.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     array: "NotebookCellArrayChange" = attrs.field()
     """The change to the cell array."""
@@ -7037,11 +7052,9 @@ class NotebookDocumentCellChangeStructure:
 class NotebookDocumentCellContentChanges:
     """Content changes to a cell in a notebook document.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     document: VersionedTextDocumentIdentifier = attrs.field()
 
@@ -7521,11 +7534,9 @@ class RelativePattern:
 class TextDocumentFilterLanguage:
     """A document filter where `language` is required field.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     language: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A language id, like `typescript`."""
@@ -7547,11 +7558,9 @@ class TextDocumentFilterLanguage:
 class TextDocumentFilterScheme:
     """A document filter where `scheme` is required field.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
@@ -7573,11 +7582,9 @@ class TextDocumentFilterScheme:
 class TextDocumentFilterPattern:
     """A document filter where `pattern` is required field.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples."""
@@ -7599,11 +7606,9 @@ class TextDocumentFilterPattern:
 class NotebookDocumentFilterNotebookType:
     """A notebook document filter where `notebookType` is required field.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     notebook_type: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The type of the enclosing notebook."""
@@ -7625,11 +7630,9 @@ class NotebookDocumentFilterNotebookType:
 class NotebookDocumentFilterScheme:
     """A notebook document filter where `scheme` is required field.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
@@ -7651,11 +7654,9 @@ class NotebookDocumentFilterScheme:
 class NotebookDocumentFilterPattern:
     """A notebook document filter where `pattern` is required field.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     pattern: str = attrs.field(validator=attrs.validators.instance_of(str))
     """A glob pattern."""
@@ -7737,6 +7738,28 @@ class WorkspaceEditClientCapabilities:
     
     @since 3.16.0"""
     # Since: 3.16.0
+
+    metadata_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client supports `WorkspaceEditMetadata` in `WorkspaceEdit`s.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
+    snippet_edit_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client supports snippets as text edits.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
 
 
 @attrs.define
@@ -8517,8 +8540,8 @@ class SelectionRangeClientCapabilities:
 
 
 @attrs.define
-class PublishDiagnosticsClientCapabilities:
-    """The publish diagnostic client capabilities."""
+class DiagnosticsCapabilities:
+    """General diagnostics capabilities for pull and push model."""
 
     related_information: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8533,12 +8556,50 @@ class PublishDiagnosticsClientCapabilities:
     @since 3.15.0"""
     # Since: 3.15.0
 
+    code_description_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client supports a codeDescription property
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+    data_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether code action supports the `data` property which is
+    preserved between a `textDocument/publishDiagnostics` and
+    `textDocument/codeAction` request.
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+
+@attrs.define
+class PublishDiagnosticsClientCapabilities:
+    """The publish diagnostic client capabilities."""
+
     version_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
     )
     """Whether the client interprets the version property of the
     `textDocument/publishDiagnostics` notification's parameter.
+    
+    @since 3.15.0"""
+    # Since: 3.15.0
+
+    related_information: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the clients accepts diagnostics with related information."""
+
+    tag_support: Optional["ClientDiagnosticsTagOptions"] = attrs.field(default=None)
+    """Client supports the tag property to provide meta data about a diagnostic.
+    Clients supporting tags have to handle unknown tags gracefully.
     
     @since 3.15.0"""
     # Since: 3.15.0
@@ -8760,6 +8821,39 @@ class DiagnosticClientCapabilities:
     )
     """Whether the clients supports related documents for document diagnostic pulls."""
 
+    related_information: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the clients accepts diagnostics with related information."""
+
+    tag_support: Optional["ClientDiagnosticsTagOptions"] = attrs.field(default=None)
+    """Client supports the tag property to provide meta data about a diagnostic.
+    Clients supporting tags have to handle unknown tags gracefully.
+    
+    @since 3.15.0"""
+    # Since: 3.15.0
+
+    code_description_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Client supports a codeDescription property
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
+    data_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether code action supports the `data` property which is
+    preserved between a `textDocument/publishDiagnostics` and
+    `textDocument/codeAction` request.
+    
+    @since 3.16.0"""
+    # Since: 3.16.0
+
 
 @attrs.define
 class InlineCompletionClientCapabilities:
@@ -8827,11 +8921,9 @@ class ShowDocumentClientCapabilities:
 
 @attrs.define
 class StaleRequestSupportOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     cancel: bool = attrs.field(validator=attrs.validators.instance_of(bool))
     """The client will actively cancel the request."""
@@ -8887,11 +8979,9 @@ class MarkdownClientCapabilities:
 
 @attrs.define
 class ChangeAnnotationsSupportOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     groups_on_label: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8904,11 +8994,9 @@ class ChangeAnnotationsSupportOptions:
 
 @attrs.define
 class ClientSymbolKindOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Optional[Sequence[SymbolKind]] = attrs.field(default=None)
     """The symbol kind values the client supports. When this
@@ -8923,11 +9011,9 @@ class ClientSymbolKindOptions:
 
 @attrs.define
 class ClientSymbolTagOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Sequence[SymbolTag] = attrs.field()
     """The tags supported by the client."""
@@ -8935,11 +9021,9 @@ class ClientSymbolTagOptions:
 
 @attrs.define
 class ClientSymbolResolveOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily. Usually
@@ -8948,11 +9032,9 @@ class ClientSymbolResolveOptions:
 
 @attrs.define
 class ClientCompletionItemOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     snippet_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9039,11 +9121,9 @@ class ClientCompletionItemOptions:
 
 @attrs.define
 class ClientCompletionItemOptionsKind:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Optional[Sequence[CompletionItemKind]] = attrs.field(default=None)
     """The completion item kind values the client supports. When this
@@ -9079,11 +9159,9 @@ class CompletionListCapabilities:
 
 @attrs.define
 class ClientSignatureInformationOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     documentation_format: Optional[Sequence[MarkupKind]] = attrs.field(default=None)
     """Client supports the following content formats for the documentation
@@ -9120,11 +9198,9 @@ class ClientSignatureInformationOptions:
 
 @attrs.define
 class ClientCodeActionLiteralOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     code_action_kind: "ClientCodeActionKindOptions" = attrs.field()
     """The code action kind is support with the following value
@@ -9133,11 +9209,9 @@ class ClientCodeActionLiteralOptions:
 
 @attrs.define
 class ClientCodeActionResolveOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily."""
@@ -9145,11 +9219,9 @@ class ClientCodeActionResolveOptions:
 
 @attrs.define
 class ClientFoldingRangeKindOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Optional[Sequence[Union[FoldingRangeKind, str]]] = attrs.field(
         default=None
@@ -9162,11 +9234,9 @@ class ClientFoldingRangeKindOptions:
 
 @attrs.define
 class ClientFoldingRangeOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     collapsed_text: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9180,24 +9250,10 @@ class ClientFoldingRangeOptions:
 
 
 @attrs.define
-class ClientDiagnosticsTagOptions:
-    """@since 3.18.0
-    @proposed"""
-
-    # Since: 3.18.0
-    # Proposed
-
-    value_set: Sequence[DiagnosticTag] = attrs.field()
-    """The tags supported by the client."""
-
-
-@attrs.define
 class ClientSemanticTokensRequestOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     range: Optional[Union[bool, Any]] = attrs.field(default=None)
     """The client will send the `textDocument/semanticTokens/range` request if
@@ -9212,11 +9268,9 @@ class ClientSemanticTokensRequestOptions:
 
 @attrs.define
 class ClientInlayHintResolveOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily."""
@@ -9224,11 +9278,9 @@ class ClientInlayHintResolveOptions:
 
 @attrs.define
 class ClientShowMessageActionItemOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     additional_properties_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9241,11 +9293,9 @@ class ClientShowMessageActionItemOptions:
 
 @attrs.define
 class CompletionItemTagOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Sequence[CompletionItemTag] = attrs.field()
     """The tags supported by the client."""
@@ -9253,11 +9303,9 @@ class CompletionItemTagOptions:
 
 @attrs.define
 class ClientCompletionItemResolveOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     properties: Sequence[str] = attrs.field()
     """The properties that a client can resolve lazily."""
@@ -9265,22 +9313,18 @@ class ClientCompletionItemResolveOptions:
 
 @attrs.define
 class ClientCompletionItemInsertTextModeOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Sequence[InsertTextMode] = attrs.field()
 
 
 @attrs.define
 class ClientSignatureParameterInformationOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     label_offset_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9295,11 +9339,9 @@ class ClientSignatureParameterInformationOptions:
 
 @attrs.define
 class ClientCodeActionKindOptions:
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value_set: Sequence[Union[CodeActionKind, str]] = attrs.field()
     """The code action kind values the client supports. When this
@@ -9309,12 +9351,20 @@ class ClientCodeActionKindOptions:
 
 
 @attrs.define
-class ClientSemanticTokensRequestFullDelta:
-    """@since 3.18.0
-    @proposed"""
+class ClientDiagnosticsTagOptions:
+    """@since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
+
+    value_set: Sequence[DiagnosticTag] = attrs.field()
+    """The tags supported by the client."""
+
+
+@attrs.define
+class ClientSemanticTokensRequestFullDelta:
+    """@since 3.18.0"""
+
+    # Since: 3.18.0
 
     delta: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -12902,6 +12952,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DiagnosticSeverity": DiagnosticSeverity,
     "DiagnosticTag": DiagnosticTag,
     "DiagnosticWorkspaceClientCapabilities": DiagnosticWorkspaceClientCapabilities,
+    "DiagnosticsCapabilities": DiagnosticsCapabilities,
     "DidChangeConfigurationClientCapabilities": DidChangeConfigurationClientCapabilities,
     "DidChangeConfigurationParams": DidChangeConfigurationParams,
     "DidChangeConfigurationRegistrationOptions": DidChangeConfigurationRegistrationOptions,
@@ -13178,6 +13229,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "SignatureHelpRegistrationOptions": SignatureHelpRegistrationOptions,
     "SignatureHelpTriggerKind": SignatureHelpTriggerKind,
     "SignatureInformation": SignatureInformation,
+    "SnippetTextEdit": SnippetTextEdit,
     "StaleRequestSupportOptions": StaleRequestSupportOptions,
     "StaticRegistrationOptions": StaticRegistrationOptions,
     "StringValue": StringValue,
@@ -13385,6 +13437,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "WorkspaceDocumentDiagnosticReport": WorkspaceDocumentDiagnosticReport,
     "WorkspaceEdit": WorkspaceEdit,
     "WorkspaceEditClientCapabilities": WorkspaceEditClientCapabilities,
+    "WorkspaceEditMetadata": WorkspaceEditMetadata,
     "WorkspaceExecuteCommandRequest": WorkspaceExecuteCommandRequest,
     "WorkspaceExecuteCommandResponse": WorkspaceExecuteCommandResponse,
     "WorkspaceExecuteCommandResult": WorkspaceExecuteCommandResult,

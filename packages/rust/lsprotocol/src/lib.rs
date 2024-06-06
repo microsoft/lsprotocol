@@ -1468,6 +1468,9 @@ pub enum LanguageKind {
     #[serde(rename = "handlebars")]
     Handlebars,
 
+    #[serde(rename = "haskell")]
+    Haskell,
+
     #[serde(rename = "html")]
     Html,
 
@@ -4947,6 +4950,13 @@ pub struct ApplyWorkspaceEditParams {
     /// presented in the user interface for example on an undo
     /// stack to undo the workspace edit.
     pub label: Option<String>,
+
+    /// Additional data about the edit.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub metadata: Option<WorkspaceEditMetadata>,
 }
 
 /// The result returned from the apply workspace edit request.
@@ -5346,7 +5356,10 @@ pub struct TextDocumentEdit {
     ///
     /// @since 3.16.0 - support for AnnotatedTextEdit. This is guarded using a
     /// client capability.
-    pub edits: Vec<OR2<TextEdit, AnnotatedTextEdit>>,
+    ///
+    /// @since 3.18.0 - support for SnippetTextEdit. This is guarded using a
+    /// client capability.
+    pub edits: Vec<OR3<TextEdit, AnnotatedTextEdit, SnippetTextEdit>>,
 
     /// The text document to change.
     pub text_document: OptionalVersionedTextDocumentIdentifier,
@@ -6176,8 +6189,6 @@ pub struct ServerCapabilities {
 ///
 /// @since 3.15.0
 /// @since 3.18.0 ServerInfo type name added.
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ServerInfo {
@@ -6575,8 +6586,6 @@ pub struct CodeActionContext {
 /// Captures why the code action is currently disabled.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeActionDisabled {
@@ -6626,8 +6635,6 @@ pub struct CodeActionOptions {
 /// Location with only uri and does not include range.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LocationUriOnly {
@@ -6738,8 +6745,6 @@ pub struct RenameOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PrepareRenamePlaceholder {
@@ -6749,8 +6754,6 @@ pub struct PrepareRenamePlaceholder {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PrepareRenameDefaultBehavior {
@@ -6767,6 +6770,18 @@ pub struct ExecuteCommandOptions {
     pub work_done_progress: Option<bool>,
 }
 
+/// Additional data about a workspace edit.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct WorkspaceEditMetadata {
+    /// Signal to the editor that this edit is a refactoring.
+    pub is_refactoring: Option<bool>,
+}
+
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -6781,8 +6796,6 @@ pub struct SemanticTokensLegend {
 /// Semantic tokens options to support deltas for full documents
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct SemanticTokensFullDelta {
@@ -6822,6 +6835,24 @@ pub struct AnnotatedTextEdit {
     /// The range of the text document to be manipulated. To insert
     /// text into a document create a range where start === end.
     pub range: Range,
+}
+
+/// An interactive text edit.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct SnippetTextEdit {
+    /// The actual identifier of the snippet edit.
+    pub annotation_id: Option<ChangeAnnotationIdentifier>,
+
+    /// The range of the text document to be manipulated.
+    pub range: Range,
+
+    /// The snippet to be inserted.
+    pub snippet: StringValue,
 }
 
 /// A generic resource operation.
@@ -6974,8 +7005,6 @@ pub struct NotebookCell {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterWithNotebook {
@@ -6989,8 +7018,6 @@ pub struct NotebookDocumentFilterWithNotebook {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterWithCells {
@@ -7006,8 +7033,6 @@ pub struct NotebookDocumentFilterWithCells {
 /// Cell changes to a notebook document.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentCellChanges {
@@ -7042,8 +7067,6 @@ pub struct SelectedCompletionInfo {
 ///
 /// @since 3.15.0
 /// @since 3.18.0 ClientInfo type name added.
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientInfo {
@@ -7108,8 +7131,6 @@ pub struct TextDocumentSyncOptions {
 /// Defines workspace specific capabilities of the server.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct WorkspaceOptions {
@@ -7125,8 +7146,6 @@ pub struct WorkspaceOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentChangePartial {
@@ -7144,8 +7163,6 @@ pub struct TextDocumentContentChangePartial {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentChangeWholeDocument {
@@ -7179,8 +7196,6 @@ pub struct DiagnosticRelatedInformation {
 /// Edit range variant that includes ranges for insert and replace operations.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EditRangeWithInsertReplace {
@@ -7190,8 +7205,6 @@ pub struct EditRangeWithInsertReplace {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ServerCompletionItemOptions {
@@ -7204,10 +7217,8 @@ pub struct ServerCompletionItemOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
 /// @deprecated use MarkupContent instead.
 #[deprecated]
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MarkedStringWithLanguage {
@@ -7305,8 +7316,6 @@ pub struct ExecutionSummary {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookCellLanguage {
@@ -7316,8 +7325,6 @@ pub struct NotebookCellLanguage {
 /// Structural changes to cells in a notebook document.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentCellChangeStructure {
@@ -7334,8 +7341,6 @@ pub struct NotebookDocumentCellChangeStructure {
 /// Content changes to a cell in a notebook document.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentCellContentChanges {
@@ -7694,8 +7699,6 @@ pub struct RelativePattern {
 /// A document filter where `language` is required field.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFilterLanguage {
@@ -7712,8 +7715,6 @@ pub struct TextDocumentFilterLanguage {
 /// A document filter where `scheme` is required field.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFilterScheme {
@@ -7730,8 +7731,6 @@ pub struct TextDocumentFilterScheme {
 /// A document filter where `pattern` is required field.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentFilterPattern {
@@ -7748,8 +7747,6 @@ pub struct TextDocumentFilterPattern {
 /// A notebook document filter where `notebookType` is required field.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterNotebookType {
@@ -7766,8 +7763,6 @@ pub struct NotebookDocumentFilterNotebookType {
 /// A notebook document filter where `scheme` is required field.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterScheme {
@@ -7784,8 +7779,6 @@ pub struct NotebookDocumentFilterScheme {
 /// A notebook document filter where `pattern` is required field.
 ///
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentFilterPattern {
@@ -7834,6 +7827,13 @@ pub struct WorkspaceEditClientCapabilities {
     /// @since 3.13.0
     pub failure_handling: Option<FailureHandlingKind>,
 
+    /// Whether the client supports `WorkspaceEditMetadata` in `WorkspaceEdit`s.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub metadata_support: Option<bool>,
+
     /// Whether the client normalizes line endings to the client specific
     /// setting.
     /// If set to `true` the client will normalize line ending characters
@@ -7848,6 +7848,13 @@ pub struct WorkspaceEditClientCapabilities {
     ///
     /// @since 3.13.0
     pub resource_operations: Option<Vec<ResourceOperationKind>>,
+
+    /// Whether the client supports snippets as text edits.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub snippet_edit_support: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -8559,6 +8566,18 @@ pub struct InlayHintClientCapabilities {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DiagnosticClientCapabilities {
+    /// Client supports a codeDescription property
+    ///
+    /// @since 3.16.0
+    pub code_description_support: Option<bool>,
+
+    /// Whether code action supports the `data` property which is
+    /// preserved between a `textDocument/publishDiagnostics` and
+    /// `textDocument/codeAction` request.
+    ///
+    /// @since 3.16.0
+    pub data_support: Option<bool>,
+
     /// Whether implementation supports dynamic registration. If this is set to `true`
     /// the client supports the new `(TextDocumentRegistrationOptions & StaticRegistrationOptions)`
     /// return value for the corresponding server capability as well.
@@ -8566,6 +8585,15 @@ pub struct DiagnosticClientCapabilities {
 
     /// Whether the clients supports related documents for document diagnostic pulls.
     pub related_document_support: Option<bool>,
+
+    /// Whether the clients accepts diagnostics with related information.
+    pub related_information: Option<bool>,
+
+    /// Client supports the tag property to provide meta data about a diagnostic.
+    /// Clients supporting tags have to handle unknown tags gracefully.
+    ///
+    /// @since 3.15.0
+    pub tag_support: Option<ClientDiagnosticsTagOptions>,
 }
 
 /// Client capabilities specific to inline completions.
@@ -8616,8 +8644,6 @@ pub struct ShowDocumentClientCapabilities {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct StaleRequestSupportOptions {
@@ -8663,8 +8689,6 @@ pub struct MarkdownClientCapabilities {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ChangeAnnotationsSupportOptions {
@@ -8675,8 +8699,6 @@ pub struct ChangeAnnotationsSupportOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSymbolKindOptions {
@@ -8692,8 +8714,6 @@ pub struct ClientSymbolKindOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSymbolTagOptions {
@@ -8702,8 +8722,6 @@ pub struct ClientSymbolTagOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSymbolResolveOptions {
@@ -8713,8 +8731,6 @@ pub struct ClientSymbolResolveOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemOptions {
@@ -8775,8 +8791,6 @@ pub struct ClientCompletionItemOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemOptionsKind {
@@ -8810,8 +8824,6 @@ pub struct CompletionListCapabilities {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSignatureInformationOptions {
@@ -8839,8 +8851,6 @@ pub struct ClientSignatureInformationOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionLiteralOptions {
@@ -8850,8 +8860,6 @@ pub struct ClientCodeActionLiteralOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionResolveOptions {
@@ -8860,8 +8868,6 @@ pub struct ClientCodeActionResolveOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientFoldingRangeKindOptions {
@@ -8873,8 +8879,6 @@ pub struct ClientFoldingRangeKindOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientFoldingRangeOptions {
@@ -8885,19 +8889,33 @@ pub struct ClientFoldingRangeOptions {
     pub collapsed_text: Option<bool>,
 }
 
-/// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
+/// General diagnostics capabilities for pull and push model.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct ClientDiagnosticsTagOptions {
-    /// The tags supported by the client.
-    pub value_set: Vec<DiagnosticTag>,
+pub struct DiagnosticsCapabilities {
+    /// Client supports a codeDescription property
+    ///
+    /// @since 3.16.0
+    pub code_description_support: Option<bool>,
+
+    /// Whether code action supports the `data` property which is
+    /// preserved between a `textDocument/publishDiagnostics` and
+    /// `textDocument/codeAction` request.
+    ///
+    /// @since 3.16.0
+    pub data_support: Option<bool>,
+
+    /// Whether the clients accepts diagnostics with related information.
+    pub related_information: Option<bool>,
+
+    /// Client supports the tag property to provide meta data about a diagnostic.
+    /// Clients supporting tags have to handle unknown tags gracefully.
+    ///
+    /// @since 3.15.0
+    pub tag_support: Option<ClientDiagnosticsTagOptions>,
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSemanticTokensRequestOptions {
@@ -8911,8 +8929,6 @@ pub struct ClientSemanticTokensRequestOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientInlayHintResolveOptions {
@@ -8921,8 +8937,6 @@ pub struct ClientInlayHintResolveOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientShowMessageActionItemOptions {
@@ -8933,8 +8947,6 @@ pub struct ClientShowMessageActionItemOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionItemTagOptions {
@@ -8943,8 +8955,6 @@ pub struct CompletionItemTagOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemResolveOptions {
@@ -8953,8 +8963,6 @@ pub struct ClientCompletionItemResolveOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCompletionItemInsertTextModeOptions {
@@ -8962,8 +8970,6 @@ pub struct ClientCompletionItemInsertTextModeOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSignatureParameterInformationOptions {
@@ -8975,8 +8981,6 @@ pub struct ClientSignatureParameterInformationOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionKindOptions {
@@ -8988,8 +8992,14 @@ pub struct ClientCodeActionKindOptions {
 }
 
 /// @since 3.18.0
-/// @proposed
-#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ClientDiagnosticsTagOptions {
+    /// The tags supported by the client.
+    pub value_set: Vec<DiagnosticTag>,
+}
+
+/// @since 3.18.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientSemanticTokensRequestFullDelta {

@@ -734,6 +734,17 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.LanguageKind)
 
+    def _text_edit_hook(
+        object_: Any, _: type
+    ) -> Union[
+        lsp_types.TextEdit, lsp_types.AnnotatedTextEdit, lsp_types.SnippetTextEdit
+    ]:
+        if "snippet" in object_:
+            return converter.structure(object_, lsp_types.SnippetTextEdit)
+        if "annotationId" in object_:
+            return converter.structure(object_, lsp_types.AnnotatedTextEdit)
+        return converter.structure(object_, lsp_types.TextEdit)
+
     structure_hooks = [
         (
             Optional[
@@ -1078,6 +1089,14 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[lsp_types.LanguageKind, str],
             _language_kind_hook,
+        ),
+        (
+            Union[
+                lsp_types.TextEdit,
+                lsp_types.AnnotatedTextEdit,
+                lsp_types.SnippetTextEdit,
+            ],
+            _text_edit_hook,
         ),
     ]
     for type_, hook in structure_hooks:

@@ -1,6 +1,6 @@
 [package]
 name = "lsprotocol"
-version = "0.1.0-alpha.2"
+version = "0.1.0-beta.1"
 edition = "2021"
 description = "Rust types for Language Server Protocol generated from LSP specification."
 authors = ["Microsoft Corporation <lsprotocol-help@microsoft.com>"]

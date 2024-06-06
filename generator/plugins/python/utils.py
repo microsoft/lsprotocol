@@ -167,7 +167,7 @@ class TypesCodeGenerator:
         self._imports: List[str] = [
             "import enum",
             "import functools",
-            "from typing import Any, Dict, Optional, Sequence, Tuple, Union",
+            "from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union",
             "import attrs",
             "from . import validators",
         ]
@@ -863,7 +863,7 @@ class TypesCodeGenerator:
                     f"{indent}id:Union[int, str] = attrs.field()",
                     f'{indent}"""The request id."""',
                     f"{indent}params: {params_type} ={params_field}",
-                    f'{indent}method: str = "{request.method}"',
+                    f'{indent}method: Literal["{request.method}"] = "{request.method}"',
                     f'{indent}"""The method to be invoked."""',
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
@@ -908,7 +908,7 @@ class TypesCodeGenerator:
                     f"class {class_name}Notification:",
                     f'{indent}"""{doc}"""' if notification.documentation else "",
                     f"{indent}params: {params_type} = {params_field}",
-                    f"{indent}method:str =  attrs.field(",
+                    f'{indent}method: Literal["{notification.method}"] = attrs.field(',
                     f'validator=attrs.validators.in_(["{notification.method}"]),',
                     f'default="{notification.method}",',
                     ")",

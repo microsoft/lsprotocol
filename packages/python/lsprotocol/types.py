@@ -9,10 +9,8 @@
 
 import enum
 import functools
-from typing import Any, Dict, Optional, Sequence, Tuple, Union
-
+from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union
 import attrs
-
 from . import validators
 
 __lsp_version__ = "3.17.0"
@@ -9372,7 +9370,7 @@ class TextDocumentImplementationRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ImplementationParams = attrs.field()
-    method: str = "textDocument/implementation"
+    method: Literal["textDocument/implementation"] = "textDocument/implementation"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9397,7 +9395,7 @@ class TextDocumentTypeDefinitionRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: TypeDefinitionParams = attrs.field()
-    method: str = "textDocument/typeDefinition"
+    method: Literal["textDocument/typeDefinition"] = "textDocument/typeDefinition"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9420,7 +9418,7 @@ class WorkspaceWorkspaceFoldersRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/workspaceFolders"
+    method: Literal["workspace/workspaceFolders"] = "workspace/workspaceFolders"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9449,7 +9447,7 @@ class WorkspaceConfigurationRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ConfigurationParams = attrs.field()
-    method: str = "workspace/configuration"
+    method: Literal["workspace/configuration"] = "workspace/configuration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9475,7 +9473,7 @@ class TextDocumentDocumentColorRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentColorParams = attrs.field()
-    method: str = "textDocument/documentColor"
+    method: Literal["textDocument/documentColor"] = "textDocument/documentColor"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9501,7 +9499,7 @@ class TextDocumentColorPresentationRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ColorPresentationParams = attrs.field()
-    method: str = "textDocument/colorPresentation"
+    method: Literal["textDocument/colorPresentation"] = "textDocument/colorPresentation"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9527,7 +9525,7 @@ class TextDocumentFoldingRangeRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: FoldingRangeParams = attrs.field()
-    method: str = "textDocument/foldingRange"
+    method: Literal["textDocument/foldingRange"] = "textDocument/foldingRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9548,7 +9546,7 @@ class WorkspaceFoldingRangeRefreshRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/foldingRange/refresh"
+    method: Literal["workspace/foldingRange/refresh"] = "workspace/foldingRange/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9574,7 +9572,7 @@ class TextDocumentDeclarationRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DeclarationParams = attrs.field()
-    method: str = "textDocument/declaration"
+    method: Literal["textDocument/declaration"] = "textDocument/declaration"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9600,7 +9598,7 @@ class TextDocumentSelectionRangeRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: SelectionRangeParams = attrs.field()
-    method: str = "textDocument/selectionRange"
+    method: Literal["textDocument/selectionRange"] = "textDocument/selectionRange"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9621,7 +9619,7 @@ class WindowWorkDoneProgressCreateRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: WorkDoneProgressCreateParams = attrs.field()
-    method: str = "window/workDoneProgress/create"
+    method: Literal["window/workDoneProgress/create"] = "window/workDoneProgress/create"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9647,7 +9645,9 @@ class TextDocumentPrepareCallHierarchyRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CallHierarchyPrepareParams = attrs.field()
-    method: str = "textDocument/prepareCallHierarchy"
+    method: Literal["textDocument/prepareCallHierarchy"] = (
+        "textDocument/prepareCallHierarchy"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9672,7 +9672,7 @@ class CallHierarchyIncomingCallsRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CallHierarchyIncomingCallsParams = attrs.field()
-    method: str = "callHierarchy/incomingCalls"
+    method: Literal["callHierarchy/incomingCalls"] = "callHierarchy/incomingCalls"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9697,7 +9697,7 @@ class CallHierarchyOutgoingCallsRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CallHierarchyOutgoingCallsParams = attrs.field()
-    method: str = "callHierarchy/outgoingCalls"
+    method: Literal["callHierarchy/outgoingCalls"] = "callHierarchy/outgoingCalls"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9720,7 +9720,9 @@ class TextDocumentSemanticTokensFullRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: SemanticTokensParams = attrs.field()
-    method: str = "textDocument/semanticTokens/full"
+    method: Literal["textDocument/semanticTokens/full"] = (
+        "textDocument/semanticTokens/full"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9745,7 +9747,9 @@ class TextDocumentSemanticTokensFullDeltaRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: SemanticTokensDeltaParams = attrs.field()
-    method: str = "textDocument/semanticTokens/full/delta"
+    method: Literal["textDocument/semanticTokens/full/delta"] = (
+        "textDocument/semanticTokens/full/delta"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9768,7 +9772,9 @@ class TextDocumentSemanticTokensRangeRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: SemanticTokensRangeParams = attrs.field()
-    method: str = "textDocument/semanticTokens/range"
+    method: Literal["textDocument/semanticTokens/range"] = (
+        "textDocument/semanticTokens/range"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9788,7 +9794,9 @@ class WorkspaceSemanticTokensRefreshRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/semanticTokens/refresh"
+    method: Literal["workspace/semanticTokens/refresh"] = (
+        "workspace/semanticTokens/refresh"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9813,7 +9821,7 @@ class WindowShowDocumentRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ShowDocumentParams = attrs.field()
-    method: str = "window/showDocument"
+    method: Literal["window/showDocument"] = "window/showDocument"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9838,7 +9846,9 @@ class TextDocumentLinkedEditingRangeRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: LinkedEditingRangeParams = attrs.field()
-    method: str = "textDocument/linkedEditingRange"
+    method: Literal["textDocument/linkedEditingRange"] = (
+        "textDocument/linkedEditingRange"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9868,7 +9878,7 @@ class WorkspaceWillCreateFilesRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CreateFilesParams = attrs.field()
-    method: str = "workspace/willCreateFiles"
+    method: Literal["workspace/willCreateFiles"] = "workspace/willCreateFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9894,7 +9904,7 @@ class WorkspaceWillRenameFilesRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: RenameFilesParams = attrs.field()
-    method: str = "workspace/willRenameFiles"
+    method: Literal["workspace/willRenameFiles"] = "workspace/willRenameFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9920,7 +9930,7 @@ class WorkspaceWillDeleteFilesRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DeleteFilesParams = attrs.field()
-    method: str = "workspace/willDeleteFiles"
+    method: Literal["workspace/willDeleteFiles"] = "workspace/willDeleteFiles"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9945,7 +9955,7 @@ class TextDocumentMonikerRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: MonikerParams = attrs.field()
-    method: str = "textDocument/moniker"
+    method: Literal["textDocument/moniker"] = "textDocument/moniker"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9971,7 +9981,9 @@ class TextDocumentPrepareTypeHierarchyRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: TypeHierarchyPrepareParams = attrs.field()
-    method: str = "textDocument/prepareTypeHierarchy"
+    method: Literal["textDocument/prepareTypeHierarchy"] = (
+        "textDocument/prepareTypeHierarchy"
+    )
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -9996,7 +10008,7 @@ class TypeHierarchySupertypesRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: TypeHierarchySupertypesParams = attrs.field()
-    method: str = "typeHierarchy/supertypes"
+    method: Literal["typeHierarchy/supertypes"] = "typeHierarchy/supertypes"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10021,7 +10033,7 @@ class TypeHierarchySubtypesRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: TypeHierarchySubtypesParams = attrs.field()
-    method: str = "typeHierarchy/subtypes"
+    method: Literal["typeHierarchy/subtypes"] = "typeHierarchy/subtypes"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10048,7 +10060,7 @@ class TextDocumentInlineValueRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: InlineValueParams = attrs.field()
-    method: str = "textDocument/inlineValue"
+    method: Literal["textDocument/inlineValue"] = "textDocument/inlineValue"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10068,7 +10080,7 @@ class WorkspaceInlineValueRefreshRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/inlineValue/refresh"
+    method: Literal["workspace/inlineValue/refresh"] = "workspace/inlineValue/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10095,7 +10107,7 @@ class TextDocumentInlayHintRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: InlayHintParams = attrs.field()
-    method: str = "textDocument/inlayHint"
+    method: Literal["textDocument/inlayHint"] = "textDocument/inlayHint"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10119,7 +10131,7 @@ class InlayHintResolveRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: InlayHint = attrs.field()
-    method: str = "inlayHint/resolve"
+    method: Literal["inlayHint/resolve"] = "inlayHint/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10139,7 +10151,7 @@ class WorkspaceInlayHintRefreshRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/inlayHint/refresh"
+    method: Literal["workspace/inlayHint/refresh"] = "workspace/inlayHint/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10161,7 +10173,7 @@ class TextDocumentDiagnosticRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentDiagnosticParams = attrs.field()
-    method: str = "textDocument/diagnostic"
+    method: Literal["textDocument/diagnostic"] = "textDocument/diagnostic"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10183,7 +10195,7 @@ class WorkspaceDiagnosticRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: WorkspaceDiagnosticParams = attrs.field()
-    method: str = "workspace/diagnostic"
+    method: Literal["workspace/diagnostic"] = "workspace/diagnostic"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10205,7 +10217,7 @@ class WorkspaceDiagnosticRefreshRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/diagnostic/refresh"
+    method: Literal["workspace/diagnostic/refresh"] = "workspace/diagnostic/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10235,7 +10247,7 @@ class TextDocumentInlineCompletionRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: InlineCompletionParams = attrs.field()
-    method: str = "textDocument/inlineCompletion"
+    method: Literal["textDocument/inlineCompletion"] = "textDocument/inlineCompletion"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10256,7 +10268,7 @@ class ClientRegisterCapabilityRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: RegistrationParams = attrs.field()
-    method: str = "client/registerCapability"
+    method: Literal["client/registerCapability"] = "client/registerCapability"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10277,7 +10289,7 @@ class ClientUnregisterCapabilityRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: UnregistrationParams = attrs.field()
-    method: str = "client/unregisterCapability"
+    method: Literal["client/unregisterCapability"] = "client/unregisterCapability"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10301,7 +10313,7 @@ class InitializeRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: InitializeParams = attrs.field()
-    method: str = "initialize"
+    method: Literal["initialize"] = "initialize"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10324,7 +10336,7 @@ class ShutdownRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "shutdown"
+    method: Literal["shutdown"] = "shutdown"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10348,7 +10360,7 @@ class WindowShowMessageRequestRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ShowMessageRequestParams = attrs.field()
-    method: str = "window/showMessageRequest"
+    method: Literal["window/showMessageRequest"] = "window/showMessageRequest"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10376,7 +10388,7 @@ class TextDocumentWillSaveWaitUntilRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: WillSaveTextDocumentParams = attrs.field()
-    method: str = "textDocument/willSaveWaitUntil"
+    method: Literal["textDocument/willSaveWaitUntil"] = "textDocument/willSaveWaitUntil"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10407,7 +10419,7 @@ class TextDocumentCompletionRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CompletionParams = attrs.field()
-    method: str = "textDocument/completion"
+    method: Literal["textDocument/completion"] = "textDocument/completion"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10429,7 +10441,7 @@ class CompletionItemResolveRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CompletionItem = attrs.field()
-    method: str = "completionItem/resolve"
+    method: Literal["completionItem/resolve"] = "completionItem/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10454,7 +10466,7 @@ class TextDocumentHoverRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: HoverParams = attrs.field()
-    method: str = "textDocument/hover"
+    method: Literal["textDocument/hover"] = "textDocument/hover"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10475,7 +10487,7 @@ class TextDocumentSignatureHelpRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: SignatureHelpParams = attrs.field()
-    method: str = "textDocument/signatureHelp"
+    method: Literal["textDocument/signatureHelp"] = "textDocument/signatureHelp"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10501,7 +10513,7 @@ class TextDocumentDefinitionRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DefinitionParams = attrs.field()
-    method: str = "textDocument/definition"
+    method: Literal["textDocument/definition"] = "textDocument/definition"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10527,7 +10539,7 @@ class TextDocumentReferencesRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ReferenceParams = attrs.field()
-    method: str = "textDocument/references"
+    method: Literal["textDocument/references"] = "textDocument/references"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10553,7 +10565,7 @@ class TextDocumentDocumentHighlightRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentHighlightParams = attrs.field()
-    method: str = "textDocument/documentHighlight"
+    method: Literal["textDocument/documentHighlight"] = "textDocument/documentHighlight"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10581,7 +10593,7 @@ class TextDocumentDocumentSymbolRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentSymbolParams = attrs.field()
-    method: str = "textDocument/documentSymbol"
+    method: Literal["textDocument/documentSymbol"] = "textDocument/documentSymbol"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10604,7 +10616,7 @@ class TextDocumentCodeActionRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CodeActionParams = attrs.field()
-    method: str = "textDocument/codeAction"
+    method: Literal["textDocument/codeAction"] = "textDocument/codeAction"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10626,7 +10638,7 @@ class CodeActionResolveRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CodeAction = attrs.field()
-    method: str = "codeAction/resolve"
+    method: Literal["codeAction/resolve"] = "codeAction/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10658,7 +10670,7 @@ class WorkspaceSymbolRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: WorkspaceSymbolParams = attrs.field()
-    method: str = "workspace/symbol"
+    method: Literal["workspace/symbol"] = "workspace/symbol"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10681,7 +10693,7 @@ class WorkspaceSymbolResolveRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: WorkspaceSymbol = attrs.field()
-    method: str = "workspaceSymbol/resolve"
+    method: Literal["workspaceSymbol/resolve"] = "workspaceSymbol/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10704,7 +10716,7 @@ class TextDocumentCodeLensRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CodeLensParams = attrs.field()
-    method: str = "textDocument/codeLens"
+    method: Literal["textDocument/codeLens"] = "textDocument/codeLens"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10724,7 +10736,7 @@ class CodeLensResolveRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: CodeLens = attrs.field()
-    method: str = "codeLens/resolve"
+    method: Literal["codeLens/resolve"] = "codeLens/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10746,7 +10758,7 @@ class WorkspaceCodeLensRefreshRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: Optional[None] = attrs.field(default=None)
-    method: str = "workspace/codeLens/refresh"
+    method: Literal["workspace/codeLens/refresh"] = "workspace/codeLens/refresh"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10769,7 +10781,7 @@ class TextDocumentDocumentLinkRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentLinkParams = attrs.field()
-    method: str = "textDocument/documentLink"
+    method: Literal["textDocument/documentLink"] = "textDocument/documentLink"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10791,7 +10803,7 @@ class DocumentLinkResolveRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentLink = attrs.field()
-    method: str = "documentLink/resolve"
+    method: Literal["documentLink/resolve"] = "documentLink/resolve"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10814,7 +10826,7 @@ class TextDocumentFormattingRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentFormattingParams = attrs.field()
-    method: str = "textDocument/formatting"
+    method: Literal["textDocument/formatting"] = "textDocument/formatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10837,7 +10849,7 @@ class TextDocumentRangeFormattingRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentRangeFormattingParams = attrs.field()
-    method: str = "textDocument/rangeFormatting"
+    method: Literal["textDocument/rangeFormatting"] = "textDocument/rangeFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10863,7 +10875,7 @@ class TextDocumentRangesFormattingRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentRangesFormattingParams = attrs.field()
-    method: str = "textDocument/rangesFormatting"
+    method: Literal["textDocument/rangesFormatting"] = "textDocument/rangesFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10886,7 +10898,7 @@ class TextDocumentOnTypeFormattingRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: DocumentOnTypeFormattingParams = attrs.field()
-    method: str = "textDocument/onTypeFormatting"
+    method: Literal["textDocument/onTypeFormatting"] = "textDocument/onTypeFormatting"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10909,7 +10921,7 @@ class TextDocumentRenameRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: RenameParams = attrs.field()
-    method: str = "textDocument/rename"
+    method: Literal["textDocument/rename"] = "textDocument/rename"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10934,7 +10946,7 @@ class TextDocumentPrepareRenameRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: PrepareRenameParams = attrs.field()
-    method: str = "textDocument/prepareRename"
+    method: Literal["textDocument/prepareRename"] = "textDocument/prepareRename"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10958,7 +10970,7 @@ class WorkspaceExecuteCommandRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ExecuteCommandParams = attrs.field()
-    method: str = "workspace/executeCommand"
+    method: Literal["workspace/executeCommand"] = "workspace/executeCommand"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10978,7 +10990,7 @@ class WorkspaceApplyEditRequest:
     id: Union[int, str] = attrs.field()
     """The request id."""
     params: ApplyWorkspaceEditParams = attrs.field()
-    method: str = "workspace/applyEdit"
+    method: Literal["workspace/applyEdit"] = "workspace/applyEdit"
     """The method to be invoked."""
     jsonrpc: str = attrs.field(default="2.0")
 
@@ -10997,7 +11009,7 @@ class WorkspaceDidChangeWorkspaceFoldersNotification:
     folder configuration changes."""
 
     params: DidChangeWorkspaceFoldersParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["workspace/didChangeWorkspaceFolders"] = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeWorkspaceFolders"]),
         default="workspace/didChangeWorkspaceFolders",
     )
@@ -11011,7 +11023,7 @@ class WindowWorkDoneProgressCancelNotification:
     initiated on the server side."""
 
     params: WorkDoneProgressCancelParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["window/workDoneProgress/cancel"] = attrs.field(
         validator=attrs.validators.in_(["window/workDoneProgress/cancel"]),
         default="window/workDoneProgress/cancel",
     )
@@ -11027,7 +11039,7 @@ class WorkspaceDidCreateFilesNotification:
     @since 3.16.0"""
 
     params: CreateFilesParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["workspace/didCreateFiles"] = attrs.field(
         validator=attrs.validators.in_(["workspace/didCreateFiles"]),
         default="workspace/didCreateFiles",
     )
@@ -11043,7 +11055,7 @@ class WorkspaceDidRenameFilesNotification:
     @since 3.16.0"""
 
     params: RenameFilesParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["workspace/didRenameFiles"] = attrs.field(
         validator=attrs.validators.in_(["workspace/didRenameFiles"]),
         default="workspace/didRenameFiles",
     )
@@ -11059,7 +11071,7 @@ class WorkspaceDidDeleteFilesNotification:
     @since 3.16.0"""
 
     params: DeleteFilesParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["workspace/didDeleteFiles"] = attrs.field(
         validator=attrs.validators.in_(["workspace/didDeleteFiles"]),
         default="workspace/didDeleteFiles",
     )
@@ -11074,7 +11086,7 @@ class NotebookDocumentDidOpenNotification:
     @since 3.17.0"""
 
     params: DidOpenNotebookDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["notebookDocument/didOpen"] = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didOpen"]),
         default="notebookDocument/didOpen",
     )
@@ -11085,7 +11097,7 @@ class NotebookDocumentDidOpenNotification:
 @attrs.define
 class NotebookDocumentDidChangeNotification:
     params: DidChangeNotebookDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["notebookDocument/didChange"] = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didChange"]),
         default="notebookDocument/didChange",
     )
@@ -11100,7 +11112,7 @@ class NotebookDocumentDidSaveNotification:
     @since 3.17.0"""
 
     params: DidSaveNotebookDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["notebookDocument/didSave"] = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didSave"]),
         default="notebookDocument/didSave",
     )
@@ -11115,7 +11127,7 @@ class NotebookDocumentDidCloseNotification:
     @since 3.17.0"""
 
     params: DidCloseNotebookDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["notebookDocument/didClose"] = attrs.field(
         validator=attrs.validators.in_(["notebookDocument/didClose"]),
         default="notebookDocument/didClose",
     )
@@ -11130,7 +11142,7 @@ class InitializedNotification:
     is allowed to send requests from the server to the client."""
 
     params: InitializedParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["initialized"] = attrs.field(
         validator=attrs.validators.in_(["initialized"]),
         default="initialized",
     )
@@ -11144,7 +11156,7 @@ class ExitNotification:
     ask the server to exit its process."""
 
     params: Optional[None] = attrs.field(default=None)
-    method: str = attrs.field(
+    method: Literal["exit"] = attrs.field(
         validator=attrs.validators.in_(["exit"]),
         default="exit",
     )
@@ -11159,7 +11171,7 @@ class WorkspaceDidChangeConfigurationNotification:
     the changed configuration as defined by the language client."""
 
     params: DidChangeConfigurationParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["workspace/didChangeConfiguration"] = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeConfiguration"]),
         default="workspace/didChangeConfiguration",
     )
@@ -11173,7 +11185,7 @@ class WindowShowMessageNotification:
     the client to display a particular message in the user interface."""
 
     params: ShowMessageParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["window/showMessage"] = attrs.field(
         validator=attrs.validators.in_(["window/showMessage"]),
         default="window/showMessage",
     )
@@ -11187,7 +11199,7 @@ class WindowLogMessageNotification:
     the client to log a particular message."""
 
     params: LogMessageParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["window/logMessage"] = attrs.field(
         validator=attrs.validators.in_(["window/logMessage"]),
         default="window/logMessage",
     )
@@ -11201,7 +11213,7 @@ class TelemetryEventNotification:
     the client to log telemetry data."""
 
     params: LSPAny = attrs.field()
-    method: str = attrs.field(
+    method: Literal["telemetry/event"] = attrs.field(
         validator=attrs.validators.in_(["telemetry/event"]),
         default="telemetry/event",
     )
@@ -11221,7 +11233,7 @@ class TextDocumentDidOpenNotification:
     is one."""
 
     params: DidOpenTextDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["textDocument/didOpen"] = attrs.field(
         validator=attrs.validators.in_(["textDocument/didOpen"]),
         default="textDocument/didOpen",
     )
@@ -11235,7 +11247,7 @@ class TextDocumentDidChangeNotification:
     changes to a text document."""
 
     params: DidChangeTextDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["textDocument/didChange"] = attrs.field(
         validator=attrs.validators.in_(["textDocument/didChange"]),
         default="textDocument/didChange",
     )
@@ -11254,7 +11266,7 @@ class TextDocumentDidCloseNotification:
     notification requires a previous open notification to be sent."""
 
     params: DidCloseTextDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["textDocument/didClose"] = attrs.field(
         validator=attrs.validators.in_(["textDocument/didClose"]),
         default="textDocument/didClose",
     )
@@ -11268,7 +11280,7 @@ class TextDocumentDidSaveNotification:
     the document got saved in the client."""
 
     params: DidSaveTextDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["textDocument/didSave"] = attrs.field(
         validator=attrs.validators.in_(["textDocument/didSave"]),
         default="textDocument/didSave",
     )
@@ -11282,7 +11294,7 @@ class TextDocumentWillSaveNotification:
     the document is actually saved."""
 
     params: WillSaveTextDocumentParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["textDocument/willSave"] = attrs.field(
         validator=attrs.validators.in_(["textDocument/willSave"]),
         default="textDocument/willSave",
     )
@@ -11296,7 +11308,7 @@ class WorkspaceDidChangeWatchedFilesNotification:
     the client detects changes to file watched by the language client."""
 
     params: DidChangeWatchedFilesParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["workspace/didChangeWatchedFiles"] = attrs.field(
         validator=attrs.validators.in_(["workspace/didChangeWatchedFiles"]),
         default="workspace/didChangeWatchedFiles",
     )
@@ -11310,7 +11322,7 @@ class TextDocumentPublishDiagnosticsNotification:
     results of validation runs."""
 
     params: PublishDiagnosticsParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["textDocument/publishDiagnostics"] = attrs.field(
         validator=attrs.validators.in_(["textDocument/publishDiagnostics"]),
         default="textDocument/publishDiagnostics",
     )
@@ -11321,7 +11333,7 @@ class TextDocumentPublishDiagnosticsNotification:
 @attrs.define
 class SetTraceNotification:
     params: SetTraceParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["$/setTrace"] = attrs.field(
         validator=attrs.validators.in_(["$/setTrace"]),
         default="$/setTrace",
     )
@@ -11332,7 +11344,7 @@ class SetTraceNotification:
 @attrs.define
 class LogTraceNotification:
     params: LogTraceParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["$/logTrace"] = attrs.field(
         validator=attrs.validators.in_(["$/logTrace"]),
         default="$/logTrace",
     )
@@ -11343,7 +11355,7 @@ class LogTraceNotification:
 @attrs.define
 class CancelRequestNotification:
     params: CancelParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["$/cancelRequest"] = attrs.field(
         validator=attrs.validators.in_(["$/cancelRequest"]),
         default="$/cancelRequest",
     )
@@ -11354,7 +11366,7 @@ class CancelRequestNotification:
 @attrs.define
 class ProgressNotification:
     params: ProgressParams = attrs.field()
-    method: str = attrs.field(
+    method: Literal["$/progress"] = attrs.field(
         validator=attrs.validators.in_(["$/progress"]),
         default="$/progress",
     )

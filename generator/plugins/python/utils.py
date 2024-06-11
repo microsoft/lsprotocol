@@ -22,7 +22,19 @@ CUSTOM_REQUEST_PARAMS_ALIASES = []
 SPECIAL_ENUMS = ["LanguageKind", "ErrorCodes", "LSPErrorCodes"]
 
 
+def customizations(spec: model.LSPModel) -> model.LSPModel:
+    # https://github.com/microsoft/lsprotocol/issues/344
+    # Allow CompletionItemKind to support custom values
+    for enum in spec.enumerations:
+        if enum.name == "CompletionItemKind":
+            enum.supportsCustomValues = True
+            break
+
+    return spec
+
+
 def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
+    spec = customizations(spec)
     code = TypesCodeGenerator(spec).get_code()
 
     output_path = pathlib.Path(output_dir, PACKAGE_NAME)

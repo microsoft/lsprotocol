@@ -343,8 +343,10 @@ def generate_commons(
 
 
 def lsp_to_base_types(lsp_type: model.BaseType):
-    if lsp_type.name in ["string", "DocumentUri", "URI", "RegExp"]:
+    if lsp_type.name in ["string", "RegExp"]:
         return "String"
+    elif lsp_type.name in ["DocumentUri", "URI"]:
+        return "Url"
     elif lsp_type.name in ["decimal"]:
         return "Decimal"
     elif lsp_type.name in ["integer"]:

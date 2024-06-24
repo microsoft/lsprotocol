@@ -10,6 +10,7 @@
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use url::Url;
 /// This type allows extending any string enum to support custom values.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(untagged)]
@@ -2284,7 +2285,7 @@ pub struct ImplementationParams {
 pub struct Location {
     pub range: Range,
 
-    pub uri: String,
+    pub uri: Url,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -2343,7 +2344,7 @@ pub struct WorkspaceFolder {
     pub name: String,
 
     /// The associated URI for this workspace folder.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// The parameters of a `workspace/didChangeWorkspaceFolders` notification.
@@ -2645,7 +2646,7 @@ pub struct CallHierarchyItem {
     pub tags: Option<Vec<SymbolTag>>,
 
     /// The resource identifier of this item.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Call hierarchy options used during static or dynamic registration.
@@ -2867,7 +2868,7 @@ pub struct ShowDocumentParams {
     pub take_focus: Option<bool>,
 
     /// The uri to show.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// The result of a showDocument request.
@@ -2959,7 +2960,7 @@ pub struct WorkspaceEdit {
     pub change_annotations: Option<HashMap<ChangeAnnotationIdentifier, ChangeAnnotation>>,
 
     /// Holds changes to existing resources.
-    pub changes: Option<HashMap<String, Vec<TextEdit>>>,
+    pub changes: Option<HashMap<Url, Vec<TextEdit>>>,
 
     /// Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes
     /// are either an array of `TextDocumentEdit`s to express changes to n different text documents
@@ -3103,7 +3104,7 @@ pub struct TypeHierarchyItem {
     pub tags: Option<Vec<SymbolTag>>,
 
     /// The resource identifier of this item.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Type hierarchy options used during static or dynamic registration.
@@ -3313,7 +3314,7 @@ pub struct DocumentDiagnosticParams {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentDiagnosticReportPartialResult {
     pub related_documents:
-        HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
+        HashMap<Url, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
 }
 
 /// Cancellation data returned from a diagnostic request.
@@ -3613,7 +3614,7 @@ pub struct InitializeParams {
     /// @deprecated in favour of workspaceFolders.
     #[deprecated]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_uri: Option<String>,
+    pub root_uri: Option<Url>,
 
     /// The initial trace setting. If omitted trace is disabled ('off').
     pub trace: Option<TraceValue>,
@@ -3844,7 +3845,7 @@ pub struct PublishDiagnosticsParams {
     pub diagnostics: Vec<Diagnostic>,
 
     /// The URI for which diagnostic information is reported.
-    pub uri: String,
+    pub uri: Url,
 
     /// Optional the version number of the document the diagnostics are published for.
     ///
@@ -4718,7 +4719,7 @@ pub struct DocumentLink {
     pub range: Range,
 
     /// The uri this link points to. If missing a resolve request is sent later.
-    pub target: Option<String>,
+    pub target: Option<Url>,
 
     /// The tooltip text when you hover over this link.
     ///
@@ -5127,7 +5128,7 @@ pub struct LocationLink {
     pub target_selection_range: Range,
 
     /// The target resource identifier of this link.
-    pub target_uri: String,
+    pub target_uri: Url,
 }
 
 /// A range in a text document expressed as (zero-based) start and end positions.
@@ -5188,7 +5189,7 @@ pub struct WorkspaceFoldersChangeEvent {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ConfigurationItem {
     /// The scope to get the configuration section for.
-    pub scope_uri: Option<String>,
+    pub scope_uri: Option<Url>,
 
     /// The configuration section asked for.
     pub section: Option<String>,
@@ -5199,7 +5200,7 @@ pub struct ConfigurationItem {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentIdentifier {
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Represents a color in RGBA space.
@@ -5381,7 +5382,7 @@ pub struct CreateFile {
     pub options: Option<CreateFileOptions>,
 
     /// The resource to create.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Rename file operation
@@ -5397,10 +5398,10 @@ pub struct RenameFile {
     pub kind: String,
 
     /// The new location.
-    pub new_uri: String,
+    pub new_uri: Url,
 
     /// The old (existing) location.
-    pub old_uri: String,
+    pub old_uri: Url,
 
     /// Rename options.
     pub options: Option<RenameFileOptions>,
@@ -5422,7 +5423,7 @@ pub struct DeleteFile {
     pub options: Option<DeleteFileOptions>,
 
     /// The file to delete.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Additional information that describes document changes.
@@ -5664,9 +5665,8 @@ pub struct RelatedFullDocumentDiagnosticReport {
     /// a.cpp and result in errors in a header file b.hpp.
     ///
     /// @since 3.17.0
-    pub related_documents: Option<
-        HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
-    >,
+    pub related_documents:
+        Option<HashMap<Url, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>>,
 
     /// An optional result id. If provided it will
     /// be sent on the next diagnostic request for the
@@ -5693,9 +5693,8 @@ pub struct RelatedUnchangedDocumentDiagnosticReport {
     /// a.cpp and result in errors in a header file b.hpp.
     ///
     /// @since 3.17.0
-    pub related_documents: Option<
-        HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
-    >,
+    pub related_documents:
+        Option<HashMap<Url, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>>,
 
     /// A result id which will be sent on the next
     /// diagnostic request for the same document.
@@ -5768,7 +5767,7 @@ pub struct DiagnosticOptions {
 pub struct PreviousResultId {
     /// The URI for which the client knowns a
     /// result id.
-    pub uri: String,
+    pub uri: Url,
 
     /// The value of the previous result id.
     pub value: String,
@@ -5793,7 +5792,7 @@ pub struct NotebookDocument {
     pub notebook_type: String,
 
     /// The notebook document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document (it will increase after each
     /// change, including undo/redo).
@@ -5812,7 +5811,7 @@ pub struct TextDocumentItem {
     pub text: String,
 
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document (it will increase after each
     /// change, including undo/redo).
@@ -5851,7 +5850,7 @@ pub struct NotebookDocumentSyncOptions {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct VersionedNotebookDocumentIdentifier {
     /// The notebook document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this notebook document.
     pub version: i32,
@@ -5879,7 +5878,7 @@ pub struct NotebookDocumentChangeEvent {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentIdentifier {
     /// The notebook document's uri.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Provides information about the context in which an inline completion was requested.
@@ -6003,7 +6002,7 @@ pub struct _InitializeParams {
     /// @deprecated in favour of workspaceFolders.
     #[deprecated]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_uri: Option<String>,
+    pub root_uri: Option<Url>,
 
     /// The initial trace setting. If omitted trace is disabled ('off').
     pub trace: Option<TraceValue>,
@@ -6204,7 +6203,7 @@ pub struct ServerInfo {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct VersionedTextDocumentIdentifier {
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document.
     pub version: i32,
@@ -6227,7 +6226,7 @@ pub struct FileEvent {
     pub type_: FileChangeType,
 
     /// The file's uri.
-    pub uri: String,
+    pub uri: Url,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -6638,7 +6637,7 @@ pub struct CodeActionOptions {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LocationUriOnly {
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Server capabilities for a [WorkspaceSymbolRequest].
@@ -6808,7 +6807,7 @@ pub struct SemanticTokensFullDelta {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OptionalVersionedTextDocumentIdentifier {
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document. If a versioned text document identifier
     /// is sent from the server to the client and the file is not open in the editor
@@ -6944,7 +6943,7 @@ pub struct WorkspaceFullDocumentDiagnosticReport {
     pub result_id: Option<String>,
 
     /// The URI for which diagnostic information is reported.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number for which the diagnostics are reported.
     /// If the document is not marked as open `null` can be provided.
@@ -6969,7 +6968,7 @@ pub struct WorkspaceUnchangedDocumentDiagnosticReport {
     pub result_id: String,
 
     /// The URI for which diagnostic information is reported.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number for which the diagnostics are reported.
     /// If the document is not marked as open `null` can be provided.
@@ -6989,7 +6988,7 @@ pub struct WorkspaceUnchangedDocumentDiagnosticReport {
 pub struct NotebookCell {
     /// The URI of the cell's text document
     /// content.
-    pub document: String,
+    pub document: Url,
 
     /// Additional execution summary information
     /// if supported by the client.
@@ -7177,7 +7176,7 @@ pub struct TextDocumentContentChangeWholeDocument {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeDescription {
     /// An URI to open with more information about the diagnostic error.
-    pub href: String,
+    pub href: Url,
 }
 
 /// Represents a related message and source code location for a diagnostic. This should be
@@ -7690,7 +7689,7 @@ pub struct FileOperationOptions {
 pub struct RelativePattern {
     /// A workspace folder or a base URI to which this pattern will be matched
     /// against relatively.
-    pub base_uri: OR2<WorkspaceFolder, String>,
+    pub base_uri: OR2<WorkspaceFolder, Url>,
 
     /// The actual glob pattern;
     pub pattern: Pattern,

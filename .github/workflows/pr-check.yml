@@ -141,7 +141,7 @@ jobs:
         run: python -m generator --plugin testdata
 
       - name: Rust Run Tests
-        run: cargo test --manifest-path tests/rust/Cargo.toml
+        run: cargo test --manifest-path pacakges/rust/lsprotocol/Cargo.toml
         shell: bash
         env:
           LSP_TEST_DATA_PATH: ${{ github.workspace }}/packages/testdata

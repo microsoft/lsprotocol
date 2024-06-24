@@ -4,7 +4,7 @@
 #[cfg(test)]
 mod tests {
     use glob::glob;
-    use lsprotocol::*;
+    use super::*;
     use serde::Deserialize;
     use std::fs;
 
@@ -355,7 +355,7 @@ mod tests {
         println!("Running generated data tests");
         let cwd = std::env::current_dir()
             .unwrap()
-            .join("../../packages/testdata");
+            .join("../../../../generator/plugins/testdata");
         let env_value = std::env::var("LSP_TEST_DATA_PATH")
             .unwrap_or_else(|_| cwd.to_str().unwrap().to_string());
         println!("TEST_DATA_ROOT: {}", env_value);
@@ -363,12 +363,4 @@ mod tests {
             validate_file(&json_file);
         }
     }
-}
-
-fn main() {
-    // Use data from test error report here to debug
-    // let json_data = "";
-
-    // Update the type here to debug
-    // serde_json::from_str::<lsprotocol::TextDocumentCompletionRequest>(json_data).unwrap();
 }

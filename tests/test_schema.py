@@ -6,7 +6,7 @@ import pathlib
 
 import jsonschema
 
-lsp_json_path = pathlib.Path(__file__).parent.parent.parent / "generator" / "lsp.json"
+lsp_json_path = pathlib.Path(__file__).parent.parent / "generator" / "lsp.json"
 lsp_schema_path = lsp_json_path.parent / "lsp.schema.json"
 
 

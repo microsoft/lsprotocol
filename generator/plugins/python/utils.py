@@ -33,7 +33,7 @@ def customizations(spec: model.LSPModel) -> model.LSPModel:
     return spec
 
 
-def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
+def generate_from_spec(spec: model.LSPModel, output_dir: str, _test_dir: str) -> None:
     spec = customizations(spec)
     code = TypesCodeGenerator(spec).get_code()
 

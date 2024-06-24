@@ -27,6 +27,7 @@ def tests(session: nox.Session):
 
     session.log("Running tests: generator and generated Python code.")
     session.run("pytest", "./tests")
+    session.run("pytest", "./packages/python/tests")
 
 
 @nox.session()

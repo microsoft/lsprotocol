@@ -33,7 +33,7 @@ def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> 
         (output_path / file_name).write_text(code[file_name], encoding="utf-8")
 
     # update tests if exists
-    test_path = pathlib.Path(test_dir) / "src" / "main.rs"
+    test_path = pathlib.Path(output_dir) / "src" / "test.rs"
     if test_path.exists():
         generate_test_code(spec, test_path)
 

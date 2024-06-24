@@ -35,7 +35,7 @@ Issues = "https://github.com/microsoft/lsprotocol/issues"
 Source = "https://github.com/microsoft/lsprotocol"
 
 [tool.flit.sdist]
-include = ["lsprotocol/", "README.md", "LICENSE"]
+include = ["lsprotocol/", "tests/", "README.md", "LICENSE"]
 exclude = ["lsprotocol/__pycache__/", "requirements.in", "requirements.txt"]
 
 [tool.mypy]

@@ -10,8 +10,8 @@ LSP is used by editors to communicate with various tools to enables services lik
 
 ```yaml
 dependencies:
-  kemal:
-    github: nobodywasishere/lsprotocol.cr
+  lsprotocol:
+    github: nobodywasishere/lsprotocol-crystal
 ```
 
 ## Usage

@@ -107,6 +107,7 @@ def build_lsp(session: nox.Session):
     generate_python(session)
     generate_dotnet(session)
     generate_rust(session)
+    generate_crystal(session)
 
 
 @nox.session()
@@ -247,3 +248,13 @@ def generate_rust(session: nox.Session):
     with session.chdir("./tests/rust"):
         session.run("cargo", "fmt", external=True)
         session.run("cargo", "build", external=True)
+
+@nox.session()
+def generate_crystal(session: nox.Session):
+    """Update the crystal code."""
+    _install_requirements(session)
+
+    session.run("python", "-m", "generator", "--plugin", "crystal")
+
+    with session.chdir("./packages/crystal/lsprotocol"):
+        session.run("crystal", "tool", "format", external=True)

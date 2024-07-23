@@ -12,3 +12,5 @@ packages/dotnet/lsprotocol/bin/
 packages/dotnet/lsprotocol/obj/
 tests/rust/**/target/
 tests/rust/**/Cargo.lock
+/build
+/*.egg-info

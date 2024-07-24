@@ -392,7 +392,7 @@ module LSProtocol
 
   alias Notification = CancelRequestNotification | ExitNotification | InitializedNotification | LogTraceNotification | NotebookDocumentDidChangeNotification | NotebookDocumentDidCloseNotification | NotebookDocumentDidOpenNotification | NotebookDocumentDidSaveNotification | ProgressNotification | SetTraceNotification | TelemetryEventNotification | TextDocumentDidChangeNotification | TextDocumentDidCloseNotification | TextDocumentDidOpenNotification | TextDocumentDidSaveNotification | TextDocumentPublishDiagnosticsNotification | TextDocumentWillSaveNotification | WindowLogMessageNotification | WindowShowMessageNotification | WindowWorkDoneProgressCancelNotification | WorkspaceDidChangeConfigurationNotification | WorkspaceDidChangeWatchedFilesNotification | WorkspaceDidChangeWorkspaceFoldersNotification | WorkspaceDidCreateFilesNotification | WorkspaceDidDeleteFilesNotification | WorkspaceDidRenameFilesNotification
 
-  alias Message = Request | Response | Notification | ResponseErrorMessage
+  alias Message = Request | Response | Notification | ResponseErrorMessage | ResponseMessage
 
   REQUESTS = [
     CallHierarchyIncomingCallsRequest,
@@ -563,7 +563,7 @@ module LSProtocol
     WorkspaceDidRenameFilesNotification,
   ]
 
-  MESSAGE_TYPES = REQUESTS + RESPONSES + NOTIFICATIONS + [ResponseErrorMessage]
+  MESSAGE_TYPES = REQUESTS + RESPONSES + NOTIFICATIONS + [ResponseErrorMessage, ResponseMessage]
 
   MESSAGE_DIRECTION = {
     # Request methods

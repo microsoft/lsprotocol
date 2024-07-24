@@ -1,6 +1,7 @@
 # Language Server Protocol Types implementation for Crystal
 
 `lsprotocol` is a Crystal implementation of object types used in the Language Server Protocol (LSP). This repository contains the code generator and the generated types for LSP.
+Generated using [lsprotocol](https://github.com/microsoft/lsprotocol).
 
 ## Overview
 

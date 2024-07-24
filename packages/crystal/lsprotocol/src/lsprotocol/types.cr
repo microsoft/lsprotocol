@@ -8404,8 +8404,11 @@ module LSProtocol
 
   class ResponseError
     include JSON::Serializable
-    # A number indicating the error type that occurred.  property code : Int32
-    # A string providing a short description of the error.  property message : String
+
+    # A number indicating the error type that occurred.
+    property code : Int32
+    # A string providing a short description of the error.
+    property message : String
     # A primitive or structured value that contains additional information about the error. Can be omitted.
     property data : LSPAny?
 
@@ -8416,13 +8419,26 @@ module LSProtocol
   class ResponseErrorMessage
     include JSON::Serializable
 
+    property jsonrpc : String = "2.0"
     # The request id where the error occurred.
     property id : Int32 | String
     # The error object in case a request fails.
     property error : ResponseError?
-    property jsonrpc : String = "2.0"
 
     def initialize(@id : Int32 | String, @error : ResponseError? = nil)
+    end
+  end
+
+  class ResponseMessage
+    include JSON::Serializable
+
+    property jsonrpc : String = "2.0"
+    # The request id where the error occurred.
+    property id : Int32 | String
+    # The error object in case a request fails.
+    property result : JSON::Any?
+
+    def initialize(@id : Int32 | String, @result : JSON::Any? = nil)
     end
   end
 
@@ -10480,6 +10496,7 @@ module LSProtocol
   class WorkspaceDidChangeWorkspaceFoldersNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidChangeWorkspaceFoldersParams
     # The method to be invoked.
     property method : String = "workspace/didChangeWorkspaceFolders"
@@ -10494,6 +10511,7 @@ module LSProtocol
   class WindowWorkDoneProgressCancelNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : WorkDoneProgressCancelParams
     # The method to be invoked.
     property method : String = "window/workDoneProgress/cancel"
@@ -10510,6 +10528,7 @@ module LSProtocol
   class WorkspaceDidCreateFilesNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : CreateFilesParams
     # The method to be invoked.
     property method : String = "workspace/didCreateFiles"
@@ -10526,6 +10545,7 @@ module LSProtocol
   class WorkspaceDidRenameFilesNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : RenameFilesParams
     # The method to be invoked.
     property method : String = "workspace/didRenameFiles"
@@ -10542,6 +10562,7 @@ module LSProtocol
   class WorkspaceDidDeleteFilesNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DeleteFilesParams
     # The method to be invoked.
     property method : String = "workspace/didDeleteFiles"
@@ -10557,6 +10578,7 @@ module LSProtocol
   class NotebookDocumentDidOpenNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidOpenNotebookDocumentParams
     # The method to be invoked.
     property method : String = "notebookDocument/didOpen"
@@ -10570,6 +10592,7 @@ module LSProtocol
   class NotebookDocumentDidChangeNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidChangeNotebookDocumentParams
     # The method to be invoked.
     property method : String = "notebookDocument/didChange"
@@ -10585,6 +10608,7 @@ module LSProtocol
   class NotebookDocumentDidSaveNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidSaveNotebookDocumentParams
     # The method to be invoked.
     property method : String = "notebookDocument/didSave"
@@ -10600,6 +10624,7 @@ module LSProtocol
   class NotebookDocumentDidCloseNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidCloseNotebookDocumentParams
     # The method to be invoked.
     property method : String = "notebookDocument/didClose"
@@ -10615,6 +10640,7 @@ module LSProtocol
   class InitializedNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : InitializedParams
     # The method to be invoked.
     property method : String = "initialized"
@@ -10629,6 +10655,7 @@ module LSProtocol
   class ExitNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : Nil
     # The method to be invoked.
     property method : String = "exit"
@@ -10644,6 +10671,7 @@ module LSProtocol
   class WorkspaceDidChangeConfigurationNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidChangeConfigurationParams
     # The method to be invoked.
     property method : String = "workspace/didChangeConfiguration"
@@ -10658,6 +10686,7 @@ module LSProtocol
   class WindowShowMessageNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : ShowMessageParams
     # The method to be invoked.
     property method : String = "window/showMessage"
@@ -10672,6 +10701,7 @@ module LSProtocol
   class WindowLogMessageNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : LogMessageParams
     # The method to be invoked.
     property method : String = "window/logMessage"
@@ -10686,6 +10716,7 @@ module LSProtocol
   class TelemetryEventNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : LSPAny
     # The method to be invoked.
     property method : String = "telemetry/event"
@@ -10706,6 +10737,7 @@ module LSProtocol
   class TextDocumentDidOpenNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidOpenTextDocumentParams
     # The method to be invoked.
     property method : String = "textDocument/didOpen"
@@ -10720,6 +10752,7 @@ module LSProtocol
   class TextDocumentDidChangeNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidChangeTextDocumentParams
     # The method to be invoked.
     property method : String = "textDocument/didChange"
@@ -10739,6 +10772,7 @@ module LSProtocol
   class TextDocumentDidCloseNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidCloseTextDocumentParams
     # The method to be invoked.
     property method : String = "textDocument/didClose"
@@ -10753,6 +10787,7 @@ module LSProtocol
   class TextDocumentDidSaveNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidSaveTextDocumentParams
     # The method to be invoked.
     property method : String = "textDocument/didSave"
@@ -10767,6 +10802,7 @@ module LSProtocol
   class TextDocumentWillSaveNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : WillSaveTextDocumentParams
     # The method to be invoked.
     property method : String = "textDocument/willSave"
@@ -10781,6 +10817,7 @@ module LSProtocol
   class WorkspaceDidChangeWatchedFilesNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : DidChangeWatchedFilesParams
     # The method to be invoked.
     property method : String = "workspace/didChangeWatchedFiles"
@@ -10795,6 +10832,7 @@ module LSProtocol
   class TextDocumentPublishDiagnosticsNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : PublishDiagnosticsParams
     # The method to be invoked.
     property method : String = "textDocument/publishDiagnostics"
@@ -10808,6 +10846,7 @@ module LSProtocol
   class SetTraceNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : SetTraceParams
     # The method to be invoked.
     property method : String = "$/setTrace"
@@ -10821,6 +10860,7 @@ module LSProtocol
   class LogTraceNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : LogTraceParams
     # The method to be invoked.
     property method : String = "$/logTrace"
@@ -10834,6 +10874,7 @@ module LSProtocol
   class CancelRequestNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : CancelParams
     # The method to be invoked.
     property method : String = "$/cancelRequest"
@@ -10847,6 +10888,7 @@ module LSProtocol
   class ProgressNotification
     include JSON::Serializable
 
+    property id : Int32 | String | Nil
     property params : ProgressParams
     # The method to be invoked.
     property method : String = "$/progress"
@@ -10857,8 +10899,8 @@ module LSProtocol
   end
 
   Enum.string MessageDirection do
-    Both
     ServerToClient
+    Both
     ClientToServer
   end
 end

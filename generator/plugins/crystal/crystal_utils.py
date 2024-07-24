@@ -173,11 +173,11 @@ class TypesCodeGenerator:
             f"alias Request = {' | '.join(sorted(request_classes))}\n",
             f"alias Response = {' | '.join(sorted(response_classes))}\n",
             f"alias Notification = {' | '.join(sorted(notification_classes))}\n",
-            "alias Message = Request | Response | Notification | ResponseErrorMessage\n",
+            "alias Message = Request | Response | Notification | ResponseErrorMessage | ResponseMessage\n",
             f"REQUESTS = [\n{',\n '.join(sorted(request_classes))}\n]\n",
             f"RESPONSES = [\n{',\n '.join(sorted(response_classes))}\n]\n",
             f"NOTIFICATIONS = [\n{',\n '.join(sorted(notification_classes))}\n]\n",
-            f"MESSAGE_TYPES = REQUESTS + RESPONSES + NOTIFICATIONS + [ResponseErrorMessage]",
+            f"MESSAGE_TYPES = REQUESTS + RESPONSES + NOTIFICATIONS + [ResponseErrorMessage, ResponseMessage]",
             "",
         ]
 
@@ -445,10 +445,10 @@ class TypesCodeGenerator:
             [
                 "class ResponseError",
                 "  include JSON::Serializable",
-                ""
-                "  # A number indicating the error type that occurred."
+                "",
+                "  # A number indicating the error type that occurred.",
                 "  property code : Int32",
-                "  # A string providing a short description of the error."
+                "  # A string providing a short description of the error.",
                 "  property message : String",
                 "  # A primitive or structured value that contains additional information about the error. Can be omitted.",
                 "  property data : LSPAny?",
@@ -465,13 +465,31 @@ class TypesCodeGenerator:
                 "class ResponseErrorMessage",
                 "  include JSON::Serializable",
                 "",
+                "  property jsonrpc : String = \"2.0\"",
                 "  # The request id where the error occurred.",
                 "  property id : Int32 | String",
                 "  # The error object in case a request fails.",
                 "  property error : ResponseError?",
-                "  property jsonrpc : String = \"2.0\"",
                 "",
                 "  def initialize(@id : Int32 | String, @error : ResponseError? = nil)",
+                "  end",
+                "end"
+            ]
+        )
+
+        self._add_type_code(
+            "ResponseMessage",
+            [
+                "class ResponseMessage",
+                "  include JSON::Serializable",
+                "",
+                "  property jsonrpc : String = \"2.0\"",
+                "  # The request id where the error occurred.",
+                "  property id : Int32 | String",
+                "  # The error object in case a request fails.",
+                "  property result : JSON::Any?",
+                "",
+                "  def initialize(@id : Int32 | String, @result : JSON::Any? = nil)",
                 "  end",
                 "end"
             ]
@@ -586,6 +604,7 @@ class TypesCodeGenerator:
                 f"class {class_name}Notification",
                 "  include JSON::Serializable",
                 "",
+                "  property id : Int32 | String | Nil",
                 f"  property params : {params_type}",
                 "  # The method to be invoked.",
                 f"  property method : String = \"{notification.method}\"",

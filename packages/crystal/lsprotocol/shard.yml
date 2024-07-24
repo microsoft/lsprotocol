@@ -1,4 +1,7 @@
 name: lsprotocol
 version: 0.1.0
 
+authors:
+  - Margret Riegert <margret@eowyn.net>
+
 license: MIT

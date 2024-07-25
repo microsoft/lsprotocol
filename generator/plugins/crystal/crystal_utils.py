@@ -361,7 +361,11 @@ class TypesCodeGenerator:
                 "# Proposed"
             ]
 
-        code_lines += [f"class {struct_def.name.strip("_")}"]
+        struct_name = struct_def.name
+        if struct_name.startswith("_"):
+            struct_name = struct_name[1:] + "Private"
+
+        code_lines += [f"class {struct_name}"]
         code_lines += [f"  include JSON::Serializable"]
         code_lines += [""]
 
@@ -422,7 +426,10 @@ class TypesCodeGenerator:
 
         code_lines = []
 
-        code_lines += [f"class {class_name.strip("_")}"]
+        if class_name.startswith("_"):
+            class_name = class_name[1:] + "Private"
+
+        code_lines += [f"class {class_name}"]
         code_lines += [f"  include JSON::Serializable"]
 
         properties = []

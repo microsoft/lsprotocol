@@ -93,10 +93,10 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
     )
     end
   end
@@ -142,14 +142,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -194,14 +194,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -297,14 +297,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -424,14 +424,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -476,14 +476,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -544,14 +544,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -659,14 +659,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -836,7 +836,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property full : Bool | SemanticTokensFullDelta?
     property id : String?
     property legend : SemanticTokensLegend
@@ -846,7 +846,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @legend : SemanticTokensLegend,
       @full : Bool | SemanticTokensFullDelta? = nil,
       @id : String? = nil,
@@ -1028,14 +1028,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -1194,13 +1194,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -1282,14 +1282,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -1391,14 +1391,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -1491,7 +1491,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "resolveProvider")]
@@ -1501,7 +1501,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @resolve_provider : Bool? = nil,
       @work_done_progress : Bool? = nil,
@@ -1607,7 +1607,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
     property identifier : String?
 
@@ -1621,7 +1621,7 @@ module LSProtocol
     property workspace_diagnostics : Bool
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @inter_file_dependencies : Bool,
       @workspace_diagnostics : Bool,
       @id : String? = nil,
@@ -1911,14 +1911,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property id : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @id : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -1961,13 +1961,13 @@ module LSProtocol
     property locale : String?
 
     @[JSON::Field(key: "processId")]
-    property process_id : Int32 | Nil
+    property process_id : Int32?
 
     @[JSON::Field(key: "rootPath")]
-    property root_path : String | Nil?
+    property root_path : String?
 
     @[JSON::Field(key: "rootUri")]
-    property root_uri : String | Nil
+    property root_uri : String?
     property trace : TraceValue?
 
     @[JSON::Field(key: "workDoneToken")]
@@ -1975,12 +1975,12 @@ module LSProtocol
 
     def initialize(
       @capabilities : ClientCapabilities,
-      @process_id : Int32 | Nil,
-      @root_uri : String | Nil,
+      @process_id : Int32,
+      @root_uri : String,
       @client_info : ClientInfo? = nil,
       @initialization_options : LSPAny? = nil,
       @locale : String? = nil,
-      @root_path : String | Nil? = nil,
+      @root_path : String? = nil,
       @trace : TraceValue? = nil,
       @work_done_token : ProgressToken? = nil,
     )
@@ -1991,10 +1991,10 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "workspaceFolders")]
-    property workspace_folders : Array(WorkspaceFolder) | Nil?
+    property workspace_folders : Array(WorkspaceFolder)?
 
     def initialize(
-      @workspace_folders : Array(WorkspaceFolder) | Nil? = nil,
+      @workspace_folders : Array(WorkspaceFolder)? = nil,
     )
     end
   end
@@ -2012,32 +2012,32 @@ module LSProtocol
     property locale : String?
 
     @[JSON::Field(key: "processId")]
-    property process_id : Int32 | Nil
+    property process_id : Int32?
 
     @[JSON::Field(key: "rootPath")]
-    property root_path : String | Nil?
+    property root_path : String?
 
     @[JSON::Field(key: "rootUri")]
-    property root_uri : String | Nil
+    property root_uri : String?
     property trace : TraceValue?
 
     @[JSON::Field(key: "workDoneToken")]
     property work_done_token : ProgressToken?
 
     @[JSON::Field(key: "workspaceFolders")]
-    property workspace_folders : Array(WorkspaceFolder) | Nil?
+    property workspace_folders : Array(WorkspaceFolder)?
 
     def initialize(
       @capabilities : ClientCapabilities,
-      @process_id : Int32 | Nil,
-      @root_uri : String | Nil,
+      @process_id : Int32,
+      @root_uri : String,
       @client_info : ClientInfo? = nil,
       @initialization_options : LSPAny? = nil,
       @locale : String? = nil,
-      @root_path : String | Nil? = nil,
+      @root_path : String? = nil,
       @trace : TraceValue? = nil,
       @work_done_token : ProgressToken? = nil,
-      @workspace_folders : Array(WorkspaceFolder) | Nil? = nil,
+      @workspace_folders : Array(WorkspaceFolder)? = nil,
     )
     end
   end
@@ -2190,13 +2190,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "syncKind")]
     property sync_kind : TextDocumentSyncKind
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @sync_kind : TextDocumentSyncKind,
     )
     end
@@ -2249,13 +2249,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "includeText")]
     property include_text : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @include_text : Bool? = nil,
     )
     end
@@ -2486,7 +2486,7 @@ module LSProtocol
     property completion_item : ServerCompletionItemOptions?
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "resolveProvider")]
     property resolve_provider : Bool?
@@ -2498,7 +2498,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @all_commit_characters : Array(String)? = nil,
       @completion_item : ServerCompletionItemOptions? = nil,
       @resolve_provider : Bool? = nil,
@@ -2560,13 +2560,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -2601,7 +2601,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "activeParameter")]
-    property active_parameter : UInt32 | Nil?
+    property active_parameter : UInt32?
 
     @[JSON::Field(key: "activeSignature")]
     property active_signature : UInt32?
@@ -2609,7 +2609,7 @@ module LSProtocol
 
     def initialize(
       @signatures : Array(SignatureInformation),
-      @active_parameter : UInt32 | Nil? = nil,
+      @active_parameter : UInt32? = nil,
       @active_signature : UInt32? = nil,
     )
     end
@@ -2641,7 +2641,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "retriggerCharacters")]
     property retrigger_characters : Array(String)?
@@ -2653,7 +2653,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @retrigger_characters : Array(String)? = nil,
       @trigger_characters : Array(String)? = nil,
       @work_done_progress : Bool? = nil,
@@ -2702,13 +2702,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -2758,13 +2758,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -2827,13 +2827,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -2955,14 +2955,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property label : String?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @label : String? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -3078,7 +3078,7 @@ module LSProtocol
     property code_action_kinds : Array(CodeActionKind | String)?
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
     property documentation : Array(CodeActionKindDocumentation)?
 
     @[JSON::Field(key: "resolveProvider")]
@@ -3088,7 +3088,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @code_action_kinds : Array(CodeActionKind | String)? = nil,
       @documentation : Array(CodeActionKindDocumentation)? = nil,
       @resolve_provider : Bool? = nil,
@@ -3241,7 +3241,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "resolveProvider")]
     property resolve_provider : Bool?
@@ -3250,7 +3250,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @resolve_provider : Bool? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -3319,7 +3319,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "resolveProvider")]
     property resolve_provider : Bool?
@@ -3328,7 +3328,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @resolve_provider : Bool? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -3373,13 +3373,13 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "workDoneProgress")]
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -3429,7 +3429,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "rangesSupport")]
     property ranges_support : Bool?
@@ -3438,7 +3438,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @ranges_support : Bool? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -3514,7 +3514,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "firstTriggerCharacter")]
     property first_trigger_character : String
@@ -3523,7 +3523,7 @@ module LSProtocol
     property more_trigger_character : Array(String)?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @first_trigger_character : String,
       @more_trigger_character : Array(String)? = nil,
     )
@@ -3575,7 +3575,7 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     @[JSON::Field(key: "prepareProvider")]
     property prepare_provider : Bool?
@@ -3584,7 +3584,7 @@ module LSProtocol
     property work_done_progress : Bool?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @prepare_provider : Bool? = nil,
       @work_done_progress : Bool? = nil,
     )
@@ -4937,14 +4937,14 @@ module LSProtocol
     include JSON::Serializable
 
     @[JSON::Field(key: "activeParameter")]
-    property active_parameter : UInt32 | Nil?
+    property active_parameter : UInt32?
     property documentation : String | MarkupContent?
     property label : String
     property parameters : Array(ParameterInformation)?
 
     def initialize(
       @label : String,
-      @active_parameter : UInt32 | Nil? = nil,
+      @active_parameter : UInt32? = nil,
       @documentation : String | MarkupContent? = nil,
       @parameters : Array(ParameterInformation)? = nil,
     )
@@ -5128,11 +5128,11 @@ module LSProtocol
     include JSON::Serializable
 
     property uri : String
-    property version : Int32 | Nil
+    property version : Int32?
 
     def initialize(
       @uri : String,
-      @version : Int32 | Nil,
+      @version : Int32,
     )
     end
   end
@@ -5259,13 +5259,13 @@ module LSProtocol
     @[JSON::Field(key: "resultId")]
     property result_id : String?
     property uri : String
-    property version : Int32 | Nil
+    property version : Int32?
 
     def initialize(
       @items : Array(Diagnostic),
       @kind : String,
       @uri : String,
-      @version : Int32 | Nil,
+      @version : Int32,
       @result_id : String? = nil,
     )
     end
@@ -5283,13 +5283,13 @@ module LSProtocol
     @[JSON::Field(key: "resultId")]
     property result_id : String
     property uri : String
-    property version : Int32 | Nil
+    property version : Int32?
 
     def initialize(
       @kind : String,
       @result_id : String,
       @uri : String,
-      @version : Int32 | Nil,
+      @version : Int32,
     )
     end
   end
@@ -8393,10 +8393,10 @@ module LSProtocol
     property work_done_progress : Bool?
 
     @[JSON::Field(key: "documentSelector")]
-    property document_selector : DocumentSelector | Nil
+    property document_selector : DocumentSelector?
 
     def initialize(
-      @document_selector : DocumentSelector | Nil,
+      @document_selector : DocumentSelector,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -10900,8 +10900,8 @@ module LSProtocol
   end
 
   Enum.string MessageDirection do
-    ServerToClient
     Both
     ClientToServer
+    ServerToClient
   end
 end

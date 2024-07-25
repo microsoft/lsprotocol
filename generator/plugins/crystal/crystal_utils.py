@@ -632,7 +632,7 @@ class TypesCodeGenerator:
 
         code_lines += [f"Enum.string MessageDirection do",]
 
-        for item in directions:
+        for item in sorted(directions):
             code_lines += [f"  {pyUtils._capitalized_item_name(item)}"]
 
         code_lines += ["end"]
@@ -654,20 +654,39 @@ class TypesCodeGenerator:
                     f"\n  @[JSON::Field(key: \"{p.name}\")]"
                 ]
 
+            type_name = self._generate_type_name(p.type)
+            question = p.optional and not type_name == "Nil"
+
+            if type_name.endswith("| Nil"):
+                type_name = type_name.rstrip("| Nil")
+                question = True
+
             code_lines += [
-                f"  property {pyUtils._to_snake_case(p.name)} : {self._generate_type_name(p.type)}{"?" if p.optional else ""}"
+                f"  property {pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""}"
             ]
 
         code_lines += ["  def initialize("]
 
         for p in [p for p in properties if not p.optional]:
+            type_name = self._generate_type_name(p.type)
+            question = not type_name == "Nil"
+
+            if type_name.endswith("| Nil"):
+                type_name = type_name.rstrip("| Nil")
+                question = True
+
             code_lines += [
-                f"    @{pyUtils._to_snake_case(p.name)} : {self._generate_type_name(p.type)},"
+                f"    @{pyUtils._to_snake_case(p.name)} : {type_name},"
             ]
 
         for p in [p for p in properties if p.optional]:
+            type_name = self._generate_type_name(p.type)
+
+            if type_name.endswith("| Nil"):
+                type_name = type_name.rstrip("| Nil")
+
             code_lines += [
-                f"    @{pyUtils._to_snake_case(p.name)} : {self._generate_type_name(p.type)}? = nil,"
+                f"    @{pyUtils._to_snake_case(p.name)} : {type_name}? = nil,"
             ]
 
         code_lines += [

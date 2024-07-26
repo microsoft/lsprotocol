@@ -258,3 +258,4 @@ def generate_crystal(session: nox.Session):
 
     with session.chdir("./packages/crystal/lsprotocol"):
         session.run("crystal", "tool", "format", external=True)
+        session.run("crystal", "spec", "-p", "-s", "--fail-fast", external=True)

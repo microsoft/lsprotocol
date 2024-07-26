@@ -3,6 +3,7 @@
 
 import collections
 import pathlib
+import re
 from typing import Dict, List, Optional, OrderedDict, Sequence, Tuple, Union
 
 import generator.plugins.python.utils as pyUtils
@@ -11,6 +12,11 @@ import generator.model as model
 
 PACKAGE_NAME = "LSProtocol"
 PACKAGE_DIR_NAME = PACKAGE_NAME.lower()
+
+BASIC_LINK_RE = re.compile(r"{@link +(\w+) ([\w ]+)}")
+BASIC_LINK_RE2 = re.compile(r"{@link +(\w+)\.(\w+) ([\w \.`]+)}")
+BASIC_LINK_RE3 = re.compile(r"{@link +(\w+)}")
+BASIC_LINK_RE4 = re.compile(r"{@link +(\w+)\.(\w+)}")
 
 # These are special type aliases to preserve backward compatibility.
 CUSTOM_REQUEST_PARAMS_ALIASES = []
@@ -95,7 +101,7 @@ class TypesCodeGenerator:
         notification_classes = []
 
         methods = set(
-            [x.method for x in (lsp_model.requests + lsp_model.notifications)] # type: ignore
+            [x.method for x in (list(lsp_model.requests) + list(lsp_model.notifications))]
         )
         code_lines = (
             [""]
@@ -170,6 +176,14 @@ class TypesCodeGenerator:
         code_lines += ["}\n"]
 
         code_lines += [
+            "STRING_TO_TYPES = {\n  ",
+            "\n  ".join([
+                f"\"{t}\" => {t}," for t in request_classes + response_classes + notification_classes
+            ]),
+            "}"
+        ]
+
+        code_lines += [
             f"alias Request = {' | '.join(sorted(request_classes))}\n",
             f"alias Response = {' | '.join(sorted(response_classes))}\n",
             f"alias Notification = {' | '.join(sorted(notification_classes))}\n",
@@ -219,77 +233,34 @@ class TypesCodeGenerator:
         for enum_def in lsp_model.enumerations:
             self._add_enum(enum_def)
 
-    def _add_enum(self, enum_def: model.Enum):
+    def _add_enum(self, enum_def: model.Enum) -> None:
         code_lines = []
-        indent = " " * 2
 
         if enum_def.documentation:
             code_lines += [
-                f"# {enum_def.documentation.replace("\n", "\n# ")}"
+                f"# {self._process_docs(enum_def.documentation)}"
             ]
 
-        if enum_def.since:
-            code_lines += [
-                f"# Since: #{enum_def.since}"
-            ]
-
-        if enum_def.proposed:
-            code_lines += [
-                "# Proposed"
-            ]
-
-        if enum_def.type.name == "string":
-            mappings = []
-            for item in enum_def.values:
-                if item.name.lower() == item.value.lower(): # type: ignore
-                    continue
-                mappings.append(item)
-
-            if len(mappings) > 0:
-                code_lines += [f"Enum.string {enum_def.name}, mappings: {{",]
-
-                for item in mappings:
-                    code_lines += [
-                        f" {pyUtils._capitalized_item_name(item.name)}: \"{item.value}\","
-                    ]
-
-                code_lines += ["} do"]
-            else:
-                code_lines += [f"Enum.string {enum_def.name} do",]
-
-        else:
-            code_lines += [
-                f"Enum.number {enum_def.name} do"
-            ]
+        code_lines += [f"enum {enum_def.name}"]
+        mappings = []
 
         for item in enum_def.values:
-            item_lines = []
+            if enum_def.type.name == "string" and item.name.lower() != str(item.value).lower():
+                mappings.append(item)
 
             name = pyUtils._capitalized_item_name(item.name)
-            value = item.value
-            doc = None
 
             if item.documentation:
-                doc = f"# {item.documentation.replace("\n", "\n  # ") if item.documentation else ""}"
-                item_lines += [doc]
-
-
-            if item.since:
                 code_lines += [
-                    f"  # Since: #{item.since}"
-                ]
-
-            if item.proposed:
-                code_lines += [
-                    "  # Proposed"
+                    f"\n# {self._process_docs(item.documentation)}"
                 ]
 
             if enum_def.type.name == "string":
-                item_lines += [f"  {name}"]
+                code_lines += [f"  {name}"]
             else:
-                item_lines += [f"  {name} = {value}"]
+                code_lines += [f"  {name} = {item.value}"]
 
-            code_lines += item_lines
+        code_lines += self._string_enum_methods(mappings)
 
         code_lines += ["end"]
 
@@ -309,17 +280,7 @@ class TypesCodeGenerator:
 
         if type_alias.documentation:
             code_lines += [
-                f"# {type_alias.documentation.replace("\n", "\n# ")}"
-            ]
-
-        if type_alias.since:
-            code_lines += [
-                f"# Since: #{type_alias.since}"
-            ]
-
-        if type_alias.proposed:
-            code_lines += [
-                "# Proposed"
+                f"# {self._process_docs(type_alias.documentation)}"
             ]
 
         code_lines += [
@@ -348,17 +309,7 @@ class TypesCodeGenerator:
 
         if struct_def.documentation:
             code_lines += [
-                f"# {struct_def.documentation.replace("\n", "\n# ")}"
-            ]
-
-        if struct_def.since:
-            code_lines += [
-                f"# Since: #{struct_def.since}"
-            ]
-
-        if struct_def.proposed:
-            code_lines += [
-                "# Proposed"
+                f"# {self._process_docs(struct_def.documentation)}"
             ]
 
         struct_name = struct_def.name
@@ -413,7 +364,7 @@ class TypesCodeGenerator:
                     and_types.append((class_name, notification.registrationOptions))
 
         for name, type_def in and_types:
-            self._add_and_type(type_def, name, lsp_model.structures) # type: ignore
+            self._add_and_type(type_def, name, list(lsp_model.structures))
 
     def _add_and_type(
         self,
@@ -454,11 +405,11 @@ class TypesCodeGenerator:
                 "  include JSON::Serializable",
                 "",
                 "  # A number indicating the error type that occurred.",
-                "  property code : Int32",
+                "  getter code : Int32",
                 "  # A string providing a short description of the error.",
-                "  property message : String",
+                "  getter message : String",
                 "  # A primitive or structured value that contains additional information about the error. Can be omitted.",
-                "  property data : LSPAny?",
+                "  getter data : LSPAny?",
                 "",
                 "  def initialize(@code : Int32, @message : String, @data : LSPAny? = nil)",
                 "  end",
@@ -472,11 +423,13 @@ class TypesCodeGenerator:
                 "class ResponseErrorMessage",
                 "  include JSON::Serializable",
                 "",
-                "  property jsonrpc : String = \"2.0\"",
+                "  getter jsonrpc : String = \"2.0\"",
+                "",
                 "  # The request id where the error occurred.",
-                "  property id : Int32 | String",
+                "  getter id : Int32 | String",
+                "",
                 "  # The error object in case a request fails.",
-                "  property error : ResponseError?",
+                "  getter error : ResponseError?",
                 "",
                 "  def initialize(@id : Int32 | String, @error : ResponseError? = nil)",
                 "  end",
@@ -490,12 +443,14 @@ class TypesCodeGenerator:
                 "class ResponseMessage",
                 "  include JSON::Serializable",
                 "",
-                "  property jsonrpc : String = \"2.0\"",
+                "  getter jsonrpc : String = \"2.0\"",
+                "",
                 "  # The request id where the error occurred.",
-                "  property id : Int32 | String",
+                "  getter id : Int32 | String",
                 "  # The error object in case a request fails.",
+                "",
                 "  @[JSON::Field(emit_null: true)]",
-                "  property result : JSON::Any?",
+                "  getter result : JSON::Any?",
                 "",
                 "  def initialize(@id : Int32 | String, @result : JSON::Any? = nil)",
                 "  end",
@@ -555,16 +510,19 @@ class TypesCodeGenerator:
         self._add_type_code(
             f"{class_name}Request",
             [
-                f"# {request.documentation.replace("\n", "\n# ") if request.documentation else ""}",
+                f"# {self._process_docs(request.documentation) if request.documentation else ""}",
                 f"class {class_name}Request",
                 "  include JSON::Serializable",
                 "",
                 "  # The request id.",
-                "  property id : Int32 | String",
-                f"  property params : {params_type}",
+                "  getter id : Int32 | String",
+                "",
+                f"  getter params : {params_type}",
+                "",
                 "  # The method to be invoked.",
-                f"  property method : String = \"{request.method}\"",
-                "  property jsonrpc : String = \"2.0\"",
+                f"  getter method : String = \"{request.method}\"",
+                "",
+                "  getter jsonrpc : String = \"2.0\"",
                 "",
                 f"  def initialize(@id : Int32 | String, @params : {params_type})",
                 "  end",
@@ -579,9 +537,9 @@ class TypesCodeGenerator:
                 "  include JSON::Serializable",
                 "",
                 "  # The request id.",
-                "  property id : Int32 | String?",
-                f"  property result : {result_type}",
-                "  property jsonrpc : String = \"2.0\"",
+                "  getter id : Int32 | String?",
+                f"  getter result : {result_type}",
+                "  getter jsonrpc : String = \"2.0\"",
                 "",
                 f"  def initialize(@id : Int32 | String, @result : {result_type})",
                 "  end",
@@ -608,15 +566,15 @@ class TypesCodeGenerator:
         self._add_type_code(
             f"{class_name}Notification",
             [
-                f"# {notification.documentation.replace("\n", "\n# ") if notification.documentation else ""}",
+                f"# {self._process_docs(notification.documentation) if notification.documentation else ""}",
                 f"class {class_name}Notification",
                 "  include JSON::Serializable",
                 "",
-                "  property id : Int32 | String | Nil",
-                f"  property params : {params_type}",
+                "  getter id : Int32 | String?",
+                f"  getter params : {params_type}",
                 "  # The method to be invoked.",
-                f"  property method : String = \"{notification.method}\"",
-                "  property jsonrpc : String = \"2.0\"",
+                f"  getter method : String = \"{notification.method}\"",
+                "  getter jsonrpc : String = \"2.0\"",
                 "",
                 f"  def initialize(@params : {params_type})",
                 "  end",
@@ -627,13 +585,20 @@ class TypesCodeGenerator:
     def _add_lsp_method_type(self, lsp_model: model.LSPModel) -> None:
         code_lines = []
         directions: set[str] = set([
-            x.messageDirection for x in (lsp_model.requests + lsp_model.notifications) # type: ignore
+            x.messageDirection
+            for x in (list(lsp_model.requests) + list(lsp_model.notifications))
         ])
 
-        code_lines += [f"Enum.string MessageDirection do",]
+        mappings: list[model.EnumItem] = [
+            model.EnumItem(x, x) for x in directions
+        ]
+
+        code_lines += [f"enum MessageDirection",]
 
         for item in sorted(directions):
             code_lines += [f"  {pyUtils._capitalized_item_name(item)}"]
+
+        code_lines += self._string_enum_methods(mappings)
 
         code_lines += ["end"]
 
@@ -644,14 +609,21 @@ class TypesCodeGenerator:
             type_name = type_name[1:-1]
         return type_name in self._types
 
-    def _generate_properties(self, properties):
+    def _generate_properties(self, properties: List[model.Property]) -> List[str]:
         properties = list({x.name: x for x in properties}.values())
 
         code_lines = []
         for p in properties:
+            code_lines += ["\n"]
+
+            if p.documentation:
+                code_lines += [
+                    f"# {self._process_docs(p.documentation)}"
+                ]
+
             if p.name != pyUtils._to_snake_case(p.name):
                 code_lines += [
-                    f"\n  @[JSON::Field(key: \"{p.name}\")]"
+                    f"  @[JSON::Field(key: \"{p.name}\")]"
                 ]
 
             type_name = self._generate_type_name(p.type)
@@ -660,9 +632,13 @@ class TypesCodeGenerator:
             if type_name.endswith("| Nil"):
                 type_name = type_name.rstrip("| Nil")
                 question = True
+            elif type_name.startswith("Nil |"):
+                type_name = type_name.lstrip("Nil |")
+                question = True
+
 
             code_lines += [
-                f"  property {pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""}"
+                f"  getter {pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""}"
             ]
 
         code_lines += ["  def initialize("]
@@ -674,9 +650,12 @@ class TypesCodeGenerator:
             if type_name.endswith("| Nil"):
                 type_name = type_name.rstrip("| Nil")
                 question = True
+            elif type_name.startswith("Nil |"):
+                type_name = type_name.lstrip("Nil |")
+                question = True
 
             code_lines += [
-                f"    @{pyUtils._to_snake_case(p.name)} : {type_name},"
+                f"    @{pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""},"
             ]
 
         for p in [p for p in properties if p.optional]:
@@ -684,6 +663,10 @@ class TypesCodeGenerator:
 
             if type_name.endswith("| Nil"):
                 type_name = type_name.rstrip("| Nil")
+                question = True
+            elif type_name.startswith("Nil |"):
+                type_name = type_name.lstrip("Nil |")
+                question = True
 
             code_lines += [
                 f"    @{pyUtils._to_snake_case(p.name)} : {type_name}? = nil,"
@@ -703,7 +686,7 @@ class TypesCodeGenerator:
     ) -> List[model.Structure]:
         definitions: List[model.Structure] = []
 
-        includes = (struct_def.extends or []) + (struct_def.mixins or []) # type: ignore
+        includes = list(struct_def.extends or []) + list(struct_def.mixins or [])
         for inc in includes:
             for struct in lsp_model.structures:
                 if struct.name == inc.name and inc.kind == "reference": # type: ignore
@@ -720,8 +703,6 @@ class TypesCodeGenerator:
         class_name: Optional[str] = None,
         prefix: str = ""
     ) -> str:
-        # if type_def.kind ==
-
         if type_def.kind == "stringLiteral":
             return "String"
 
@@ -742,7 +723,7 @@ class TypesCodeGenerator:
             types = []
             for item in type_def.items: # type: ignore
                 types.append(self._generate_type_name(item, class_name, prefix))
-            return f"{' | '.join(types)}"
+            return f"{' | '.join(sorted(set(types)))}"
 
         if type_def.kind == "and":
             if not class_name:
@@ -758,8 +739,10 @@ class TypesCodeGenerator:
                 return "Int32"
             elif type_def.name == "uinteger": # type: ignore
                 return "UInt32"
-            elif type_def.name in ["string", "DocumentUri", "URI"]: # type: ignore
+            elif type_def.name in ["string"]: # type: ignore
                 return "String"
+            elif type_def.name in ["DocumentUri", "URI"]: # type: ignore
+                return "URI"
             elif type_def.name == "null": # type: ignore
                 return "Nil"
             else:
@@ -772,7 +755,7 @@ class TypesCodeGenerator:
             types = []
             for item in type_def.items: # type: ignore
                 types.append(self._generate_type_name(item, class_name, prefix))
-            return f"Tuple({' | '.join(types)})"
+            return f"Array({' | '.join(sorted(set(types)))})"
 
         raise ValueError(str(type_def))
 
@@ -792,3 +775,72 @@ class TypesCodeGenerator:
             if enum_def.type.name == "uinteger":
                 return "UInt32"
         return None
+
+    def _process_docs(self, docs: str) -> str:
+        docs = BASIC_LINK_RE.sub(r"`\1`", docs)
+        docs = BASIC_LINK_RE2.sub(r"`\1#\2`", docs)
+        docs = BASIC_LINK_RE3.sub(r"`\1`", docs)
+        docs = BASIC_LINK_RE4.sub(r"`\1#\2`", docs)
+        return docs.replace("\n", "\n# ").strip()
+
+    def _string_enum_methods(self, mappings: List[model.EnumItem]) -> List[str]:
+        code_lines = [
+            """\
+
+                def self.new(pull : JSON::PullParser) : self
+                    self.from_json(pull)
+                end
+
+                def self.from_json(pull : JSON::PullParser) : self
+                    case pull.kind
+                    when .int?
+                    from_value(pull.read_int)
+                    when .string?
+                    parse(pull.read_string)
+                    else
+                        {% if @type.annotation(Flags) %}
+                            pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
+                        {% else %}
+                            pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
+                        {% end %}
+                    end
+                end
+
+                def to_json(builder : JSON::Builder)
+                    builder.string self.to_s
+                end
+
+                def to_s(io : IO) : Nil
+                    io << self.to_s
+                end
+            """
+        ]
+
+        if len(mappings) > 0:
+            code_lines += [
+                "\n  def self.parse(string : String) : self",
+                "    case string",
+                "\n".join([
+                    f"  when \"{item.value}\"\n  return self.new({pyUtils._capitalized_item_name(item.name)})"
+                    for item in mappings
+                ]),
+                "    end",
+                "",
+                "    super",
+                "  end"
+            ]
+
+            code_lines += [
+                "\n  def to_s : String",
+                "    case self",
+                "\n".join([
+                    f"  when {pyUtils._capitalized_item_name(item.name)}\n  return \"{item.value}\""
+                    for item in mappings
+                ]),
+                "    end",
+                "",
+                "    super",
+                "  end"
+            ]
+
+        return code_lines

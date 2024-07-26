@@ -10042,26 +10042,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10100,26 +10085,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10196,26 +10166,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10231,26 +10186,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10358,26 +10298,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10406,26 +10331,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10449,26 +10359,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10489,26 +10384,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10545,26 +10425,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10581,26 +10446,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10625,26 +10475,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10674,26 +10509,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -10713,26 +10533,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11128,26 +10933,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11241,26 +11031,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11279,26 +11054,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11321,26 +11081,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11364,26 +11109,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11405,26 +11135,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11446,26 +11161,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11487,26 +11187,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11564,26 +11249,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -11681,26 +11351,11 @@ module LSProtocol
     end
 
     def self.from_json(pull : JSON::PullParser) : self
-      case pull.kind
-      when .int?
-        from_value(pull.read_int)
-      when .string?
-        parse(pull.read_string)
-      else
-        {% if @type.annotation(Flags) %}
-          pull.raise "Expecting int, string or array in JSON for #{self.class}, not #{pull.kind}"
-        {% else %}
-          pull.raise "Expecting int or string in JSON for #{self.class}, not #{pull.kind}"
-        {% end %}
-      end
+      self.from_value?(pull.read_int) || pull.raise "Unknown enum #{self} value: #{pull.int_value}"
     end
 
-    def to_json(builder : JSON::Builder)
-      builder.string self.to_s
-    end
-
-    def to_s(io : IO) : Nil
-      io << self.to_s
+    def to_json(json : JSON::Builder)
+      json.number(value)
     end
   end
 
@@ -14635,12 +14290,12 @@ module LSProtocol
 
     def self.parse(string : String) : self
       case string
+      when "both"
+        return self.new(Both)
       when "clientToServer"
         return self.new(ClientToServer)
       when "serverToClient"
         return self.new(ServerToClient)
-      when "both"
-        return self.new(Both)
       end
 
       super
@@ -14648,12 +14303,12 @@ module LSProtocol
 
     def to_s : String
       case self
+      when Both
+        return "both"
       when ClientToServer
         return "clientToServer"
       when ServerToClient
         return "serverToClient"
-      when Both
-        return "both"
       end
 
       super

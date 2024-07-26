@@ -16,6 +16,8 @@ BASIC_LINK_RE = re.compile(r"{@link +(\w+) ([\w ]+)}")
 BASIC_LINK_RE2 = re.compile(r"{@link +(\w+)\.(\w+) ([\w \.`]+)}")
 BASIC_LINK_RE3 = re.compile(r"{@link +(\w+)}")
 BASIC_LINK_RE4 = re.compile(r"{@link +(\w+)\.(\w+)}")
+BASIC_LINK_RE5 = re.compile(r"{@link +(\w+) (\w+)\[\]}")
+BASIC_LINK_RE6 = re.compile(r"{@linkcode +(\w+)\.(\w+)}")
 
 # These are special type aliases to preserve backward compatibility.
 CUSTOM_REQUEST_PARAMS_ALIASES = []
@@ -775,6 +777,8 @@ class TypesCodeGenerator:
         docs = BASIC_LINK_RE2.sub(r"`\1#\2`", docs)
         docs = BASIC_LINK_RE3.sub(r"`\1`", docs)
         docs = BASIC_LINK_RE4.sub(r"`\1#\2`", docs)
+        docs = BASIC_LINK_RE5.sub(r"`Array(\2)`", docs)
+        docs = BASIC_LINK_RE6.sub(r"`\1#\2`", docs)
         return docs.replace("\n", "\n# ").strip()
 
     def _string_enum_methods(self, mappings: List[model.EnumItem]) -> List[str]:

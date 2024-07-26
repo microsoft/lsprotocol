@@ -7302,7 +7302,7 @@ module LSProtocol
 
     # Command that is ued to display the documentation to the user.
     #
-    # The title of this documentation code action is taken from {@linkcode Command.title}
+    # The title of this documentation code action is taken from `Command#title`
     getter command : Command
 
     # The kind of the code action being documented.
@@ -11741,7 +11741,7 @@ module LSProtocol
 
   # A request to list all color symbols found in a given text document. The request's
   # parameter is of type `DocumentColorParams` the
-  # response is of type {@link ColorInformation ColorInformation[]} or a Thenable
+  # response is of type `Array(ColorInformation)` or a Thenable
   # that resolves to such.
   class TextDocumentDocumentColorRequest
     include JSON::Serializable
@@ -11776,7 +11776,7 @@ module LSProtocol
 
   # A request to list all presentation for a color. The request's
   # parameter is of type `ColorPresentationParams` the
-  # response is of type {@link ColorInformation ColorInformation[]} or a Thenable
+  # response is of type `Array(ColorInformation)` or a Thenable
   # that resolves to such.
   class TextDocumentColorPresentationRequest
     include JSON::Serializable
@@ -11912,7 +11912,7 @@ module LSProtocol
 
   # A request to provide selection ranges in a document. The request's
   # parameter is of type `SelectionRangeParams`, the
-  # response is of type {@link SelectionRange SelectionRange[]} or a Thenable
+  # response is of type `Array(SelectionRange)` or a Thenable
   # that resolves to such.
   class TextDocumentSelectionRangeRequest
     include JSON::Serializable
@@ -12385,7 +12385,7 @@ module LSProtocol
 
   # A request to get the moniker of a symbol at a given text document position.
   # The request parameter is of type `TextDocumentPositionParams`.
-  # The response is of type {@link Moniker Moniker[]} or `null`.
+  # The response is of type `Array(Moniker)` or `null`.
   class TextDocumentMonikerRequest
     include JSON::Serializable
 
@@ -12522,7 +12522,7 @@ module LSProtocol
 
   # A request to provide inline values in a document. The request's parameter is of
   # type `InlineValueParams`, the response is of type
-  # {@link InlineValue InlineValue[]} or a Thenable that resolves to such.
+  # `Array(InlineValue)` or a Thenable that resolves to such.
   #
   # @since 3.17.0
   class TextDocumentInlineValueRequest
@@ -12588,7 +12588,7 @@ module LSProtocol
 
   # A request to provide inlay hints in a document. The request's parameter is of
   # type `InlayHintsParams`, the response is of type
-  # {@link InlayHint InlayHint[]} or a Thenable that resolves to such.
+  # `Array(InlayHint)` or a Thenable that resolves to such.
   #
   # @since 3.17.0
   class TextDocumentInlayHintRequest
@@ -12784,7 +12784,7 @@ module LSProtocol
 
   # A request to provide inline completions in a document. The request's parameter is of
   # type `InlineCompletionParams`, the response is of type
-  # {@link InlineCompletion InlineCompletion[]} or a Thenable that resolves to such.
+  # `Array(InlineCompletion)` or a Thenable that resolves to such.
   #
   # @since 3.18.0
   # @proposed
@@ -13020,7 +13020,7 @@ module LSProtocol
 
   # Request to request completion at a given text document position. The request's
   # parameter is of type `TextDocumentPosition` the response
-  # is of type {@link CompletionItem CompletionItem[]} or `CompletionList`
+  # is of type `Array(CompletionItem)` or `CompletionList`
   # or a Thenable that resolves to such.
   #
   # The request can delay the computation of the `CompletionItem#detail`
@@ -13194,7 +13194,7 @@ module LSProtocol
   # A request to resolve project-wide references for the symbol denoted
   # by the given text document position. The request's parameter is of
   # type `ReferenceParams` the response is of type
-  # {@link Location Location[]} or a Thenable that resolves to such.
+  # `Array(Location)` or a Thenable that resolves to such.
   class TextDocumentReferencesRequest
     include JSON::Serializable
 
@@ -13263,7 +13263,7 @@ module LSProtocol
 
   # A request to list all symbols found in a given text document. The request's
   # parameter is of type `TextDocumentIdentifier` the
-  # response is of type {@link SymbolInformation SymbolInformation[]} or a Thenable
+  # response is of type `Array(SymbolInformation)` or a Thenable
   # that resolves to such.
   class TextDocumentDocumentSymbolRequest
     include JSON::Serializable
@@ -13362,7 +13362,7 @@ module LSProtocol
 
   # A request to list project-wide symbols matching the query string given
   # by the `WorkspaceSymbolParams`. The response is
-  # of type {@link SymbolInformation SymbolInformation[]} or a Thenable that
+  # of type `Array(SymbolInformation)` or a Thenable that
   # resolves to such.
   #
   # @since 3.17.0 - support for WorkspaceSymbol in the returned data. Clients

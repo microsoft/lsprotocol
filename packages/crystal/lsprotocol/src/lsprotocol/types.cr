@@ -973,7 +973,7 @@ module LSProtocol
 
     # Server supports providing semantic tokens for a specific range
     # of a document.
-    getter range : Bool | JSON::Any??
+    getter range : Bool | JSON::Any?
 
     @[JSON::Field(key: "workDoneProgress")]
     getter work_done_progress : Bool?
@@ -981,7 +981,7 @@ module LSProtocol
     def initialize(
       @legend : SemanticTokensLegend?,
       @full : Bool | SemanticTokensFullDelta? = nil,
-      @range : Bool | JSON::Any?? = nil,
+      @range : Bool | JSON::Any? = nil,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -1008,7 +1008,7 @@ module LSProtocol
 
     # Server supports providing semantic tokens for a specific range
     # of a document.
-    getter range : Bool | JSON::Any??
+    getter range : Bool | JSON::Any?
 
     @[JSON::Field(key: "workDoneProgress")]
     getter work_done_progress : Bool?
@@ -1018,7 +1018,7 @@ module LSProtocol
       @legend : SemanticTokensLegend?,
       @full : Bool | SemanticTokensFullDelta? = nil,
       @id : String? = nil,
-      @range : Bool | JSON::Any?? = nil,
+      @range : Bool | JSON::Any? = nil,
       @work_done_progress : Bool? = nil,
     )
     end
@@ -9736,11 +9736,11 @@ module LSProtocol
 
     # The client will send the `textDocument/semanticTokens/range` request if
     # the server provides a corresponding handler.
-    getter range : Bool | JSON::Any??
+    getter range : Bool | JSON::Any?
 
     def initialize(
       @full : Bool | ClientSemanticTokensRequestFullDelta? = nil,
-      @range : Bool | JSON::Any?? = nil,
+      @range : Bool | JSON::Any? = nil,
     )
     end
   end
@@ -9944,6 +9944,7 @@ module LSProtocol
   # corresponding client capabilities.
   #
   # @since 3.16.0
+  @[Flags]
   enum SemanticTokenModifiers
     Declaration
     Definition
@@ -10133,7 +10134,7 @@ module LSProtocol
   end
 
   # A symbol kind.
-  enum SymbolKind
+  enum SymbolKind : UInt32
     File          =  1
     Module        =  2
     Namespace     =  3
@@ -10177,7 +10178,7 @@ module LSProtocol
   # Symbol tags are extra annotations that tweak the rendering of a symbol.
   #
   # @since 3.16
-  enum SymbolTag
+  enum SymbolTag : UInt32
     # Render a symbol as obsolete, usually using a strike-out.
     Deprecated = 1
 
@@ -10286,7 +10287,7 @@ module LSProtocol
   # Inlay hint kinds.
   #
   # @since 3.17.0
-  enum InlayHintKind
+  enum InlayHintKind : UInt32
     # An inlay hint that for a type annotation.
     Type = 1
 
@@ -10307,7 +10308,7 @@ module LSProtocol
   end
 
   # The message type
-  enum MessageType
+  enum MessageType : UInt32
     # An error message.
     Error = 1
 
@@ -10341,7 +10342,7 @@ module LSProtocol
 
   # Defines how the host (editor) should sync
   # document changes to the language server.
-  enum TextDocumentSyncKind
+  enum TextDocumentSyncKind : UInt32
     # Documents should not be synced at all.
     None_ = 0
 
@@ -10368,7 +10369,7 @@ module LSProtocol
   end
 
   # Represents reasons why a text document is saved.
-  enum TextDocumentSaveReason
+  enum TextDocumentSaveReason : UInt32
     # Manually triggered, e.g. by the user pressing save, by starting debugging,
     # or by an API call.
     Manual = 1
@@ -10393,7 +10394,7 @@ module LSProtocol
   end
 
   # The kind of a completion entry.
-  enum CompletionItemKind
+  enum CompletionItemKind : UInt32
     Text          =  1
     Method        =  2
     Function      =  3
@@ -10437,7 +10438,7 @@ module LSProtocol
   # item.
   #
   # @since 3.15.0
-  enum CompletionItemTag
+  enum CompletionItemTag : UInt32
     # Render a completion as obsolete, usually using a strike-out.
     Deprecated = 1
 
@@ -10456,7 +10457,7 @@ module LSProtocol
 
   # Defines whether the insert text in a completion item should be interpreted as
   # plain text or a snippet.
-  enum InsertTextFormat
+  enum InsertTextFormat : UInt32
     # The primary text to be inserted is treated as a plain string.
     PlainText = 1
 
@@ -10487,7 +10488,7 @@ module LSProtocol
   # item insertion.
   #
   # @since 3.16.0
-  enum InsertTextMode
+  enum InsertTextMode : UInt32
     # The insertion or replace strings is taken as it is. If the
     # value is multi line the lines below the cursor will be
     # inserted using the indentation defined in the string value.
@@ -10518,7 +10519,7 @@ module LSProtocol
   end
 
   # A document highlight kind.
-  enum DocumentHighlightKind
+  enum DocumentHighlightKind : UInt32
     # A textual occurrence.
     Text = 1
 
@@ -10921,7 +10922,7 @@ module LSProtocol
   #
   # @since 3.18.0
   # @proposed
-  enum InlineCompletionTriggerKind
+  enum InlineCompletionTriggerKind : UInt32
     # Completion was triggered explicitly by a user gesture.
     Invoked = 1
 
@@ -11016,7 +11017,7 @@ module LSProtocol
   end
 
   # The file event type
-  enum FileChangeType
+  enum FileChangeType : UInt32
     # The file got created.
     Created = 1
 
@@ -11039,7 +11040,7 @@ module LSProtocol
     end
   end
 
-  enum WatchKind
+  enum WatchKind : UInt32
     # Interested in create events.
     Create = 1
 
@@ -11063,7 +11064,7 @@ module LSProtocol
   end
 
   # The diagnostic's severity.
-  enum DiagnosticSeverity
+  enum DiagnosticSeverity : UInt32
     # Reports an error.
     Error = 1
 
@@ -11092,7 +11093,7 @@ module LSProtocol
   # The diagnostic tags.
   #
   # @since 3.15.0
-  enum DiagnosticTag
+  enum DiagnosticTag : UInt32
     # Unused or unnecessary code.
     #
     # Clients are allowed to render diagnostics with this tag faded out instead of having
@@ -11118,7 +11119,7 @@ module LSProtocol
   end
 
   # How a completion was triggered
-  enum CompletionTriggerKind
+  enum CompletionTriggerKind : UInt32
     # Completion was triggered by typing an identifier (24x7 code
     # complete), manual invocation (e.g Ctrl+Space) or via API.
     Invoked = 1
@@ -11146,7 +11147,7 @@ module LSProtocol
   # How a signature help was triggered.
   #
   # @since 3.15.0
-  enum SignatureHelpTriggerKind
+  enum SignatureHelpTriggerKind : UInt32
     # Signature help was invoked manually by the user or by a command.
     Invoked = 1
 
@@ -11172,7 +11173,7 @@ module LSProtocol
   # The reason why code actions were requested.
   #
   # @since 3.17.0
-  enum CodeActionTriggerKind
+  enum CodeActionTriggerKind : UInt32
     # Code actions were explicitly requested by the user or by an extension.
     Invoked = 1
 
@@ -11237,7 +11238,7 @@ module LSProtocol
   # A notebook cell kind.
   #
   # @since 3.17.0
-  enum NotebookCellKind
+  enum NotebookCellKind : UInt32
     # A markup-cell is formatted source that is used for display.
     Markup = 1
 
@@ -11341,7 +11342,7 @@ module LSProtocol
     end
   end
 
-  enum PrepareSupportDefaultBehavior
+  enum PrepareSupportDefaultBehavior : UInt32
     # The client's default behavior is to select the identifier
     # according the to language's syntax rule.
     Identifier = 1

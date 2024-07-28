@@ -22,6 +22,8 @@ BASIC_LINK_RE6 = re.compile(r"{@linkcode +(\w+)\.(\w+)}")
 # These are special type aliases to preserve backward compatibility.
 CUSTOM_REQUEST_PARAMS_ALIASES = []
 
+FLAG_ENUMS = ["SemanticTokenModifiers"]
+
 
 def generate_from_spec(spec: model.LSPModel, output_dir: str, test_dir: str) -> None:
     """Generate the code for the given spec."""
@@ -245,7 +247,14 @@ class TypesCodeGenerator:
         if enum_def.documentation:
             code_lines += [f"# {self._process_docs(enum_def.documentation)}"]
 
-        code_lines += [f"enum {enum_def.name}"]
+        if enum_def.name in FLAG_ENUMS:
+            code_lines += ["@[Flags]"]
+
+        if enum_def.type.name == "uinteger":
+            code_lines += [f"enum {enum_def.name} : UInt32"]
+        else:
+            code_lines += [f"enum {enum_def.name}"]
+
         mappings = []
 
         for item in enum_def.values:
@@ -638,6 +647,9 @@ class TypesCodeGenerator:
                 type_name = type_name.lstrip("Nil |")
                 question = True
 
+            if type_name.endswith("?"):
+                question = False
+
             code_lines += [
                 f"  getter {pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""}"
             ]
@@ -655,22 +667,27 @@ class TypesCodeGenerator:
                 type_name = type_name.lstrip("Nil |")
                 question = True
 
+            if type_name.endswith("?"):
+                question = False
+
             code_lines += [
                 f"    @{pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""},"
             ]
 
         for p in [p for p in properties if p.optional]:
             type_name = self._generate_type_name(p.type)
+            question = True
 
             if type_name.endswith("| Nil"):
                 type_name = type_name.rstrip("| Nil")
-                question = True
             elif type_name.startswith("Nil |"):
                 type_name = type_name.lstrip("Nil |")
-                question = True
+
+            if type_name.endswith("?"):
+                question = False
 
             code_lines += [
-                f"    @{pyUtils._to_snake_case(p.name)} : {type_name}? = nil,"
+                f"    @{pyUtils._to_snake_case(p.name)} : {type_name}{"?" if question else ""} = nil,"
             ]
 
         code_lines += ["  )", "  end"]

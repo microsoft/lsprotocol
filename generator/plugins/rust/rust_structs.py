@@ -461,6 +461,8 @@ def generate_response(
                 )
             ]
     name = fix_lsp_method_name(request_def.method)
+    if name.endswith("Request"):
+        name = name[:-7]
     response_def = model.Structure(
         name=f"{name}Response",
         documentation=f"Response to the [{name}Request].",

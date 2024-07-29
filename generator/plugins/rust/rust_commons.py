@@ -606,6 +606,8 @@ def struct_wrapper(
     type_def: Union[model.Structure, model.Notification, model.Request],
     inner: List[str],
 ) -> List[str]:
+    if type_def.typeName:
+        name = type_def.typeName
     if hasattr(type_def, "name"):
         name = type_def.name
     else:

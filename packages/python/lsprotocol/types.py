@@ -5172,7 +5172,9 @@ class TextDocumentEdit:
     
     @since 3.18.0 - support for SnippetTextEdit. This is guarded using a
     client capability."""
-    # Since: 3.18.0 - support for SnippetTextEdit. This is guarded using aclient capability.
+    # Since:
+    # 3.16.0 - support for AnnotatedTextEdit. This is guarded using a client capability.
+    # 3.18.0 - support for SnippetTextEdit. This is guarded using a client capability.
 
 
 @attrs.define
@@ -5996,7 +5998,9 @@ class ServerInfo:
     @since 3.15.0
     @since 3.18.0 ServerInfo type name added."""
 
-    # Since: 3.18.0 ServerInfo type name added.
+    # Since:
+    # 3.15.0
+    # 3.18.0 ServerInfo type name added.
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of the server as defined by the server."""
@@ -6731,7 +6735,9 @@ class ClientInfo:
     @since 3.15.0
     @since 3.18.0 ClientInfo type name added."""
 
-    # Since: 3.18.0 ClientInfo type name added.
+    # Since:
+    # 3.15.0
+    # 3.18.0 ClientInfo type name added.
 
     name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The name of the client as defined by the client."""
@@ -9436,7 +9442,7 @@ class ResponseErrorMessage:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-ImplementationRequestResult = Union[Definition, Sequence[DefinitionLink], None]
+ImplementationResult = Union[Definition, Sequence[DefinitionLink], None]
 
 
 @attrs.define
@@ -9457,11 +9463,11 @@ class ImplementationRequest:
 class ImplementationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ImplementationRequestResult = attrs.field(default=None)
+    result: ImplementationResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-TypeDefinitionRequestResult = Union[Definition, Sequence[DefinitionLink], None]
+TypeDefinitionResult = Union[Definition, Sequence[DefinitionLink], None]
 
 
 @attrs.define
@@ -9482,11 +9488,11 @@ class TypeDefinitionRequest:
 class TypeDefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeDefinitionRequestResult = attrs.field(default=None)
+    result: TypeDefinitionResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WorkspaceFoldersRequestResult = Union[Sequence[WorkspaceFolder], None]
+WorkspaceFoldersResult = Union[Sequence[WorkspaceFolder], None]
 
 
 @attrs.define
@@ -9505,11 +9511,11 @@ class WorkspaceFoldersRequest:
 class WorkspaceFoldersResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WorkspaceFoldersRequestResult = attrs.field(default=None)
+    result: WorkspaceFoldersResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-ConfigurationRequestResult = Sequence[LSPAny]
+ConfigurationResult = Sequence[LSPAny]
 
 
 @attrs.define
@@ -9534,11 +9540,11 @@ class ConfigurationRequest:
 class ConfigurationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ConfigurationRequestResult = attrs.field(default=None)
+    result: ConfigurationResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentColorRequestResult = Sequence[ColorInformation]
+DocumentColorResult = Sequence[ColorInformation]
 
 
 @attrs.define
@@ -9560,11 +9566,11 @@ class DocumentColorRequest:
 class DocumentColorResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentColorRequestResult = attrs.field(default=None)
+    result: DocumentColorResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-ColorPresentationRequestResult = Sequence[ColorPresentation]
+ColorPresentationResult = Sequence[ColorPresentation]
 
 
 @attrs.define
@@ -9586,11 +9592,11 @@ class ColorPresentationRequest:
 class ColorPresentationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ColorPresentationRequestResult = attrs.field(default=None)
+    result: ColorPresentationResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-FoldingRangeRequestResult = Union[Sequence[FoldingRange], None]
+FoldingRangeResult = Union[Sequence[FoldingRange], None]
 
 
 @attrs.define
@@ -9612,7 +9618,7 @@ class FoldingRangeRequest:
 class FoldingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: FoldingRangeRequestResult = attrs.field(default=None)
+    result: FoldingRangeResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9637,7 +9643,7 @@ class FoldingRangeRefreshResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DeclarationRequestResult = Union[Declaration, Sequence[DeclarationLink], None]
+DeclarationResult = Union[Declaration, Sequence[DeclarationLink], None]
 
 
 @attrs.define
@@ -9659,11 +9665,11 @@ class DeclarationRequest:
 class DeclarationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DeclarationRequestResult = attrs.field(default=None)
+    result: DeclarationResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-SelectionRangeRequestResult = Union[Sequence[SelectionRange], None]
+SelectionRangeResult = Union[Sequence[SelectionRange], None]
 
 
 @attrs.define
@@ -9685,7 +9691,7 @@ class SelectionRangeRequest:
 class SelectionRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SelectionRangeRequestResult = attrs.field(default=None)
+    result: SelectionRangeResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9710,7 +9716,7 @@ class WorkDoneProgressCreateResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-CallHierarchyPrepareRequestResult = Union[Sequence[CallHierarchyItem], None]
+CallHierarchyPrepareResult = Union[Sequence[CallHierarchyItem], None]
 
 
 @attrs.define
@@ -9734,13 +9740,11 @@ class CallHierarchyPrepareRequest:
 class CallHierarchyPrepareResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CallHierarchyPrepareRequestResult = attrs.field(default=None)
+    result: CallHierarchyPrepareResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-CallHierarchyIncomingCallsRequestResult = Union[
-    Sequence[CallHierarchyIncomingCall], None
-]
+CallHierarchyIncomingCallsResult = Union[Sequence[CallHierarchyIncomingCall], None]
 
 
 @attrs.define
@@ -9761,13 +9765,11 @@ class CallHierarchyIncomingCallsRequest:
 class CallHierarchyIncomingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CallHierarchyIncomingCallsRequestResult = attrs.field(default=None)
+    result: CallHierarchyIncomingCallsResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-CallHierarchyOutgoingCallsRequestResult = Union[
-    Sequence[CallHierarchyOutgoingCall], None
-]
+CallHierarchyOutgoingCallsResult = Union[Sequence[CallHierarchyOutgoingCall], None]
 
 
 @attrs.define
@@ -9788,11 +9790,11 @@ class CallHierarchyOutgoingCallsRequest:
 class CallHierarchyOutgoingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CallHierarchyOutgoingCallsRequestResult = attrs.field(default=None)
+    result: CallHierarchyOutgoingCallsResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-SemanticTokensRequestResult = Union[SemanticTokens, None]
+SemanticTokensResult = Union[SemanticTokens, None]
 
 
 @attrs.define
@@ -9813,11 +9815,11 @@ class SemanticTokensRequest:
 class SemanticTokensResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SemanticTokensRequestResult = attrs.field(default=None)
+    result: SemanticTokensResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-SemanticTokensDeltaRequestResult = Union[SemanticTokens, SemanticTokensDelta, None]
+SemanticTokensDeltaResult = Union[SemanticTokens, SemanticTokensDelta, None]
 
 
 @attrs.define
@@ -9838,11 +9840,11 @@ class SemanticTokensDeltaRequest:
 class SemanticTokensDeltaResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SemanticTokensDeltaRequestResult = attrs.field(default=None)
+    result: SemanticTokensDeltaResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-SemanticTokensRangeRequestResult = Union[SemanticTokens, None]
+SemanticTokensRangeResult = Union[SemanticTokens, None]
 
 
 @attrs.define
@@ -9863,7 +9865,7 @@ class SemanticTokensRangeRequest:
 class SemanticTokensRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SemanticTokensRangeRequestResult = attrs.field(default=None)
+    result: SemanticTokensRangeResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9914,7 +9916,7 @@ class ShowDocumentResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-LinkedEditingRangeRequestResult = Union[LinkedEditingRanges, None]
+LinkedEditingRangeResult = Union[LinkedEditingRanges, None]
 
 
 @attrs.define
@@ -9937,11 +9939,11 @@ class LinkedEditingRangeRequest:
 class LinkedEditingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: LinkedEditingRangeRequestResult = attrs.field(default=None)
+    result: LinkedEditingRangeResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WillCreateFilesRequestResult = Union[WorkspaceEdit, None]
+WillCreateFilesResult = Union[WorkspaceEdit, None]
 
 
 @attrs.define
@@ -9967,11 +9969,11 @@ class WillCreateFilesRequest:
 class WillCreateFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillCreateFilesRequestResult = attrs.field(default=None)
+    result: WillCreateFilesResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WillRenameFilesRequestResult = Union[WorkspaceEdit, None]
+WillRenameFilesResult = Union[WorkspaceEdit, None]
 
 
 @attrs.define
@@ -9993,11 +9995,11 @@ class WillRenameFilesRequest:
 class WillRenameFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillRenameFilesRequestResult = attrs.field(default=None)
+    result: WillRenameFilesResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WillDeleteFilesRequestResult = Union[WorkspaceEdit, None]
+WillDeleteFilesResult = Union[WorkspaceEdit, None]
 
 
 @attrs.define
@@ -10019,11 +10021,11 @@ class WillDeleteFilesRequest:
 class WillDeleteFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillDeleteFilesRequestResult = attrs.field(default=None)
+    result: WillDeleteFilesResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-MonikerRequestResult = Union[Sequence[Moniker], None]
+MonikerResult = Union[Sequence[Moniker], None]
 
 
 @attrs.define
@@ -10044,11 +10046,11 @@ class MonikerRequest:
 class MonikerResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: MonikerRequestResult = attrs.field(default=None)
+    result: MonikerResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-TypeHierarchyPrepareRequestResult = Union[Sequence[TypeHierarchyItem], None]
+TypeHierarchyPrepareResult = Union[Sequence[TypeHierarchyItem], None]
 
 
 @attrs.define
@@ -10072,11 +10074,11 @@ class TypeHierarchyPrepareRequest:
 class TypeHierarchyPrepareResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeHierarchyPrepareRequestResult = attrs.field(default=None)
+    result: TypeHierarchyPrepareResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-TypeHierarchySupertypesRequestResult = Union[Sequence[TypeHierarchyItem], None]
+TypeHierarchySupertypesResult = Union[Sequence[TypeHierarchyItem], None]
 
 
 @attrs.define
@@ -10097,11 +10099,11 @@ class TypeHierarchySupertypesRequest:
 class TypeHierarchySupertypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeHierarchySupertypesRequestResult = attrs.field(default=None)
+    result: TypeHierarchySupertypesResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-TypeHierarchySubtypesRequestResult = Union[Sequence[TypeHierarchyItem], None]
+TypeHierarchySubtypesResult = Union[Sequence[TypeHierarchyItem], None]
 
 
 @attrs.define
@@ -10122,11 +10124,11 @@ class TypeHierarchySubtypesRequest:
 class TypeHierarchySubtypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeHierarchySubtypesRequestResult = attrs.field(default=None)
+    result: TypeHierarchySubtypesResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-InlineValueRequestResult = Union[Sequence[InlineValue], None]
+InlineValueResult = Union[Sequence[InlineValue], None]
 
 
 @attrs.define
@@ -10149,7 +10151,7 @@ class InlineValueRequest:
 class InlineValueResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: InlineValueRequestResult = attrs.field(default=None)
+    result: InlineValueResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10173,7 +10175,7 @@ class InlineValueRefreshResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-InlayHintRequestResult = Union[Sequence[InlayHint], None]
+InlayHintResult = Union[Sequence[InlayHint], None]
 
 
 @attrs.define
@@ -10196,7 +10198,7 @@ class InlayHintRequest:
 class InlayHintResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: InlayHintRequestResult = attrs.field(default=None)
+    result: InlayHintResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10310,7 +10312,7 @@ class DiagnosticRefreshResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-InlineCompletionRequestResult = Union[
+InlineCompletionResult = Union[
     InlineCompletionList, Sequence[InlineCompletionItem], None
 ]
 
@@ -10336,7 +10338,7 @@ class InlineCompletionRequest:
 class InlineCompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: InlineCompletionRequestResult = attrs.field(default=None)
+    result: InlineCompletionResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10429,7 +10431,7 @@ class ShutdownResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-ShowMessageRequestResult = Union[MessageActionItem, None]
+ShowMessageResult = Union[MessageActionItem, None]
 
 
 @attrs.define
@@ -10449,11 +10451,11 @@ class ShowMessageRequest:
 class ShowMessageResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ShowMessageRequestResult = attrs.field(default=None)
+    result: ShowMessageResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WillSaveTextDocumentWaitUntilRequestResult = Union[Sequence[TextEdit], None]
+WillSaveTextDocumentWaitUntilResult = Union[Sequence[TextEdit], None]
 
 
 @attrs.define
@@ -10477,11 +10479,11 @@ class WillSaveTextDocumentWaitUntilRequest:
 class WillSaveTextDocumentWaitUntilResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillSaveTextDocumentWaitUntilRequestResult = attrs.field(default=None)
+    result: WillSaveTextDocumentWaitUntilResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-CompletionRequestResult = Union[Sequence[CompletionItem], CompletionList, None]
+CompletionResult = Union[Sequence[CompletionItem], CompletionList, None]
 
 
 @attrs.define
@@ -10508,7 +10510,7 @@ class CompletionRequest:
 class CompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CompletionRequestResult = attrs.field(default=None)
+    result: CompletionResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10534,7 +10536,7 @@ class CompletionResolveResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-HoverRequestResult = Union[Hover, None]
+HoverResult = Union[Hover, None]
 
 
 @attrs.define
@@ -10555,11 +10557,11 @@ class HoverRequest:
 class HoverResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: HoverRequestResult = attrs.field(default=None)
+    result: HoverResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-SignatureHelpRequestResult = Union[SignatureHelp, None]
+SignatureHelpResult = Union[SignatureHelp, None]
 
 
 @attrs.define
@@ -10576,11 +10578,11 @@ class SignatureHelpRequest:
 class SignatureHelpResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SignatureHelpRequestResult = attrs.field(default=None)
+    result: SignatureHelpResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DefinitionRequestResult = Union[Definition, Sequence[DefinitionLink], None]
+DefinitionResult = Union[Definition, Sequence[DefinitionLink], None]
 
 
 @attrs.define
@@ -10602,11 +10604,11 @@ class DefinitionRequest:
 class DefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DefinitionRequestResult = attrs.field(default=None)
+    result: DefinitionResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-ReferencesRequestResult = Union[Sequence[Location], None]
+ReferencesResult = Union[Sequence[Location], None]
 
 
 @attrs.define
@@ -10628,11 +10630,11 @@ class ReferencesRequest:
 class ReferencesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ReferencesRequestResult = attrs.field(default=None)
+    result: ReferencesResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentHighlightRequestResult = Union[Sequence[DocumentHighlight], None]
+DocumentHighlightResult = Union[Sequence[DocumentHighlight], None]
 
 
 @attrs.define
@@ -10654,11 +10656,11 @@ class DocumentHighlightRequest:
 class DocumentHighlightResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentHighlightRequestResult = attrs.field(default=None)
+    result: DocumentHighlightResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentSymbolRequestResult = Union[
+DocumentSymbolResult = Union[
     Sequence[SymbolInformation], Sequence[DocumentSymbol], None
 ]
 
@@ -10682,11 +10684,11 @@ class DocumentSymbolRequest:
 class DocumentSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentSymbolRequestResult = attrs.field(default=None)
+    result: DocumentSymbolResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-CodeActionRequestResult = Union[Sequence[Union[Command, CodeAction]], None]
+CodeActionResult = Union[Sequence[Union[Command, CodeAction]], None]
 
 
 @attrs.define
@@ -10705,7 +10707,7 @@ class CodeActionRequest:
 class CodeActionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CodeActionRequestResult = attrs.field(default=None)
+    result: CodeActionResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10731,7 +10733,7 @@ class CodeActionResolveResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-WorkspaceSymbolRequestResult = Union[
+WorkspaceSymbolResult = Union[
     Sequence[SymbolInformation], Sequence[WorkspaceSymbol], None
 ]
 
@@ -10759,7 +10761,7 @@ class WorkspaceSymbolRequest:
 class WorkspaceSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WorkspaceSymbolRequestResult = attrs.field(default=None)
+    result: WorkspaceSymbolResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10786,7 +10788,7 @@ class WorkspaceSymbolResolveResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-CodeLensRequestResult = Union[Sequence[CodeLens], None]
+CodeLensResult = Union[Sequence[CodeLens], None]
 
 
 @attrs.define
@@ -10805,7 +10807,7 @@ class CodeLensRequest:
 class CodeLensResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CodeLensRequestResult = attrs.field(default=None)
+    result: CodeLensResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10851,7 +10853,7 @@ class CodeLensRefreshResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentLinkRequestResult = Union[Sequence[DocumentLink], None]
+DocumentLinkResult = Union[Sequence[DocumentLink], None]
 
 
 @attrs.define
@@ -10870,7 +10872,7 @@ class DocumentLinkRequest:
 class DocumentLinkResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentLinkRequestResult = attrs.field(default=None)
+    result: DocumentLinkResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10896,7 +10898,7 @@ class DocumentLinkResolveResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentFormattingRequestResult = Union[Sequence[TextEdit], None]
+DocumentFormattingResult = Union[Sequence[TextEdit], None]
 
 
 @attrs.define
@@ -10915,11 +10917,11 @@ class DocumentFormattingRequest:
 class DocumentFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentFormattingRequestResult = attrs.field(default=None)
+    result: DocumentFormattingResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentRangeFormattingRequestResult = Union[Sequence[TextEdit], None]
+DocumentRangeFormattingResult = Union[Sequence[TextEdit], None]
 
 
 @attrs.define
@@ -10938,11 +10940,11 @@ class DocumentRangeFormattingRequest:
 class DocumentRangeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentRangeFormattingRequestResult = attrs.field(default=None)
+    result: DocumentRangeFormattingResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentRangesFormattingRequestResult = Union[Sequence[TextEdit], None]
+DocumentRangesFormattingResult = Union[Sequence[TextEdit], None]
 
 
 @attrs.define
@@ -10964,11 +10966,11 @@ class DocumentRangesFormattingRequest:
 class DocumentRangesFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentRangesFormattingRequestResult = attrs.field(default=None)
+    result: DocumentRangesFormattingResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-DocumentOnTypeFormattingRequestResult = Union[Sequence[TextEdit], None]
+DocumentOnTypeFormattingResult = Union[Sequence[TextEdit], None]
 
 
 @attrs.define
@@ -10987,11 +10989,11 @@ class DocumentOnTypeFormattingRequest:
 class DocumentOnTypeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentOnTypeFormattingRequestResult = attrs.field(default=None)
+    result: DocumentOnTypeFormattingResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-RenameRequestResult = Union[WorkspaceEdit, None]
+RenameResult = Union[WorkspaceEdit, None]
 
 
 @attrs.define
@@ -11010,11 +11012,8 @@ class RenameRequest:
 class RenameResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: RenameRequestResult = attrs.field(default=None)
+    result: RenameResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
-
-
-PrepareRenameRequestResult = Union[PrepareRenameResult, None]
 
 
 @attrs.define
@@ -11035,11 +11034,11 @@ class PrepareRenameRequest:
 class PrepareRenameResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: PrepareRenameRequestResult = attrs.field(default=None)
+    result: PrepareRenameResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
-ExecuteCommandRequestResult = Union[LSPAny, None]
+ExecuteCommandResult = Union[LSPAny, None]
 
 
 @attrs.define
@@ -11059,7 +11058,7 @@ class ExecuteCommandRequest:
 class ExecuteCommandResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ExecuteCommandRequestResult = attrs.field(default=None)
+    result: ExecuteCommandResult = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -12250,47 +12249,47 @@ def is_keyword_class(cls: type) -> bool:
 
 _SPECIAL_CLASSES = [
     ApplyWorkspaceEditRequest,
-    ApplyWorkspaceEditRequestResponse,
+    ApplyWorkspaceEditResponse,
     CallHierarchyIncomingCallsRequest,
-    CallHierarchyIncomingCallsRequestResponse,
+    CallHierarchyIncomingCallsResponse,
     CallHierarchyOutgoingCallsRequest,
-    CallHierarchyOutgoingCallsRequestResponse,
+    CallHierarchyOutgoingCallsResponse,
     CallHierarchyPrepareRequest,
-    CallHierarchyPrepareRequestResponse,
+    CallHierarchyPrepareResponse,
     CallHierarchyRegistrationOptions,
     CancelNotification,
     CodeActionRegistrationOptions,
     CodeActionRequest,
-    CodeActionRequestResponse,
     CodeActionResolveRequest,
-    CodeActionResolveRequestResponse,
+    CodeActionResolveResponse,
+    CodeActionResponse,
     CodeLensRefreshRequest,
-    CodeLensRefreshRequestResponse,
+    CodeLensRefreshResponse,
     CodeLensRegistrationOptions,
     CodeLensRequest,
-    CodeLensRequestResponse,
     CodeLensResolveRequest,
-    CodeLensResolveRequestResponse,
+    CodeLensResolveResponse,
+    CodeLensResponse,
     ColorPresentationRequest,
     ColorPresentationRequestOptions,
-    ColorPresentationRequestResponse,
+    ColorPresentationResponse,
     CompletionRegistrationOptions,
     CompletionRequest,
-    CompletionRequestResponse,
     CompletionResolveRequest,
-    CompletionResolveRequestResponse,
+    CompletionResolveResponse,
+    CompletionResponse,
     ConfigurationRequest,
-    ConfigurationRequestResponse,
+    ConfigurationResponse,
     CreateFile,
     DeclarationRegistrationOptions,
     DeclarationRequest,
-    DeclarationRequestResponse,
+    DeclarationResponse,
     DefinitionRegistrationOptions,
     DefinitionRequest,
-    DefinitionRequestResponse,
+    DefinitionResponse,
     DeleteFile,
     DiagnosticRefreshRequest,
-    DiagnosticRefreshRequestResponse,
+    DiagnosticRefreshResponse,
     DiagnosticRegistrationOptions,
     DidChangeConfigurationNotification,
     DidChangeNotebookDocumentNotification,
@@ -12308,114 +12307,114 @@ _SPECIAL_CLASSES = [
     DidSaveTextDocumentNotification,
     DocumentColorRegistrationOptions,
     DocumentColorRequest,
-    DocumentColorRequestResponse,
+    DocumentColorResponse,
     DocumentDiagnosticRequest,
-    DocumentDiagnosticRequestResponse,
+    DocumentDiagnosticResponse,
     DocumentFormattingRegistrationOptions,
     DocumentFormattingRequest,
-    DocumentFormattingRequestResponse,
+    DocumentFormattingResponse,
     DocumentHighlightRegistrationOptions,
     DocumentHighlightRequest,
-    DocumentHighlightRequestResponse,
+    DocumentHighlightResponse,
     DocumentLinkRegistrationOptions,
     DocumentLinkRequest,
-    DocumentLinkRequestResponse,
     DocumentLinkResolveRequest,
-    DocumentLinkResolveRequestResponse,
+    DocumentLinkResolveResponse,
+    DocumentLinkResponse,
     DocumentOnTypeFormattingRegistrationOptions,
     DocumentOnTypeFormattingRequest,
-    DocumentOnTypeFormattingRequestResponse,
+    DocumentOnTypeFormattingResponse,
     DocumentRangeFormattingRegistrationOptions,
     DocumentRangeFormattingRequest,
-    DocumentRangeFormattingRequestResponse,
+    DocumentRangeFormattingResponse,
     DocumentRangesFormattingRequest,
-    DocumentRangesFormattingRequestResponse,
+    DocumentRangesFormattingResponse,
     DocumentSymbolRegistrationOptions,
     DocumentSymbolRequest,
-    DocumentSymbolRequestResponse,
+    DocumentSymbolResponse,
     ExecuteCommandRequest,
-    ExecuteCommandRequestResponse,
+    ExecuteCommandResponse,
     ExitNotification,
     FoldingRangeRefreshRequest,
-    FoldingRangeRefreshRequestResponse,
+    FoldingRangeRefreshResponse,
     FoldingRangeRegistrationOptions,
     FoldingRangeRequest,
-    FoldingRangeRequestResponse,
+    FoldingRangeResponse,
     FullDocumentDiagnosticReport,
     HoverRegistrationOptions,
     HoverRequest,
-    HoverRequestResponse,
+    HoverResponse,
     ImplementationRegistrationOptions,
     ImplementationRequest,
-    ImplementationRequestResponse,
+    ImplementationResponse,
     InitializeParams,
     InitializeRequest,
-    InitializeRequestResponse,
+    InitializeResponse,
     InitializedNotification,
     InlayHintRefreshRequest,
-    InlayHintRefreshRequestResponse,
+    InlayHintRefreshResponse,
     InlayHintRegistrationOptions,
     InlayHintRequest,
-    InlayHintRequestResponse,
     InlayHintResolveRequest,
-    InlayHintResolveRequestResponse,
+    InlayHintResolveResponse,
+    InlayHintResponse,
     InlineCompletionRegistrationOptions,
     InlineCompletionRequest,
-    InlineCompletionRequestResponse,
+    InlineCompletionResponse,
     InlineValueRefreshRequest,
-    InlineValueRefreshRequestResponse,
+    InlineValueRefreshResponse,
     InlineValueRegistrationOptions,
     InlineValueRequest,
-    InlineValueRequestResponse,
+    InlineValueResponse,
     LinkedEditingRangeRegistrationOptions,
     LinkedEditingRangeRequest,
-    LinkedEditingRangeRequestResponse,
+    LinkedEditingRangeResponse,
     LogMessageNotification,
     LogTraceNotification,
     MonikerRegistrationOptions,
     MonikerRequest,
-    MonikerRequestResponse,
+    MonikerResponse,
     OptionalVersionedTextDocumentIdentifier,
     PrepareRenameRequest,
-    PrepareRenameRequestResponse,
+    PrepareRenameResponse,
     ProgressNotification,
     PublishDiagnosticsNotification,
     ReferenceRegistrationOptions,
     ReferencesRequest,
-    ReferencesRequestResponse,
+    ReferencesResponse,
     RegistrationRequest,
-    RegistrationRequestResponse,
+    RegistrationResponse,
     RelatedFullDocumentDiagnosticReport,
     RelatedUnchangedDocumentDiagnosticReport,
     RenameFile,
     RenameRegistrationOptions,
     RenameRequest,
-    RenameRequestResponse,
+    RenameResponse,
     ResponseErrorMessage,
     SelectionRangeRegistrationOptions,
     SelectionRangeRequest,
-    SelectionRangeRequestResponse,
+    SelectionRangeResponse,
     SemanticTokensDeltaRequest,
-    SemanticTokensDeltaRequestResponse,
+    SemanticTokensDeltaResponse,
     SemanticTokensRangeRequest,
-    SemanticTokensRangeRequestResponse,
+    SemanticTokensRangeResponse,
     SemanticTokensRefreshRequest,
-    SemanticTokensRefreshRequestResponse,
+    SemanticTokensRefreshResponse,
     SemanticTokensRegistrationOptions,
     SemanticTokensRequest,
-    SemanticTokensRequestResponse,
+    SemanticTokensResponse,
     SetTraceNotification,
     ShowDocumentRequest,
-    ShowDocumentRequestResponse,
+    ShowDocumentResponse,
     ShowMessageNotification,
     ShowMessageRequest,
-    ShowMessageRequestResponse,
+    ShowMessageResponse,
     ShutdownRequest,
-    ShutdownRequestResponse,
+    ShutdownResponse,
     SignatureHelp,
     SignatureHelpRegistrationOptions,
     SignatureHelpRequest,
-    SignatureHelpRequestResponse,
+    SignatureHelpResponse,
     SignatureInformation,
     StringValue,
     TelemetryEventNotification,
@@ -12424,42 +12423,42 @@ _SPECIAL_CLASSES = [
     TextDocumentSaveRegistrationOptions,
     TypeDefinitionRegistrationOptions,
     TypeDefinitionRequest,
-    TypeDefinitionRequestResponse,
+    TypeDefinitionResponse,
     TypeHierarchyPrepareRequest,
-    TypeHierarchyPrepareRequestResponse,
+    TypeHierarchyPrepareResponse,
     TypeHierarchyRegistrationOptions,
     TypeHierarchySubtypesRequest,
-    TypeHierarchySubtypesRequestResponse,
+    TypeHierarchySubtypesResponse,
     TypeHierarchySupertypesRequest,
-    TypeHierarchySupertypesRequestResponse,
+    TypeHierarchySupertypesResponse,
     UnchangedDocumentDiagnosticReport,
     UnregistrationRequest,
-    UnregistrationRequestResponse,
+    UnregistrationResponse,
     WillCreateFilesRequest,
-    WillCreateFilesRequestResponse,
+    WillCreateFilesResponse,
     WillDeleteFilesRequest,
-    WillDeleteFilesRequestResponse,
+    WillDeleteFilesResponse,
     WillRenameFilesRequest,
-    WillRenameFilesRequestResponse,
+    WillRenameFilesResponse,
     WillSaveTextDocumentNotification,
     WillSaveTextDocumentWaitUntilRequest,
-    WillSaveTextDocumentWaitUntilRequestResponse,
+    WillSaveTextDocumentWaitUntilResponse,
     WorkDoneProgressBegin,
     WorkDoneProgressCancelNotification,
     WorkDoneProgressCreateRequest,
-    WorkDoneProgressCreateRequestResponse,
+    WorkDoneProgressCreateResponse,
     WorkDoneProgressEnd,
     WorkDoneProgressReport,
     WorkspaceDiagnosticRequest,
-    WorkspaceDiagnosticRequestResponse,
+    WorkspaceDiagnosticResponse,
     WorkspaceFoldersInitializeParams,
     WorkspaceFoldersRequest,
-    WorkspaceFoldersRequestResponse,
+    WorkspaceFoldersResponse,
     WorkspaceFullDocumentDiagnosticReport,
     WorkspaceSymbolRequest,
-    WorkspaceSymbolRequestResponse,
     WorkspaceSymbolResolveRequest,
-    WorkspaceSymbolResolveRequestResponse,
+    WorkspaceSymbolResolveResponse,
+    WorkspaceSymbolResponse,
     WorkspaceUnchangedDocumentDiagnosticReport,
     _InitializeParams,
 ]
@@ -12473,79 +12472,79 @@ def is_special_class(cls: type) -> bool:
 _SPECIAL_PROPERTIES = [
     "ApplyWorkspaceEditRequest.jsonrpc",
     "ApplyWorkspaceEditRequest.method",
-    "ApplyWorkspaceEditRequestResponse.jsonrpc",
-    "ApplyWorkspaceEditRequestResponse.result",
+    "ApplyWorkspaceEditResponse.jsonrpc",
+    "ApplyWorkspaceEditResponse.result",
     "CallHierarchyIncomingCallsRequest.jsonrpc",
     "CallHierarchyIncomingCallsRequest.method",
-    "CallHierarchyIncomingCallsRequestResponse.jsonrpc",
-    "CallHierarchyIncomingCallsRequestResponse.result",
+    "CallHierarchyIncomingCallsResponse.jsonrpc",
+    "CallHierarchyIncomingCallsResponse.result",
     "CallHierarchyOutgoingCallsRequest.jsonrpc",
     "CallHierarchyOutgoingCallsRequest.method",
-    "CallHierarchyOutgoingCallsRequestResponse.jsonrpc",
-    "CallHierarchyOutgoingCallsRequestResponse.result",
+    "CallHierarchyOutgoingCallsResponse.jsonrpc",
+    "CallHierarchyOutgoingCallsResponse.result",
     "CallHierarchyPrepareRequest.jsonrpc",
     "CallHierarchyPrepareRequest.method",
-    "CallHierarchyPrepareRequestResponse.jsonrpc",
-    "CallHierarchyPrepareRequestResponse.result",
+    "CallHierarchyPrepareResponse.jsonrpc",
+    "CallHierarchyPrepareResponse.result",
     "CallHierarchyRegistrationOptions.document_selector",
     "CancelNotification.jsonrpc",
     "CancelNotification.method",
     "CodeActionRegistrationOptions.document_selector",
     "CodeActionRequest.jsonrpc",
     "CodeActionRequest.method",
-    "CodeActionRequestResponse.jsonrpc",
-    "CodeActionRequestResponse.result",
     "CodeActionResolveRequest.jsonrpc",
     "CodeActionResolveRequest.method",
-    "CodeActionResolveRequestResponse.jsonrpc",
-    "CodeActionResolveRequestResponse.result",
+    "CodeActionResolveResponse.jsonrpc",
+    "CodeActionResolveResponse.result",
+    "CodeActionResponse.jsonrpc",
+    "CodeActionResponse.result",
     "CodeLensRefreshRequest.jsonrpc",
     "CodeLensRefreshRequest.method",
-    "CodeLensRefreshRequestResponse.jsonrpc",
-    "CodeLensRefreshRequestResponse.result",
+    "CodeLensRefreshResponse.jsonrpc",
+    "CodeLensRefreshResponse.result",
     "CodeLensRegistrationOptions.document_selector",
     "CodeLensRequest.jsonrpc",
     "CodeLensRequest.method",
-    "CodeLensRequestResponse.jsonrpc",
-    "CodeLensRequestResponse.result",
     "CodeLensResolveRequest.jsonrpc",
     "CodeLensResolveRequest.method",
-    "CodeLensResolveRequestResponse.jsonrpc",
-    "CodeLensResolveRequestResponse.result",
+    "CodeLensResolveResponse.jsonrpc",
+    "CodeLensResolveResponse.result",
+    "CodeLensResponse.jsonrpc",
+    "CodeLensResponse.result",
     "ColorPresentationRequest.jsonrpc",
     "ColorPresentationRequest.method",
     "ColorPresentationRequestOptions.document_selector",
-    "ColorPresentationRequestResponse.jsonrpc",
-    "ColorPresentationRequestResponse.result",
+    "ColorPresentationResponse.jsonrpc",
+    "ColorPresentationResponse.result",
     "CompletionRegistrationOptions.document_selector",
     "CompletionRequest.jsonrpc",
     "CompletionRequest.method",
-    "CompletionRequestResponse.jsonrpc",
-    "CompletionRequestResponse.result",
     "CompletionResolveRequest.jsonrpc",
     "CompletionResolveRequest.method",
-    "CompletionResolveRequestResponse.jsonrpc",
-    "CompletionResolveRequestResponse.result",
+    "CompletionResolveResponse.jsonrpc",
+    "CompletionResolveResponse.result",
+    "CompletionResponse.jsonrpc",
+    "CompletionResponse.result",
     "ConfigurationRequest.jsonrpc",
     "ConfigurationRequest.method",
-    "ConfigurationRequestResponse.jsonrpc",
-    "ConfigurationRequestResponse.result",
+    "ConfigurationResponse.jsonrpc",
+    "ConfigurationResponse.result",
     "CreateFile.kind",
     "DeclarationRegistrationOptions.document_selector",
     "DeclarationRequest.jsonrpc",
     "DeclarationRequest.method",
-    "DeclarationRequestResponse.jsonrpc",
-    "DeclarationRequestResponse.result",
+    "DeclarationResponse.jsonrpc",
+    "DeclarationResponse.result",
     "DefinitionRegistrationOptions.document_selector",
     "DefinitionRequest.jsonrpc",
     "DefinitionRequest.method",
-    "DefinitionRequestResponse.jsonrpc",
-    "DefinitionRequestResponse.result",
+    "DefinitionResponse.jsonrpc",
+    "DefinitionResponse.result",
     "DeleteFile.kind",
     "DiagnosticRefreshRequest.jsonrpc",
     "DiagnosticRefreshRequest.method",
-    "DiagnosticRefreshRequestResponse.jsonrpc",
-    "DiagnosticRefreshRequestResponse.result",
+    "DiagnosticRefreshResponse.jsonrpc",
+    "DiagnosticRefreshResponse.result",
     "DiagnosticRegistrationOptions.document_selector",
     "DidChangeConfigurationNotification.jsonrpc",
     "DidChangeConfigurationNotification.method",
@@ -12578,118 +12577,118 @@ _SPECIAL_PROPERTIES = [
     "DocumentColorRegistrationOptions.document_selector",
     "DocumentColorRequest.jsonrpc",
     "DocumentColorRequest.method",
-    "DocumentColorRequestResponse.jsonrpc",
-    "DocumentColorRequestResponse.result",
+    "DocumentColorResponse.jsonrpc",
+    "DocumentColorResponse.result",
     "DocumentDiagnosticRequest.jsonrpc",
     "DocumentDiagnosticRequest.method",
-    "DocumentDiagnosticRequestResponse.jsonrpc",
-    "DocumentDiagnosticRequestResponse.result",
+    "DocumentDiagnosticResponse.jsonrpc",
+    "DocumentDiagnosticResponse.result",
     "DocumentFormattingRegistrationOptions.document_selector",
     "DocumentFormattingRequest.jsonrpc",
     "DocumentFormattingRequest.method",
-    "DocumentFormattingRequestResponse.jsonrpc",
-    "DocumentFormattingRequestResponse.result",
+    "DocumentFormattingResponse.jsonrpc",
+    "DocumentFormattingResponse.result",
     "DocumentHighlightRegistrationOptions.document_selector",
     "DocumentHighlightRequest.jsonrpc",
     "DocumentHighlightRequest.method",
-    "DocumentHighlightRequestResponse.jsonrpc",
-    "DocumentHighlightRequestResponse.result",
+    "DocumentHighlightResponse.jsonrpc",
+    "DocumentHighlightResponse.result",
     "DocumentLinkRegistrationOptions.document_selector",
     "DocumentLinkRequest.jsonrpc",
     "DocumentLinkRequest.method",
-    "DocumentLinkRequestResponse.jsonrpc",
-    "DocumentLinkRequestResponse.result",
     "DocumentLinkResolveRequest.jsonrpc",
     "DocumentLinkResolveRequest.method",
-    "DocumentLinkResolveRequestResponse.jsonrpc",
-    "DocumentLinkResolveRequestResponse.result",
+    "DocumentLinkResolveResponse.jsonrpc",
+    "DocumentLinkResolveResponse.result",
+    "DocumentLinkResponse.jsonrpc",
+    "DocumentLinkResponse.result",
     "DocumentOnTypeFormattingRegistrationOptions.document_selector",
     "DocumentOnTypeFormattingRequest.jsonrpc",
     "DocumentOnTypeFormattingRequest.method",
-    "DocumentOnTypeFormattingRequestResponse.jsonrpc",
-    "DocumentOnTypeFormattingRequestResponse.result",
+    "DocumentOnTypeFormattingResponse.jsonrpc",
+    "DocumentOnTypeFormattingResponse.result",
     "DocumentRangeFormattingRegistrationOptions.document_selector",
     "DocumentRangeFormattingRequest.jsonrpc",
     "DocumentRangeFormattingRequest.method",
-    "DocumentRangeFormattingRequestResponse.jsonrpc",
-    "DocumentRangeFormattingRequestResponse.result",
+    "DocumentRangeFormattingResponse.jsonrpc",
+    "DocumentRangeFormattingResponse.result",
     "DocumentRangesFormattingRequest.jsonrpc",
     "DocumentRangesFormattingRequest.method",
-    "DocumentRangesFormattingRequestResponse.jsonrpc",
-    "DocumentRangesFormattingRequestResponse.result",
+    "DocumentRangesFormattingResponse.jsonrpc",
+    "DocumentRangesFormattingResponse.result",
     "DocumentSymbolRegistrationOptions.document_selector",
     "DocumentSymbolRequest.jsonrpc",
     "DocumentSymbolRequest.method",
-    "DocumentSymbolRequestResponse.jsonrpc",
-    "DocumentSymbolRequestResponse.result",
+    "DocumentSymbolResponse.jsonrpc",
+    "DocumentSymbolResponse.result",
     "ExecuteCommandRequest.jsonrpc",
     "ExecuteCommandRequest.method",
-    "ExecuteCommandRequestResponse.jsonrpc",
-    "ExecuteCommandRequestResponse.result",
+    "ExecuteCommandResponse.jsonrpc",
+    "ExecuteCommandResponse.result",
     "ExitNotification.jsonrpc",
     "ExitNotification.method",
     "FoldingRangeRefreshRequest.jsonrpc",
     "FoldingRangeRefreshRequest.method",
-    "FoldingRangeRefreshRequestResponse.jsonrpc",
-    "FoldingRangeRefreshRequestResponse.result",
+    "FoldingRangeRefreshResponse.jsonrpc",
+    "FoldingRangeRefreshResponse.result",
     "FoldingRangeRegistrationOptions.document_selector",
     "FoldingRangeRequest.jsonrpc",
     "FoldingRangeRequest.method",
-    "FoldingRangeRequestResponse.jsonrpc",
-    "FoldingRangeRequestResponse.result",
+    "FoldingRangeResponse.jsonrpc",
+    "FoldingRangeResponse.result",
     "FullDocumentDiagnosticReport.kind",
     "HoverRegistrationOptions.document_selector",
     "HoverRequest.jsonrpc",
     "HoverRequest.method",
-    "HoverRequestResponse.jsonrpc",
-    "HoverRequestResponse.result",
+    "HoverResponse.jsonrpc",
+    "HoverResponse.result",
     "ImplementationRegistrationOptions.document_selector",
     "ImplementationRequest.jsonrpc",
     "ImplementationRequest.method",
-    "ImplementationRequestResponse.jsonrpc",
-    "ImplementationRequestResponse.result",
+    "ImplementationResponse.jsonrpc",
+    "ImplementationResponse.result",
     "InitializeParams.process_id",
     "InitializeParams.root_path",
     "InitializeParams.root_uri",
     "InitializeParams.workspace_folders",
     "InitializeRequest.jsonrpc",
     "InitializeRequest.method",
-    "InitializeRequestResponse.jsonrpc",
-    "InitializeRequestResponse.result",
+    "InitializeResponse.jsonrpc",
+    "InitializeResponse.result",
     "InitializedNotification.jsonrpc",
     "InitializedNotification.method",
     "InlayHintRefreshRequest.jsonrpc",
     "InlayHintRefreshRequest.method",
-    "InlayHintRefreshRequestResponse.jsonrpc",
-    "InlayHintRefreshRequestResponse.result",
+    "InlayHintRefreshResponse.jsonrpc",
+    "InlayHintRefreshResponse.result",
     "InlayHintRegistrationOptions.document_selector",
     "InlayHintRequest.jsonrpc",
     "InlayHintRequest.method",
-    "InlayHintRequestResponse.jsonrpc",
-    "InlayHintRequestResponse.result",
     "InlayHintResolveRequest.jsonrpc",
     "InlayHintResolveRequest.method",
-    "InlayHintResolveRequestResponse.jsonrpc",
-    "InlayHintResolveRequestResponse.result",
+    "InlayHintResolveResponse.jsonrpc",
+    "InlayHintResolveResponse.result",
+    "InlayHintResponse.jsonrpc",
+    "InlayHintResponse.result",
     "InlineCompletionRegistrationOptions.document_selector",
     "InlineCompletionRequest.jsonrpc",
     "InlineCompletionRequest.method",
-    "InlineCompletionRequestResponse.jsonrpc",
-    "InlineCompletionRequestResponse.result",
+    "InlineCompletionResponse.jsonrpc",
+    "InlineCompletionResponse.result",
     "InlineValueRefreshRequest.jsonrpc",
     "InlineValueRefreshRequest.method",
-    "InlineValueRefreshRequestResponse.jsonrpc",
-    "InlineValueRefreshRequestResponse.result",
+    "InlineValueRefreshResponse.jsonrpc",
+    "InlineValueRefreshResponse.result",
     "InlineValueRegistrationOptions.document_selector",
     "InlineValueRequest.jsonrpc",
     "InlineValueRequest.method",
-    "InlineValueRequestResponse.jsonrpc",
-    "InlineValueRequestResponse.result",
+    "InlineValueResponse.jsonrpc",
+    "InlineValueResponse.result",
     "LinkedEditingRangeRegistrationOptions.document_selector",
     "LinkedEditingRangeRequest.jsonrpc",
     "LinkedEditingRangeRequest.method",
-    "LinkedEditingRangeRequestResponse.jsonrpc",
-    "LinkedEditingRangeRequestResponse.result",
+    "LinkedEditingRangeResponse.jsonrpc",
+    "LinkedEditingRangeResponse.result",
     "LogMessageNotification.jsonrpc",
     "LogMessageNotification.method",
     "LogTraceNotification.jsonrpc",
@@ -12697,13 +12696,13 @@ _SPECIAL_PROPERTIES = [
     "MonikerRegistrationOptions.document_selector",
     "MonikerRequest.jsonrpc",
     "MonikerRequest.method",
-    "MonikerRequestResponse.jsonrpc",
-    "MonikerRequestResponse.result",
+    "MonikerResponse.jsonrpc",
+    "MonikerResponse.result",
     "OptionalVersionedTextDocumentIdentifier.version",
     "PrepareRenameRequest.jsonrpc",
     "PrepareRenameRequest.method",
-    "PrepareRenameRequestResponse.jsonrpc",
-    "PrepareRenameRequestResponse.result",
+    "PrepareRenameResponse.jsonrpc",
+    "PrepareRenameResponse.result",
     "ProgressNotification.jsonrpc",
     "ProgressNotification.method",
     "PublishDiagnosticsNotification.jsonrpc",
@@ -12711,66 +12710,66 @@ _SPECIAL_PROPERTIES = [
     "ReferenceRegistrationOptions.document_selector",
     "ReferencesRequest.jsonrpc",
     "ReferencesRequest.method",
-    "ReferencesRequestResponse.jsonrpc",
-    "ReferencesRequestResponse.result",
+    "ReferencesResponse.jsonrpc",
+    "ReferencesResponse.result",
     "RegistrationRequest.jsonrpc",
     "RegistrationRequest.method",
-    "RegistrationRequestResponse.jsonrpc",
-    "RegistrationRequestResponse.result",
+    "RegistrationResponse.jsonrpc",
+    "RegistrationResponse.result",
     "RelatedFullDocumentDiagnosticReport.kind",
     "RelatedUnchangedDocumentDiagnosticReport.kind",
     "RenameFile.kind",
     "RenameRegistrationOptions.document_selector",
     "RenameRequest.jsonrpc",
     "RenameRequest.method",
-    "RenameRequestResponse.jsonrpc",
-    "RenameRequestResponse.result",
+    "RenameResponse.jsonrpc",
+    "RenameResponse.result",
     "ResponseErrorMessage.error",
     "ResponseErrorMessage.jsonrpc",
     "SelectionRangeRegistrationOptions.document_selector",
     "SelectionRangeRequest.jsonrpc",
     "SelectionRangeRequest.method",
-    "SelectionRangeRequestResponse.jsonrpc",
-    "SelectionRangeRequestResponse.result",
+    "SelectionRangeResponse.jsonrpc",
+    "SelectionRangeResponse.result",
     "SemanticTokensDeltaRequest.jsonrpc",
     "SemanticTokensDeltaRequest.method",
-    "SemanticTokensDeltaRequestResponse.jsonrpc",
-    "SemanticTokensDeltaRequestResponse.result",
+    "SemanticTokensDeltaResponse.jsonrpc",
+    "SemanticTokensDeltaResponse.result",
     "SemanticTokensRangeRequest.jsonrpc",
     "SemanticTokensRangeRequest.method",
-    "SemanticTokensRangeRequestResponse.jsonrpc",
-    "SemanticTokensRangeRequestResponse.result",
+    "SemanticTokensRangeResponse.jsonrpc",
+    "SemanticTokensRangeResponse.result",
     "SemanticTokensRefreshRequest.jsonrpc",
     "SemanticTokensRefreshRequest.method",
-    "SemanticTokensRefreshRequestResponse.jsonrpc",
-    "SemanticTokensRefreshRequestResponse.result",
+    "SemanticTokensRefreshResponse.jsonrpc",
+    "SemanticTokensRefreshResponse.result",
     "SemanticTokensRegistrationOptions.document_selector",
     "SemanticTokensRequest.jsonrpc",
     "SemanticTokensRequest.method",
-    "SemanticTokensRequestResponse.jsonrpc",
-    "SemanticTokensRequestResponse.result",
+    "SemanticTokensResponse.jsonrpc",
+    "SemanticTokensResponse.result",
     "SetTraceNotification.jsonrpc",
     "SetTraceNotification.method",
     "ShowDocumentRequest.jsonrpc",
     "ShowDocumentRequest.method",
-    "ShowDocumentRequestResponse.jsonrpc",
-    "ShowDocumentRequestResponse.result",
+    "ShowDocumentResponse.jsonrpc",
+    "ShowDocumentResponse.result",
     "ShowMessageNotification.jsonrpc",
     "ShowMessageNotification.method",
     "ShowMessageRequest.jsonrpc",
     "ShowMessageRequest.method",
-    "ShowMessageRequestResponse.jsonrpc",
-    "ShowMessageRequestResponse.result",
+    "ShowMessageResponse.jsonrpc",
+    "ShowMessageResponse.result",
     "ShutdownRequest.jsonrpc",
     "ShutdownRequest.method",
-    "ShutdownRequestResponse.jsonrpc",
-    "ShutdownRequestResponse.result",
+    "ShutdownResponse.jsonrpc",
+    "ShutdownResponse.result",
     "SignatureHelp.active_parameter",
     "SignatureHelpRegistrationOptions.document_selector",
     "SignatureHelpRequest.jsonrpc",
     "SignatureHelpRequest.method",
-    "SignatureHelpRequestResponse.jsonrpc",
-    "SignatureHelpRequestResponse.result",
+    "SignatureHelpResponse.jsonrpc",
+    "SignatureHelpResponse.result",
     "SignatureInformation.active_parameter",
     "StringValue.kind",
     "TelemetryEventNotification.jsonrpc",
@@ -12781,72 +12780,72 @@ _SPECIAL_PROPERTIES = [
     "TypeDefinitionRegistrationOptions.document_selector",
     "TypeDefinitionRequest.jsonrpc",
     "TypeDefinitionRequest.method",
-    "TypeDefinitionRequestResponse.jsonrpc",
-    "TypeDefinitionRequestResponse.result",
+    "TypeDefinitionResponse.jsonrpc",
+    "TypeDefinitionResponse.result",
     "TypeHierarchyPrepareRequest.jsonrpc",
     "TypeHierarchyPrepareRequest.method",
-    "TypeHierarchyPrepareRequestResponse.jsonrpc",
-    "TypeHierarchyPrepareRequestResponse.result",
+    "TypeHierarchyPrepareResponse.jsonrpc",
+    "TypeHierarchyPrepareResponse.result",
     "TypeHierarchyRegistrationOptions.document_selector",
     "TypeHierarchySubtypesRequest.jsonrpc",
     "TypeHierarchySubtypesRequest.method",
-    "TypeHierarchySubtypesRequestResponse.jsonrpc",
-    "TypeHierarchySubtypesRequestResponse.result",
+    "TypeHierarchySubtypesResponse.jsonrpc",
+    "TypeHierarchySubtypesResponse.result",
     "TypeHierarchySupertypesRequest.jsonrpc",
     "TypeHierarchySupertypesRequest.method",
-    "TypeHierarchySupertypesRequestResponse.jsonrpc",
-    "TypeHierarchySupertypesRequestResponse.result",
+    "TypeHierarchySupertypesResponse.jsonrpc",
+    "TypeHierarchySupertypesResponse.result",
     "UnchangedDocumentDiagnosticReport.kind",
     "UnregistrationRequest.jsonrpc",
     "UnregistrationRequest.method",
-    "UnregistrationRequestResponse.jsonrpc",
-    "UnregistrationRequestResponse.result",
+    "UnregistrationResponse.jsonrpc",
+    "UnregistrationResponse.result",
     "WillCreateFilesRequest.jsonrpc",
     "WillCreateFilesRequest.method",
-    "WillCreateFilesRequestResponse.jsonrpc",
-    "WillCreateFilesRequestResponse.result",
+    "WillCreateFilesResponse.jsonrpc",
+    "WillCreateFilesResponse.result",
     "WillDeleteFilesRequest.jsonrpc",
     "WillDeleteFilesRequest.method",
-    "WillDeleteFilesRequestResponse.jsonrpc",
-    "WillDeleteFilesRequestResponse.result",
+    "WillDeleteFilesResponse.jsonrpc",
+    "WillDeleteFilesResponse.result",
     "WillRenameFilesRequest.jsonrpc",
     "WillRenameFilesRequest.method",
-    "WillRenameFilesRequestResponse.jsonrpc",
-    "WillRenameFilesRequestResponse.result",
+    "WillRenameFilesResponse.jsonrpc",
+    "WillRenameFilesResponse.result",
     "WillSaveTextDocumentNotification.jsonrpc",
     "WillSaveTextDocumentNotification.method",
     "WillSaveTextDocumentWaitUntilRequest.jsonrpc",
     "WillSaveTextDocumentWaitUntilRequest.method",
-    "WillSaveTextDocumentWaitUntilRequestResponse.jsonrpc",
-    "WillSaveTextDocumentWaitUntilRequestResponse.result",
+    "WillSaveTextDocumentWaitUntilResponse.jsonrpc",
+    "WillSaveTextDocumentWaitUntilResponse.result",
     "WorkDoneProgressBegin.kind",
     "WorkDoneProgressCancelNotification.jsonrpc",
     "WorkDoneProgressCancelNotification.method",
     "WorkDoneProgressCreateRequest.jsonrpc",
     "WorkDoneProgressCreateRequest.method",
-    "WorkDoneProgressCreateRequestResponse.jsonrpc",
-    "WorkDoneProgressCreateRequestResponse.result",
+    "WorkDoneProgressCreateResponse.jsonrpc",
+    "WorkDoneProgressCreateResponse.result",
     "WorkDoneProgressEnd.kind",
     "WorkDoneProgressReport.kind",
     "WorkspaceDiagnosticRequest.jsonrpc",
     "WorkspaceDiagnosticRequest.method",
-    "WorkspaceDiagnosticRequestResponse.jsonrpc",
-    "WorkspaceDiagnosticRequestResponse.result",
+    "WorkspaceDiagnosticResponse.jsonrpc",
+    "WorkspaceDiagnosticResponse.result",
     "WorkspaceFoldersInitializeParams.workspace_folders",
     "WorkspaceFoldersRequest.jsonrpc",
     "WorkspaceFoldersRequest.method",
-    "WorkspaceFoldersRequestResponse.jsonrpc",
-    "WorkspaceFoldersRequestResponse.result",
+    "WorkspaceFoldersResponse.jsonrpc",
+    "WorkspaceFoldersResponse.result",
     "WorkspaceFullDocumentDiagnosticReport.kind",
     "WorkspaceFullDocumentDiagnosticReport.version",
     "WorkspaceSymbolRequest.jsonrpc",
     "WorkspaceSymbolRequest.method",
-    "WorkspaceSymbolRequestResponse.jsonrpc",
-    "WorkspaceSymbolRequestResponse.result",
     "WorkspaceSymbolResolveRequest.jsonrpc",
     "WorkspaceSymbolResolveRequest.method",
-    "WorkspaceSymbolResolveRequestResponse.jsonrpc",
-    "WorkspaceSymbolResolveRequestResponse.result",
+    "WorkspaceSymbolResolveResponse.jsonrpc",
+    "WorkspaceSymbolResolveResponse.result",
+    "WorkspaceSymbolResponse.jsonrpc",
+    "WorkspaceSymbolResponse.result",
     "WorkspaceUnchangedDocumentDiagnosticReport.kind",
     "WorkspaceUnchangedDocumentDiagnosticReport.version",
     "_InitializeParams.process_id",
@@ -12882,19 +12881,19 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "CallHierarchyIncomingCall": CallHierarchyIncomingCall,
     "CallHierarchyIncomingCallsParams": CallHierarchyIncomingCallsParams,
     "CallHierarchyIncomingCallsRequest": CallHierarchyIncomingCallsRequest,
-    "CallHierarchyIncomingCallsRequestResult": CallHierarchyIncomingCallsRequestResult,
     "CallHierarchyIncomingCallsResponse": CallHierarchyIncomingCallsResponse,
+    "CallHierarchyIncomingCallsResult": CallHierarchyIncomingCallsResult,
     "CallHierarchyItem": CallHierarchyItem,
     "CallHierarchyOptions": CallHierarchyOptions,
     "CallHierarchyOutgoingCall": CallHierarchyOutgoingCall,
     "CallHierarchyOutgoingCallsParams": CallHierarchyOutgoingCallsParams,
     "CallHierarchyOutgoingCallsRequest": CallHierarchyOutgoingCallsRequest,
-    "CallHierarchyOutgoingCallsRequestResult": CallHierarchyOutgoingCallsRequestResult,
     "CallHierarchyOutgoingCallsResponse": CallHierarchyOutgoingCallsResponse,
+    "CallHierarchyOutgoingCallsResult": CallHierarchyOutgoingCallsResult,
     "CallHierarchyPrepareParams": CallHierarchyPrepareParams,
     "CallHierarchyPrepareRequest": CallHierarchyPrepareRequest,
-    "CallHierarchyPrepareRequestResult": CallHierarchyPrepareRequestResult,
     "CallHierarchyPrepareResponse": CallHierarchyPrepareResponse,
+    "CallHierarchyPrepareResult": CallHierarchyPrepareResult,
     "CallHierarchyRegistrationOptions": CallHierarchyRegistrationOptions,
     "CancelNotification": CancelNotification,
     "CancelParams": CancelParams,
@@ -12933,10 +12932,10 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "CodeActionParams": CodeActionParams,
     "CodeActionRegistrationOptions": CodeActionRegistrationOptions,
     "CodeActionRequest": CodeActionRequest,
-    "CodeActionRequestResult": CodeActionRequestResult,
     "CodeActionResolveRequest": CodeActionResolveRequest,
     "CodeActionResolveResponse": CodeActionResolveResponse,
     "CodeActionResponse": CodeActionResponse,
+    "CodeActionResult": CodeActionResult,
     "CodeActionTriggerKind": CodeActionTriggerKind,
     "CodeDescription": CodeDescription,
     "CodeLens": CodeLens,
@@ -12947,10 +12946,10 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "CodeLensRefreshResponse": CodeLensRefreshResponse,
     "CodeLensRegistrationOptions": CodeLensRegistrationOptions,
     "CodeLensRequest": CodeLensRequest,
-    "CodeLensRequestResult": CodeLensRequestResult,
     "CodeLensResolveRequest": CodeLensResolveRequest,
     "CodeLensResolveResponse": CodeLensResolveResponse,
     "CodeLensResponse": CodeLensResponse,
+    "CodeLensResult": CodeLensResult,
     "CodeLensWorkspaceClientCapabilities": CodeLensWorkspaceClientCapabilities,
     "Color": Color,
     "ColorInformation": ColorInformation,
@@ -12958,8 +12957,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "ColorPresentationParams": ColorPresentationParams,
     "ColorPresentationRequest": ColorPresentationRequest,
     "ColorPresentationRequestOptions": ColorPresentationRequestOptions,
-    "ColorPresentationRequestResult": ColorPresentationRequestResult,
     "ColorPresentationResponse": ColorPresentationResponse,
+    "ColorPresentationResult": ColorPresentationResult,
     "Command": Command,
     "CompletionClientCapabilities": CompletionClientCapabilities,
     "CompletionContext": CompletionContext,
@@ -12975,16 +12974,16 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "CompletionParams": CompletionParams,
     "CompletionRegistrationOptions": CompletionRegistrationOptions,
     "CompletionRequest": CompletionRequest,
-    "CompletionRequestResult": CompletionRequestResult,
     "CompletionResolveRequest": CompletionResolveRequest,
     "CompletionResolveResponse": CompletionResolveResponse,
     "CompletionResponse": CompletionResponse,
+    "CompletionResult": CompletionResult,
     "CompletionTriggerKind": CompletionTriggerKind,
     "ConfigurationItem": ConfigurationItem,
     "ConfigurationParams": ConfigurationParams,
     "ConfigurationRequest": ConfigurationRequest,
-    "ConfigurationRequestResult": ConfigurationRequestResult,
     "ConfigurationResponse": ConfigurationResponse,
+    "ConfigurationResult": ConfigurationResult,
     "CreateFile": CreateFile,
     "CreateFileOptions": CreateFileOptions,
     "CreateFilesParams": CreateFilesParams,
@@ -12995,8 +12994,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DeclarationParams": DeclarationParams,
     "DeclarationRegistrationOptions": DeclarationRegistrationOptions,
     "DeclarationRequest": DeclarationRequest,
-    "DeclarationRequestResult": DeclarationRequestResult,
     "DeclarationResponse": DeclarationResponse,
+    "DeclarationResult": DeclarationResult,
     "Definition": Definition,
     "DefinitionClientCapabilities": DefinitionClientCapabilities,
     "DefinitionLink": DefinitionLink,
@@ -13004,8 +13003,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DefinitionParams": DefinitionParams,
     "DefinitionRegistrationOptions": DefinitionRegistrationOptions,
     "DefinitionRequest": DefinitionRequest,
-    "DefinitionRequestResult": DefinitionRequestResult,
     "DefinitionResponse": DefinitionResponse,
+    "DefinitionResult": DefinitionResult,
     "DeleteFile": DeleteFile,
     "DeleteFileOptions": DeleteFileOptions,
     "DeleteFilesParams": DeleteFilesParams,
@@ -13055,8 +13054,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DocumentColorParams": DocumentColorParams,
     "DocumentColorRegistrationOptions": DocumentColorRegistrationOptions,
     "DocumentColorRequest": DocumentColorRequest,
-    "DocumentColorRequestResult": DocumentColorRequestResult,
     "DocumentColorResponse": DocumentColorResponse,
+    "DocumentColorResult": DocumentColorResult,
     "DocumentDiagnosticParams": DocumentDiagnosticParams,
     "DocumentDiagnosticReport": DocumentDiagnosticReport,
     "DocumentDiagnosticReportKind": DocumentDiagnosticReportKind,
@@ -13069,8 +13068,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DocumentFormattingParams": DocumentFormattingParams,
     "DocumentFormattingRegistrationOptions": DocumentFormattingRegistrationOptions,
     "DocumentFormattingRequest": DocumentFormattingRequest,
-    "DocumentFormattingRequestResult": DocumentFormattingRequestResult,
     "DocumentFormattingResponse": DocumentFormattingResponse,
+    "DocumentFormattingResult": DocumentFormattingResult,
     "DocumentHighlight": DocumentHighlight,
     "DocumentHighlightClientCapabilities": DocumentHighlightClientCapabilities,
     "DocumentHighlightKind": DocumentHighlightKind,
@@ -13078,36 +13077,36 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DocumentHighlightParams": DocumentHighlightParams,
     "DocumentHighlightRegistrationOptions": DocumentHighlightRegistrationOptions,
     "DocumentHighlightRequest": DocumentHighlightRequest,
-    "DocumentHighlightRequestResult": DocumentHighlightRequestResult,
     "DocumentHighlightResponse": DocumentHighlightResponse,
+    "DocumentHighlightResult": DocumentHighlightResult,
     "DocumentLink": DocumentLink,
     "DocumentLinkClientCapabilities": DocumentLinkClientCapabilities,
     "DocumentLinkOptions": DocumentLinkOptions,
     "DocumentLinkParams": DocumentLinkParams,
     "DocumentLinkRegistrationOptions": DocumentLinkRegistrationOptions,
     "DocumentLinkRequest": DocumentLinkRequest,
-    "DocumentLinkRequestResult": DocumentLinkRequestResult,
     "DocumentLinkResolveRequest": DocumentLinkResolveRequest,
     "DocumentLinkResolveResponse": DocumentLinkResolveResponse,
     "DocumentLinkResponse": DocumentLinkResponse,
+    "DocumentLinkResult": DocumentLinkResult,
     "DocumentOnTypeFormattingClientCapabilities": DocumentOnTypeFormattingClientCapabilities,
     "DocumentOnTypeFormattingOptions": DocumentOnTypeFormattingOptions,
     "DocumentOnTypeFormattingParams": DocumentOnTypeFormattingParams,
     "DocumentOnTypeFormattingRegistrationOptions": DocumentOnTypeFormattingRegistrationOptions,
     "DocumentOnTypeFormattingRequest": DocumentOnTypeFormattingRequest,
-    "DocumentOnTypeFormattingRequestResult": DocumentOnTypeFormattingRequestResult,
     "DocumentOnTypeFormattingResponse": DocumentOnTypeFormattingResponse,
+    "DocumentOnTypeFormattingResult": DocumentOnTypeFormattingResult,
     "DocumentRangeFormattingClientCapabilities": DocumentRangeFormattingClientCapabilities,
     "DocumentRangeFormattingOptions": DocumentRangeFormattingOptions,
     "DocumentRangeFormattingParams": DocumentRangeFormattingParams,
     "DocumentRangeFormattingRegistrationOptions": DocumentRangeFormattingRegistrationOptions,
     "DocumentRangeFormattingRequest": DocumentRangeFormattingRequest,
-    "DocumentRangeFormattingRequestResult": DocumentRangeFormattingRequestResult,
     "DocumentRangeFormattingResponse": DocumentRangeFormattingResponse,
+    "DocumentRangeFormattingResult": DocumentRangeFormattingResult,
     "DocumentRangesFormattingParams": DocumentRangesFormattingParams,
     "DocumentRangesFormattingRequest": DocumentRangesFormattingRequest,
-    "DocumentRangesFormattingRequestResult": DocumentRangesFormattingRequestResult,
     "DocumentRangesFormattingResponse": DocumentRangesFormattingResponse,
+    "DocumentRangesFormattingResult": DocumentRangesFormattingResult,
     "DocumentSelector": DocumentSelector,
     "DocumentSymbol": DocumentSymbol,
     "DocumentSymbolClientCapabilities": DocumentSymbolClientCapabilities,
@@ -13115,8 +13114,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DocumentSymbolParams": DocumentSymbolParams,
     "DocumentSymbolRegistrationOptions": DocumentSymbolRegistrationOptions,
     "DocumentSymbolRequest": DocumentSymbolRequest,
-    "DocumentSymbolRequestResult": DocumentSymbolRequestResult,
     "DocumentSymbolResponse": DocumentSymbolResponse,
+    "DocumentSymbolResult": DocumentSymbolResult,
     "EditRangeWithInsertReplace": EditRangeWithInsertReplace,
     "ErrorCodes": ErrorCodes,
     "ExecuteCommandClientCapabilities": ExecuteCommandClientCapabilities,
@@ -13124,8 +13123,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "ExecuteCommandParams": ExecuteCommandParams,
     "ExecuteCommandRegistrationOptions": ExecuteCommandRegistrationOptions,
     "ExecuteCommandRequest": ExecuteCommandRequest,
-    "ExecuteCommandRequestResult": ExecuteCommandRequestResult,
     "ExecuteCommandResponse": ExecuteCommandResponse,
+    "ExecuteCommandResult": ExecuteCommandResult,
     "ExecutionSummary": ExecutionSummary,
     "ExitNotification": ExitNotification,
     "FailureHandlingKind": FailureHandlingKind,
@@ -13151,8 +13150,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "FoldingRangeRefreshResponse": FoldingRangeRefreshResponse,
     "FoldingRangeRegistrationOptions": FoldingRangeRegistrationOptions,
     "FoldingRangeRequest": FoldingRangeRequest,
-    "FoldingRangeRequestResult": FoldingRangeRequestResult,
     "FoldingRangeResponse": FoldingRangeResponse,
+    "FoldingRangeResult": FoldingRangeResult,
     "FoldingRangeWorkspaceClientCapabilities": FoldingRangeWorkspaceClientCapabilities,
     "FormattingOptions": FormattingOptions,
     "FullDocumentDiagnosticReport": FullDocumentDiagnosticReport,
@@ -13164,15 +13163,15 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "HoverParams": HoverParams,
     "HoverRegistrationOptions": HoverRegistrationOptions,
     "HoverRequest": HoverRequest,
-    "HoverRequestResult": HoverRequestResult,
     "HoverResponse": HoverResponse,
+    "HoverResult": HoverResult,
     "ImplementationClientCapabilities": ImplementationClientCapabilities,
     "ImplementationOptions": ImplementationOptions,
     "ImplementationParams": ImplementationParams,
     "ImplementationRegistrationOptions": ImplementationRegistrationOptions,
     "ImplementationRequest": ImplementationRequest,
-    "ImplementationRequestResult": ImplementationRequestResult,
     "ImplementationResponse": ImplementationResponse,
+    "ImplementationResult": ImplementationResult,
     "InitializeError": InitializeError,
     "InitializeParams": InitializeParams,
     "InitializeRequest": InitializeRequest,
@@ -13190,10 +13189,10 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "InlayHintRefreshResponse": InlayHintRefreshResponse,
     "InlayHintRegistrationOptions": InlayHintRegistrationOptions,
     "InlayHintRequest": InlayHintRequest,
-    "InlayHintRequestResult": InlayHintRequestResult,
     "InlayHintResolveRequest": InlayHintResolveRequest,
     "InlayHintResolveResponse": InlayHintResolveResponse,
     "InlayHintResponse": InlayHintResponse,
+    "InlayHintResult": InlayHintResult,
     "InlayHintWorkspaceClientCapabilities": InlayHintWorkspaceClientCapabilities,
     "InlineCompletionClientCapabilities": InlineCompletionClientCapabilities,
     "InlineCompletionContext": InlineCompletionContext,
@@ -13203,8 +13202,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "InlineCompletionParams": InlineCompletionParams,
     "InlineCompletionRegistrationOptions": InlineCompletionRegistrationOptions,
     "InlineCompletionRequest": InlineCompletionRequest,
-    "InlineCompletionRequestResult": InlineCompletionRequestResult,
     "InlineCompletionResponse": InlineCompletionResponse,
+    "InlineCompletionResult": InlineCompletionResult,
     "InlineCompletionTriggerKind": InlineCompletionTriggerKind,
     "InlineValue": InlineValue,
     "InlineValueClientCapabilities": InlineValueClientCapabilities,
@@ -13216,8 +13215,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "InlineValueRefreshResponse": InlineValueRefreshResponse,
     "InlineValueRegistrationOptions": InlineValueRegistrationOptions,
     "InlineValueRequest": InlineValueRequest,
-    "InlineValueRequestResult": InlineValueRequestResult,
     "InlineValueResponse": InlineValueResponse,
+    "InlineValueResult": InlineValueResult,
     "InlineValueText": InlineValueText,
     "InlineValueVariableLookup": InlineValueVariableLookup,
     "InlineValueWorkspaceClientCapabilities": InlineValueWorkspaceClientCapabilities,
@@ -13234,8 +13233,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "LinkedEditingRangeParams": LinkedEditingRangeParams,
     "LinkedEditingRangeRegistrationOptions": LinkedEditingRangeRegistrationOptions,
     "LinkedEditingRangeRequest": LinkedEditingRangeRequest,
-    "LinkedEditingRangeRequestResult": LinkedEditingRangeRequestResult,
     "LinkedEditingRangeResponse": LinkedEditingRangeResponse,
+    "LinkedEditingRangeResult": LinkedEditingRangeResult,
     "LinkedEditingRanges": LinkedEditingRanges,
     "Location": Location,
     "LocationLink": LocationLink,
@@ -13259,8 +13258,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "MonikerParams": MonikerParams,
     "MonikerRegistrationOptions": MonikerRegistrationOptions,
     "MonikerRequest": MonikerRequest,
-    "MonikerRequestResult": MonikerRequestResult,
     "MonikerResponse": MonikerResponse,
+    "MonikerResult": MonikerResult,
     "NotebookCell": NotebookCell,
     "NotebookCellArrayChange": NotebookCellArrayChange,
     "NotebookCellKind": NotebookCellKind,
@@ -13292,7 +13291,6 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "PrepareRenameParams": PrepareRenameParams,
     "PrepareRenamePlaceholder": PrepareRenamePlaceholder,
     "PrepareRenameRequest": PrepareRenameRequest,
-    "PrepareRenameRequestResult": PrepareRenameRequestResult,
     "PrepareRenameResponse": PrepareRenameResponse,
     "PrepareRenameResult": PrepareRenameResult,
     "PrepareSupportDefaultBehavior": PrepareSupportDefaultBehavior,
@@ -13310,8 +13308,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "ReferenceParams": ReferenceParams,
     "ReferenceRegistrationOptions": ReferenceRegistrationOptions,
     "ReferencesRequest": ReferencesRequest,
-    "ReferencesRequestResult": ReferencesRequestResult,
     "ReferencesResponse": ReferencesResponse,
+    "ReferencesResult": ReferencesResult,
     "Registration": Registration,
     "RegistrationParams": RegistrationParams,
     "RegistrationRequest": RegistrationRequest,
@@ -13329,8 +13327,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "RenameParams": RenameParams,
     "RenameRegistrationOptions": RenameRegistrationOptions,
     "RenameRequest": RenameRequest,
-    "RenameRequestResult": RenameRequestResult,
     "RenameResponse": RenameResponse,
+    "RenameResult": RenameResult,
     "ResourceOperation": ResourceOperation,
     "ResourceOperationKind": ResourceOperationKind,
     "ResponseError": ResponseError,
@@ -13343,8 +13341,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "SelectionRangeParams": SelectionRangeParams,
     "SelectionRangeRegistrationOptions": SelectionRangeRegistrationOptions,
     "SelectionRangeRequest": SelectionRangeRequest,
-    "SelectionRangeRequestResult": SelectionRangeRequestResult,
     "SelectionRangeResponse": SelectionRangeResponse,
+    "SelectionRangeResult": SelectionRangeResult,
     "SemanticTokenModifiers": SemanticTokenModifiers,
     "SemanticTokenTypes": SemanticTokenTypes,
     "SemanticTokens": SemanticTokens,
@@ -13353,8 +13351,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "SemanticTokensDeltaParams": SemanticTokensDeltaParams,
     "SemanticTokensDeltaPartialResult": SemanticTokensDeltaPartialResult,
     "SemanticTokensDeltaRequest": SemanticTokensDeltaRequest,
-    "SemanticTokensDeltaRequestResult": SemanticTokensDeltaRequestResult,
     "SemanticTokensDeltaResponse": SemanticTokensDeltaResponse,
+    "SemanticTokensDeltaResult": SemanticTokensDeltaResult,
     "SemanticTokensEdit": SemanticTokensEdit,
     "SemanticTokensFullDelta": SemanticTokensFullDelta,
     "SemanticTokensLegend": SemanticTokensLegend,
@@ -13363,14 +13361,14 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "SemanticTokensPartialResult": SemanticTokensPartialResult,
     "SemanticTokensRangeParams": SemanticTokensRangeParams,
     "SemanticTokensRangeRequest": SemanticTokensRangeRequest,
-    "SemanticTokensRangeRequestResult": SemanticTokensRangeRequestResult,
     "SemanticTokensRangeResponse": SemanticTokensRangeResponse,
+    "SemanticTokensRangeResult": SemanticTokensRangeResult,
     "SemanticTokensRefreshRequest": SemanticTokensRefreshRequest,
     "SemanticTokensRefreshResponse": SemanticTokensRefreshResponse,
     "SemanticTokensRegistrationOptions": SemanticTokensRegistrationOptions,
     "SemanticTokensRequest": SemanticTokensRequest,
-    "SemanticTokensRequestResult": SemanticTokensRequestResult,
     "SemanticTokensResponse": SemanticTokensResponse,
+    "SemanticTokensResult": SemanticTokensResult,
     "SemanticTokensWorkspaceClientCapabilities": SemanticTokensWorkspaceClientCapabilities,
     "ServerCapabilities": ServerCapabilities,
     "ServerCompletionItemOptions": ServerCompletionItemOptions,
@@ -13387,8 +13385,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "ShowMessageRequest": ShowMessageRequest,
     "ShowMessageRequestClientCapabilities": ShowMessageRequestClientCapabilities,
     "ShowMessageRequestParams": ShowMessageRequestParams,
-    "ShowMessageRequestResult": ShowMessageRequestResult,
     "ShowMessageResponse": ShowMessageResponse,
+    "ShowMessageResult": ShowMessageResult,
     "ShutdownRequest": ShutdownRequest,
     "ShutdownResponse": ShutdownResponse,
     "SignatureHelp": SignatureHelp,
@@ -13398,8 +13396,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "SignatureHelpParams": SignatureHelpParams,
     "SignatureHelpRegistrationOptions": SignatureHelpRegistrationOptions,
     "SignatureHelpRequest": SignatureHelpRequest,
-    "SignatureHelpRequestResult": SignatureHelpRequestResult,
     "SignatureHelpResponse": SignatureHelpResponse,
+    "SignatureHelpResult": SignatureHelpResult,
     "SignatureHelpTriggerKind": SignatureHelpTriggerKind,
     "SignatureInformation": SignatureInformation,
     "SnippetTextEdit": SnippetTextEdit,
@@ -13437,24 +13435,24 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "TypeDefinitionParams": TypeDefinitionParams,
     "TypeDefinitionRegistrationOptions": TypeDefinitionRegistrationOptions,
     "TypeDefinitionRequest": TypeDefinitionRequest,
-    "TypeDefinitionRequestResult": TypeDefinitionRequestResult,
     "TypeDefinitionResponse": TypeDefinitionResponse,
+    "TypeDefinitionResult": TypeDefinitionResult,
     "TypeHierarchyClientCapabilities": TypeHierarchyClientCapabilities,
     "TypeHierarchyItem": TypeHierarchyItem,
     "TypeHierarchyOptions": TypeHierarchyOptions,
     "TypeHierarchyPrepareParams": TypeHierarchyPrepareParams,
     "TypeHierarchyPrepareRequest": TypeHierarchyPrepareRequest,
-    "TypeHierarchyPrepareRequestResult": TypeHierarchyPrepareRequestResult,
     "TypeHierarchyPrepareResponse": TypeHierarchyPrepareResponse,
+    "TypeHierarchyPrepareResult": TypeHierarchyPrepareResult,
     "TypeHierarchyRegistrationOptions": TypeHierarchyRegistrationOptions,
     "TypeHierarchySubtypesParams": TypeHierarchySubtypesParams,
     "TypeHierarchySubtypesRequest": TypeHierarchySubtypesRequest,
-    "TypeHierarchySubtypesRequestResult": TypeHierarchySubtypesRequestResult,
     "TypeHierarchySubtypesResponse": TypeHierarchySubtypesResponse,
+    "TypeHierarchySubtypesResult": TypeHierarchySubtypesResult,
     "TypeHierarchySupertypesParams": TypeHierarchySupertypesParams,
     "TypeHierarchySupertypesRequest": TypeHierarchySupertypesRequest,
-    "TypeHierarchySupertypesRequestResult": TypeHierarchySupertypesRequestResult,
     "TypeHierarchySupertypesResponse": TypeHierarchySupertypesResponse,
+    "TypeHierarchySupertypesResult": TypeHierarchySupertypesResult,
     "UnchangedDocumentDiagnosticReport": UnchangedDocumentDiagnosticReport,
     "UniquenessLevel": UniquenessLevel,
     "Unregistration": Unregistration,
@@ -13465,19 +13463,19 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "VersionedTextDocumentIdentifier": VersionedTextDocumentIdentifier,
     "WatchKind": WatchKind,
     "WillCreateFilesRequest": WillCreateFilesRequest,
-    "WillCreateFilesRequestResult": WillCreateFilesRequestResult,
     "WillCreateFilesResponse": WillCreateFilesResponse,
+    "WillCreateFilesResult": WillCreateFilesResult,
     "WillDeleteFilesRequest": WillDeleteFilesRequest,
-    "WillDeleteFilesRequestResult": WillDeleteFilesRequestResult,
     "WillDeleteFilesResponse": WillDeleteFilesResponse,
+    "WillDeleteFilesResult": WillDeleteFilesResult,
     "WillRenameFilesRequest": WillRenameFilesRequest,
-    "WillRenameFilesRequestResult": WillRenameFilesRequestResult,
     "WillRenameFilesResponse": WillRenameFilesResponse,
+    "WillRenameFilesResult": WillRenameFilesResult,
     "WillSaveTextDocumentNotification": WillSaveTextDocumentNotification,
     "WillSaveTextDocumentParams": WillSaveTextDocumentParams,
     "WillSaveTextDocumentWaitUntilRequest": WillSaveTextDocumentWaitUntilRequest,
-    "WillSaveTextDocumentWaitUntilRequestResult": WillSaveTextDocumentWaitUntilRequestResult,
     "WillSaveTextDocumentWaitUntilResponse": WillSaveTextDocumentWaitUntilResponse,
+    "WillSaveTextDocumentWaitUntilResult": WillSaveTextDocumentWaitUntilResult,
     "WindowClientCapabilities": WindowClientCapabilities,
     "WorkDoneProgressBegin": WorkDoneProgressBegin,
     "WorkDoneProgressCancelNotification": WorkDoneProgressCancelNotification,
@@ -13503,8 +13501,8 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "WorkspaceFoldersChangeEvent": WorkspaceFoldersChangeEvent,
     "WorkspaceFoldersInitializeParams": WorkspaceFoldersInitializeParams,
     "WorkspaceFoldersRequest": WorkspaceFoldersRequest,
-    "WorkspaceFoldersRequestResult": WorkspaceFoldersRequestResult,
     "WorkspaceFoldersResponse": WorkspaceFoldersResponse,
+    "WorkspaceFoldersResult": WorkspaceFoldersResult,
     "WorkspaceFoldersServerCapabilities": WorkspaceFoldersServerCapabilities,
     "WorkspaceFullDocumentDiagnosticReport": WorkspaceFullDocumentDiagnosticReport,
     "WorkspaceOptions": WorkspaceOptions,
@@ -13514,10 +13512,10 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "WorkspaceSymbolParams": WorkspaceSymbolParams,
     "WorkspaceSymbolRegistrationOptions": WorkspaceSymbolRegistrationOptions,
     "WorkspaceSymbolRequest": WorkspaceSymbolRequest,
-    "WorkspaceSymbolRequestResult": WorkspaceSymbolRequestResult,
     "WorkspaceSymbolResolveRequest": WorkspaceSymbolResolveRequest,
     "WorkspaceSymbolResolveResponse": WorkspaceSymbolResolveResponse,
     "WorkspaceSymbolResponse": WorkspaceSymbolResponse,
+    "WorkspaceSymbolResult": WorkspaceSymbolResult,
     "WorkspaceUnchangedDocumentDiagnosticReport": WorkspaceUnchangedDocumentDiagnosticReport,
     "_InitializeParams": _InitializeParams,
 }

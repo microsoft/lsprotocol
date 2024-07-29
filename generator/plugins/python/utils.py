@@ -103,7 +103,7 @@ def lines_to_str(lines: Union[Sequence[str], List[str]]) -> str:
 def _sanitize_comment(text: str) -> str:
     """LSP spec comments can contain newlines or characters that should not be used or
     can cause issues with python code clean them up."""
-    return text.replace("\r", "").replace("\n", "")
+    return " ".join(text.splitlines())
 
 
 def _is_special_field(prop: model.Property) -> bool:

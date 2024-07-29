@@ -175,6 +175,29 @@ def _get_indented_documentation(
     return doc
 
 
+def _get_since(
+    spec: Union[
+        model.Structure,
+        model.Property,
+        model.Enum,
+        model.EnumItem,
+        model.LiteralType,
+        model.TypeAlias,
+        model.Notification,
+        model.Request,
+    ],
+    indent: str = "",
+) -> List[str]:
+    if spec.sinceTags:
+        lines = [f"{indent}# Since:"]
+        for tag in spec.sinceTags:
+            lines.append(f"{indent}# {_sanitize_comment(tag)}")
+        return lines
+    if spec.since:
+        return [f"{indent}# Since: { _sanitize_comment(spec.since)}"]
+    return []
+
+
 class TypesCodeGenerator:
     def __init__(self, lsp_model: model.LSPModel):
         self._lsp_model = lsp_model
@@ -420,13 +443,9 @@ class TypesCodeGenerator:
 
         indent = " " * 4
         doc = _get_indented_documentation(enum_def.documentation, indent)
-        code_lines += [
-            f'{indent}"""{doc}"""' if enum_def.documentation else "",
-            f"{indent}# Since: {_sanitize_comment(enum_def.since)}"
-            if enum_def.since
-            else "",
-            f"{indent}# Proposed" if enum_def.proposed else "",
-        ]
+        code_lines += [f'{indent}"""{doc}"""' if enum_def.documentation else ""]
+        code_lines += _get_since(enum_def, indent)
+        code_lines += [f"{indent}# Proposed" if enum_def.proposed else ""]
 
         # Remove unnecessary empty lines
         code_lines = [code for code in code_lines if len(code) > 0]
@@ -440,11 +459,9 @@ class TypesCodeGenerator:
             item_lines = [
                 f"{indent}{name} = {value}",
                 f'{indent}"""{doc}"""' if item.documentation else "",
-                f"{indent}# Since: {_sanitize_comment(item.since)}"
-                if item.since
-                else "",
-                f"{indent}# Proposed" if item.proposed else "",
             ]
+            item_lines += _get_since(item, indent)
+            item_lines += [f"{indent}# Proposed" if item.proposed else ""]
 
             # Remove unnecessary empty lines.
             code_lines += [code for code in item_lines if len(code) > 0]
@@ -520,13 +537,10 @@ class TypesCodeGenerator:
             name = _to_snake_case(property_def.name)
 
             prop_lines = [f"{indent}{name}: {type_name} = {type_validator}"]
-            prop_lines += [
-                f'{indent}"""{doc}"""' if property_def.documentation else "",
-                f"{indent}# Since: {_sanitize_comment(property_def.since)}"
-                if property_def.since
-                else "",
-                f"{indent}# Proposed" if property_def.proposed else "",
-            ]
+            prop_lines += [f'{indent}"""{doc}"""' if property_def.documentation else ""]
+            prop_lines += _get_since(property_def, indent)
+            prop_lines += [f"{indent}# Proposed" if property_def.proposed else ""]
+
             # Remove unnecessary empty lines and add a single empty line
             code_lines += [code for code in prop_lines if len(code) > 0] + [""]
 
@@ -547,9 +561,9 @@ class TypesCodeGenerator:
             "@attrs.define",
             f"class {literal_def.name}:",
             f'{indent}"""{doc}"""' if literal_def.documentation else "",
-            f"{indent}# Since: {literal_def.since}" if literal_def.since else "",
-            f"{indent}# Proposed" if literal_def.proposed else "",
         ]
+        code_lines += _get_since(literal_def, indent)
+        code_lines += [f"{indent}# Proposed" if literal_def.proposed else ""]
 
         # Remove unnecessary empty lines. This can happen if doc string or comments are missing.
         code_lines = [code for code in code_lines if len(code) > 0]
@@ -606,19 +620,17 @@ class TypesCodeGenerator:
             code_lines = [
                 f"{type_alias.name} = {type_name}",
                 f'"""{doc}"""' if type_alias.documentation else "",
-                f"# Since: {_sanitize_comment(type_alias.since)}"
-                if type_alias.since
-                else "",
-                "# Proposed" if type_alias.proposed else "",
             ]
+            code_lines += _get_since(type_alias, indent)
+            code_lines += ["# Proposed" if type_alias.proposed else ""]
         else:
             doc = _get_indented_documentation(type_alias.documentation, indent)
             code_lines = [
                 f"class {type_alias.name}:",
                 f'{indent}"""{doc}"""' if type_alias.documentation else "",
-                f"{indent}# Since: {_sanitize_comment(type_alias.since)}"
-                if type_alias.since
-                else "",
+            ]
+            code_lines += _get_since(type_alias, indent)
+            code_lines += [
                 f"{indent}# Proposed" if type_alias.proposed else "",
                 f"{indent}pass",
             ]
@@ -678,9 +690,9 @@ class TypesCodeGenerator:
             if class_name == "LSPObject"
             else f"class {class_name}:",
             f'{indent}"""{doc}"""' if struct_def.documentation else "",
-            f"{indent}# Since: {_sanitize_comment(struct_def.since)}"
-            if struct_def.since
-            else "",
+        ]
+        class_lines += _get_since(struct_def, indent)
+        class_lines += [
             f"{indent}# Proposed" if struct_def.proposed else "",
         ]
 

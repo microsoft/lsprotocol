@@ -421,6 +421,10 @@ pub enum SemanticTokenTypes {
     /// @since 3.17.0
     #[serde(rename = "decorator")]
     Decorator,
+
+    /// @since 3.18.0
+    #[serde(rename = "label")]
+    Label,
 }
 
 /// A set of predefined token modifiers. This set is not fixed
@@ -558,7 +562,7 @@ pub enum LSPErrorCodes {
     /// the client should cancel the request.
     ContentModified = -32801,
 
-    /// The client has canceled a request and a server as detected
+    /// The client has canceled a request and a server has detected
     /// the cancel.
     RequestCancelled = -32800,
 }
@@ -4586,6 +4590,12 @@ pub struct WorkspaceSymbolParams {
 
     /// A query string to filter symbols by. Clients may send an empty
     /// string here to request all symbols.
+    ///
+    /// The `query`-parameter should be interpreted in a *relaxed way* as editors
+    /// will apply their own highlighting and scoring on the results. A good rule
+    /// of thumb is to match case-insensitive and to simply check that the
+    /// characters of *query* appear in their order in a candidate symbol.
+    /// Servers shouldn't use prefix, substring, or similar strict matching.
     pub query: String,
 
     /// An optional token that a server can use to report work done progress.
@@ -6273,8 +6283,9 @@ pub struct Diagnostic {
     /// a scope collide all definitions can be marked via this property.
     pub related_information: Option<Vec<DiagnosticRelatedInformation>>,
 
-    /// The diagnostic's severity. Can be omitted. If omitted it is up to the
-    /// client to interpret diagnostics as error, warning, info or hint.
+    /// The diagnostic's severity. To avoid interpretation mismatches when a
+    /// server is used with different clients it is highly recommended that servers
+    /// always provide a severity value.
     pub severity: Option<DiagnosticSeverity>,
 
     /// A human-readable string describing the source of this
@@ -7705,7 +7716,9 @@ pub struct TextDocumentFilterLanguage {
     pub language: String,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    pub pattern: Option<String>,
+    ///
+    /// @since 3.18.0 - support for relative patterns.
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -7721,7 +7734,9 @@ pub struct TextDocumentFilterScheme {
     pub language: Option<String>,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    pub pattern: Option<String>,
+    ///
+    /// @since 3.18.0 - support for relative patterns.
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
@@ -7737,7 +7752,9 @@ pub struct TextDocumentFilterPattern {
     pub language: Option<String>,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    pub pattern: String,
+    ///
+    /// @since 3.18.0 - support for relative patterns.
+    pub pattern: GlobPattern,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -7753,7 +7770,7 @@ pub struct NotebookDocumentFilterNotebookType {
     pub notebook_type: String,
 
     /// A glob pattern.
-    pub pattern: Option<String>,
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -7769,7 +7786,7 @@ pub struct NotebookDocumentFilterScheme {
     pub notebook_type: Option<String>,
 
     /// A glob pattern.
-    pub pattern: Option<String>,
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
@@ -7785,7 +7802,7 @@ pub struct NotebookDocumentFilterPattern {
     pub notebook_type: Option<String>,
 
     /// A glob pattern.
-    pub pattern: String,
+    pub pattern: GlobPattern,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -8280,6 +8297,12 @@ pub struct CodeActionClientCapabilities {
 pub struct CodeLensClientCapabilities {
     /// Whether code lens supports dynamic registration.
     pub dynamic_registration: Option<bool>,
+
+    /// Whether the client supports resolving additional code lens
+    /// properties via a separate `codeLens/resolve` request.
+    ///
+    /// @since 3.18.0
+    pub resolve_support: Option<ClientCodeLensResolveOptions>,
 }
 
 /// The client capabilities of a [DocumentLinkRequest].
@@ -8862,6 +8885,14 @@ pub struct ClientCodeActionLiteralOptions {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientCodeActionResolveOptions {
+    /// The properties that a client can resolve lazily.
+    pub properties: Vec<String>,
+}
+
+/// @since 3.18.0
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ClientCodeLensResolveOptions {
     /// The properties that a client can resolve lazily.
     pub properties: Vec<String>,
 }

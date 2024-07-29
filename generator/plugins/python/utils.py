@@ -90,6 +90,12 @@ def _to_class_name(lsp_method_name: str) -> str:
     return "".join(part.title() for part in name.split("_"))
 
 
+def _get_class_name(obj: Union[model.Request, model.Notification]) -> str:
+    if obj.typeName:
+        return obj.typeName
+    return _to_class_name(obj.method)
+
+
 def lines_to_str(lines: Union[Sequence[str], List[str]]) -> str:
     return "\n".join(lines)
 
@@ -761,23 +767,23 @@ class TypesCodeGenerator:
         for request in lsp_model.requests:
             if request.params:
                 if request.params.kind == "and":
-                    class_name = f"{_to_class_name(request.method)}Params"
+                    class_name = f"{_get_class_name(request)}Params"
                     and_types.append((f"{class_name}", request.params))
 
             if request.registrationOptions:
                 if request.registrationOptions.kind == "and":
-                    class_name = f"{_to_class_name(request.method)}Options"
+                    class_name = f"{_get_class_name(request)}Options"
                     and_types.append((f"{class_name}", request.registrationOptions))
 
         for notification in lsp_model.notifications:
             if notification.params:
                 if notification.params.kind == "and":
-                    class_name = f"{_to_class_name(notification.method)}Params"
+                    class_name = f"{_get_class_name(notification)}Params"
                     and_types.append((f"{class_name}", notification.params))
 
             if notification.registrationOptions:
                 if notification.registrationOptions.kind == "and":
-                    class_name = f"{_to_class_name(notification.method)}Options"
+                    class_name = f"{_get_class_name(notification)}Options"
                     and_types.append(
                         (f"{class_name}", notification.registrationOptions)
                     )
@@ -819,15 +825,20 @@ class TypesCodeGenerator:
         self._add_special("ResponseErrorMessage", ["error", "jsonrpc"])
 
         for request in lsp_mode.requests:
-            class_name = _to_class_name(request.method)
+            class_name = _get_class_name(request)
+            if not class_name.endswith("Request"):
+                class_name += "Request"
+            class_name_part = class_name.replace("Request", "")
+
             doc = _get_indented_documentation(request.documentation, indent)
 
+            params_class_name = f"{class_name_part}Params"
             if request.params:
                 if (
                     request.params.kind == "reference"
-                    and f"{class_name}Params" in CUSTOM_REQUEST_PARAMS_ALIASES
+                    and {params_class_name} in CUSTOM_REQUEST_PARAMS_ALIASES
                 ):
-                    params_type = f"{class_name}Params"
+                    params_type = params_class_name
 
                     self._add_type_alias(
                         model.TypeAlias(
@@ -837,23 +848,24 @@ class TypesCodeGenerator:
                     )
                 else:
                     params_type = self._generate_type_name(
-                        request.params, f"{class_name}Params"
+                        request.params, params_class_name
                     )
                 if not self._has_type(params_type):
-                    raise ValueError(f"{class_name}Params type definition is missing.")
+                    raise ValueError(f"{params_class_name} type definition is missing.")
                 params_field = "attrs.field()"
             else:
                 params_type = "Optional[None]"
                 params_field = "attrs.field(default=None)"
 
             result_type = None
+            result_class_name = f"{class_name_part}Result"
             if request.result:
                 if request.result.kind == "reference" or (
                     request.result.kind == "base" and request.result.name == "null"
                 ):
                     result_type = self._generate_type_name(request.result)
                 else:
-                    result_type = f"{class_name}Result"
+                    result_type = result_class_name
                     self._add_type_alias(
                         model.TypeAlias(
                             name=result_type,
@@ -867,10 +879,10 @@ class TypesCodeGenerator:
                 result_field = "attrs.field(default=None)"
 
             self._add_type_code(
-                f"{class_name}Request",
+                class_name,
                 [
                     "@attrs.define",
-                    f"class {class_name}Request:",
+                    f"class {class_name}:",
                     f'{indent}"""{doc}"""' if request.documentation else "",
                     f"{indent}id:Union[int, str] = attrs.field()",
                     f'{indent}"""The request id."""',
@@ -880,26 +892,30 @@ class TypesCodeGenerator:
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
             )
-            self._add_special(f"{class_name}Request", ["method", "jsonrpc"])
+            self._add_special(class_name, ["method", "jsonrpc"])
 
+            response_class_name = f"{class_name_part}Response"
             self._add_type_code(
-                f"{class_name}Response",
+                response_class_name,
                 [
                     "@attrs.define",
-                    f"class {class_name}Response:",
+                    f"class {response_class_name}:",
                     f"{indent}id:Optional[Union[int, str]] = attrs.field()",
                     f'{indent}"""The request id."""',
                     f"{indent}result: {result_type} = {result_field}",
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
             )
-            self._add_special(f"{class_name}Response", ["result", "jsonrpc"])
+            self._add_special(response_class_name, ["result", "jsonrpc"])
 
     def _add_notifications(self, lsp_mode: model.LSPModel) -> None:
         indent = " " * 4
 
         for notification in lsp_mode.notifications:
-            class_name = _to_class_name(notification.method)
+            class_name = _get_class_name(notification)
+            if not class_name.endswith("Notification"):
+                class_name += "Notification"
+
             doc = _get_indented_documentation(notification.documentation, indent)
 
             if notification.params:
@@ -914,10 +930,10 @@ class TypesCodeGenerator:
                 params_field = "attrs.field(default=None)"
 
             self._add_type_code(
-                f"{class_name}Notification",
+                class_name,
                 [
                     "@attrs.define",
-                    f"class {class_name}Notification:",
+                    f"class {class_name}:",
                     f'{indent}"""{doc}"""' if notification.documentation else "",
                     f"{indent}params: {params_type} = {params_field}",
                     f'{indent}method: Literal["{notification.method}"] = attrs.field(',
@@ -928,7 +944,7 @@ class TypesCodeGenerator:
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
             )
-            self._add_special(f"{class_name}Notification", ["method", "jsonrpc"])
+            self._add_special(class_name, ["method", "jsonrpc"])
 
     def _add_lsp_method_type(self, lsp_model: model.LSPModel) -> None:
         indent = " " * 4
@@ -994,9 +1010,12 @@ class TypesCodeGenerator:
 
         request_types = []
         for request in lsp_model.requests:
-            class_name = _to_class_name(request.method)
-            request_class = f"{class_name}Request"
-            response_class = f"{class_name}Response"
+            class_name = _get_class_name(request)
+            if not class_name.endswith("Request"):
+                class_name += "Request"
+            class_name_part = class_name.replace("Request", "")
+            request_class = f"{class_name_part}Request"
+            response_class = f"{class_name_part}Response"
 
             request_classes.append(request_class)
             response_classes.append(response_class)
@@ -1023,7 +1042,9 @@ class TypesCodeGenerator:
 
         notify_types = []
         for notification in lsp_model.notifications:
-            class_name = _to_class_name(notification.method)
+            class_name = _get_class_name(notification)
+            if not class_name.endswith("Notification"):
+                class_name += "Notification"
             notification_class = f"{class_name}Notification"
             notification_classes.append(notification_class)
 

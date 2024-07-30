@@ -772,6 +772,15 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.WorkspaceFolder)
 
+    def _prepare_rename_result_hook(
+        object_: Any, _: type
+    ) -> lsp_types.PrepareRenameResult:
+        if "placeholder" in object_ or "range" in object_:
+            return converter.structure(object_, lsp_types.PrepareRenamePlaceholder)
+        if "defaultBehavior" in object_:
+            return converter.structure(object_, lsp_types.PrepareRenameDefaultBehavior)
+        return converter.structure(object_, lsp_types.Range)
+
     structure_hooks = [
         (
             Optional[
@@ -1148,6 +1157,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[lsp_types.WorkspaceFolder, str],
             _workspace_folder_hook,
+        ),
+        (
+            lsp_types.PrepareRenameResult,
+            _prepare_rename_result_hook,
         ),
     ]
     for type_, hook in structure_hooks:

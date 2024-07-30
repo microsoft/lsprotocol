@@ -161,8 +161,8 @@ mod tests {
             }
             "InitializeRequest" => return validate_type::<InitializeRequest>(result_type, data),
             "ShutdownRequest" => return validate_type::<ShutdownRequest>(result_type, data),
-            "WindowShowMessageRequestRequest" => {
-                return validate_type::<WindowShowMessageRequestRequest>(result_type, data)
+            "WindowShowMessageRequest" => {
+                return validate_type::<WindowShowMessageRequest>(result_type, data)
             }
             "TextDocumentWillSaveWaitUntilRequest" => {
                 return validate_type::<TextDocumentWillSaveWaitUntilRequest>(result_type, data)

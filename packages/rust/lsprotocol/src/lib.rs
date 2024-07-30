@@ -10835,7 +10835,7 @@ pub struct ShutdownResponse {
 /// and a set of options actions to the user.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowMessageRequestRequest {
+pub struct WindowShowMessageRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10848,10 +10848,10 @@ pub struct WindowShowMessageRequestRequest {
     pub params: ShowMessageRequestParams,
 }
 
-/// Response to the [WindowShowMessageRequestRequest].
+/// Response to the [WindowShowMessageRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowMessageRequestResponse {
+pub struct WindowShowMessageResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 

@@ -473,7 +473,8 @@ def generate(spec: model.LSPModel, logger: logging.Logger):
         request_name = get_name(request)
         if not request_name.endswith("Request"):
             request_name = f"{request_name}Request"
-        response_name = f"{request_name.replace("Request", "")}Response"
+        response_name_part = request_name.replace("Request", "")
+        response_name = f"{response_name_part}Response"
         counter = 0
         for valid, value in generate_requests(request, spec):
             content = json.dumps(value, indent=4, ensure_ascii=False)

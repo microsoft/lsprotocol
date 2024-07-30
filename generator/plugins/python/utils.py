@@ -1057,7 +1057,7 @@ class TypesCodeGenerator:
             class_name = _get_class_name(notification)
             if not class_name.endswith("Notification"):
                 class_name += "Notification"
-            notification_class = f"{class_name}Notification"
+            notification_class = class_name
             notification_classes.append(notification_class)
 
             params_type = None

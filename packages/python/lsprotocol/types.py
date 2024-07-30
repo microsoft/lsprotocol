@@ -10,7 +10,9 @@
 import enum
 import functools
 from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union
+
 import attrs
+
 from . import validators
 
 __lsp_version__ = "3.17.0"
@@ -9463,7 +9465,7 @@ class ImplementationRequest:
 class ImplementationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ImplementationResult = attrs.field(default=None)
+    result: Optional[ImplementationResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9488,7 +9490,7 @@ class TypeDefinitionRequest:
 class TypeDefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeDefinitionResult = attrs.field(default=None)
+    result: Optional[TypeDefinitionResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9511,7 +9513,7 @@ class WorkspaceFoldersRequest:
 class WorkspaceFoldersResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WorkspaceFoldersResult = attrs.field(default=None)
+    result: Optional[WorkspaceFoldersResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9618,7 +9620,7 @@ class FoldingRangeRequest:
 class FoldingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: FoldingRangeResult = attrs.field(default=None)
+    result: Optional[FoldingRangeResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9665,7 +9667,7 @@ class DeclarationRequest:
 class DeclarationResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DeclarationResult = attrs.field(default=None)
+    result: Optional[DeclarationResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9691,7 +9693,7 @@ class SelectionRangeRequest:
 class SelectionRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SelectionRangeResult = attrs.field(default=None)
+    result: Optional[SelectionRangeResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9740,7 +9742,7 @@ class CallHierarchyPrepareRequest:
 class CallHierarchyPrepareResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CallHierarchyPrepareResult = attrs.field(default=None)
+    result: Optional[CallHierarchyPrepareResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9765,7 +9767,7 @@ class CallHierarchyIncomingCallsRequest:
 class CallHierarchyIncomingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CallHierarchyIncomingCallsResult = attrs.field(default=None)
+    result: Optional[CallHierarchyIncomingCallsResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9790,7 +9792,7 @@ class CallHierarchyOutgoingCallsRequest:
 class CallHierarchyOutgoingCallsResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CallHierarchyOutgoingCallsResult = attrs.field(default=None)
+    result: Optional[CallHierarchyOutgoingCallsResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9815,7 +9817,7 @@ class SemanticTokensRequest:
 class SemanticTokensResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SemanticTokensResult = attrs.field(default=None)
+    result: Optional[SemanticTokensResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9840,7 +9842,7 @@ class SemanticTokensDeltaRequest:
 class SemanticTokensDeltaResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SemanticTokensDeltaResult = attrs.field(default=None)
+    result: Optional[SemanticTokensDeltaResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9865,7 +9867,7 @@ class SemanticTokensRangeRequest:
 class SemanticTokensRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SemanticTokensRangeResult = attrs.field(default=None)
+    result: Optional[SemanticTokensRangeResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9939,7 +9941,7 @@ class LinkedEditingRangeRequest:
 class LinkedEditingRangeResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: LinkedEditingRangeResult = attrs.field(default=None)
+    result: Optional[LinkedEditingRangeResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9969,7 +9971,7 @@ class WillCreateFilesRequest:
 class WillCreateFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillCreateFilesResult = attrs.field(default=None)
+    result: Optional[WillCreateFilesResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -9995,7 +9997,7 @@ class WillRenameFilesRequest:
 class WillRenameFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillRenameFilesResult = attrs.field(default=None)
+    result: Optional[WillRenameFilesResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10021,7 +10023,7 @@ class WillDeleteFilesRequest:
 class WillDeleteFilesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillDeleteFilesResult = attrs.field(default=None)
+    result: Optional[WillDeleteFilesResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10046,7 +10048,7 @@ class MonikerRequest:
 class MonikerResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: MonikerResult = attrs.field(default=None)
+    result: Optional[MonikerResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10074,7 +10076,7 @@ class TypeHierarchyPrepareRequest:
 class TypeHierarchyPrepareResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeHierarchyPrepareResult = attrs.field(default=None)
+    result: Optional[TypeHierarchyPrepareResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10099,7 +10101,7 @@ class TypeHierarchySupertypesRequest:
 class TypeHierarchySupertypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeHierarchySupertypesResult = attrs.field(default=None)
+    result: Optional[TypeHierarchySupertypesResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10124,7 +10126,7 @@ class TypeHierarchySubtypesRequest:
 class TypeHierarchySubtypesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: TypeHierarchySubtypesResult = attrs.field(default=None)
+    result: Optional[TypeHierarchySubtypesResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10151,7 +10153,7 @@ class InlineValueRequest:
 class InlineValueResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: InlineValueResult = attrs.field(default=None)
+    result: Optional[InlineValueResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10198,7 +10200,7 @@ class InlayHintRequest:
 class InlayHintResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: InlayHintResult = attrs.field(default=None)
+    result: Optional[InlayHintResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10338,7 +10340,7 @@ class InlineCompletionRequest:
 class InlineCompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: InlineCompletionResult = attrs.field(default=None)
+    result: Optional[InlineCompletionResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10451,7 +10453,7 @@ class ShowMessageRequest:
 class ShowMessageResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ShowMessageResult = attrs.field(default=None)
+    result: Optional[ShowMessageResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10479,7 +10481,7 @@ class WillSaveTextDocumentWaitUntilRequest:
 class WillSaveTextDocumentWaitUntilResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WillSaveTextDocumentWaitUntilResult = attrs.field(default=None)
+    result: Optional[WillSaveTextDocumentWaitUntilResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10510,7 +10512,7 @@ class CompletionRequest:
 class CompletionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CompletionResult = attrs.field(default=None)
+    result: Optional[CompletionResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10557,7 +10559,7 @@ class HoverRequest:
 class HoverResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: HoverResult = attrs.field(default=None)
+    result: Optional[HoverResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10578,7 +10580,7 @@ class SignatureHelpRequest:
 class SignatureHelpResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: SignatureHelpResult = attrs.field(default=None)
+    result: Optional[SignatureHelpResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10604,7 +10606,7 @@ class DefinitionRequest:
 class DefinitionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DefinitionResult = attrs.field(default=None)
+    result: Optional[DefinitionResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10630,7 +10632,7 @@ class ReferencesRequest:
 class ReferencesResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ReferencesResult = attrs.field(default=None)
+    result: Optional[ReferencesResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10656,7 +10658,7 @@ class DocumentHighlightRequest:
 class DocumentHighlightResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentHighlightResult = attrs.field(default=None)
+    result: Optional[DocumentHighlightResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10684,7 +10686,7 @@ class DocumentSymbolRequest:
 class DocumentSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentSymbolResult = attrs.field(default=None)
+    result: Optional[DocumentSymbolResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10707,7 +10709,7 @@ class CodeActionRequest:
 class CodeActionResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CodeActionResult = attrs.field(default=None)
+    result: Optional[CodeActionResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10761,7 +10763,7 @@ class WorkspaceSymbolRequest:
 class WorkspaceSymbolResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: WorkspaceSymbolResult = attrs.field(default=None)
+    result: Optional[WorkspaceSymbolResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10807,7 +10809,7 @@ class CodeLensRequest:
 class CodeLensResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: CodeLensResult = attrs.field(default=None)
+    result: Optional[CodeLensResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10872,7 +10874,7 @@ class DocumentLinkRequest:
 class DocumentLinkResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentLinkResult = attrs.field(default=None)
+    result: Optional[DocumentLinkResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10917,7 +10919,7 @@ class DocumentFormattingRequest:
 class DocumentFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentFormattingResult = attrs.field(default=None)
+    result: Optional[DocumentFormattingResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10940,7 +10942,7 @@ class DocumentRangeFormattingRequest:
 class DocumentRangeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentRangeFormattingResult = attrs.field(default=None)
+    result: Optional[DocumentRangeFormattingResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10966,7 +10968,7 @@ class DocumentRangesFormattingRequest:
 class DocumentRangesFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentRangesFormattingResult = attrs.field(default=None)
+    result: Optional[DocumentRangesFormattingResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -10989,7 +10991,7 @@ class DocumentOnTypeFormattingRequest:
 class DocumentOnTypeFormattingResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: DocumentOnTypeFormattingResult = attrs.field(default=None)
+    result: Optional[DocumentOnTypeFormattingResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -11012,7 +11014,7 @@ class RenameRequest:
 class RenameResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: RenameResult = attrs.field(default=None)
+    result: Optional[RenameResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -11034,7 +11036,7 @@ class PrepareRenameRequest:
 class PrepareRenameResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: PrepareRenameResult = attrs.field(default=None)
+    result: Optional[PrepareRenameResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 
@@ -11058,7 +11060,7 @@ class ExecuteCommandRequest:
 class ExecuteCommandResponse:
     id: Optional[Union[int, str]] = attrs.field()
     """The request id."""
-    result: ExecuteCommandResult = attrs.field(default=None)
+    result: Optional[ExecuteCommandResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
 
 

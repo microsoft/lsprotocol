@@ -705,23 +705,6 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             converter.structure(item, lsp_types.SymbolInformation) for item in object_
         ]
 
-    def _notebook_sync_registration_option_selector_hook(
-        object_: Any, _: type
-    ) -> Union[
-        lsp_types.NotebookDocumentFilterWithNotebook,
-        lsp_types.NotebookDocumentFilterWithCells,
-    ]:
-        if "notebook" in object_:
-            return converter.structure(
-                object_,
-                lsp_types.NotebookDocumentFilterWithNotebook,
-            )
-        else:
-            return converter.structure(
-                object_,
-                lsp_types.NotebookDocumentFilterWithCells,
-            )
-
     def _language_kind_hook(
         object_: Any, _: type
     ) -> Union[
@@ -771,15 +754,6 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.WorkspaceFolder)
-
-    def _prepare_rename_result_hook(
-        object_: Any, _: type
-    ) -> lsp_types.PrepareRenameResult:
-        if "placeholder" in object_ or "range" in object_:
-            return converter.structure(object_, lsp_types.PrepareRenamePlaceholder)
-        if "defaultBehavior" in object_:
-            return converter.structure(object_, lsp_types.PrepareRenameDefaultBehavior)
-        return converter.structure(object_, lsp_types.Range)
 
     structure_hooks = [
         (
@@ -1157,10 +1131,6 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[lsp_types.WorkspaceFolder, str],
             _workspace_folder_hook,
-        ),
-        (
-            lsp_types.PrepareRenameResult,
-            _prepare_rename_result_hook,
         ),
     ]
     for type_, hook in structure_hooks:

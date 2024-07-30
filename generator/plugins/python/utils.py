@@ -877,10 +877,18 @@ class TypesCodeGenerator:
                 ):
                     result_type = self._generate_type_name(request.result)
                 else:
-                    result_type = result_class_name
+                    is_optional = request.result.kind == "or" and any(
+                        t.kind == "base" and t.name == "null"
+                        for t in request.result.items
+                    )
+                    result_type = (
+                        f"Optional[{result_class_name}]"
+                        if is_optional
+                        else result_class_name
+                    )
                     self._add_type_alias(
                         model.TypeAlias(
-                            name=result_type,
+                            name=result_class_name,
                             type=request.result,
                         )
                     )

@@ -964,7 +964,7 @@ def get_registration_options_template(
             return model.Structure(**class_template)
         else:
             raise ValueError(
-                f"Unexpected registrationOptions type: {obj.registrationOptions.type.kind}"
+                f"Unexpected registrationOptions type: {obj.registrationOptions.kind}"
             )
     return None
 

@@ -486,8 +486,8 @@ def generate_partial_result(
     if not request_def.partialResult:
         return
 
-    if request_def.partialResult.kind not in ["and", "or"]:
-        return
+    # Partial results are also typical covered in `model.Structures` that should already be generated
+    # so we don't need to generate them here.
 
 
 def generate_registration_options(
@@ -496,5 +496,5 @@ def generate_registration_options(
     if not request_def.registrationOptions:
         return
 
-    if request_def.registrationOptions.kind not in ["and", "or"]:
-        return
+    # These types have references in `model.Structures` that should already be generated
+    # so we don't need to generate them here.

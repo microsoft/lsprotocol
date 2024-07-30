@@ -1125,6 +1125,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             _completion_item_kind_hook,
         ),
         (
+            Optional[Union[str, lsp_types.RelativePattern]],
+            _relative_pattern_hook,
+        ),
+        (
             Union[str, lsp_types.RelativePattern],
             _relative_pattern_hook,
         ),

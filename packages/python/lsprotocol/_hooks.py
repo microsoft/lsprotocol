@@ -754,6 +754,15 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.CompletionItemKind)
 
+    def _relative_pattern_hook(
+        object_: Any, _: type
+    ) -> Union[str, lsp_types.RelativePattern]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.RelativePattern)
+
     structure_hooks = [
         (
             Optional[
@@ -1114,6 +1123,10 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[lsp_types.CompletionItemKind, int],
             _completion_item_kind_hook,
+        ),
+        (
+            Union[str, lsp_types.RelativePattern],
+            _relative_pattern_hook,
         ),
     ]
     for type_, hook in structure_hooks:

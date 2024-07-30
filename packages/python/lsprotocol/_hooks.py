@@ -763,6 +763,15 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.RelativePattern)
 
+    def _workspace_folder_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.WorkspaceFolder]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.WorkspaceFolder)
+
     structure_hooks = [
         (
             Optional[
@@ -1131,6 +1140,14 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[str, lsp_types.RelativePattern],
             _relative_pattern_hook,
+        ),
+        (
+            Optional[Union[lsp_types.WorkspaceFolder, str]],
+            _workspace_folder_hook,
+        ),
+        (
+            Union[lsp_types.WorkspaceFolder, str],
+            _workspace_folder_hook,
         ),
     ]
     for type_, hook in structure_hooks:

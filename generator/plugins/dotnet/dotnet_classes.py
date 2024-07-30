@@ -14,6 +14,7 @@ from .dotnet_helpers import (
     class_wrapper,
     generate_extras,
     get_doc,
+    get_name,
     get_special_case_class_name,
     get_special_case_property_name,
     get_usings,
@@ -858,8 +859,12 @@ def get_message_template(
             }
         )
 
+    name = get_name(obj)
+    if not name.endswith(text):
+        name += text
+
     class_template = {
-        "name": f"{lsp_method_to_name(obj.method)}{text}",
+        "name": name,
         "properties": properties,
         "documentation": obj.documentation,
         "since": obj.since,
@@ -916,8 +921,13 @@ def get_response_template(
             "optional": True,
         }
     )
+
+    response_name = get_name(obj)
+    if response_name.endswith("Request"):
+        response_name = response_name[:-7] + "Response"
+
     class_template = {
-        "name": f"{lsp_method_to_name(obj.method)}Response",
+        "name": response_name,
         "properties": properties,
         "documentation": obj.documentation,
         "since": obj.since,
@@ -939,8 +949,14 @@ def get_registration_options_template(
             for struct in structs:
                 properties += get_all_properties(struct, spec)
 
+            name = get_name(obj)
+            if name.endswith("Request"):
+                name = name[:-7] + "RegistrationOptions"
+            elif name.endswith("Notification"):
+                name = name[:-12] + "RegistrationOptions"
+
             class_template = {
-                "name": f"{lsp_method_to_name(obj.method)}RegistrationOptions",
+                "name": name,
                 "properties": [
                     cattrs.unstructure(p, model.Property) for p in properties
                 ],
@@ -971,6 +987,10 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             partial_result_name = get_type_name(request.partialResult, types, spec)
 
         struct = get_message_template(request, is_request=True)
+        request_name = get_name(request)
+        response_name = request_name
+        if response_name.endswith("Request"):
+            response_name = response_name[:-7] + "Response"
         generate_class_from_struct(
             struct,
             spec,
@@ -982,9 +1002,9 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             ),
             [
                 f"[Direction(MessageDirection.{to_upper_camel_case(request.messageDirection)})]",
-                f'[LSPRequest("{request.method}", typeof({lsp_method_to_name(request.method)}Response), typeof({partial_result_name}))]'
+                f'[LSPRequest("{request.method}", typeof({response_name}), typeof({partial_result_name}))]'
                 if partial_result_name
-                else f'[LSPRequest("{request.method}", typeof({lsp_method_to_name(request.method)}Response))]',
+                else f'[LSPRequest("{request.method}", typeof({response_name}))]',
             ],
         )
         response = get_response_template(request, spec, types)
@@ -994,7 +1014,7 @@ def generate_all_classes(spec: model.LSPModel, types: TypeData):
             types,
             f"IResponse<{get_type_name(request.result, types, spec)}>",
             [
-                f"[LSPResponse(typeof({lsp_method_to_name(request.method)}Request))]",
+                f"[LSPResponse(typeof({request_name}))]",
             ],
         )
         registration_options = get_registration_options_template(request, spec, types)

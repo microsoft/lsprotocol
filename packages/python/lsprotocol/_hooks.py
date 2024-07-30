@@ -756,7 +756,7 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
 
     def _relative_pattern_hook(
         object_: Any, _: type
-    ) -> Union[str, lsp_types.RelativePattern]:
+    ) -> Union[OptionalPrimitive, lsp_types.RelativePattern]:
         if object_ is None:
             return None
         if isinstance(object_, (bool, int, str, float)):

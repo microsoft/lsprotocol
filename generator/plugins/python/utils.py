@@ -90,6 +90,12 @@ def _to_class_name(lsp_method_name: str) -> str:
     return "".join(part.title() for part in name.split("_"))
 
 
+def _get_class_name(obj: Union[model.Request, model.Notification]) -> str:
+    if obj.typeName:
+        return obj.typeName
+    return _to_class_name(obj.method)
+
+
 def lines_to_str(lines: Union[Sequence[str], List[str]]) -> str:
     return "\n".join(lines)
 
@@ -97,7 +103,7 @@ def lines_to_str(lines: Union[Sequence[str], List[str]]) -> str:
 def _sanitize_comment(text: str) -> str:
     """LSP spec comments can contain newlines or characters that should not be used or
     can cause issues with python code clean them up."""
-    return text.replace("\r", "").replace("\n", "")
+    return " ".join(text.splitlines())
 
 
 def _is_special_field(prop: model.Property) -> bool:
@@ -167,6 +173,29 @@ def _get_indented_documentation(
         doc = re.sub(r"\[(?P<class>[\S]*)(\[\])\]\(\#(?P=class)\)", r"\1\2", doc)
         doc = re.sub(r"\[([\w\ ]+)\]\(\#[\w\.]+\)", r"\1", doc)
     return doc
+
+
+def _get_since(
+    spec: Union[
+        model.Structure,
+        model.Property,
+        model.Enum,
+        model.EnumItem,
+        model.LiteralType,
+        model.TypeAlias,
+        model.Notification,
+        model.Request,
+    ],
+    indent: str = "",
+) -> List[str]:
+    if spec.sinceTags:
+        lines = [f"{indent}# Since:"]
+        for tag in spec.sinceTags:
+            lines.append(f"{indent}# {_sanitize_comment(tag)}")
+        return lines
+    if spec.since:
+        return [f"{indent}# Since: { _sanitize_comment(spec.since)}"]
+    return []
 
 
 class TypesCodeGenerator:
@@ -414,13 +443,9 @@ class TypesCodeGenerator:
 
         indent = " " * 4
         doc = _get_indented_documentation(enum_def.documentation, indent)
-        code_lines += [
-            f'{indent}"""{doc}"""' if enum_def.documentation else "",
-            f"{indent}# Since: {_sanitize_comment(enum_def.since)}"
-            if enum_def.since
-            else "",
-            f"{indent}# Proposed" if enum_def.proposed else "",
-        ]
+        code_lines += [f'{indent}"""{doc}"""' if enum_def.documentation else ""]
+        code_lines += _get_since(enum_def, indent)
+        code_lines += [f"{indent}# Proposed" if enum_def.proposed else ""]
 
         # Remove unnecessary empty lines
         code_lines = [code for code in code_lines if len(code) > 0]
@@ -434,11 +459,9 @@ class TypesCodeGenerator:
             item_lines = [
                 f"{indent}{name} = {value}",
                 f'{indent}"""{doc}"""' if item.documentation else "",
-                f"{indent}# Since: {_sanitize_comment(item.since)}"
-                if item.since
-                else "",
-                f"{indent}# Proposed" if item.proposed else "",
             ]
+            item_lines += _get_since(item, indent)
+            item_lines += [f"{indent}# Proposed" if item.proposed else ""]
 
             # Remove unnecessary empty lines.
             code_lines += [code for code in item_lines if len(code) > 0]
@@ -514,13 +537,10 @@ class TypesCodeGenerator:
             name = _to_snake_case(property_def.name)
 
             prop_lines = [f"{indent}{name}: {type_name} = {type_validator}"]
-            prop_lines += [
-                f'{indent}"""{doc}"""' if property_def.documentation else "",
-                f"{indent}# Since: {_sanitize_comment(property_def.since)}"
-                if property_def.since
-                else "",
-                f"{indent}# Proposed" if property_def.proposed else "",
-            ]
+            prop_lines += [f'{indent}"""{doc}"""' if property_def.documentation else ""]
+            prop_lines += _get_since(property_def, indent)
+            prop_lines += [f"{indent}# Proposed" if property_def.proposed else ""]
+
             # Remove unnecessary empty lines and add a single empty line
             code_lines += [code for code in prop_lines if len(code) > 0] + [""]
 
@@ -541,9 +561,9 @@ class TypesCodeGenerator:
             "@attrs.define",
             f"class {literal_def.name}:",
             f'{indent}"""{doc}"""' if literal_def.documentation else "",
-            f"{indent}# Since: {literal_def.since}" if literal_def.since else "",
-            f"{indent}# Proposed" if literal_def.proposed else "",
         ]
+        code_lines += _get_since(literal_def, indent)
+        code_lines += [f"{indent}# Proposed" if literal_def.proposed else ""]
 
         # Remove unnecessary empty lines. This can happen if doc string or comments are missing.
         code_lines = [code for code in code_lines if len(code) > 0]
@@ -600,19 +620,17 @@ class TypesCodeGenerator:
             code_lines = [
                 f"{type_alias.name} = {type_name}",
                 f'"""{doc}"""' if type_alias.documentation else "",
-                f"# Since: {_sanitize_comment(type_alias.since)}"
-                if type_alias.since
-                else "",
-                "# Proposed" if type_alias.proposed else "",
             ]
+            code_lines += _get_since(type_alias, indent)
+            code_lines += ["# Proposed" if type_alias.proposed else ""]
         else:
             doc = _get_indented_documentation(type_alias.documentation, indent)
             code_lines = [
                 f"class {type_alias.name}:",
                 f'{indent}"""{doc}"""' if type_alias.documentation else "",
-                f"{indent}# Since: {_sanitize_comment(type_alias.since)}"
-                if type_alias.since
-                else "",
+            ]
+            code_lines += _get_since(type_alias, indent)
+            code_lines += [
                 f"{indent}# Proposed" if type_alias.proposed else "",
                 f"{indent}pass",
             ]
@@ -672,9 +690,9 @@ class TypesCodeGenerator:
             if class_name == "LSPObject"
             else f"class {class_name}:",
             f'{indent}"""{doc}"""' if struct_def.documentation else "",
-            f"{indent}# Since: {_sanitize_comment(struct_def.since)}"
-            if struct_def.since
-            else "",
+        ]
+        class_lines += _get_since(struct_def, indent)
+        class_lines += [
             f"{indent}# Proposed" if struct_def.proposed else "",
         ]
 
@@ -761,23 +779,23 @@ class TypesCodeGenerator:
         for request in lsp_model.requests:
             if request.params:
                 if request.params.kind == "and":
-                    class_name = f"{_to_class_name(request.method)}Params"
+                    class_name = f"{_get_class_name(request)}Params"
                     and_types.append((f"{class_name}", request.params))
 
             if request.registrationOptions:
                 if request.registrationOptions.kind == "and":
-                    class_name = f"{_to_class_name(request.method)}Options"
+                    class_name = f"{_get_class_name(request)}Options"
                     and_types.append((f"{class_name}", request.registrationOptions))
 
         for notification in lsp_model.notifications:
             if notification.params:
                 if notification.params.kind == "and":
-                    class_name = f"{_to_class_name(notification.method)}Params"
+                    class_name = f"{_get_class_name(notification)}Params"
                     and_types.append((f"{class_name}", notification.params))
 
             if notification.registrationOptions:
                 if notification.registrationOptions.kind == "and":
-                    class_name = f"{_to_class_name(notification.method)}Options"
+                    class_name = f"{_get_class_name(notification)}Options"
                     and_types.append(
                         (f"{class_name}", notification.registrationOptions)
                     )
@@ -819,15 +837,20 @@ class TypesCodeGenerator:
         self._add_special("ResponseErrorMessage", ["error", "jsonrpc"])
 
         for request in lsp_mode.requests:
-            class_name = _to_class_name(request.method)
+            class_name = _get_class_name(request)
+            if not class_name.endswith("Request"):
+                class_name += "Request"
+            class_name_part = class_name.replace("Request", "")
+
             doc = _get_indented_documentation(request.documentation, indent)
 
+            params_class_name = f"{class_name_part}Params"
             if request.params:
                 if (
                     request.params.kind == "reference"
-                    and f"{class_name}Params" in CUSTOM_REQUEST_PARAMS_ALIASES
+                    and {params_class_name} in CUSTOM_REQUEST_PARAMS_ALIASES
                 ):
-                    params_type = f"{class_name}Params"
+                    params_type = params_class_name
 
                     self._add_type_alias(
                         model.TypeAlias(
@@ -837,26 +860,35 @@ class TypesCodeGenerator:
                     )
                 else:
                     params_type = self._generate_type_name(
-                        request.params, f"{class_name}Params"
+                        request.params, params_class_name
                     )
                 if not self._has_type(params_type):
-                    raise ValueError(f"{class_name}Params type definition is missing.")
+                    raise ValueError(f"{params_class_name} type definition is missing.")
                 params_field = "attrs.field()"
             else:
                 params_type = "Optional[None]"
                 params_field = "attrs.field(default=None)"
 
             result_type = None
+            result_class_name = f"{class_name_part}Result"
             if request.result:
                 if request.result.kind == "reference" or (
                     request.result.kind == "base" and request.result.name == "null"
                 ):
                     result_type = self._generate_type_name(request.result)
                 else:
-                    result_type = f"{class_name}Result"
+                    is_optional = request.result.kind == "or" and any(
+                        t.kind == "base" and t.name == "null"
+                        for t in request.result.items
+                    )
+                    result_type = (
+                        f"Optional[{result_class_name}]"
+                        if is_optional
+                        else result_class_name
+                    )
                     self._add_type_alias(
                         model.TypeAlias(
-                            name=result_type,
+                            name=result_class_name,
                             type=request.result,
                         )
                     )
@@ -867,10 +899,10 @@ class TypesCodeGenerator:
                 result_field = "attrs.field(default=None)"
 
             self._add_type_code(
-                f"{class_name}Request",
+                class_name,
                 [
                     "@attrs.define",
-                    f"class {class_name}Request:",
+                    f"class {class_name}:",
                     f'{indent}"""{doc}"""' if request.documentation else "",
                     f"{indent}id:Union[int, str] = attrs.field()",
                     f'{indent}"""The request id."""',
@@ -880,26 +912,30 @@ class TypesCodeGenerator:
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
             )
-            self._add_special(f"{class_name}Request", ["method", "jsonrpc"])
+            self._add_special(class_name, ["method", "jsonrpc"])
 
+            response_class_name = f"{class_name_part}Response"
             self._add_type_code(
-                f"{class_name}Response",
+                response_class_name,
                 [
                     "@attrs.define",
-                    f"class {class_name}Response:",
+                    f"class {response_class_name}:",
                     f"{indent}id:Optional[Union[int, str]] = attrs.field()",
                     f'{indent}"""The request id."""',
                     f"{indent}result: {result_type} = {result_field}",
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
             )
-            self._add_special(f"{class_name}Response", ["result", "jsonrpc"])
+            self._add_special(response_class_name, ["result", "jsonrpc"])
 
     def _add_notifications(self, lsp_mode: model.LSPModel) -> None:
         indent = " " * 4
 
         for notification in lsp_mode.notifications:
-            class_name = _to_class_name(notification.method)
+            class_name = _get_class_name(notification)
+            if not class_name.endswith("Notification"):
+                class_name += "Notification"
+
             doc = _get_indented_documentation(notification.documentation, indent)
 
             if notification.params:
@@ -914,10 +950,10 @@ class TypesCodeGenerator:
                 params_field = "attrs.field(default=None)"
 
             self._add_type_code(
-                f"{class_name}Notification",
+                class_name,
                 [
                     "@attrs.define",
-                    f"class {class_name}Notification:",
+                    f"class {class_name}:",
                     f'{indent}"""{doc}"""' if notification.documentation else "",
                     f"{indent}params: {params_type} = {params_field}",
                     f'{indent}method: Literal["{notification.method}"] = attrs.field(',
@@ -928,7 +964,7 @@ class TypesCodeGenerator:
                     f'{indent}jsonrpc: str = attrs.field(default="2.0")',
                 ],
             )
-            self._add_special(f"{class_name}Notification", ["method", "jsonrpc"])
+            self._add_special(class_name, ["method", "jsonrpc"])
 
     def _add_lsp_method_type(self, lsp_model: model.LSPModel) -> None:
         indent = " " * 4
@@ -994,9 +1030,12 @@ class TypesCodeGenerator:
 
         request_types = []
         for request in lsp_model.requests:
-            class_name = _to_class_name(request.method)
-            request_class = f"{class_name}Request"
-            response_class = f"{class_name}Response"
+            class_name = _get_class_name(request)
+            if not class_name.endswith("Request"):
+                class_name += "Request"
+            class_name_part = class_name.replace("Request", "")
+            request_class = f"{class_name_part}Request"
+            response_class = f"{class_name_part}Response"
 
             request_classes.append(request_class)
             response_classes.append(response_class)
@@ -1023,8 +1062,10 @@ class TypesCodeGenerator:
 
         notify_types = []
         for notification in lsp_model.notifications:
-            class_name = _to_class_name(notification.method)
-            notification_class = f"{class_name}Notification"
+            class_name = _get_class_name(notification)
+            if not class_name.endswith("Notification"):
+                class_name += "Notification"
+            notification_class = class_name
             notification_classes.append(notification_class)
 
             params_type = None

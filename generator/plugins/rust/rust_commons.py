@@ -598,18 +598,29 @@ def generate_property(
 def get_message_type_name(type_def: Union[model.Notification, model.Request]) -> str:
     name = fix_lsp_method_name(type_def.method)
     if isinstance(type_def, model.Notification):
+        if name.endswith("Notification"):
+            return name
         return f"{name}Notification"
+    if name.endswith("Request"):
+        return name
     return f"{name}Request"
+
+
+def get_name(
+    type_def: Union[model.Structure, model.Notification, model.Request],
+) -> str:
+    if hasattr(type_def, "typeName"):
+        return type_def.typeName
+    if hasattr(type_def, "name"):
+        return type_def.name
+    return get_message_type_name(type_def)
 
 
 def struct_wrapper(
     type_def: Union[model.Structure, model.Notification, model.Request],
     inner: List[str],
 ) -> List[str]:
-    if hasattr(type_def, "name"):
-        name = type_def.name
-    else:
-        name = get_message_type_name(type_def)
+    name = get_name(type_def)
     lines = (
         _get_doc(type_def.documentation)
         + generate_extras(type_def)

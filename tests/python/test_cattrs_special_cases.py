@@ -7,7 +7,6 @@ import attrs
 import hamcrest
 import pytest
 from cattrs.errors import ClassValidationError
-
 from lsprotocol import converters as cv
 from lsprotocol import types as lsp
 
@@ -304,3 +303,18 @@ def test_position_encoding_kind(e):
         hamcrest.assert_that(
             converter.unstructure(obj, TestPosEncoding), hamcrest.is_(data)
         )
+
+
+def test_prepare_rename_response():
+    data = {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": None,
+    }
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.PrepareRenameResponse)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.PrepareRenameResponse))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.PrepareRenameResponse),
+        hamcrest.is_(data),
+    )

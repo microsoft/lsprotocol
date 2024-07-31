@@ -53,6 +53,14 @@ def lsp_method_to_name(method: str) -> str:
     return to_upper_camel_case(method)
 
 
+def get_name(obj: Union[model.Request, model.Notification]) -> str:
+    if obj.typeName:
+        return obj.typeName
+    if hasattr(obj, "name"):
+        return obj.name
+    return lsp_method_to_name(obj.method)
+
+
 def file_header() -> List[str]:
     return [
         "// Copyright (c) Microsoft Corporation. All rights reserved.",

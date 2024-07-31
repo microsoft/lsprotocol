@@ -109,6 +109,10 @@ class EnumItem:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
+        default=None,
+    )
     deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -167,6 +171,10 @@ class Enum:
     )
     since: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
         default=None,
     )
     supportsCustomValues: Optional[bool] = attrs.field(
@@ -495,6 +503,10 @@ class Property:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
+        default=None,
+    )
     deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -565,6 +577,10 @@ class LiteralType:
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
+        default=None,
+    )
     deprecated: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
@@ -605,6 +621,10 @@ class TypeAlias:
     )
     since: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
         default=None,
     )
     deprecated: Optional[str] = attrs.field(
@@ -652,6 +672,10 @@ class Structure:
     )
     since: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
         default=None,
     )
     deprecated: Optional[str] = attrs.field(
@@ -713,6 +737,14 @@ class Notification:
         default=None,
     )
     since: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
+        default=None,
+    )
+    typeName: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
@@ -792,6 +824,14 @@ class Request:
         default=None,
     )
     since: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    sinceTags: Optional[List[str]] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(list)),
+        default=None,
+    )
+    typeName: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )

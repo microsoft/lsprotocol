@@ -6,21 +6,21 @@ import pathlib
 
 import generator.model as model
 
-from .rust_commons import get_message_type_name
+from .rust_commons import get_name
 
 
 def generate_test_code(spec: model.LSPModel, test_path: pathlib.Path) -> str:
     """Generate the code for the given spec."""
     lines = []
     for request in spec.requests:
-        request_name = get_message_type_name(request)
+        request_name = get_name(request)
         lines += [
             f'"{request_name}" =>' "{",
             f"return validate_type::<{request_name}>(result_type, data)",
             "}",
         ]
     for notification in spec.notifications:
-        notification_name = get_message_type_name(notification)
+        notification_name = get_name(notification)
         lines += [
             f'"{notification_name}" =>' "{",
             f"return validate_type::<{notification_name}>(result_type, data)",

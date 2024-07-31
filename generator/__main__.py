@@ -102,6 +102,7 @@ def main(argv: Sequence[str]) -> None:
         LOGGER.info(f"Plugin {plugin} completed.")
     except Exception as e:
         LOGGER.error(f"Error running plugin {plugin}:", exc_info=e)
+        raise e
 
 
 if __name__ == "__main__":

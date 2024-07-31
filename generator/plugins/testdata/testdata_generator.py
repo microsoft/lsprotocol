@@ -7,7 +7,7 @@ import json
 import logging
 import re
 from copy import deepcopy
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 import generator.model as model
 
@@ -373,7 +373,7 @@ def generate_requests(request: model.Request, spec: model.LSPModel):
             yield (valid1 and valid2, message)
 
 
-def generate_notifications(notify: model.Notification, spec: model.LSPModel) -> None:
+def generate_notifications(notify: model.Notification, spec: model.LSPModel):
     variants = zip(
         *extend_all(
             [
@@ -415,7 +415,7 @@ RESPONSE_ERROR = model.Structure(
 )
 
 
-def generate_responses(request: model.Request, spec: model.LSPModel) -> None:
+def generate_responses(request: model.Request, spec: model.LSPModel):
     variants = zip(
         *extend_all(
             [
@@ -460,14 +460,25 @@ def lsp_method_to_name(method: str) -> str:
     return to_upper_camel_case(method)
 
 
+def get_name(obj: Union[model.Request, model.Notification]) -> str:
+    if obj.typeName:
+        return obj.typeName
+    return lsp_method_to_name(obj.method)
+
+
 def generate(spec: model.LSPModel, logger: logging.Logger):
     spec.structures.append(RESPONSE_ERROR)
     testdata = {}
     for request in spec.requests:
+        request_name = get_name(request)
+        if not request_name.endswith("Request"):
+            request_name = f"{request_name}Request"
+        response_name_part = request_name.replace("Request", "")
+        response_name = f"{response_name_part}Response"
         counter = 0
         for valid, value in generate_requests(request, spec):
             content = json.dumps(value, indent=4, ensure_ascii=False)
-            name = f"{lsp_method_to_name(request.method)}Request-{valid}-{get_hash_from(content)}.json"
+            name = f"{request_name}-{valid}-{get_hash_from(content)}.json"
             if name in testdata:
                 continue
             testdata[name] = content
@@ -476,7 +487,7 @@ def generate(spec: model.LSPModel, logger: logging.Logger):
 
         for valid, value in generate_responses(request, spec):
             content = json.dumps(value, indent=4, ensure_ascii=False)
-            name = f"{lsp_method_to_name(request.method)}Response-{valid}-{get_hash_from(content)}.json"
+            name = f"{response_name}-{valid}-{get_hash_from(content)}.json"
             if name in testdata:
                 continue
             testdata[name] = content
@@ -484,10 +495,13 @@ def generate(spec: model.LSPModel, logger: logging.Logger):
         logger.info(f"Generated {counter} variants for Response: {request.method}")
 
     for notify in spec.notifications:
+        notification_name = get_name(notify)
+        if not notification_name.endswith("Notification"):
+            notification_name = f"{notification_name}Notification"
         counter = 0
         for valid, value in generate_notifications(notify, spec):
             content = json.dumps(value, indent=4, ensure_ascii=False)
-            name = f"{lsp_method_to_name(notify.method)}Notification-{valid}-{get_hash_from(content)}.json"
+            name = f"{notification_name}-{valid}-{get_hash_from(content)}.json"
             if name in testdata:
                 continue
             testdata[name] = content

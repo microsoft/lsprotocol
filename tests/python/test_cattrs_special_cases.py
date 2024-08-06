@@ -296,9 +296,7 @@ def test_position_encoding_kind(e):
     hamcrest.assert_that(obj, hamcrest.instance_of(_PosEncoding))
 
     if e is None:
-        hamcrest.assert_that(
-            converter.unstructure(obj, _PosEncoding), hamcrest.is_({})
-        )
+        hamcrest.assert_that(converter.unstructure(obj, _PosEncoding), hamcrest.is_({}))
     else:
         hamcrest.assert_that(
             converter.unstructure(obj, _PosEncoding), hamcrest.is_(data)

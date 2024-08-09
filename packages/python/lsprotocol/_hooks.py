@@ -755,6 +755,22 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             return object_
         return converter.structure(object_, lsp_types.WorkspaceFolder)
 
+    def _text_document_content_hook(
+        object_: Any, _: type
+    ) -> Union[
+        OptionalPrimitive,
+        lsp_types.TextDocumentContentRegistrationOptions,
+        lsp_types.TextDocumentContentOptions,
+    ]:
+        if object_ is None:
+            return None
+        if "id" in object_:
+            return converter.structure(
+                object_, lsp_types.TextDocumentContentRegistrationOptions
+            )
+        else:
+            return converter.structure(object_, lsp_types.TextDocumentContentOptions)
+
     structure_hooks = [
         (
             Optional[
@@ -1131,6 +1147,22 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[lsp_types.WorkspaceFolder, str],
             _workspace_folder_hook,
+        ),
+        (
+            Optional[
+                Union[
+                    lsp_types.TextDocumentContentOptions,
+                    lsp_types.TextDocumentContentRegistrationOptions,
+                ]
+            ],
+            _text_document_content_hook,
+        ),
+        (
+            Union[
+                lsp_types.TextDocumentContentOptions,
+                lsp_types.TextDocumentContentRegistrationOptions,
+            ],
+            _text_document_content_hook,
         ),
     ]
     for type_, hook in structure_hooks:

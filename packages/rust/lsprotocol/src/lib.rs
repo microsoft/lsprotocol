@@ -213,6 +213,10 @@ pub enum LSPRequestMethods {
     WorkspaceDiagnosticRefresh,
     #[serde(rename = "textDocument/inlineCompletion")]
     TextDocumentInlineCompletion,
+    #[serde(rename = "workspace/textDocumentContent")]
+    WorkspaceTextDocumentContent,
+    #[serde(rename = "workspace/textDocumentContent/refresh")]
+    WorkspaceTextDocumentContentRefresh,
     #[serde(rename = "client/registerCapability")]
     ClientRegisterCapability,
     #[serde(rename = "client/unregisterCapability")]
@@ -3560,6 +3564,46 @@ pub struct InlineCompletionRegistrationOptions {
     pub work_done_progress: Option<bool>,
 }
 
+/// Parameters for the `workspace/textDocumentContent` request.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentParams {
+    /// The uri of the text document.
+    pub uri: Url,
+}
+
+/// Text document content provider registration options.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentRegistrationOptions {
+    /// The id used to register the request. The id can be used to deregister
+    /// the request again. See also Registration#id.
+    pub id: Option<String>,
+
+    /// The scheme for which the server provides content.
+    pub scheme: String,
+}
+
+/// Parameters for the `workspace/textDocumentContent/refresh` request.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentRefreshParams {
+    /// The uri of the text document to refresh.
+    pub uri: Url,
+}
+
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct RegistrationParams {
@@ -5938,6 +5982,18 @@ pub struct InlineCompletionOptions {
     pub work_done_progress: Option<bool>,
 }
 
+/// Text document content provider options.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentOptions {
+    /// The scheme for which the server provides content.
+    pub scheme: String,
+}
+
 /// General parameters to register for a notification or to register a provider.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -7149,6 +7205,14 @@ pub struct WorkspaceOptions {
     /// @since 3.16.0
     pub file_operations: Option<FileOperationOptions>,
 
+    /// The server supports the `workspace/textDocumentContent` request.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub text_document_content:
+        Option<OR2<TextDocumentContentOptions, TextDocumentContentRegistrationOptions>>,
+
     /// The server supports workspace folder.
     ///
     /// @since 3.6.0
@@ -7426,6 +7490,13 @@ pub struct WorkspaceClientCapabilities {
 
     /// Capabilities specific to the `workspace/symbol` request.
     pub symbol: Option<WorkspaceSymbolClientCapabilities>,
+
+    /// Capabilities specific to the `workspace/textDocumentContent` request.
+    ///
+    /// @since 3.18.0
+    /// @proposed
+    #[cfg(feature = "proposed")]
+    pub text_document_content: Option<TextDocumentContentClientCapabilities>,
 
     /// Capabilities specific to `WorkspaceEdit`s.
     pub workspace_edit: Option<WorkspaceEditClientCapabilities>,
@@ -8054,6 +8125,18 @@ pub struct FoldingRangeWorkspaceClientCapabilities {
     /// @proposed
     #[cfg(feature = "proposed")]
     pub refresh_support: Option<bool>,
+}
+
+/// Client capabilities for a text document content provider.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentClientCapabilities {
+    /// Text document content provider supports dynamic registration.
+    pub dynamic_registration: Option<bool>,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -10692,6 +10775,80 @@ pub struct InlineCompletionResponse {
 
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result: Option<OR2<InlineCompletionList, Vec<InlineCompletionItem>>>,
+}
+
+/// The `workspace/textDocumentContent` request is sent from the client to the
+/// server to request the content of a text document.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentRequest {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPId,
+
+    pub params: TextDocumentContentParams,
+}
+
+/// Response to the [TextDocumentContentRequest].
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentResponse {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPIdOptional,
+
+    pub result: String,
+}
+
+/// The `workspace/textDocumentContent` request is sent from the server to the client to refresh
+/// the content of a specific text document.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentRefreshRequest {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPId,
+
+    pub params: TextDocumentContentRefreshParams,
+}
+
+/// Response to the [TextDocumentContentRefreshRequest].
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentRefreshResponse {
+    /// The version of the JSON RPC protocol.
+    pub jsonrpc: String,
+
+    /// The method to be invoked.
+    pub method: LSPRequestMethods,
+
+    /// The request id.
+    pub id: LSPIdOptional,
+
+    pub result: LSPNull,
 }
 
 /// The `client/registerCapability` request is sent from the server to the client to register a new capability

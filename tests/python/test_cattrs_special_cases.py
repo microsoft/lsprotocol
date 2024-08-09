@@ -7,7 +7,6 @@ import attrs
 import hamcrest
 import pytest
 from cattrs.errors import ClassValidationError
-
 from lsprotocol import converters as cv
 from lsprotocol import types as lsp
 
@@ -280,7 +279,7 @@ def test_notebook_sync_options():
 
 
 @attrs.define
-class TestPosEncoding:
+class _PosEncoding:
     """Defines the capabilities provided by a language
     server."""
 
@@ -293,14 +292,27 @@ class TestPosEncoding:
 def test_position_encoding_kind(e):
     data = {"positionEncoding": e}
     converter = cv.get_converter()
-    obj = converter.structure(data, TestPosEncoding)
-    hamcrest.assert_that(obj, hamcrest.instance_of(TestPosEncoding))
+    obj = converter.structure(data, _PosEncoding)
+    hamcrest.assert_that(obj, hamcrest.instance_of(_PosEncoding))
 
     if e is None:
-        hamcrest.assert_that(
-            converter.unstructure(obj, TestPosEncoding), hamcrest.is_({})
-        )
+        hamcrest.assert_that(converter.unstructure(obj, _PosEncoding), hamcrest.is_({}))
     else:
         hamcrest.assert_that(
-            converter.unstructure(obj, TestPosEncoding), hamcrest.is_(data)
+            converter.unstructure(obj, _PosEncoding), hamcrest.is_(data)
         )
+
+
+def test_prepare_rename_response():
+    data = {
+        "id": 1,
+        "jsonrpc": "2.0",
+        "result": None,
+    }
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.PrepareRenameResponse)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.PrepareRenameResponse))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.PrepareRenameResponse),
+        hamcrest.is_(data),
+    )

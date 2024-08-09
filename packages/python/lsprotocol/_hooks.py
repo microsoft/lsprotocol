@@ -705,23 +705,6 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
             converter.structure(item, lsp_types.SymbolInformation) for item in object_
         ]
 
-    def _notebook_sync_registration_option_selector_hook(
-        object_: Any, _: type
-    ) -> Union[
-        lsp_types.NotebookDocumentFilterWithNotebook,
-        lsp_types.NotebookDocumentFilterWithCells,
-    ]:
-        if "notebook" in object_:
-            return converter.structure(
-                object_,
-                lsp_types.NotebookDocumentFilterWithNotebook,
-            )
-        else:
-            return converter.structure(
-                object_,
-                lsp_types.NotebookDocumentFilterWithCells,
-            )
-
     def _language_kind_hook(
         object_: Any, _: type
     ) -> Union[
@@ -753,6 +736,24 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         if isinstance(object_, (bool, int, str, float)):
             return object_
         return converter.structure(object_, lsp_types.CompletionItemKind)
+
+    def _relative_pattern_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.RelativePattern]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.RelativePattern)
+
+    def _workspace_folder_hook(
+        object_: Any, _: type
+    ) -> Union[OptionalPrimitive, lsp_types.WorkspaceFolder]:
+        if object_ is None:
+            return None
+        if isinstance(object_, (bool, int, str, float)):
+            return object_
+        return converter.structure(object_, lsp_types.WorkspaceFolder)
 
     structure_hooks = [
         (
@@ -1114,6 +1115,22 @@ def _register_capabilities_hooks(converter: cattrs.Converter) -> cattrs.Converte
         (
             Union[lsp_types.CompletionItemKind, int],
             _completion_item_kind_hook,
+        ),
+        (
+            Optional[Union[str, lsp_types.RelativePattern]],
+            _relative_pattern_hook,
+        ),
+        (
+            Union[str, lsp_types.RelativePattern],
+            _relative_pattern_hook,
+        ),
+        (
+            Optional[Union[lsp_types.WorkspaceFolder, str]],
+            _workspace_folder_hook,
+        ),
+        (
+            Union[lsp_types.WorkspaceFolder, str],
+            _workspace_folder_hook,
         ),
     ]
     for type_, hook in structure_hooks:

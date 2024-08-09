@@ -7,13 +7,13 @@ import generator.model as model
 
 from .rust_commons import (
     TypeData,
-    fix_lsp_method_name,
     generate_extras,
     generate_literal_struct_name,
     generate_property,
     get_extended_properties,
     get_from_name,
     get_message_type_name,
+    get_name,
     get_type_name,
     struct_wrapper,
     type_alias_wrapper,
@@ -460,7 +460,10 @@ def generate_response(
                     type=request_def.result,
                 )
             ]
-    name = fix_lsp_method_name(request_def.method)
+    name = get_name(request_def)
+
+    if name.endswith("Request"):
+        name = name[:-7]
     response_def = model.Structure(
         name=f"{name}Response",
         documentation=f"Response to the [{name}Request].",
@@ -483,8 +486,8 @@ def generate_partial_result(
     if not request_def.partialResult:
         return
 
-    if request_def.partialResult.kind not in ["and", "or"]:
-        return
+    # Partial results are also typical covered in `model.Structures` that should already be generated
+    # so we don't need to generate them here.
 
 
 def generate_registration_options(
@@ -493,5 +496,5 @@ def generate_registration_options(
     if not request_def.registrationOptions:
         return
 
-    if request_def.registrationOptions.kind not in ["and", "or"]:
-        return
+    # These types have references in `model.Structures` that should already be generated
+    # so we don't need to generate them here.

@@ -10,6 +10,7 @@
 use rust_decimal::Decimal;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use url::Url;
 /// This type allows extending any string enum to support custom values.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(untagged)]
@@ -420,6 +421,10 @@ pub enum SemanticTokenTypes {
     /// @since 3.17.0
     #[serde(rename = "decorator")]
     Decorator,
+
+    /// @since 3.18.0
+    #[serde(rename = "label")]
+    Label,
 }
 
 /// A set of predefined token modifiers. This set is not fixed
@@ -557,7 +562,7 @@ pub enum LSPErrorCodes {
     /// the client should cancel the request.
     ContentModified = -32801,
 
-    /// The client has canceled a request and a server as detected
+    /// The client has canceled a request and a server has detected
     /// the cancel.
     RequestCancelled = -32800,
 }
@@ -2284,7 +2289,7 @@ pub struct ImplementationParams {
 pub struct Location {
     pub range: Range,
 
-    pub uri: String,
+    pub uri: Url,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -2343,7 +2348,7 @@ pub struct WorkspaceFolder {
     pub name: String,
 
     /// The associated URI for this workspace folder.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// The parameters of a `workspace/didChangeWorkspaceFolders` notification.
@@ -2645,7 +2650,7 @@ pub struct CallHierarchyItem {
     pub tags: Option<Vec<SymbolTag>>,
 
     /// The resource identifier of this item.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Call hierarchy options used during static or dynamic registration.
@@ -2867,7 +2872,7 @@ pub struct ShowDocumentParams {
     pub take_focus: Option<bool>,
 
     /// The uri to show.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// The result of a showDocument request.
@@ -2959,7 +2964,7 @@ pub struct WorkspaceEdit {
     pub change_annotations: Option<HashMap<ChangeAnnotationIdentifier, ChangeAnnotation>>,
 
     /// Holds changes to existing resources.
-    pub changes: Option<HashMap<String, Vec<TextEdit>>>,
+    pub changes: Option<HashMap<Url, Vec<TextEdit>>>,
 
     /// Depending on the client capability `workspace.workspaceEdit.resourceOperations` document changes
     /// are either an array of `TextDocumentEdit`s to express changes to n different text documents
@@ -3103,7 +3108,7 @@ pub struct TypeHierarchyItem {
     pub tags: Option<Vec<SymbolTag>>,
 
     /// The resource identifier of this item.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Type hierarchy options used during static or dynamic registration.
@@ -3313,7 +3318,7 @@ pub struct DocumentDiagnosticParams {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentDiagnosticReportPartialResult {
     pub related_documents:
-        HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
+        HashMap<Url, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
 }
 
 /// Cancellation data returned from a diagnostic request.
@@ -3613,7 +3618,7 @@ pub struct InitializeParams {
     /// @deprecated in favour of workspaceFolders.
     #[deprecated]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_uri: Option<String>,
+    pub root_uri: Option<Url>,
 
     /// The initial trace setting. If omitted trace is disabled ('off').
     pub trace: Option<TraceValue>,
@@ -3844,7 +3849,7 @@ pub struct PublishDiagnosticsParams {
     pub diagnostics: Vec<Diagnostic>,
 
     /// The URI for which diagnostic information is reported.
-    pub uri: String,
+    pub uri: Url,
 
     /// Optional the version number of the document the diagnostics are published for.
     ///
@@ -4585,6 +4590,12 @@ pub struct WorkspaceSymbolParams {
 
     /// A query string to filter symbols by. Clients may send an empty
     /// string here to request all symbols.
+    ///
+    /// The `query`-parameter should be interpreted in a *relaxed way* as editors
+    /// will apply their own highlighting and scoring on the results. A good rule
+    /// of thumb is to match case-insensitive and to simply check that the
+    /// characters of *query* appear in their order in a candidate symbol.
+    /// Servers shouldn't use prefix, substring, or similar strict matching.
     pub query: String,
 
     /// An optional token that a server can use to report work done progress.
@@ -4718,7 +4729,7 @@ pub struct DocumentLink {
     pub range: Range,
 
     /// The uri this link points to. If missing a resolve request is sent later.
-    pub target: Option<String>,
+    pub target: Option<Url>,
 
     /// The tooltip text when you hover over this link.
     ///
@@ -5127,7 +5138,7 @@ pub struct LocationLink {
     pub target_selection_range: Range,
 
     /// The target resource identifier of this link.
-    pub target_uri: String,
+    pub target_uri: Url,
 }
 
 /// A range in a text document expressed as (zero-based) start and end positions.
@@ -5188,7 +5199,7 @@ pub struct WorkspaceFoldersChangeEvent {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ConfigurationItem {
     /// The scope to get the configuration section for.
-    pub scope_uri: Option<String>,
+    pub scope_uri: Option<Url>,
 
     /// The configuration section asked for.
     pub section: Option<String>,
@@ -5199,7 +5210,7 @@ pub struct ConfigurationItem {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentIdentifier {
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Represents a color in RGBA space.
@@ -5381,7 +5392,7 @@ pub struct CreateFile {
     pub options: Option<CreateFileOptions>,
 
     /// The resource to create.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Rename file operation
@@ -5397,10 +5408,10 @@ pub struct RenameFile {
     pub kind: String,
 
     /// The new location.
-    pub new_uri: String,
+    pub new_uri: Url,
 
     /// The old (existing) location.
-    pub old_uri: String,
+    pub old_uri: Url,
 
     /// Rename options.
     pub options: Option<RenameFileOptions>,
@@ -5422,7 +5433,7 @@ pub struct DeleteFile {
     pub options: Option<DeleteFileOptions>,
 
     /// The file to delete.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Additional information that describes document changes.
@@ -5664,9 +5675,8 @@ pub struct RelatedFullDocumentDiagnosticReport {
     /// a.cpp and result in errors in a header file b.hpp.
     ///
     /// @since 3.17.0
-    pub related_documents: Option<
-        HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
-    >,
+    pub related_documents:
+        Option<HashMap<Url, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>>,
 
     /// An optional result id. If provided it will
     /// be sent on the next diagnostic request for the
@@ -5693,9 +5703,8 @@ pub struct RelatedUnchangedDocumentDiagnosticReport {
     /// a.cpp and result in errors in a header file b.hpp.
     ///
     /// @since 3.17.0
-    pub related_documents: Option<
-        HashMap<String, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>,
-    >,
+    pub related_documents:
+        Option<HashMap<Url, OR2<FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport>>>,
 
     /// A result id which will be sent on the next
     /// diagnostic request for the same document.
@@ -5768,7 +5777,7 @@ pub struct DiagnosticOptions {
 pub struct PreviousResultId {
     /// The URI for which the client knowns a
     /// result id.
-    pub uri: String,
+    pub uri: Url,
 
     /// The value of the previous result id.
     pub value: String,
@@ -5793,7 +5802,7 @@ pub struct NotebookDocument {
     pub notebook_type: String,
 
     /// The notebook document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document (it will increase after each
     /// change, including undo/redo).
@@ -5812,7 +5821,7 @@ pub struct TextDocumentItem {
     pub text: String,
 
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document (it will increase after each
     /// change, including undo/redo).
@@ -5851,7 +5860,7 @@ pub struct NotebookDocumentSyncOptions {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct VersionedNotebookDocumentIdentifier {
     /// The notebook document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this notebook document.
     pub version: i32,
@@ -5879,7 +5888,7 @@ pub struct NotebookDocumentChangeEvent {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct NotebookDocumentIdentifier {
     /// The notebook document's uri.
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Provides information about the context in which an inline completion was requested.
@@ -6003,7 +6012,7 @@ pub struct _InitializeParams {
     /// @deprecated in favour of workspaceFolders.
     #[deprecated]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub root_uri: Option<String>,
+    pub root_uri: Option<Url>,
 
     /// The initial trace setting. If omitted trace is disabled ('off').
     pub trace: Option<TraceValue>,
@@ -6204,7 +6213,7 @@ pub struct ServerInfo {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct VersionedTextDocumentIdentifier {
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document.
     pub version: i32,
@@ -6227,7 +6236,7 @@ pub struct FileEvent {
     pub type_: FileChangeType,
 
     /// The file's uri.
-    pub uri: String,
+    pub uri: Url,
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
@@ -6274,8 +6283,9 @@ pub struct Diagnostic {
     /// a scope collide all definitions can be marked via this property.
     pub related_information: Option<Vec<DiagnosticRelatedInformation>>,
 
-    /// The diagnostic's severity. Can be omitted. If omitted it is up to the
-    /// client to interpret diagnostics as error, warning, info or hint.
+    /// The diagnostic's severity. To avoid interpretation mismatches when a
+    /// server is used with different clients it is highly recommended that servers
+    /// always provide a severity value.
     pub severity: Option<DiagnosticSeverity>,
 
     /// A human-readable string describing the source of this
@@ -6638,7 +6648,7 @@ pub struct CodeActionOptions {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct LocationUriOnly {
-    pub uri: String,
+    pub uri: Url,
 }
 
 /// Server capabilities for a [WorkspaceSymbolRequest].
@@ -6808,7 +6818,7 @@ pub struct SemanticTokensFullDelta {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OptionalVersionedTextDocumentIdentifier {
     /// The text document's uri.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number of this document. If a versioned text document identifier
     /// is sent from the server to the client and the file is not open in the editor
@@ -6944,7 +6954,7 @@ pub struct WorkspaceFullDocumentDiagnosticReport {
     pub result_id: Option<String>,
 
     /// The URI for which diagnostic information is reported.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number for which the diagnostics are reported.
     /// If the document is not marked as open `null` can be provided.
@@ -6969,7 +6979,7 @@ pub struct WorkspaceUnchangedDocumentDiagnosticReport {
     pub result_id: String,
 
     /// The URI for which diagnostic information is reported.
-    pub uri: String,
+    pub uri: Url,
 
     /// The version number for which the diagnostics are reported.
     /// If the document is not marked as open `null` can be provided.
@@ -6989,7 +6999,7 @@ pub struct WorkspaceUnchangedDocumentDiagnosticReport {
 pub struct NotebookCell {
     /// The URI of the cell's text document
     /// content.
-    pub document: String,
+    pub document: Url,
 
     /// Additional execution summary information
     /// if supported by the client.
@@ -7177,7 +7187,7 @@ pub struct TextDocumentContentChangeWholeDocument {
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CodeDescription {
     /// An URI to open with more information about the diagnostic error.
-    pub href: String,
+    pub href: Url,
 }
 
 /// Represents a related message and source code location for a diagnostic. This should be
@@ -7690,7 +7700,7 @@ pub struct FileOperationOptions {
 pub struct RelativePattern {
     /// A workspace folder or a base URI to which this pattern will be matched
     /// against relatively.
-    pub base_uri: OR2<WorkspaceFolder, String>,
+    pub base_uri: OR2<WorkspaceFolder, Url>,
 
     /// The actual glob pattern;
     pub pattern: Pattern,
@@ -7706,7 +7716,9 @@ pub struct TextDocumentFilterLanguage {
     pub language: String,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    pub pattern: Option<String>,
+    ///
+    /// @since 3.18.0 - support for relative patterns.
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -7722,7 +7734,9 @@ pub struct TextDocumentFilterScheme {
     pub language: Option<String>,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    pub pattern: Option<String>,
+    ///
+    /// @since 3.18.0 - support for relative patterns.
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
@@ -7738,7 +7752,9 @@ pub struct TextDocumentFilterPattern {
     pub language: Option<String>,
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    pub pattern: String,
+    ///
+    /// @since 3.18.0 - support for relative patterns.
+    pub pattern: GlobPattern,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -7754,7 +7770,7 @@ pub struct NotebookDocumentFilterNotebookType {
     pub notebook_type: String,
 
     /// A glob pattern.
-    pub pattern: Option<String>,
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -7770,7 +7786,7 @@ pub struct NotebookDocumentFilterScheme {
     pub notebook_type: Option<String>,
 
     /// A glob pattern.
-    pub pattern: Option<String>,
+    pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: String,
@@ -7786,7 +7802,7 @@ pub struct NotebookDocumentFilterPattern {
     pub notebook_type: Option<String>,
 
     /// A glob pattern.
-    pub pattern: String,
+    pub pattern: GlobPattern,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
     pub scheme: Option<String>,
@@ -8281,6 +8297,12 @@ pub struct CodeActionClientCapabilities {
 pub struct CodeLensClientCapabilities {
     /// Whether code lens supports dynamic registration.
     pub dynamic_registration: Option<bool>,
+
+    /// Whether the client supports resolving additional code lens
+    /// properties via a separate `codeLens/resolve` request.
+    ///
+    /// @since 3.18.0
+    pub resolve_support: Option<ClientCodeLensResolveOptions>,
 }
 
 /// The client capabilities of a [DocumentLinkRequest].
@@ -8870,6 +8892,14 @@ pub struct ClientCodeActionResolveOptions {
 /// @since 3.18.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct ClientCodeLensResolveOptions {
+    /// The properties that a client can resolve lazily.
+    pub properties: Vec<String>,
+}
+
+/// @since 3.18.0
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct ClientFoldingRangeKindOptions {
     /// The folding range kind values the client supports. When this
     /// property exists the client also guarantees that it will
@@ -9012,7 +9042,7 @@ pub struct ClientSemanticTokensRequestFullDelta {
 /// folder configuration changes.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDidChangeWorkspaceFoldersNotification {
+pub struct DidChangeWorkspaceFoldersNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9026,7 +9056,7 @@ pub struct WorkspaceDidChangeWorkspaceFoldersNotification {
 /// initiated on the server side.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowWorkDoneProgressCancelNotification {
+pub struct WorkDoneProgressCancelNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9042,7 +9072,7 @@ pub struct WindowWorkDoneProgressCancelNotification {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDidCreateFilesNotification {
+pub struct DidCreateFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9058,7 +9088,7 @@ pub struct WorkspaceDidCreateFilesNotification {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDidRenameFilesNotification {
+pub struct DidRenameFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9074,7 +9104,7 @@ pub struct WorkspaceDidRenameFilesNotification {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDidDeleteFilesNotification {
+pub struct DidDeleteFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9089,7 +9119,7 @@ pub struct WorkspaceDidDeleteFilesNotification {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentDidOpenNotification {
+pub struct DidOpenNotebookDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9101,7 +9131,7 @@ pub struct NotebookDocumentDidOpenNotification {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentDidChangeNotification {
+pub struct DidChangeNotebookDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9116,7 +9146,7 @@ pub struct NotebookDocumentDidChangeNotification {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentDidSaveNotification {
+pub struct DidSaveNotebookDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9131,7 +9161,7 @@ pub struct NotebookDocumentDidSaveNotification {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct NotebookDocumentDidCloseNotification {
+pub struct DidCloseNotebookDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9175,7 +9205,7 @@ pub struct ExitNotification {
 /// the changed configuration as defined by the language client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDidChangeConfigurationNotification {
+pub struct DidChangeConfigurationNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9189,7 +9219,7 @@ pub struct WorkspaceDidChangeConfigurationNotification {
 /// the client to display a particular message in the user interface.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowMessageNotification {
+pub struct ShowMessageNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9203,7 +9233,7 @@ pub struct WindowShowMessageNotification {
 /// the client to log a particular message.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowLogMessageNotification {
+pub struct LogMessageNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9237,7 +9267,7 @@ pub struct TelemetryEventNotification {
 /// is one.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDidOpenNotification {
+pub struct DidOpenTextDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9251,7 +9281,7 @@ pub struct TextDocumentDidOpenNotification {
 /// changes to a text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDidChangeNotification {
+pub struct DidChangeTextDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9270,7 +9300,7 @@ pub struct TextDocumentDidChangeNotification {
 /// notification requires a previous open notification to be sent.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDidCloseNotification {
+pub struct DidCloseTextDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9284,7 +9314,7 @@ pub struct TextDocumentDidCloseNotification {
 /// the document got saved in the client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDidSaveNotification {
+pub struct DidSaveTextDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9298,7 +9328,7 @@ pub struct TextDocumentDidSaveNotification {
 /// the document is actually saved.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentWillSaveNotification {
+pub struct WillSaveTextDocumentNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9312,7 +9342,7 @@ pub struct TextDocumentWillSaveNotification {
 /// the client detects changes to file watched by the language client.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDidChangeWatchedFilesNotification {
+pub struct DidChangeWatchedFilesNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9326,7 +9356,7 @@ pub struct WorkspaceDidChangeWatchedFilesNotification {
 /// results of validation runs.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPublishDiagnosticsNotification {
+pub struct PublishDiagnosticsNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9362,7 +9392,7 @@ pub struct LogTraceNotification {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct CancelRequestNotification {
+pub struct CancelNotification {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9406,7 +9436,7 @@ pub enum LSPIdOptional {
 /// the response is of type [Definition] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentImplementationRequest {
+pub struct ImplementationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9419,10 +9449,10 @@ pub struct TextDocumentImplementationRequest {
     pub params: ImplementationParams,
 }
 
-/// Response to the [TextDocumentImplementationRequest].
+/// Response to the [ImplementationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentImplementationResponse {
+pub struct ImplementationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9441,7 +9471,7 @@ pub struct TextDocumentImplementationResponse {
 /// the response is of type [Definition] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentTypeDefinitionRequest {
+pub struct TypeDefinitionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9454,10 +9484,10 @@ pub struct TextDocumentTypeDefinitionRequest {
     pub params: TypeDefinitionParams,
 }
 
-/// Response to the [TextDocumentTypeDefinitionRequest].
+/// Response to the [TypeDefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentTypeDefinitionResponse {
+pub struct TypeDefinitionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9474,7 +9504,7 @@ pub struct TextDocumentTypeDefinitionResponse {
 /// The `workspace/workspaceFolders` is sent from the server to the client to fetch the open workspace folders.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWorkspaceFoldersRequest {
+pub struct WorkspaceFoldersRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9487,10 +9517,10 @@ pub struct WorkspaceWorkspaceFoldersRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceWorkspaceFoldersRequest].
+/// Response to the [WorkspaceFoldersRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWorkspaceFoldersResponse {
+pub struct WorkspaceFoldersResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9513,7 +9543,7 @@ pub struct WorkspaceWorkspaceFoldersResponse {
 /// change event and empty the cache if such an event is received.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceConfigurationRequest {
+pub struct ConfigurationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9526,10 +9556,10 @@ pub struct WorkspaceConfigurationRequest {
     pub params: ConfigurationParams,
 }
 
-/// Response to the [WorkspaceConfigurationRequest].
+/// Response to the [ConfigurationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceConfigurationResponse {
+pub struct ConfigurationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9548,7 +9578,7 @@ pub struct WorkspaceConfigurationResponse {
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentColorRequest {
+pub struct DocumentColorRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9561,10 +9591,10 @@ pub struct TextDocumentDocumentColorRequest {
     pub params: DocumentColorParams,
 }
 
-/// Response to the [TextDocumentDocumentColorRequest].
+/// Response to the [DocumentColorRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentColorResponse {
+pub struct DocumentColorResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9583,7 +9613,7 @@ pub struct TextDocumentDocumentColorResponse {
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentColorPresentationRequest {
+pub struct ColorPresentationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9596,10 +9626,10 @@ pub struct TextDocumentColorPresentationRequest {
     pub params: ColorPresentationParams,
 }
 
-/// Response to the [TextDocumentColorPresentationRequest].
+/// Response to the [ColorPresentationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentColorPresentationResponse {
+pub struct ColorPresentationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9618,7 +9648,7 @@ pub struct TextDocumentColorPresentationResponse {
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentFoldingRangeRequest {
+pub struct FoldingRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9631,10 +9661,10 @@ pub struct TextDocumentFoldingRangeRequest {
     pub params: FoldingRangeParams,
 }
 
-/// Response to the [TextDocumentFoldingRangeRequest].
+/// Response to the [FoldingRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentFoldingRangeResponse {
+pub struct FoldingRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9653,7 +9683,7 @@ pub struct TextDocumentFoldingRangeResponse {
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceFoldingRangeRefreshRequest {
+pub struct FoldingRangeRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9666,10 +9696,10 @@ pub struct WorkspaceFoldingRangeRefreshRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceFoldingRangeRefreshRequest].
+/// Response to the [FoldingRangeRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceFoldingRangeRefreshResponse {
+pub struct FoldingRangeRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9688,7 +9718,7 @@ pub struct WorkspaceFoldingRangeRefreshResponse {
 /// or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDeclarationRequest {
+pub struct DeclarationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9701,10 +9731,10 @@ pub struct TextDocumentDeclarationRequest {
     pub params: DeclarationParams,
 }
 
-/// Response to the [TextDocumentDeclarationRequest].
+/// Response to the [DeclarationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDeclarationResponse {
+pub struct DeclarationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9724,7 +9754,7 @@ pub struct TextDocumentDeclarationResponse {
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSelectionRangeRequest {
+pub struct SelectionRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9737,10 +9767,10 @@ pub struct TextDocumentSelectionRangeRequest {
     pub params: SelectionRangeParams,
 }
 
-/// Response to the [TextDocumentSelectionRangeRequest].
+/// Response to the [SelectionRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSelectionRangeResponse {
+pub struct SelectionRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9758,7 +9788,7 @@ pub struct TextDocumentSelectionRangeResponse {
 /// reporting from the server.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowWorkDoneProgressCreateRequest {
+pub struct WorkDoneProgressCreateRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9771,10 +9801,10 @@ pub struct WindowWorkDoneProgressCreateRequest {
     pub params: WorkDoneProgressCreateParams,
 }
 
-/// Response to the [WindowWorkDoneProgressCreateRequest].
+/// Response to the [WorkDoneProgressCreateRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowWorkDoneProgressCreateResponse {
+pub struct WorkDoneProgressCreateResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9793,7 +9823,7 @@ pub struct WindowWorkDoneProgressCreateResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPrepareCallHierarchyRequest {
+pub struct CallHierarchyPrepareRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9806,10 +9836,10 @@ pub struct TextDocumentPrepareCallHierarchyRequest {
     pub params: CallHierarchyPrepareParams,
 }
 
-/// Response to the [TextDocumentPrepareCallHierarchyRequest].
+/// Response to the [CallHierarchyPrepareRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPrepareCallHierarchyResponse {
+pub struct CallHierarchyPrepareResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9896,7 +9926,7 @@ pub struct CallHierarchyOutgoingCallsResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSemanticTokensFullRequest {
+pub struct SemanticTokensRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9909,10 +9939,10 @@ pub struct TextDocumentSemanticTokensFullRequest {
     pub params: SemanticTokensParams,
 }
 
-/// Response to the [TextDocumentSemanticTokensFullRequest].
+/// Response to the [SemanticTokensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSemanticTokensFullResponse {
+pub struct SemanticTokensResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9929,7 +9959,7 @@ pub struct TextDocumentSemanticTokensFullResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSemanticTokensFullDeltaRequest {
+pub struct SemanticTokensDeltaRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9942,10 +9972,10 @@ pub struct TextDocumentSemanticTokensFullDeltaRequest {
     pub params: SemanticTokensDeltaParams,
 }
 
-/// Response to the [TextDocumentSemanticTokensFullDeltaRequest].
+/// Response to the [SemanticTokensDeltaRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSemanticTokensFullDeltaResponse {
+pub struct SemanticTokensDeltaResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9962,7 +9992,7 @@ pub struct TextDocumentSemanticTokensFullDeltaResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSemanticTokensRangeRequest {
+pub struct SemanticTokensRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9975,10 +10005,10 @@ pub struct TextDocumentSemanticTokensRangeRequest {
     pub params: SemanticTokensRangeParams,
 }
 
-/// Response to the [TextDocumentSemanticTokensRangeRequest].
+/// Response to the [SemanticTokensRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSemanticTokensRangeResponse {
+pub struct SemanticTokensRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -9995,7 +10025,7 @@ pub struct TextDocumentSemanticTokensRangeResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceSemanticTokensRefreshRequest {
+pub struct SemanticTokensRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10008,10 +10038,10 @@ pub struct WorkspaceSemanticTokensRefreshRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceSemanticTokensRefreshRequest].
+/// Response to the [SemanticTokensRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceSemanticTokensRefreshResponse {
+pub struct SemanticTokensRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10032,7 +10062,7 @@ pub struct WorkspaceSemanticTokensRefreshResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowDocumentRequest {
+pub struct ShowDocumentRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10045,10 +10075,10 @@ pub struct WindowShowDocumentRequest {
     pub params: ShowDocumentParams,
 }
 
-/// Response to the [WindowShowDocumentRequest].
+/// Response to the [ShowDocumentRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowDocumentResponse {
+pub struct ShowDocumentResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10066,7 +10096,7 @@ pub struct WindowShowDocumentResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentLinkedEditingRangeRequest {
+pub struct LinkedEditingRangeRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10079,10 +10109,10 @@ pub struct TextDocumentLinkedEditingRangeRequest {
     pub params: LinkedEditingRangeParams,
 }
 
-/// Response to the [TextDocumentLinkedEditingRangeRequest].
+/// Response to the [LinkedEditingRangeRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentLinkedEditingRangeResponse {
+pub struct LinkedEditingRangeResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10106,7 +10136,7 @@ pub struct TextDocumentLinkedEditingRangeResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWillCreateFilesRequest {
+pub struct WillCreateFilesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10119,10 +10149,10 @@ pub struct WorkspaceWillCreateFilesRequest {
     pub params: CreateFilesParams,
 }
 
-/// Response to the [WorkspaceWillCreateFilesRequest].
+/// Response to the [WillCreateFilesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWillCreateFilesResponse {
+pub struct WillCreateFilesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10142,7 +10172,7 @@ pub struct WorkspaceWillCreateFilesResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWillRenameFilesRequest {
+pub struct WillRenameFilesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10155,10 +10185,10 @@ pub struct WorkspaceWillRenameFilesRequest {
     pub params: RenameFilesParams,
 }
 
-/// Response to the [WorkspaceWillRenameFilesRequest].
+/// Response to the [WillRenameFilesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWillRenameFilesResponse {
+pub struct WillRenameFilesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10178,7 +10208,7 @@ pub struct WorkspaceWillRenameFilesResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWillDeleteFilesRequest {
+pub struct WillDeleteFilesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10191,10 +10221,10 @@ pub struct WorkspaceWillDeleteFilesRequest {
     pub params: DeleteFilesParams,
 }
 
-/// Response to the [WorkspaceWillDeleteFilesRequest].
+/// Response to the [WillDeleteFilesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceWillDeleteFilesResponse {
+pub struct WillDeleteFilesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10213,7 +10243,7 @@ pub struct WorkspaceWillDeleteFilesResponse {
 /// The response is of type {@link Moniker Moniker[]} or `null`.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentMonikerRequest {
+pub struct MonikerRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10226,10 +10256,10 @@ pub struct TextDocumentMonikerRequest {
     pub params: MonikerParams,
 }
 
-/// Response to the [TextDocumentMonikerRequest].
+/// Response to the [MonikerRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentMonikerResponse {
+pub struct MonikerResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10249,7 +10279,7 @@ pub struct TextDocumentMonikerResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPrepareTypeHierarchyRequest {
+pub struct TypeHierarchyPrepareRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10262,10 +10292,10 @@ pub struct TextDocumentPrepareTypeHierarchyRequest {
     pub params: TypeHierarchyPrepareParams,
 }
 
-/// Response to the [TextDocumentPrepareTypeHierarchyRequest].
+/// Response to the [TypeHierarchyPrepareRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPrepareTypeHierarchyResponse {
+pub struct TypeHierarchyPrepareResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10356,7 +10386,7 @@ pub struct TypeHierarchySubtypesResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentInlineValueRequest {
+pub struct InlineValueRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10369,10 +10399,10 @@ pub struct TextDocumentInlineValueRequest {
     pub params: InlineValueParams,
 }
 
-/// Response to the [TextDocumentInlineValueRequest].
+/// Response to the [InlineValueRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentInlineValueResponse {
+pub struct InlineValueResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10389,7 +10419,7 @@ pub struct TextDocumentInlineValueResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceInlineValueRefreshRequest {
+pub struct InlineValueRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10402,10 +10432,10 @@ pub struct WorkspaceInlineValueRefreshRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceInlineValueRefreshRequest].
+/// Response to the [InlineValueRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceInlineValueRefreshResponse {
+pub struct InlineValueRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10425,7 +10455,7 @@ pub struct WorkspaceInlineValueRefreshResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentInlayHintRequest {
+pub struct InlayHintRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10438,10 +10468,10 @@ pub struct TextDocumentInlayHintRequest {
     pub params: InlayHintParams,
 }
 
-/// Response to the [TextDocumentInlayHintRequest].
+/// Response to the [InlayHintRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentInlayHintResponse {
+pub struct InlayHintResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10494,7 +10524,7 @@ pub struct InlayHintResolveResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceInlayHintRefreshRequest {
+pub struct InlayHintRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10507,10 +10537,10 @@ pub struct WorkspaceInlayHintRefreshRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceInlayHintRefreshRequest].
+/// Response to the [InlayHintRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceInlayHintRefreshResponse {
+pub struct InlayHintRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10528,7 +10558,7 @@ pub struct WorkspaceInlayHintRefreshResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDiagnosticRequest {
+pub struct DocumentDiagnosticRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10541,10 +10571,10 @@ pub struct TextDocumentDiagnosticRequest {
     pub params: DocumentDiagnosticParams,
 }
 
-/// Response to the [TextDocumentDiagnosticRequest].
+/// Response to the [DocumentDiagnosticRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDiagnosticResponse {
+pub struct DocumentDiagnosticResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10596,7 +10626,7 @@ pub struct WorkspaceDiagnosticResponse {
 /// @since 3.17.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDiagnosticRefreshRequest {
+pub struct DiagnosticRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10609,10 +10639,10 @@ pub struct WorkspaceDiagnosticRefreshRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceDiagnosticRefreshRequest].
+/// Response to the [DiagnosticRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceDiagnosticRefreshResponse {
+pub struct DiagnosticRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10634,7 +10664,7 @@ pub struct WorkspaceDiagnosticRefreshResponse {
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentInlineCompletionRequest {
+pub struct InlineCompletionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10647,10 +10677,10 @@ pub struct TextDocumentInlineCompletionRequest {
     pub params: InlineCompletionParams,
 }
 
-/// Response to the [TextDocumentInlineCompletionRequest].
+/// Response to the [InlineCompletionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentInlineCompletionResponse {
+pub struct InlineCompletionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10668,7 +10698,7 @@ pub struct TextDocumentInlineCompletionResponse {
 /// handler on the client side.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct ClientRegisterCapabilityRequest {
+pub struct RegistrationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10681,10 +10711,10 @@ pub struct ClientRegisterCapabilityRequest {
     pub params: RegistrationParams,
 }
 
-/// Response to the [ClientRegisterCapabilityRequest].
+/// Response to the [RegistrationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct ClientRegisterCapabilityResponse {
+pub struct RegistrationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10701,7 +10731,7 @@ pub struct ClientRegisterCapabilityResponse {
 /// handler on the client side.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct ClientUnregisterCapabilityRequest {
+pub struct UnregistrationRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10714,10 +10744,10 @@ pub struct ClientUnregisterCapabilityRequest {
     pub params: UnregistrationParams,
 }
 
-/// Response to the [ClientUnregisterCapabilityRequest].
+/// Response to the [UnregistrationRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct ClientUnregisterCapabilityResponse {
+pub struct UnregistrationResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10805,7 +10835,7 @@ pub struct ShutdownResponse {
 /// and a set of options actions to the user.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowMessageRequestRequest {
+pub struct ShowMessageRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10818,10 +10848,10 @@ pub struct WindowShowMessageRequestRequest {
     pub params: ShowMessageRequestParams,
 }
 
-/// Response to the [WindowShowMessageRequestRequest].
+/// Response to the [ShowMessageRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WindowShowMessageRequestResponse {
+pub struct ShowMessageResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10843,7 +10873,7 @@ pub struct WindowShowMessageRequestResponse {
 /// reliable.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentWillSaveWaitUntilRequest {
+pub struct WillSaveTextDocumentWaitUntilRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10856,10 +10886,10 @@ pub struct TextDocumentWillSaveWaitUntilRequest {
     pub params: WillSaveTextDocumentParams,
 }
 
-/// Response to the [TextDocumentWillSaveWaitUntilRequest].
+/// Response to the [WillSaveTextDocumentWaitUntilRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentWillSaveWaitUntilResponse {
+pub struct WillSaveTextDocumentWaitUntilResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10884,7 +10914,7 @@ pub struct TextDocumentWillSaveWaitUntilResponse {
 /// `filterText`, `insertText`, and `textEdit`, must not be changed during resolve.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentCompletionRequest {
+pub struct CompletionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10897,10 +10927,10 @@ pub struct TextDocumentCompletionRequest {
     pub params: CompletionParams,
 }
 
-/// Response to the [TextDocumentCompletionRequest].
+/// Response to the [CompletionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentCompletionResponse {
+pub struct CompletionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10919,7 +10949,7 @@ pub struct TextDocumentCompletionResponse {
 /// is of type [CompletionItem] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct CompletionItemResolveRequest {
+pub struct CompletionResolveRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10932,10 +10962,10 @@ pub struct CompletionItemResolveRequest {
     pub params: CompletionItem,
 }
 
-/// Response to the [CompletionItemResolveRequest].
+/// Response to the [CompletionResolveRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct CompletionItemResolveResponse {
+pub struct CompletionResolveResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10953,7 +10983,7 @@ pub struct CompletionItemResolveResponse {
 /// type [Hover] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentHoverRequest {
+pub struct HoverRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10966,10 +10996,10 @@ pub struct TextDocumentHoverRequest {
     pub params: HoverParams,
 }
 
-/// Response to the [TextDocumentHoverRequest].
+/// Response to the [HoverRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentHoverResponse {
+pub struct HoverResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10985,7 +11015,7 @@ pub struct TextDocumentHoverResponse {
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSignatureHelpRequest {
+pub struct SignatureHelpRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -10998,10 +11028,10 @@ pub struct TextDocumentSignatureHelpRequest {
     pub params: SignatureHelpParams,
 }
 
-/// Response to the [TextDocumentSignatureHelpRequest].
+/// Response to the [SignatureHelpRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentSignatureHelpResponse {
+pub struct SignatureHelpResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11021,7 +11051,7 @@ pub struct TextDocumentSignatureHelpResponse {
 /// [DefinitionLink] or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDefinitionRequest {
+pub struct DefinitionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11034,10 +11064,10 @@ pub struct TextDocumentDefinitionRequest {
     pub params: DefinitionParams,
 }
 
-/// Response to the [TextDocumentDefinitionRequest].
+/// Response to the [DefinitionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDefinitionResponse {
+pub struct DefinitionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11057,7 +11087,7 @@ pub struct TextDocumentDefinitionResponse {
 /// {@link Location Location[]} or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentReferencesRequest {
+pub struct ReferencesRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11070,10 +11100,10 @@ pub struct TextDocumentReferencesRequest {
     pub params: ReferenceParams,
 }
 
-/// Response to the [TextDocumentReferencesRequest].
+/// Response to the [ReferencesRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentReferencesResponse {
+pub struct ReferencesResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11093,7 +11123,7 @@ pub struct TextDocumentReferencesResponse {
 /// or a Thenable that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentHighlightRequest {
+pub struct DocumentHighlightRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11106,10 +11136,10 @@ pub struct TextDocumentDocumentHighlightRequest {
     pub params: DocumentHighlightParams,
 }
 
-/// Response to the [TextDocumentDocumentHighlightRequest].
+/// Response to the [DocumentHighlightRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentHighlightResponse {
+pub struct DocumentHighlightResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11129,7 +11159,7 @@ pub struct TextDocumentDocumentHighlightResponse {
 /// that resolves to such.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentSymbolRequest {
+pub struct DocumentSymbolRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11142,10 +11172,10 @@ pub struct TextDocumentDocumentSymbolRequest {
     pub params: DocumentSymbolParams,
 }
 
-/// Response to the [TextDocumentDocumentSymbolRequest].
+/// Response to the [DocumentSymbolRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentSymbolResponse {
+pub struct DocumentSymbolResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11162,7 +11192,7 @@ pub struct TextDocumentDocumentSymbolResponse {
 /// A request to provide commands for the given text document and range.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentCodeActionRequest {
+pub struct CodeActionRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11175,10 +11205,10 @@ pub struct TextDocumentCodeActionRequest {
     pub params: CodeActionParams,
 }
 
-/// Response to the [TextDocumentCodeActionRequest].
+/// Response to the [CodeActionRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentCodeActionResponse {
+pub struct CodeActionResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11304,7 +11334,7 @@ pub struct WorkspaceSymbolResolveResponse {
 /// A request to provide code lens for the given text document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentCodeLensRequest {
+pub struct CodeLensRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11317,10 +11347,10 @@ pub struct TextDocumentCodeLensRequest {
     pub params: CodeLensParams,
 }
 
-/// Response to the [TextDocumentCodeLensRequest].
+/// Response to the [CodeLensRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentCodeLensResponse {
+pub struct CodeLensResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11371,7 +11401,7 @@ pub struct CodeLensResolveResponse {
 /// @since 3.16.0
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceCodeLensRefreshRequest {
+pub struct CodeLensRefreshRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11384,10 +11414,10 @@ pub struct WorkspaceCodeLensRefreshRequest {
     pub params: Option<LSPNull>,
 }
 
-/// Response to the [WorkspaceCodeLensRefreshRequest].
+/// Response to the [CodeLensRefreshRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceCodeLensRefreshResponse {
+pub struct CodeLensRefreshResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11403,7 +11433,7 @@ pub struct WorkspaceCodeLensRefreshResponse {
 /// A request to provide document links
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentLinkRequest {
+pub struct DocumentLinkRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11416,10 +11446,10 @@ pub struct TextDocumentDocumentLinkRequest {
     pub params: DocumentLinkParams,
 }
 
-/// Response to the [TextDocumentDocumentLinkRequest].
+/// Response to the [DocumentLinkRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentDocumentLinkResponse {
+pub struct DocumentLinkResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11470,7 +11500,7 @@ pub struct DocumentLinkResolveResponse {
 /// A request to format a whole document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentFormattingRequest {
+pub struct DocumentFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11483,10 +11513,10 @@ pub struct TextDocumentFormattingRequest {
     pub params: DocumentFormattingParams,
 }
 
-/// Response to the [TextDocumentFormattingRequest].
+/// Response to the [DocumentFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentFormattingResponse {
+pub struct DocumentFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11503,7 +11533,7 @@ pub struct TextDocumentFormattingResponse {
 /// A request to format a range in a document.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentRangeFormattingRequest {
+pub struct DocumentRangeFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11516,10 +11546,10 @@ pub struct TextDocumentRangeFormattingRequest {
     pub params: DocumentRangeFormattingParams,
 }
 
-/// Response to the [TextDocumentRangeFormattingRequest].
+/// Response to the [DocumentRangeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentRangeFormattingResponse {
+pub struct DocumentRangeFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11540,7 +11570,7 @@ pub struct TextDocumentRangeFormattingResponse {
 #[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentRangesFormattingRequest {
+pub struct DocumentRangesFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11553,10 +11583,10 @@ pub struct TextDocumentRangesFormattingRequest {
     pub params: DocumentRangesFormattingParams,
 }
 
-/// Response to the [TextDocumentRangesFormattingRequest].
+/// Response to the [DocumentRangesFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentRangesFormattingResponse {
+pub struct DocumentRangesFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11573,7 +11603,7 @@ pub struct TextDocumentRangesFormattingResponse {
 /// A request to format a document on type.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentOnTypeFormattingRequest {
+pub struct DocumentOnTypeFormattingRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11586,10 +11616,10 @@ pub struct TextDocumentOnTypeFormattingRequest {
     pub params: DocumentOnTypeFormattingParams,
 }
 
-/// Response to the [TextDocumentOnTypeFormattingRequest].
+/// Response to the [DocumentOnTypeFormattingRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentOnTypeFormattingResponse {
+pub struct DocumentOnTypeFormattingResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11606,7 +11636,7 @@ pub struct TextDocumentOnTypeFormattingResponse {
 /// A request to rename a symbol.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentRenameRequest {
+pub struct RenameRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11619,10 +11649,10 @@ pub struct TextDocumentRenameRequest {
     pub params: RenameParams,
 }
 
-/// Response to the [TextDocumentRenameRequest].
+/// Response to the [RenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentRenameResponse {
+pub struct RenameResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11641,7 +11671,7 @@ pub struct TextDocumentRenameResponse {
 /// @since 3.16 - support for default behavior
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPrepareRenameRequest {
+pub struct PrepareRenameRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11654,10 +11684,10 @@ pub struct TextDocumentPrepareRenameRequest {
     pub params: PrepareRenameParams,
 }
 
-/// Response to the [TextDocumentPrepareRenameRequest].
+/// Response to the [PrepareRenameRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct TextDocumentPrepareRenameResponse {
+pub struct PrepareRenameResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11675,7 +11705,7 @@ pub struct TextDocumentPrepareRenameResponse {
 /// a workspace edit which the client will apply to the workspace.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceExecuteCommandRequest {
+pub struct ExecuteCommandRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11688,10 +11718,10 @@ pub struct WorkspaceExecuteCommandRequest {
     pub params: ExecuteCommandParams,
 }
 
-/// Response to the [WorkspaceExecuteCommandRequest].
+/// Response to the [ExecuteCommandRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceExecuteCommandResponse {
+pub struct ExecuteCommandResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11708,7 +11738,7 @@ pub struct WorkspaceExecuteCommandResponse {
 /// A request sent from the server to the client to modified certain resources.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceApplyEditRequest {
+pub struct ApplyWorkspaceEditRequest {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 
@@ -11721,10 +11751,10 @@ pub struct WorkspaceApplyEditRequest {
     pub params: ApplyWorkspaceEditParams,
 }
 
-/// Response to the [WorkspaceApplyEditRequest].
+/// Response to the [ApplyWorkspaceEditRequest].
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct WorkspaceApplyEditResponse {
+pub struct ApplyWorkspaceEditResponse {
     /// The version of the JSON RPC protocol.
     pub jsonrpc: String,
 

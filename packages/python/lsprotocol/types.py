@@ -10,9 +10,7 @@
 import enum
 import functools
 from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union
-
 import attrs
-
 from . import validators
 
 __lsp_version__ = "3.17.0"
@@ -2812,6 +2810,69 @@ class InlineCompletionRegistrationOptions:
     )
     """The id used to register the request. The id can be used to deregister
     the request again. See also Registration#id."""
+
+
+@attrs.define
+class TextDocumentContentParams:
+    """Parameters for the `workspace/textDocumentContent` request.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The uri of the text document."""
+
+
+@attrs.define
+class TextDocumentContentOptions:
+    """Text document content provider options.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The scheme for which the server provides content."""
+
+
+@attrs.define
+class TextDocumentContentRegistrationOptions:
+    """Text document content provider registration options.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The scheme for which the server provides content."""
+
+    id: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """The id used to register the request. The id can be used to deregister
+    the request again. See also Registration#id."""
+
+
+@attrs.define
+class TextDocumentContentRefreshParams:
+    """Parameters for the `workspace/textDocumentContent/refresh` request.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    uri: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The uri of the text document to refresh."""
 
 
 @attrs.define
@@ -6838,6 +6899,16 @@ class WorkspaceOptions:
     @since 3.16.0"""
     # Since: 3.16.0
 
+    text_document_content: Optional[
+        Union[TextDocumentContentOptions, TextDocumentContentRegistrationOptions]
+    ] = attrs.field(default=None)
+    """The server supports the `workspace/textDocumentContent` request.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
 
 @attrs.define
 class TextDocumentContentChangePartial:
@@ -7188,6 +7259,16 @@ class WorkspaceClientCapabilities:
         default=None
     )
     """Capabilities specific to the folding range requests scoped to the workspace.
+    
+    @since 3.18.0
+    @proposed"""
+    # Since: 3.18.0
+    # Proposed
+
+    text_document_content: Optional["TextDocumentContentClientCapabilities"] = (
+        attrs.field(default=None)
+    )
+    """Capabilities specific to the `workspace/textDocumentContent` request.
     
     @since 3.18.0
     @proposed"""
@@ -8028,6 +8109,23 @@ class FoldingRangeWorkspaceClientCapabilities:
     @proposed"""
     # Since: 3.18.0
     # Proposed
+
+
+@attrs.define
+class TextDocumentContentClientCapabilities:
+    """Client capabilities for a text document content provider.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    dynamic_registration: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Text document content provider supports dynamic registration."""
 
 
 @attrs.define
@@ -10344,6 +10442,59 @@ class InlineCompletionResponse:
     jsonrpc: str = attrs.field(default="2.0")
 
 
+TextDocumentContentResult = str
+
+
+@attrs.define
+class TextDocumentContentRequest:
+    """The `workspace/textDocumentContent` request is sent from the client to the
+    server to request the content of a text document.
+
+    @since 3.18.0
+    @proposed"""
+
+    id: Union[int, str] = attrs.field()
+    """The request id."""
+    params: TextDocumentContentParams = attrs.field()
+    method: Literal["workspace/textDocumentContent"] = "workspace/textDocumentContent"
+    """The method to be invoked."""
+    jsonrpc: str = attrs.field(default="2.0")
+
+
+@attrs.define
+class TextDocumentContentResponse:
+    id: Optional[Union[int, str]] = attrs.field()
+    """The request id."""
+    result: TextDocumentContentResult = attrs.field(default=None)
+    jsonrpc: str = attrs.field(default="2.0")
+
+
+@attrs.define
+class TextDocumentContentRefreshRequest:
+    """The `workspace/textDocumentContent` request is sent from the server to the client to refresh
+    the content of a specific text document.
+
+    @since 3.18.0
+    @proposed"""
+
+    id: Union[int, str] = attrs.field()
+    """The request id."""
+    params: TextDocumentContentRefreshParams = attrs.field()
+    method: Literal["workspace/textDocumentContent/refresh"] = (
+        "workspace/textDocumentContent/refresh"
+    )
+    """The method to be invoked."""
+    jsonrpc: str = attrs.field(default="2.0")
+
+
+@attrs.define
+class TextDocumentContentRefreshResponse:
+    id: Optional[Union[int, str]] = attrs.field()
+    """The request id."""
+    result: None = attrs.field(default=None)
+    jsonrpc: str = attrs.field(default="2.0")
+
+
 @attrs.define
 class RegistrationRequest:
     """The `client/registerCapability` request is sent from the server to the client to register a new capability
@@ -11551,6 +11702,8 @@ WORKSPACE_INLINE_VALUE_REFRESH = "workspace/inlineValue/refresh"
 WORKSPACE_SEMANTIC_TOKENS_REFRESH = "workspace/semanticTokens/refresh"
 WORKSPACE_SYMBOL = "workspace/symbol"
 WORKSPACE_SYMBOL_RESOLVE = "workspaceSymbol/resolve"
+WORKSPACE_TEXT_DOCUMENT_CONTENT = "workspace/textDocumentContent"
+WORKSPACE_TEXT_DOCUMENT_CONTENT_REFRESH = "workspace/textDocumentContent/refresh"
 WORKSPACE_WILL_CREATE_FILES = "workspace/willCreateFiles"
 WORKSPACE_WILL_DELETE_FILES = "workspace/willDeleteFiles"
 WORKSPACE_WILL_RENAME_FILES = "workspace/willRenameFiles"
@@ -11926,6 +12079,18 @@ METHOD_TO_TYPES = {
         WorkspaceSymbol,
         None,
     ),
+    WORKSPACE_TEXT_DOCUMENT_CONTENT: (
+        TextDocumentContentRequest,
+        TextDocumentContentResponse,
+        TextDocumentContentParams,
+        TextDocumentContentRegistrationOptions,
+    ),
+    WORKSPACE_TEXT_DOCUMENT_CONTENT_REFRESH: (
+        TextDocumentContentRefreshRequest,
+        TextDocumentContentRefreshResponse,
+        TextDocumentContentRefreshParams,
+        None,
+    ),
     WORKSPACE_WILL_CREATE_FILES: (
         WillCreateFilesRequest,
         WillCreateFilesResponse,
@@ -12117,6 +12282,8 @@ REQUESTS = Union[
     ShowMessageRequest,
     ShutdownRequest,
     SignatureHelpRequest,
+    TextDocumentContentRefreshRequest,
+    TextDocumentContentRequest,
     TypeDefinitionRequest,
     TypeHierarchyPrepareRequest,
     TypeHierarchySubtypesRequest,
@@ -12186,6 +12353,8 @@ RESPONSES = Union[
     ShowMessageResponse,
     ShutdownResponse,
     SignatureHelpResponse,
+    TextDocumentContentRefreshResponse,
+    TextDocumentContentResponse,
     TypeDefinitionResponse,
     TypeHierarchyPrepareResponse,
     TypeHierarchySubtypesResponse,
@@ -12411,6 +12580,10 @@ _SPECIAL_CLASSES = [
     StringValue,
     TelemetryEventNotification,
     TextDocumentChangeRegistrationOptions,
+    TextDocumentContentRefreshRequest,
+    TextDocumentContentRefreshResponse,
+    TextDocumentContentRequest,
+    TextDocumentContentResponse,
     TextDocumentRegistrationOptions,
     TextDocumentSaveRegistrationOptions,
     TypeDefinitionRegistrationOptions,
@@ -12767,6 +12940,14 @@ _SPECIAL_PROPERTIES = [
     "TelemetryEventNotification.jsonrpc",
     "TelemetryEventNotification.method",
     "TextDocumentChangeRegistrationOptions.document_selector",
+    "TextDocumentContentRefreshRequest.jsonrpc",
+    "TextDocumentContentRefreshRequest.method",
+    "TextDocumentContentRefreshResponse.jsonrpc",
+    "TextDocumentContentRefreshResponse.result",
+    "TextDocumentContentRequest.jsonrpc",
+    "TextDocumentContentRequest.method",
+    "TextDocumentContentResponse.jsonrpc",
+    "TextDocumentContentResponse.result",
     "TextDocumentRegistrationOptions.document_selector",
     "TextDocumentSaveRegistrationOptions.document_selector",
     "TypeDefinitionRegistrationOptions.document_selector",
@@ -13405,6 +13586,16 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "TextDocumentContentChangeEvent": TextDocumentContentChangeEvent,
     "TextDocumentContentChangePartial": TextDocumentContentChangePartial,
     "TextDocumentContentChangeWholeDocument": TextDocumentContentChangeWholeDocument,
+    "TextDocumentContentClientCapabilities": TextDocumentContentClientCapabilities,
+    "TextDocumentContentOptions": TextDocumentContentOptions,
+    "TextDocumentContentParams": TextDocumentContentParams,
+    "TextDocumentContentRefreshParams": TextDocumentContentRefreshParams,
+    "TextDocumentContentRefreshRequest": TextDocumentContentRefreshRequest,
+    "TextDocumentContentRefreshResponse": TextDocumentContentRefreshResponse,
+    "TextDocumentContentRegistrationOptions": TextDocumentContentRegistrationOptions,
+    "TextDocumentContentRequest": TextDocumentContentRequest,
+    "TextDocumentContentResponse": TextDocumentContentResponse,
+    "TextDocumentContentResult": TextDocumentContentResult,
     "TextDocumentEdit": TextDocumentEdit,
     "TextDocumentFilter": TextDocumentFilter,
     "TextDocumentFilterLanguage": TextDocumentFilterLanguage,
@@ -13577,6 +13768,8 @@ _MESSAGE_DIRECTION: Dict[str, str] = {
     WORKSPACE_SEMANTIC_TOKENS_REFRESH: "serverToClient",
     WORKSPACE_SYMBOL: "clientToServer",
     WORKSPACE_SYMBOL_RESOLVE: "clientToServer",
+    WORKSPACE_TEXT_DOCUMENT_CONTENT: "clientToServer",
+    WORKSPACE_TEXT_DOCUMENT_CONTENT_REFRESH: "serverToClient",
     WORKSPACE_WILL_CREATE_FILES: "clientToServer",
     WORKSPACE_WILL_DELETE_FILES: "clientToServer",
     WORKSPACE_WILL_RENAME_FILES: "clientToServer",

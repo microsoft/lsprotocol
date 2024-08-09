@@ -142,6 +142,12 @@ mod tests {
             "InlineCompletionRequest" => {
                 return validate_type::<InlineCompletionRequest>(result_type, data)
             }
+            "TextDocumentContentRequest" => {
+                return validate_type::<TextDocumentContentRequest>(result_type, data)
+            }
+            "TextDocumentContentRefreshRequest" => {
+                return validate_type::<TextDocumentContentRefreshRequest>(result_type, data)
+            }
             "RegistrationRequest" => {
                 return validate_type::<RegistrationRequest>(result_type, data)
             }

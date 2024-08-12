@@ -30,9 +30,3 @@ extends:
 
       - script: python -m nox --session build_python_package
         displayName: Build package (sdist and wheels)
-
-      - task: 1ES.PublishPipelineArtifact@1
-        inputs:
-          targetPath: $(Build.SourcesDirectory)/packages/python/dist
-          artifactName: dist
-        displayName: 🚛 Publish pypi artifact

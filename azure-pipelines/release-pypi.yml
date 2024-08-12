@@ -22,7 +22,7 @@ extends:
     pythonVersion: '3.8'
     # We don't ship any built in packages.
     generateNotice: false
-    pyProjectTomlPath: $(Build.SourcesDirectory)/packages/python/pyproject.toml
+    projectRootDirectory: $(Build.SourcesDirectory)/packages/python
     packageName: lsprotocol
     buildSteps:
       - script: python -m pip install nox

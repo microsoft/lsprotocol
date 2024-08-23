@@ -2827,6 +2827,23 @@ class TextDocumentContentParams:
 
 
 @attrs.define
+class TextDocumentContentResult:
+    """Result of the `workspace/textDocumentContent` request.
+
+    @since 3.18.0
+    @proposed"""
+
+    # Since: 3.18.0
+    # Proposed
+
+    text: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """The text content of the text document. Please note, that the content of
+    any subsequent open notifications for the text document might differ
+    from the returned content due to whitespace and line ending
+    normalizations done on the client"""
+
+
+@attrs.define
 class TextDocumentContentOptions:
     """Text document content provider options.
 
@@ -2836,8 +2853,8 @@ class TextDocumentContentOptions:
     # Since: 3.18.0
     # Proposed
 
-    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The scheme for which the server provides content."""
+    schemes: Sequence[str] = attrs.field()
+    """The schemes for which the server provides content."""
 
 
 @attrs.define
@@ -2850,8 +2867,8 @@ class TextDocumentContentRegistrationOptions:
     # Since: 3.18.0
     # Proposed
 
-    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The scheme for which the server provides content."""
+    schemes: Sequence[str] = attrs.field()
+    """The schemes for which the server provides content."""
 
     id: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
@@ -5159,19 +5176,13 @@ class Position:
     # Since: 3.17.0 - support for negotiated position encoding.
 
     line: int = attrs.field(validator=validators.uinteger_validator)
-    """Line position in a document (zero-based).
-    
-    If a line number is greater than the number of lines in a document, it defaults back to the number of lines in the document.
-    If a line number is negative, it defaults to 0."""
+    """Line position in a document (zero-based)."""
 
     character: int = attrs.field(validator=validators.uinteger_validator)
     """Character offset on a line in a document (zero-based).
     
     The meaning of this offset is determined by the negotiated
-    `PositionEncodingKind`.
-    
-    If the character value is greater than the line length it defaults back to the
-    line length."""
+    `PositionEncodingKind`."""
 
     def __eq__(self, o: object) -> bool:
         if not isinstance(o, Position):
@@ -10440,9 +10451,6 @@ class InlineCompletionResponse:
     """The request id."""
     result: Optional[InlineCompletionResult] = attrs.field(default=None)
     jsonrpc: str = attrs.field(default="2.0")
-
-
-TextDocumentContentResult = str
 
 
 @attrs.define

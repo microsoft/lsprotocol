@@ -3576,6 +3576,21 @@ pub struct TextDocumentContentParams {
     pub uri: Url,
 }
 
+/// Result of the `workspace/textDocumentContent` request.
+///
+/// @since 3.18.0
+/// @proposed
+#[cfg(feature = "proposed")]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentContentResult {
+    /// The text content of the text document. Please note, that the content of
+    /// any subsequent open notifications for the text document might differ
+    /// from the returned content due to whitespace and line ending
+    /// normalizations done on the client
+    pub text: String,
+}
+
 /// Text document content provider registration options.
 ///
 /// @since 3.18.0
@@ -3588,8 +3603,8 @@ pub struct TextDocumentContentRegistrationOptions {
     /// the request again. See also Registration#id.
     pub id: Option<String>,
 
-    /// The scheme for which the server provides content.
-    pub scheme: String,
+    /// The schemes for which the server provides content.
+    pub schemes: Vec<String>,
 }
 
 /// Parameters for the `workspace/textDocumentContent/refresh` request.
@@ -5326,15 +5341,9 @@ pub struct Position {
     ///
     /// The meaning of this offset is determined by the negotiated
     /// `PositionEncodingKind`.
-    ///
-    /// If the character value is greater than the line length it defaults back to the
-    /// line length.
     pub character: u32,
 
     /// Line position in a document (zero-based).
-    ///
-    /// If a line number is greater than the number of lines in a document, it defaults back to the number of lines in the document.
-    /// If a line number is negative, it defaults to 0.
     pub line: u32,
 }
 
@@ -5990,8 +5999,8 @@ pub struct InlineCompletionOptions {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentOptions {
-    /// The scheme for which the server provides content.
-    pub scheme: String,
+    /// The schemes for which the server provides content.
+    pub schemes: Vec<String>,
 }
 
 /// General parameters to register for a notification or to register a provider.
@@ -10811,7 +10820,7 @@ pub struct TextDocumentContentResponse {
     /// The request id.
     pub id: LSPIdOptional,
 
-    pub result: String,
+    pub result: TextDocumentContentResult,
 }
 
 /// The `workspace/textDocumentContent` request is sent from the server to the client to refresh

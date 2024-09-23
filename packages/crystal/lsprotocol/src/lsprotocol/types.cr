@@ -2296,6 +2296,94 @@ module LSProtocol
     end
   end
 
+  # Parameters for the `workspace/textDocumentContent` request.
+  #
+  # @since 3.18.0
+  # @proposed
+  class TextDocumentContentParams
+    include JSON::Serializable
+
+    # The uri of the text document.
+    getter uri : URI
+
+    def initialize(
+      @uri : URI?,
+    )
+    end
+  end
+
+  # Result of the `workspace/textDocumentContent` request.
+  #
+  # @since 3.18.0
+  # @proposed
+  class TextDocumentContentResult
+    include JSON::Serializable
+
+    # The text content of the text document. Please note, that the content of
+    # any subsequent open notifications for the text document might differ
+    # from the returned content due to whitespace and line ending
+    # normalizations done on the client
+    getter text : String
+
+    def initialize(
+      @text : String?,
+    )
+    end
+  end
+
+  # Text document content provider options.
+  #
+  # @since 3.18.0
+  # @proposed
+  class TextDocumentContentOptions
+    include JSON::Serializable
+
+    # The schemes for which the server provides content.
+    getter schemes : Array(String)
+
+    def initialize(
+      @schemes : Array(String)?,
+    )
+    end
+  end
+
+  # Text document content provider registration options.
+  #
+  # @since 3.18.0
+  # @proposed
+  class TextDocumentContentRegistrationOptions
+    include JSON::Serializable
+
+    # The id used to register the request. The id can be used to deregister
+    # the request again. See also Registration#id.
+    getter id : String?
+
+    # The schemes for which the server provides content.
+    getter schemes : Array(String)
+
+    def initialize(
+      @schemes : Array(String)?,
+      @id : String? = nil,
+    )
+    end
+  end
+
+  # Parameters for the `workspace/textDocumentContent/refresh` request.
+  #
+  # @since 3.18.0
+  # @proposed
+  class TextDocumentContentRefreshParams
+    include JSON::Serializable
+
+    # The uri of the text document to refresh.
+    getter uri : URI
+
+    def initialize(
+      @uri : URI?,
+    )
+    end
+  end
+
   class RegistrationParams
     include JSON::Serializable
 
@@ -4069,6 +4157,12 @@ module LSProtocol
 
     # A query string to filter symbols by. Clients may send an empty
     # string here to request all symbols.
+    #
+    # The `query`-parameter should be interpreted in a *relaxed way* as editors
+    # will apply their own highlighting and scoring on the results. A good rule
+    # of thumb is to match case-insensitive and to simply check that the
+    # characters of *query* appear in their order in a candidate symbol.
+    # Servers shouldn't use prefix, substring, or similar strict matching.
     getter query : String
 
     # An optional token that a server can use to report work done progress.
@@ -5124,15 +5218,9 @@ module LSProtocol
     #
     # The meaning of this offset is determined by the negotiated
     # `PositionEncodingKind`.
-    #
-    # If the character value is greater than the line length it defaults back to the
-    # line length.
     getter character : UInt32
 
     # Line position in a document (zero-based).
-    #
-    # If a line number is greater than the number of lines in a document, it defaults back to the number of lines in the document.
-    # If a line number is negative, it defaults to 0.
     getter line : UInt32
 
     def initialize(
@@ -6250,8 +6338,9 @@ module LSProtocol
     @[JSON::Field(key: "relatedInformation")]
     getter related_information : Array(DiagnosticRelatedInformation)?
 
-    # The diagnostic's severity. Can be omitted. If omitted it is up to the
-    # client to interpret diagnostics as error, warning, info or hint.
+    # The diagnostic's severity. To avoid interpretation mismatches when a
+    # server is used with different clients it is highly recommended that servers
+    # always provide a severity value.
     getter severity : DiagnosticSeverity?
 
     # A human-readable string describing the source of this
@@ -7128,6 +7217,13 @@ module LSProtocol
     @[JSON::Field(key: "fileOperations")]
     getter file_operations : FileOperationOptions?
 
+    # The server supports the `workspace/textDocumentContent` request.
+    #
+    # @since 3.18.0
+    # @proposed
+    @[JSON::Field(key: "textDocumentContent")]
+    getter text_document_content : TextDocumentContentOptions | TextDocumentContentRegistrationOptions?
+
     # The server supports workspace folder.
     #
     # @since 3.6.0
@@ -7136,6 +7232,7 @@ module LSProtocol
 
     def initialize(
       @file_operations : FileOperationOptions? = nil,
+      @text_document_content : TextDocumentContentOptions | TextDocumentContentRegistrationOptions? = nil,
       @workspace_folders : WorkspaceFoldersServerCapabilities? = nil,
     )
     end
@@ -7512,6 +7609,13 @@ module LSProtocol
     # Capabilities specific to the `workspace/symbol` request.
     getter symbol : WorkspaceSymbolClientCapabilities?
 
+    # Capabilities specific to the `workspace/textDocumentContent` request.
+    #
+    # @since 3.18.0
+    # @proposed
+    @[JSON::Field(key: "textDocumentContent")]
+    getter text_document_content : TextDocumentContentClientCapabilities?
+
     # Capabilities specific to `WorkspaceEdit`s.
     @[JSON::Field(key: "workspaceEdit")]
     getter workspace_edit : WorkspaceEditClientCapabilities?
@@ -7536,6 +7640,7 @@ module LSProtocol
       @inline_value : InlineValueWorkspaceClientCapabilities? = nil,
       @semantic_tokens : SemanticTokensWorkspaceClientCapabilities? = nil,
       @symbol : WorkspaceSymbolClientCapabilities? = nil,
+      @text_document_content : TextDocumentContentClientCapabilities? = nil,
       @workspace_edit : WorkspaceEditClientCapabilities? = nil,
       @workspace_folders : Bool? = nil,
     )
@@ -7932,14 +8037,16 @@ module LSProtocol
     getter language : String
 
     # A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    getter pattern : String?
+    #
+    # @since 3.18.0 - support for relative patterns.
+    getter pattern : GlobPattern?
 
     # A Uri `Uri#scheme`, like `file` or `untitled`.
     getter scheme : String?
 
     def initialize(
       @language : String?,
-      @pattern : String? = nil,
+      @pattern : GlobPattern? = nil,
       @scheme : String? = nil,
     )
     end
@@ -7955,7 +8062,9 @@ module LSProtocol
     getter language : String?
 
     # A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    getter pattern : String?
+    #
+    # @since 3.18.0 - support for relative patterns.
+    getter pattern : GlobPattern?
 
     # A Uri `Uri#scheme`, like `file` or `untitled`.
     getter scheme : String
@@ -7963,7 +8072,7 @@ module LSProtocol
     def initialize(
       @scheme : String?,
       @language : String? = nil,
-      @pattern : String? = nil,
+      @pattern : GlobPattern? = nil,
     )
     end
   end
@@ -7978,13 +8087,15 @@ module LSProtocol
     getter language : String?
 
     # A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
-    getter pattern : String
+    #
+    # @since 3.18.0 - support for relative patterns.
+    getter pattern : GlobPattern
 
     # A Uri `Uri#scheme`, like `file` or `untitled`.
     getter scheme : String?
 
     def initialize(
-      @pattern : String?,
+      @pattern : GlobPattern?,
       @language : String? = nil,
       @scheme : String? = nil,
     )
@@ -8002,14 +8113,14 @@ module LSProtocol
     getter notebook_type : String
 
     # A glob pattern.
-    getter pattern : String?
+    getter pattern : GlobPattern?
 
     # A Uri `Uri#scheme`, like `file` or `untitled`.
     getter scheme : String?
 
     def initialize(
       @notebook_type : String?,
-      @pattern : String? = nil,
+      @pattern : GlobPattern? = nil,
       @scheme : String? = nil,
     )
     end
@@ -8026,7 +8137,7 @@ module LSProtocol
     getter notebook_type : String?
 
     # A glob pattern.
-    getter pattern : String?
+    getter pattern : GlobPattern?
 
     # A Uri `Uri#scheme`, like `file` or `untitled`.
     getter scheme : String
@@ -8034,7 +8145,7 @@ module LSProtocol
     def initialize(
       @scheme : String?,
       @notebook_type : String? = nil,
-      @pattern : String? = nil,
+      @pattern : GlobPattern? = nil,
     )
     end
   end
@@ -8050,13 +8161,13 @@ module LSProtocol
     getter notebook_type : String?
 
     # A glob pattern.
-    getter pattern : String
+    getter pattern : GlobPattern
 
     # A Uri `Uri#scheme`, like `file` or `untitled`.
     getter scheme : String?
 
     def initialize(
-      @pattern : String?,
+      @pattern : GlobPattern?,
       @notebook_type : String? = nil,
       @scheme : String? = nil,
     )
@@ -8415,6 +8526,23 @@ module LSProtocol
 
     def initialize(
       @refresh_support : Bool? = nil,
+    )
+    end
+  end
+
+  # Client capabilities for a text document content provider.
+  #
+  # @since 3.18.0
+  # @proposed
+  class TextDocumentContentClientCapabilities
+    include JSON::Serializable
+
+    # Text document content provider supports dynamic registration.
+    @[JSON::Field(key: "dynamicRegistration")]
+    getter dynamic_registration : Bool?
+
+    def initialize(
+      @dynamic_registration : Bool? = nil,
     )
     end
   end
@@ -8785,8 +8913,16 @@ module LSProtocol
     @[JSON::Field(key: "dynamicRegistration")]
     getter dynamic_registration : Bool?
 
+    # Whether the client supports resolving additional code lens
+    # properties via a separate `codeLens/resolve` request.
+    #
+    # @since 3.18.0
+    @[JSON::Field(key: "resolveSupport")]
+    getter resolve_support : ClientCodeLensResolveOptions?
+
     def initialize(
       @dynamic_registration : Bool? = nil,
+      @resolve_support : ClientCodeLensResolveOptions? = nil,
     )
     end
   end
@@ -9693,6 +9829,19 @@ module LSProtocol
   end
 
   # @since 3.18.0
+  class ClientCodeLensResolveOptions
+    include JSON::Serializable
+
+    # The properties that a client can resolve lazily.
+    getter properties : Array(String)
+
+    def initialize(
+      @properties : Array(String)?,
+    )
+    end
+  end
+
+  # @since 3.18.0
   class ClientFoldingRangeKindOptions
     include JSON::Serializable
 
@@ -9911,6 +10060,9 @@ module LSProtocol
     # @since 3.17.0
     Decorator
 
+    # @since 3.18.0
+    Label
+
     def self.new(pull : JSON::PullParser) : self
       self.from_json(pull)
     end
@@ -10077,7 +10229,7 @@ module LSProtocol
     # the client should cancel the request.
     ContentModified = -32801
 
-    # The client has canceled a request and a server as detected
+    # The client has canceled a request and a server has detected
     # the cancel.
     RequestCancelled = -32800
 
@@ -12815,6 +12967,74 @@ module LSProtocol
     getter jsonrpc : String = "2.0"
 
     def initialize(@id : Int32 | String, @result : TextDocumentInlineCompletionResult)
+    end
+  end
+
+  # The `workspace/textDocumentContent` request is sent from the client to the
+  # server to request the content of a text document.
+  #
+  # @since 3.18.0
+  # @proposed
+  class WorkspaceTextDocumentContentRequest
+    include JSON::Serializable
+
+    # The request id.
+    getter id : Int32 | String
+
+    getter params : TextDocumentContentParams
+
+    # The method to be invoked.
+    getter method : String = "workspace/textDocumentContent"
+
+    getter jsonrpc : String = "2.0"
+
+    def initialize(@id : Int32 | String, @params : TextDocumentContentParams)
+    end
+  end
+
+  class WorkspaceTextDocumentContentResponse
+    include JSON::Serializable
+
+    # The request id.
+    getter id : Int32 | String?
+    getter result : TextDocumentContentResult
+    getter jsonrpc : String = "2.0"
+
+    def initialize(@id : Int32 | String, @result : TextDocumentContentResult)
+    end
+  end
+
+  # The `workspace/textDocumentContent` request is sent from the server to the client to refresh
+  # the content of a specific text document.
+  #
+  # @since 3.18.0
+  # @proposed
+  class WorkspaceTextDocumentContentRefreshRequest
+    include JSON::Serializable
+
+    # The request id.
+    getter id : Int32 | String
+
+    getter params : TextDocumentContentRefreshParams
+
+    # The method to be invoked.
+    getter method : String = "workspace/textDocumentContent/refresh"
+
+    getter jsonrpc : String = "2.0"
+
+    def initialize(@id : Int32 | String, @params : TextDocumentContentRefreshParams)
+    end
+  end
+
+  class WorkspaceTextDocumentContentRefreshResponse
+    include JSON::Serializable
+
+    # The request id.
+    getter id : Int32 | String?
+    getter result : Nil
+    getter jsonrpc : String = "2.0"
+
+    def initialize(@id : Int32 | String, @result : Nil)
     end
   end
 

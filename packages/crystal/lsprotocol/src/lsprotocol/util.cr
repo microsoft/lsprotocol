@@ -97,6 +97,8 @@ module LSProtocol
   WORKSPACE_SEMANTIC_TOKENS_REFRESH        = "workspace/semanticTokens/refresh"
   WORKSPACE_SYMBOL                         = "workspace/symbol"
   WORKSPACE_SYMBOL_RESOLVE                 = "workspaceSymbol/resolve"
+  WORKSPACE_TEXT_DOCUMENT_CONTENT          = "workspace/textDocumentContent"
+  WORKSPACE_TEXT_DOCUMENT_CONTENT_REFRESH  = "workspace/textDocumentContent/refresh"
   WORKSPACE_WILL_CREATE_FILES              = "workspace/willCreateFiles"
   WORKSPACE_WILL_DELETE_FILES              = "workspace/willDeleteFiles"
   WORKSPACE_WILL_RENAME_FILES              = "workspace/willRenameFiles"
@@ -290,6 +292,12 @@ module LSProtocol
     "workspace/symbol": {
       WorkspaceSymbolRequest, WorkspaceSymbolResponse, WorkspaceSymbolParams, WorkspaceSymbolRegistrationOptions,
     },
+    "workspace/textDocumentContent": {
+      WorkspaceTextDocumentContentRequest, WorkspaceTextDocumentContentResponse, TextDocumentContentParams, TextDocumentContentRegistrationOptions,
+    },
+    "workspace/textDocumentContent/refresh": {
+      WorkspaceTextDocumentContentRefreshRequest, WorkspaceTextDocumentContentRefreshResponse, TextDocumentContentRefreshParams, Nil,
+    },
     "workspace/willCreateFiles": {
       WorkspaceWillCreateFilesRequest, WorkspaceWillCreateFilesResponse, CreateFilesParams, FileOperationRegistrationOptions,
     },
@@ -424,6 +432,8 @@ module LSProtocol
     "WorkspaceDiagnosticRequest"                     => WorkspaceDiagnosticRequest,
     "WorkspaceDiagnosticRefreshRequest"              => WorkspaceDiagnosticRefreshRequest,
     "TextDocumentInlineCompletionRequest"            => TextDocumentInlineCompletionRequest,
+    "WorkspaceTextDocumentContentRequest"            => WorkspaceTextDocumentContentRequest,
+    "WorkspaceTextDocumentContentRefreshRequest"     => WorkspaceTextDocumentContentRefreshRequest,
     "ClientRegisterCapabilityRequest"                => ClientRegisterCapabilityRequest,
     "ClientUnregisterCapabilityRequest"              => ClientUnregisterCapabilityRequest,
     "InitializeRequest"                              => InitializeRequest,
@@ -491,6 +501,8 @@ module LSProtocol
     "WorkspaceDiagnosticResponse"                    => WorkspaceDiagnosticResponse,
     "WorkspaceDiagnosticRefreshResponse"             => WorkspaceDiagnosticRefreshResponse,
     "TextDocumentInlineCompletionResponse"           => TextDocumentInlineCompletionResponse,
+    "WorkspaceTextDocumentContentResponse"           => WorkspaceTextDocumentContentResponse,
+    "WorkspaceTextDocumentContentRefreshResponse"    => WorkspaceTextDocumentContentRefreshResponse,
     "ClientRegisterCapabilityResponse"               => ClientRegisterCapabilityResponse,
     "ClientUnregisterCapabilityResponse"             => ClientUnregisterCapabilityResponse,
     "InitializeResponse"                             => InitializeResponse,
@@ -549,9 +561,9 @@ module LSProtocol
     "CancelRequestNotification"                      => CancelRequestNotification,
     "ProgressNotification"                           => ProgressNotification,
   }
-  alias Request = CallHierarchyIncomingCallsRequest | CallHierarchyOutgoingCallsRequest | ClientRegisterCapabilityRequest | ClientUnregisterCapabilityRequest | CodeActionResolveRequest | CodeLensResolveRequest | CompletionItemResolveRequest | DocumentLinkResolveRequest | InitializeRequest | InlayHintResolveRequest | ShutdownRequest | TextDocumentCodeActionRequest | TextDocumentCodeLensRequest | TextDocumentColorPresentationRequest | TextDocumentCompletionRequest | TextDocumentDeclarationRequest | TextDocumentDefinitionRequest | TextDocumentDiagnosticRequest | TextDocumentDocumentColorRequest | TextDocumentDocumentHighlightRequest | TextDocumentDocumentLinkRequest | TextDocumentDocumentSymbolRequest | TextDocumentFoldingRangeRequest | TextDocumentFormattingRequest | TextDocumentHoverRequest | TextDocumentImplementationRequest | TextDocumentInlayHintRequest | TextDocumentInlineCompletionRequest | TextDocumentInlineValueRequest | TextDocumentLinkedEditingRangeRequest | TextDocumentMonikerRequest | TextDocumentOnTypeFormattingRequest | TextDocumentPrepareCallHierarchyRequest | TextDocumentPrepareRenameRequest | TextDocumentPrepareTypeHierarchyRequest | TextDocumentRangeFormattingRequest | TextDocumentRangesFormattingRequest | TextDocumentReferencesRequest | TextDocumentRenameRequest | TextDocumentSelectionRangeRequest | TextDocumentSemanticTokensFullDeltaRequest | TextDocumentSemanticTokensFullRequest | TextDocumentSemanticTokensRangeRequest | TextDocumentSignatureHelpRequest | TextDocumentTypeDefinitionRequest | TextDocumentWillSaveWaitUntilRequest | TypeHierarchySubtypesRequest | TypeHierarchySupertypesRequest | WindowShowDocumentRequest | WindowShowMessageRequestRequest | WindowWorkDoneProgressCreateRequest | WorkspaceApplyEditRequest | WorkspaceCodeLensRefreshRequest | WorkspaceConfigurationRequest | WorkspaceDiagnosticRefreshRequest | WorkspaceDiagnosticRequest | WorkspaceExecuteCommandRequest | WorkspaceFoldingRangeRefreshRequest | WorkspaceInlayHintRefreshRequest | WorkspaceInlineValueRefreshRequest | WorkspaceSemanticTokensRefreshRequest | WorkspaceSymbolRequest | WorkspaceSymbolResolveRequest | WorkspaceWillCreateFilesRequest | WorkspaceWillDeleteFilesRequest | WorkspaceWillRenameFilesRequest | WorkspaceWorkspaceFoldersRequest
+  alias Request = CallHierarchyIncomingCallsRequest | CallHierarchyOutgoingCallsRequest | ClientRegisterCapabilityRequest | ClientUnregisterCapabilityRequest | CodeActionResolveRequest | CodeLensResolveRequest | CompletionItemResolveRequest | DocumentLinkResolveRequest | InitializeRequest | InlayHintResolveRequest | ShutdownRequest | TextDocumentCodeActionRequest | TextDocumentCodeLensRequest | TextDocumentColorPresentationRequest | TextDocumentCompletionRequest | TextDocumentDeclarationRequest | TextDocumentDefinitionRequest | TextDocumentDiagnosticRequest | TextDocumentDocumentColorRequest | TextDocumentDocumentHighlightRequest | TextDocumentDocumentLinkRequest | TextDocumentDocumentSymbolRequest | TextDocumentFoldingRangeRequest | TextDocumentFormattingRequest | TextDocumentHoverRequest | TextDocumentImplementationRequest | TextDocumentInlayHintRequest | TextDocumentInlineCompletionRequest | TextDocumentInlineValueRequest | TextDocumentLinkedEditingRangeRequest | TextDocumentMonikerRequest | TextDocumentOnTypeFormattingRequest | TextDocumentPrepareCallHierarchyRequest | TextDocumentPrepareRenameRequest | TextDocumentPrepareTypeHierarchyRequest | TextDocumentRangeFormattingRequest | TextDocumentRangesFormattingRequest | TextDocumentReferencesRequest | TextDocumentRenameRequest | TextDocumentSelectionRangeRequest | TextDocumentSemanticTokensFullDeltaRequest | TextDocumentSemanticTokensFullRequest | TextDocumentSemanticTokensRangeRequest | TextDocumentSignatureHelpRequest | TextDocumentTypeDefinitionRequest | TextDocumentWillSaveWaitUntilRequest | TypeHierarchySubtypesRequest | TypeHierarchySupertypesRequest | WindowShowDocumentRequest | WindowShowMessageRequestRequest | WindowWorkDoneProgressCreateRequest | WorkspaceApplyEditRequest | WorkspaceCodeLensRefreshRequest | WorkspaceConfigurationRequest | WorkspaceDiagnosticRefreshRequest | WorkspaceDiagnosticRequest | WorkspaceExecuteCommandRequest | WorkspaceFoldingRangeRefreshRequest | WorkspaceInlayHintRefreshRequest | WorkspaceInlineValueRefreshRequest | WorkspaceSemanticTokensRefreshRequest | WorkspaceSymbolRequest | WorkspaceSymbolResolveRequest | WorkspaceTextDocumentContentRefreshRequest | WorkspaceTextDocumentContentRequest | WorkspaceWillCreateFilesRequest | WorkspaceWillDeleteFilesRequest | WorkspaceWillRenameFilesRequest | WorkspaceWorkspaceFoldersRequest
 
-  alias Response = CallHierarchyIncomingCallsResponse | CallHierarchyOutgoingCallsResponse | ClientRegisterCapabilityResponse | ClientUnregisterCapabilityResponse | CodeActionResolveResponse | CodeLensResolveResponse | CompletionItemResolveResponse | DocumentLinkResolveResponse | InitializeResponse | InlayHintResolveResponse | ShutdownResponse | TextDocumentCodeActionResponse | TextDocumentCodeLensResponse | TextDocumentColorPresentationResponse | TextDocumentCompletionResponse | TextDocumentDeclarationResponse | TextDocumentDefinitionResponse | TextDocumentDiagnosticResponse | TextDocumentDocumentColorResponse | TextDocumentDocumentHighlightResponse | TextDocumentDocumentLinkResponse | TextDocumentDocumentSymbolResponse | TextDocumentFoldingRangeResponse | TextDocumentFormattingResponse | TextDocumentHoverResponse | TextDocumentImplementationResponse | TextDocumentInlayHintResponse | TextDocumentInlineCompletionResponse | TextDocumentInlineValueResponse | TextDocumentLinkedEditingRangeResponse | TextDocumentMonikerResponse | TextDocumentOnTypeFormattingResponse | TextDocumentPrepareCallHierarchyResponse | TextDocumentPrepareRenameResponse | TextDocumentPrepareTypeHierarchyResponse | TextDocumentRangeFormattingResponse | TextDocumentRangesFormattingResponse | TextDocumentReferencesResponse | TextDocumentRenameResponse | TextDocumentSelectionRangeResponse | TextDocumentSemanticTokensFullDeltaResponse | TextDocumentSemanticTokensFullResponse | TextDocumentSemanticTokensRangeResponse | TextDocumentSignatureHelpResponse | TextDocumentTypeDefinitionResponse | TextDocumentWillSaveWaitUntilResponse | TypeHierarchySubtypesResponse | TypeHierarchySupertypesResponse | WindowShowDocumentResponse | WindowShowMessageRequestResponse | WindowWorkDoneProgressCreateResponse | WorkspaceApplyEditResponse | WorkspaceCodeLensRefreshResponse | WorkspaceConfigurationResponse | WorkspaceDiagnosticRefreshResponse | WorkspaceDiagnosticResponse | WorkspaceExecuteCommandResponse | WorkspaceFoldingRangeRefreshResponse | WorkspaceInlayHintRefreshResponse | WorkspaceInlineValueRefreshResponse | WorkspaceSemanticTokensRefreshResponse | WorkspaceSymbolResolveResponse | WorkspaceSymbolResponse | WorkspaceWillCreateFilesResponse | WorkspaceWillDeleteFilesResponse | WorkspaceWillRenameFilesResponse | WorkspaceWorkspaceFoldersResponse
+  alias Response = CallHierarchyIncomingCallsResponse | CallHierarchyOutgoingCallsResponse | ClientRegisterCapabilityResponse | ClientUnregisterCapabilityResponse | CodeActionResolveResponse | CodeLensResolveResponse | CompletionItemResolveResponse | DocumentLinkResolveResponse | InitializeResponse | InlayHintResolveResponse | ShutdownResponse | TextDocumentCodeActionResponse | TextDocumentCodeLensResponse | TextDocumentColorPresentationResponse | TextDocumentCompletionResponse | TextDocumentDeclarationResponse | TextDocumentDefinitionResponse | TextDocumentDiagnosticResponse | TextDocumentDocumentColorResponse | TextDocumentDocumentHighlightResponse | TextDocumentDocumentLinkResponse | TextDocumentDocumentSymbolResponse | TextDocumentFoldingRangeResponse | TextDocumentFormattingResponse | TextDocumentHoverResponse | TextDocumentImplementationResponse | TextDocumentInlayHintResponse | TextDocumentInlineCompletionResponse | TextDocumentInlineValueResponse | TextDocumentLinkedEditingRangeResponse | TextDocumentMonikerResponse | TextDocumentOnTypeFormattingResponse | TextDocumentPrepareCallHierarchyResponse | TextDocumentPrepareRenameResponse | TextDocumentPrepareTypeHierarchyResponse | TextDocumentRangeFormattingResponse | TextDocumentRangesFormattingResponse | TextDocumentReferencesResponse | TextDocumentRenameResponse | TextDocumentSelectionRangeResponse | TextDocumentSemanticTokensFullDeltaResponse | TextDocumentSemanticTokensFullResponse | TextDocumentSemanticTokensRangeResponse | TextDocumentSignatureHelpResponse | TextDocumentTypeDefinitionResponse | TextDocumentWillSaveWaitUntilResponse | TypeHierarchySubtypesResponse | TypeHierarchySupertypesResponse | WindowShowDocumentResponse | WindowShowMessageRequestResponse | WindowWorkDoneProgressCreateResponse | WorkspaceApplyEditResponse | WorkspaceCodeLensRefreshResponse | WorkspaceConfigurationResponse | WorkspaceDiagnosticRefreshResponse | WorkspaceDiagnosticResponse | WorkspaceExecuteCommandResponse | WorkspaceFoldingRangeRefreshResponse | WorkspaceInlayHintRefreshResponse | WorkspaceInlineValueRefreshResponse | WorkspaceSemanticTokensRefreshResponse | WorkspaceSymbolResolveResponse | WorkspaceSymbolResponse | WorkspaceTextDocumentContentRefreshResponse | WorkspaceTextDocumentContentResponse | WorkspaceWillCreateFilesResponse | WorkspaceWillDeleteFilesResponse | WorkspaceWillRenameFilesResponse | WorkspaceWorkspaceFoldersResponse
 
   alias Notification = CancelRequestNotification | ExitNotification | InitializedNotification | LogTraceNotification | NotebookDocumentDidChangeNotification | NotebookDocumentDidCloseNotification | NotebookDocumentDidOpenNotification | NotebookDocumentDidSaveNotification | ProgressNotification | SetTraceNotification | TelemetryEventNotification | TextDocumentDidChangeNotification | TextDocumentDidCloseNotification | TextDocumentDidOpenNotification | TextDocumentDidSaveNotification | TextDocumentPublishDiagnosticsNotification | TextDocumentWillSaveNotification | WindowLogMessageNotification | WindowShowMessageNotification | WindowWorkDoneProgressCancelNotification | WorkspaceDidChangeConfigurationNotification | WorkspaceDidChangeWatchedFilesNotification | WorkspaceDidChangeWorkspaceFoldersNotification | WorkspaceDidCreateFilesNotification | WorkspaceDidDeleteFilesNotification | WorkspaceDidRenameFilesNotification
 
@@ -621,6 +633,8 @@ module LSProtocol
     WorkspaceSemanticTokensRefreshRequest,
     WorkspaceSymbolRequest,
     WorkspaceSymbolResolveRequest,
+    WorkspaceTextDocumentContentRefreshRequest,
+    WorkspaceTextDocumentContentRequest,
     WorkspaceWillCreateFilesRequest,
     WorkspaceWillDeleteFilesRequest,
     WorkspaceWillRenameFilesRequest,
@@ -691,6 +705,8 @@ module LSProtocol
     WorkspaceSemanticTokensRefreshResponse,
     WorkspaceSymbolResolveResponse,
     WorkspaceSymbolResponse,
+    WorkspaceTextDocumentContentRefreshResponse,
+    WorkspaceTextDocumentContentResponse,
     WorkspaceWillCreateFilesResponse,
     WorkspaceWillDeleteFilesResponse,
     WorkspaceWillRenameFilesResponse,
@@ -792,6 +808,8 @@ module LSProtocol
     "workspace/inlineValue/refresh":          MessageDirection.parse("serverToClient"),
     "workspace/semanticTokens/refresh":       MessageDirection.parse("serverToClient"),
     "workspace/symbol":                       MessageDirection.parse("clientToServer"),
+    "workspace/textDocumentContent":          MessageDirection.parse("clientToServer"),
+    "workspace/textDocumentContent/refresh":  MessageDirection.parse("serverToClient"),
     "workspace/willCreateFiles":              MessageDirection.parse("clientToServer"),
     "workspace/willDeleteFiles":              MessageDirection.parse("clientToServer"),
     "workspace/willRenameFiles":              MessageDirection.parse("clientToServer"),

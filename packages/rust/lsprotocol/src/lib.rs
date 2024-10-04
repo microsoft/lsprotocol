@@ -1368,6 +1368,37 @@ pub enum CodeActionKind {
     Notebook,
 }
 
+/// Code action tags are extra annotations that tweak the behavior of a code action.
+///
+/// @since 3.18.0 - proposed
+#[derive(PartialEq, Debug, Eq, Clone)]
+pub enum CodeActionTag {
+    /// Marks the code action as LLM-generated.
+    Llmgenerated = 1,
+}
+impl Serialize for CodeActionTag {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            CodeActionTag::Llmgenerated => serializer.serialize_i32(1),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for CodeActionTag {
+    fn deserialize<D>(deserializer: D) -> Result<CodeActionTag, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(CodeActionTag::Llmgenerated),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 pub enum TraceValue {
     /// Turn tracing off.
@@ -1862,6 +1893,25 @@ impl<'de> Deserialize<'de> for CompletionTriggerKind {
             _ => Err(serde::de::Error::custom("Unexpected value")),
         }
     }
+}
+
+/// Defines how values from a set of defaults and an individual item will be
+/// merged.
+///
+/// @since 3.18.0
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+pub enum ApplyKind {
+    /// The value from the individual item (if provided and not `null`) will be
+    /// used instead of the default.
+    #[serde(rename = "replace")]
+    Replace,
+
+    /// The value from the item will be merged with the default.
+    ///
+    /// The specific rules for mergeing values are defined against each field
+    /// that supports merging.
+    #[serde(rename = "merge")]
+    Merge,
 }
 
 /// How a signature help was triggered.
@@ -4086,6 +4136,25 @@ pub struct CompletionItem {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionList {
+    /// Specifies how fields from a completion item should be combined with those
+    /// from `completionList.itemDefaults`.
+    ///
+    /// If unspecified, all fields will be treated as "replace".
+    ///
+    /// If a field's value is "replace", the value from a completion item (if
+    /// provided and not `null`) will always be used instead of the value from
+    /// `completionItem.itemDefaults`.
+    ///
+    /// If a field's value is "merge", the values will be merged using the rules
+    /// defined against each field below.
+    ///
+    /// Servers are only allowed to return `applyKind` if the client
+    /// signals support for this via the `completionList.applyKindSupport`
+    /// capability.
+    ///
+    /// @since 3.18.0
+    pub apply_kind: Option<CompletionItemApplyKinds>,
+
     /// This list it not complete. Further typing results in recomputing this list.
     ///
     /// Recomputed lists have all their items replaced (not appended) in the
@@ -4098,7 +4167,9 @@ pub struct CompletionList {
     /// be used if a completion item itself doesn't specify the value.
     ///
     /// If a completion list specifies a default value and a completion item
-    /// also specifies a corresponding value the one from the item is used.
+    /// also specifies a corresponding value, the rules for combining these are
+    /// defined by `applyKinds` (if the client supports it), defaulting to
+    /// "replace".
     ///
     /// Servers are only allowed to return default values if the client
     /// signals support for this via the `completionList.itemDefaults`
@@ -4592,6 +4663,11 @@ pub struct CodeAction {
     ///
     /// Used to filter code actions.
     pub kind: Option<CustomStringEnum<CodeActionKind>>,
+
+    /// Tags for this code action.
+    ///
+    /// @since 3.18.0 - proposed
+    pub tags: Option<Vec<CodeActionTag>>,
 
     /// A short, human-readable, title for this code action.
     pub title: String,
@@ -6413,7 +6489,9 @@ pub struct InsertReplaceEdit {
 /// be used if a completion item itself doesn't specify the value.
 ///
 /// If a completion list specifies a default value and a completion item
-/// also specifies a corresponding value the one from the item is used.
+/// also specifies a corresponding value, the rules for combining these are
+/// defined by `applyKinds` (if the client supports it), defaulting to
+/// "replace".
 ///
 /// Servers are only allowed to return default values if the client
 /// signals support for this via the `completionList.itemDefaults`
@@ -6447,6 +6525,68 @@ pub struct CompletionItemDefaults {
     ///
     /// @since 3.17.0
     pub insert_text_mode: Option<InsertTextMode>,
+}
+
+/// Specifies how fields from a completion item should be combined with those
+/// from `completionList.itemDefaults`.
+///
+/// If unspecified, all fields will be treated as "replace".
+///
+/// If a field's value is "replace", the value from a completion item (if
+/// provided and not `null`) will always be used instead of the value from
+/// `completionItem.itemDefaults`.
+///
+/// If a field's value is "merge", the values will be merged using the rules
+/// defined against each field below.
+///
+/// Servers are only allowed to return `applyKind` if the client
+/// signals support for this via the `completionList.applyKindSupport`
+/// capability.
+///
+/// @since 3.18.0
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct CompletionItemApplyKinds {
+    /// Specifies whether commitCharacters on a completion will replace or be
+    /// merged with those in `completionList.itemDefaults.commitCharacters`.
+    ///
+    /// If "replace", the commit characters from the completion item will
+    /// always be used unless not provided, in which case those from
+    /// `completionList.itemDefaults.commitCharacters` will be used. An
+    /// empty list can be used if a completion item does not have any commit
+    /// characters and also should not use those from
+    /// `completionList.itemDefaults.commitCharacters`.
+    ///
+    /// If "merge" the commitCharacters for the completion will be the union
+    /// of all values in both `completionList.itemDefaults.commitCharacters`
+    /// and the completion's own `commitCharacters`.
+    ///
+    /// @since 3.18.0
+    pub commit_characters: Option<ApplyKind>,
+
+    /// Specifies whether the `data` field on a completion will replace or
+    /// be merged with data from `completionList.itemDefaults.data`.
+    ///
+    /// If "replace", the data from the completion item will be used if
+    /// provided (and not `null`), otherwise
+    /// `completionList.itemDefaults.data` will be used. An empty object can
+    /// be used if a completion item does not have any data but also should
+    /// not use the value from `completionList.itemDefaults.data`.
+    ///
+    /// If "merge", a shallow merge will be performed between
+    /// `completionList.itemDefaults.data` and the completion's own data
+    /// using the following rules:
+    ///
+    /// - If a completion's `data` field is not provided (or `null`), the
+    ///   entire `data` field from `completionList.itemDefaults.data` will be
+    ///   used as-is.
+    /// - If a completion's `data` field is provided, each field will
+    ///   overwrite the field of the same name in
+    ///   `completionList.itemDefaults.data` but no merging of nested fields
+    ///   within that value will occur.
+    ///
+    /// @since 3.18.0
+    pub data: Option<ApplyKind>,
 }
 
 /// Completion options.
@@ -8381,6 +8521,12 @@ pub struct CodeActionClientCapabilities {
     ///
     /// @since 3.16.0
     pub resolve_support: Option<ClientCodeActionResolveOptions>,
+
+    /// Client supports the tag property on a code action. Clients
+    /// supporting tags have to handle unknown tags gracefully.
+    ///
+    /// @since 3.18.0 - proposed
+    pub tag_support: Option<CodeActionTagOptions>,
 }
 
 /// The client capabilities  of a [CodeLensRequest].
@@ -8926,6 +9072,19 @@ pub struct ClientCompletionItemOptionsKind {
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct CompletionListCapabilities {
+    /// Specifies whether the client supports `CompletionList.applyKind` to
+    /// indicate how supported values from `completionList.itemDefaults`
+    /// and `completion` will be combined.
+    ///
+    /// If a client supports `applyKind` it must support it for all fields
+    /// that it supports that are listed in `CompletionList.applyKind`. This
+    /// means when clients add support for new/future fields in completion
+    /// items the MUST also support merge for them if those fields are
+    /// defined in `CompletionList.applyKind`.
+    ///
+    /// @since 3.18.0
+    pub apply_kind_support: Option<bool>,
+
     /// The client supports the following itemDefaults on
     /// a completion list.
     ///
@@ -8979,6 +9138,14 @@ pub struct ClientCodeActionLiteralOptions {
 pub struct ClientCodeActionResolveOptions {
     /// The properties that a client can resolve lazily.
     pub properties: Vec<String>,
+}
+
+/// @since 3.18.0 - proposed
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct CodeActionTagOptions {
+    /// The tags supported by the client.
+    pub value_set: Vec<CodeActionTag>,
 }
 
 /// @since 3.18.0

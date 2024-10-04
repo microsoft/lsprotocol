@@ -61,6 +61,16 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def custom_plugin(plugin: str) -> None:
+    LOGGER.info(f"Loading plugin: {plugin}.")
+    try:
+        plugin_module = importlib.import_module(plugin)
+    except ImportError:
+        LOGGER.info(f"Loading plugin: generator.plugins.{plugin}.")
+        plugin_module = importlib.import_module(f"generator.plugins.{plugin}")
+    return plugin_module
+
+
 def main(argv: Sequence[str]) -> None:
     parser = get_parser()
     args = parser.parse_args(argv)
@@ -95,8 +105,7 @@ def main(argv: Sequence[str]) -> None:
     spec: model.LSPModel = model.create_lsp_model(json_models)
 
     try:
-        LOGGER.info(f"Loading plugin: {plugin}.")
-        plugin_module = importlib.import_module(f"generator.plugins.{plugin}")
+        plugin_module = custom_plugin(plugin)
         LOGGER.info(f"Running plugin: {plugin}.")
         plugin_module.generate(spec, output_dir, test_dir)
         LOGGER.info(f"Plugin {plugin} completed.")

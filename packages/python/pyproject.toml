@@ -17,7 +17,7 @@ maintainers = [
   { name = "Karthik Nadig", email = "kanadig@microsoft.com" },
 ]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.8",

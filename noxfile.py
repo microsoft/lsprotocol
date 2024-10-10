@@ -39,7 +39,7 @@ def coverage(session: nox.Session):
     session.run("python", "-m", "generator", "--plugin", "testdata")
 
     session.log("Running coverage: generator and generated Python code.")
-    session.run("pytest", "--cov-report", "term-missing", "--cov=lsprotocol", "./tests")
+    session.run("pytest", "--cov=lsprotocol", "./tests")
 
 
 @nox.session()

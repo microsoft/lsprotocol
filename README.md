@@ -88,4 +88,5 @@ Below is the list of plugins already created using this package, with their resp
 | Python           | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            | [Python package README](./packages/python/README.md)        |
 | Rust             | generator.plugins.rust   | [![Crates](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)        | Active            | [Rust package README](./packages/rust/lsprotocol/README.md) |
 | Dotnet           | generator.plugins.dotnet | <in development>                                                                                    | Under development |
+| Crystal          |                          | [nobodywasishere/lsprotocol-crystal](https://github.com/nobodywasishere/lsprotocol-crystal)         | Active            | [CrystalDoc.info](https://crystaldoc.info/github/nobodywasishere/lsprotocol-crystal/main/index.html) |
 | <in development> |

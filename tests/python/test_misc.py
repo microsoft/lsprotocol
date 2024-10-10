@@ -33,4 +33,4 @@ def test_is_special_class(cls, expected):
     ],
 )
 def test_is_keyword_class(cls, expected):
-    assert_that(lsp.is_keyword_class(lsp.CancelNotification), is_(expected))
+    assert_that(lsp.is_keyword_class(cls), is_(expected))

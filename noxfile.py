@@ -30,6 +30,19 @@ def tests(session: nox.Session):
 
 
 @nox.session()
+def coverage(session: nox.Session):
+    """Run coverage for generator and generated code in python."""
+    _install_requirements(session)
+    session.install("pytest-cov")
+
+    session.log("Running test data generator.")
+    session.run("python", "-m", "generator", "--plugin", "testdata")
+
+    session.log("Running coverage: generator and generated Python code.")
+    session.run("pytest", "--cov-report", "term-missing", "--cov=lsprotocol", "./tests")
+
+
+@nox.session()
 def lint(session: nox.Session):
     """Linting for generator and generated code in all languages."""
     _install_requirements(session)

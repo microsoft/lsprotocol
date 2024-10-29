@@ -1899,19 +1899,41 @@ impl<'de> Deserialize<'de> for CompletionTriggerKind {
 /// merged.
 ///
 /// @since 3.18.0
-#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[derive(PartialEq, Debug, Eq, Clone)]
 pub enum ApplyKind {
     /// The value from the individual item (if provided and not `null`) will be
     /// used instead of the default.
-    #[serde(rename = "replace")]
-    Replace,
+    Replace = 1,
 
     /// The value from the item will be merged with the default.
     ///
     /// The specific rules for mergeing values are defined against each field
     /// that supports merging.
-    #[serde(rename = "merge")]
-    Merge,
+    Merge = 2,
+}
+impl Serialize for ApplyKind {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        match self {
+            ApplyKind::Replace => serializer.serialize_i32(1),
+            ApplyKind::Merge => serializer.serialize_i32(2),
+        }
+    }
+}
+impl<'de> Deserialize<'de> for ApplyKind {
+    fn deserialize<D>(deserializer: D) -> Result<ApplyKind, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let value = i32::deserialize(deserializer)?;
+        match value {
+            1 => Ok(ApplyKind::Replace),
+            2 => Ok(ApplyKind::Merge),
+            _ => Err(serde::de::Error::custom("Unexpected value")),
+        }
+    }
 }
 
 /// How a signature help was triggered.
@@ -2251,7 +2273,7 @@ pub enum MarkedString {
 /// A document filter describes a top level text document or
 /// a notebook cell document.
 ///
-/// @since 3.17.0 - proposed support for NotebookCellTextDocumentFilter.
+/// @since 3.17.0 - support for NotebookCellTextDocumentFilter.
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(untagged)]
 pub enum DocumentFilter {
@@ -4139,14 +4161,14 @@ pub struct CompletionList {
     /// Specifies how fields from a completion item should be combined with those
     /// from `completionList.itemDefaults`.
     ///
-    /// If unspecified, all fields will be treated as "replace".
+    /// If unspecified, all fields will be treated as ApplyKind.Replace.
     ///
-    /// If a field's value is "replace", the value from a completion item (if
-    /// provided and not `null`) will always be used instead of the value from
-    /// `completionItem.itemDefaults`.
+    /// If a field's value is ApplyKind.Replace, the value from a completion item
+    /// (if provided and not `null`) will always be used instead of the value
+    /// from `completionItem.itemDefaults`.
     ///
-    /// If a field's value is "merge", the values will be merged using the rules
-    /// defined against each field below.
+    /// If a field's value is ApplyKind.Merge, the values will be merged using
+    /// the rules defined against each field below.
     ///
     /// Servers are only allowed to return `applyKind` if the client
     /// signals support for this via the `completionList.applyKindSupport`
@@ -4169,7 +4191,7 @@ pub struct CompletionList {
     /// If a completion list specifies a default value and a completion item
     /// also specifies a corresponding value, the rules for combining these are
     /// defined by `applyKinds` (if the client supports it), defaulting to
-    /// "replace".
+    /// ApplyKind.Replace.
     ///
     /// Servers are only allowed to return default values if the client
     /// signals support for this via the `completionList.itemDefaults`
@@ -6491,7 +6513,7 @@ pub struct InsertReplaceEdit {
 /// If a completion list specifies a default value and a completion item
 /// also specifies a corresponding value, the rules for combining these are
 /// defined by `applyKinds` (if the client supports it), defaulting to
-/// "replace".
+/// ApplyKind.Replace.
 ///
 /// Servers are only allowed to return default values if the client
 /// signals support for this via the `completionList.itemDefaults`
@@ -6530,13 +6552,13 @@ pub struct CompletionItemDefaults {
 /// Specifies how fields from a completion item should be combined with those
 /// from `completionList.itemDefaults`.
 ///
-/// If unspecified, all fields will be treated as "replace".
+/// If unspecified, all fields will be treated as ApplyKind.Replace.
 ///
-/// If a field's value is "replace", the value from a completion item (if
+/// If a field's value is ApplyKind.Replace, the value from a completion item (if
 /// provided and not `null`) will always be used instead of the value from
 /// `completionItem.itemDefaults`.
 ///
-/// If a field's value is "merge", the values will be merged using the rules
+/// If a field's value is ApplyKind.Merge, the values will be merged using the rules
 /// defined against each field below.
 ///
 /// Servers are only allowed to return `applyKind` if the client
@@ -6550,15 +6572,15 @@ pub struct CompletionItemApplyKinds {
     /// Specifies whether commitCharacters on a completion will replace or be
     /// merged with those in `completionList.itemDefaults.commitCharacters`.
     ///
-    /// If "replace", the commit characters from the completion item will
+    /// If ApplyKind.Replace, the commit characters from the completion item will
     /// always be used unless not provided, in which case those from
     /// `completionList.itemDefaults.commitCharacters` will be used. An
     /// empty list can be used if a completion item does not have any commit
     /// characters and also should not use those from
     /// `completionList.itemDefaults.commitCharacters`.
     ///
-    /// If "merge" the commitCharacters for the completion will be the union
-    /// of all values in both `completionList.itemDefaults.commitCharacters`
+    /// If ApplyKind.Merge the commitCharacters for the completion will be the
+    /// union of all values in both `completionList.itemDefaults.commitCharacters`
     /// and the completion's own `commitCharacters`.
     ///
     /// @since 3.18.0
@@ -6567,13 +6589,13 @@ pub struct CompletionItemApplyKinds {
     /// Specifies whether the `data` field on a completion will replace or
     /// be merged with data from `completionList.itemDefaults.data`.
     ///
-    /// If "replace", the data from the completion item will be used if
+    /// If ApplyKind.Replace, the data from the completion item will be used if
     /// provided (and not `null`), otherwise
     /// `completionList.itemDefaults.data` will be used. An empty object can
     /// be used if a completion item does not have any data but also should
     /// not use the value from `completionList.itemDefaults.data`.
     ///
-    /// If "merge", a shallow merge will be performed between
+    /// If ApplyKind.Merge, a shallow merge will be performed between
     /// `completionList.itemDefaults.data` and the completion's own data
     /// using the following rules:
     ///
@@ -7702,6 +7724,11 @@ pub struct TextDocumentClientCapabilities {
     /// Capabilities specific to the `textDocument/documentSymbol` request.
     pub document_symbol: Option<DocumentSymbolClientCapabilities>,
 
+    /// Defines which filters the client supports.
+    ///
+    /// @since 3.18.0
+    pub filters: Option<TextDocumentFilterClientCapabilities>,
+
     /// Capabilities specific to the `textDocument/foldingRange` request.
     ///
     /// @since 3.10.0
@@ -7937,7 +7964,9 @@ pub struct TextDocumentFilterLanguage {
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
     ///
-    /// @since 3.18.0 - support for relative patterns.
+    /// @since 3.18.0 - support for relative patterns. Whether clients support
+    /// relative patterns depends on the client capability
+    /// `textDocuments.filters.relativePatternSupport`.
     pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
@@ -7955,7 +7984,9 @@ pub struct TextDocumentFilterScheme {
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
     ///
-    /// @since 3.18.0 - support for relative patterns.
+    /// @since 3.18.0 - support for relative patterns. Whether clients support
+    /// relative patterns depends on the client capability
+    /// `textDocuments.filters.relativePatternSupport`.
     pub pattern: Option<GlobPattern>,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
@@ -7973,7 +8004,9 @@ pub struct TextDocumentFilterPattern {
 
     /// A glob pattern, like **​/*.{ts,js}. See TextDocumentFilter for examples.
     ///
-    /// @since 3.18.0 - support for relative patterns.
+    /// @since 3.18.0 - support for relative patterns. Whether clients support
+    /// relative patterns depends on the client capability
+    /// `textDocuments.filters.relativePatternSupport`.
     pub pattern: GlobPattern,
 
     /// A Uri [scheme][`Uri::scheme`], like `file` or `untitled`.
@@ -8304,6 +8337,15 @@ pub struct TextDocumentSyncClientCapabilities {
     /// waits for a response providing text edits which will
     /// be applied to the document before it is saved.
     pub will_save_wait_until: Option<bool>,
+}
+
+#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct TextDocumentFilterClientCapabilities {
+    /// The client supports Relative Patterns.
+    ///
+    /// @since 3.18.0
+    pub relative_pattern_support: Option<bool>,
 }
 
 /// Completion client capabilities

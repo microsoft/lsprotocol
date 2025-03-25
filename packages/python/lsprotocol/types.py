@@ -9,7 +9,7 @@
 
 import enum
 import functools
-from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Mapping, Literal, Optional, Sequence, Tuple, Union
 import attrs
 from . import validators
 
@@ -1957,7 +1957,7 @@ class WorkspaceEdit:
     cause failure of the operation. How the client recovers from the failure is described by
     the client capability: `workspace.workspaceEdit.failureHandling`"""
 
-    changes: Optional[Dict[str, Sequence["TextEdit"]]] = attrs.field(default=None)
+    changes: Optional[Mapping[str, Sequence["TextEdit"]]] = attrs.field(default=None)
     """Holds changes to existing resources."""
 
     document_changes: Optional[
@@ -1975,7 +1975,7 @@ class WorkspaceEdit:
     only plain `TextEdit`s using the `changes` property are supported."""
 
     change_annotations: Optional[
-        Dict[ChangeAnnotationIdentifier, "ChangeAnnotation"]
+        Mapping[ChangeAnnotationIdentifier, "ChangeAnnotation"]
     ] = attrs.field(default=None)
     """A map of change annotations that can be referenced in `AnnotatedTextEdit`s or create, rename and
     delete file / folder operations.
@@ -2454,7 +2454,7 @@ class DocumentDiagnosticReportPartialResult:
 
     # Since: 3.17.0
 
-    related_documents: Dict[
+    related_documents: Mapping[
         str, Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"]
     ] = attrs.field()
 
@@ -5644,7 +5644,7 @@ class RelatedFullDocumentDiagnosticReport:
     """The actual items."""
 
     related_documents: Optional[
-        Dict[
+        Mapping[
             str,
             Union[FullDocumentDiagnosticReport, "UnchangedDocumentDiagnosticReport"],
         ]
@@ -5705,7 +5705,7 @@ class RelatedUnchangedDocumentDiagnosticReport:
     diagnostic request for the same document."""
 
     related_documents: Optional[
-        Dict[
+        Mapping[
             str, Union[FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport]
         ]
     ] = attrs.field(default=None)

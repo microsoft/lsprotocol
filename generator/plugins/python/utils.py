@@ -208,7 +208,7 @@ class TypesCodeGenerator:
         self._imports: List[str] = [
             "import enum",
             "import functools",
-            "from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union",
+            "from typing import Any, Mapping, Literal, Optional, Sequence, Tuple, Union",
             "import attrs",
             "from . import validators",
         ]
@@ -356,7 +356,7 @@ class TypesCodeGenerator:
 
         if type_def.kind == "map":
             # This kind defines a dictionary like object.
-            return f"Dict[{self._generate_type_name(type_def.key, class_name, prefix)}, {self._generate_type_name(type_def.value, class_name, prefix)}]"
+            return f"Mapping[{self._generate_type_name(type_def.key, class_name, prefix)}, {self._generate_type_name(type_def.value, class_name, prefix)}]"
 
         if type_def.kind == "tuple":
             # This kind defined a tuple like object.
@@ -1154,11 +1154,11 @@ class TypesCodeGenerator:
             "",
         ]
 
-        code_lines += ["", "ALL_TYPES_MAP: Dict[str, Union[type, object]] = {"]
+        code_lines += ["", "ALL_TYPES_MAP: Mapping[str, Union[type, object]] = {"]
         code_lines += sorted([f"'{name}': {name}," for name in set(self._types.keys())])
         code_lines += ["}", ""]
 
-        code_lines += ["_MESSAGE_DIRECTION: Dict[str, str] = {"]
+        code_lines += ["_MESSAGE_DIRECTION: Mapping[str, str] = {"]
 
         code_lines += ["# Request methods"]
         code_lines += sorted(

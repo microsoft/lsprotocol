@@ -500,11 +500,9 @@ class MarkupKind(str, enum.Enum):
 
 class LanguageKind(str, enum.Enum):
     """Predefined Language kinds
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
     Abap = "abap"
     WindowsBat = "bat"
     BibTeX = "bibtex"

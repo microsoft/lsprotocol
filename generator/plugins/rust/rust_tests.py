@@ -15,14 +15,14 @@ def generate_test_code(spec: model.LSPModel, test_path: pathlib.Path) -> str:
     for request in spec.requests:
         request_name = get_name(request)
         lines += [
-            f'"{request_name}" =>' "{",
+            f'"{request_name}" =>{{',
             f"return validate_type::<{request_name}>(result_type, data)",
             "}",
         ]
     for notification in spec.notifications:
         notification_name = get_name(notification)
         lines += [
-            f'"{notification_name}" =>' "{",
+            f'"{notification_name}" =>{{',
             f"return validate_type::<{notification_name}>(result_type, data)",
             "}",
         ]

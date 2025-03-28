@@ -297,7 +297,7 @@ def fix_lsp_method_name(name: str) -> str:
 def generate_special_enum(enum_name: str, items: List[str]) -> Dict[str, List[str]]:
     lines = [
         "#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]",
-        f"pub enum {enum_name}" "{",
+        f"pub enum {enum_name}{{",
     ]
     for item in items:
         lines += indent_lines(

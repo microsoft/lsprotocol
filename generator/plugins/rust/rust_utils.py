@@ -59,7 +59,7 @@ def generate_lib_rs(spec: model.LSPModel) -> List[str]:
         "use serde::{Serialize, Deserialize};",
         "use std::collections::HashMap;",
         "use url::Url;",
-        "use rust_decimal::Decimal;" "",
+        "use rust_decimal::Decimal;",
     ]
 
     type_data = TypeData()

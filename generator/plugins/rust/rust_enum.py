@@ -16,13 +16,13 @@ def _get_enum_docs(enum: Union[model.Enum, model.EnumItem]) -> List[str]:
 
 def generate_serde(enum: model.Enum) -> List[str]:
     ser = [
-        f"impl Serialize for {enum.name} " "{",
+        f"impl Serialize for {enum.name} {{",
         "fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: serde::Serializer,{",
         "match self {",
     ]
 
     de = [
-        f"impl<'de> Deserialize<'de> for {enum.name} " "{",
+        f"impl<'de> Deserialize<'de> for {enum.name} {{",
         f"fn deserialize<D>(deserializer: D) -> Result<{enum.name}, D::Error> where D: serde::Deserializer<'de>,"
         "{",
         "let value = i32::deserialize(deserializer)?;",
@@ -54,7 +54,7 @@ def generate_enum(enum: model.Enum, types: TypeData) -> None:
         lines += ["#[derive(PartialEq, Debug, Eq, Clone)]"]
     else:
         lines += ["#[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]"]
-    lines += [f"pub enum {enum.name} " "{"]
+    lines += [f"pub enum {enum.name} {{"]
 
     for item in enum.values:
         if is_int:

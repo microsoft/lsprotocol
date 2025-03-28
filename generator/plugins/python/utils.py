@@ -194,7 +194,7 @@ def _get_since(
             lines.append(f"{indent}# {_sanitize_comment(tag)}")
         return lines
     if spec.since:
-        return [f"{indent}# Since: { _sanitize_comment(spec.since)}"]
+        return [f"{indent}# Since: {_sanitize_comment(spec.since)}"]
     return []
 
 

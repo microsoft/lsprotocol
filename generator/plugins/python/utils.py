@@ -208,7 +208,7 @@ class TypesCodeGenerator:
         self._imports: List[str] = [
             "import enum",
             "import functools",
-            "from typing import Any, Dict, Literal, Optional, Sequence, Tuple, Union",
+            "from typing import Any, Dict, Mapping, Literal, Optional, Sequence, Tuple, Union",
             "import attrs",
             "from . import validators",
         ]
@@ -356,7 +356,7 @@ class TypesCodeGenerator:
 
         if type_def.kind == "map":
             # This kind defines a dictionary like object.
-            return f"Dict[{self._generate_type_name(type_def.key, class_name, prefix)}, {self._generate_type_name(type_def.value, class_name, prefix)}]"
+            return f"Mapping[{self._generate_type_name(type_def.key, class_name, prefix)}, {self._generate_type_name(type_def.value, class_name, prefix)}]"
 
         if type_def.kind == "tuple":
             # This kind defined a tuple like object.

@@ -68,11 +68,11 @@ extends:
               - task: CopyFiles@2
                 displayName: Copy wheel and tarball
                 inputs:
-                  sourceFolder: dist
+                  sourceFolder: packages/python/dist
                   targetFolder: $(Build.StagingDirectory)/dist
                   contents: |
-                    sarif_tools-$(releaseVersion)-py3-none-any.whl
-                    sarif_tools-$(releaseVersion).tar.gz
+                    lsprotocol-$(releaseVersion)-py3-none-any.whl
+                    lsprotocol-$(releaseVersion).tar.gz
 
       - stage: CreateTag
         displayName: Create Tag

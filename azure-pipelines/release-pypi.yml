@@ -78,7 +78,7 @@ extends:
         displayName: Create Tag
         dependsOn: Build
         variables:
-          releaseVersionWithPrefix: $[ stageDependencies.Build.Build.outputs['getReleaseVersionStep.releaseVersionWithPrefix'] ]
+          releaseVersion: $[ stageDependencies.Build.Build.outputs['getReleaseVersionStep.releaseVersion'] ]
         jobs:
           - job: CreateTag
             steps:
@@ -91,8 +91,8 @@ extends:
                   git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   git config user.name "Azure Piplines"
                   git fetch --depth 1 origin $(Build.SourceBranchName)
-                  git tag -a $(releaseVersionWithPrefix) -m "Release $(releaseVersionWithPrefix)" origin/$(Build.SourceBranchName)
-                  git push origin $(releaseVersionWithPrefix)
+                  git tag -a $(releaseVersion) -m "Release $(releaseVersion)" origin/$(Build.SourceBranchName)
+                  git push origin $(releaseVersion)
                 displayName: Create git tag
 
       - stage: CreateRelease

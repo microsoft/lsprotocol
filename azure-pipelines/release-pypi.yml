@@ -50,7 +50,11 @@ extends:
                 fetchDepth: 1
                 fetchTags: false
 
-              - template: use_python.yml@self
+              - task: UsePythonVersion@0
+                inputs:
+                  versionSpec: '$(python.version)'
+                  architecture: '$(architecture)'
+                displayName: 'Use Python $(python.version) $(architecture)'
 
               - script: python -m pip install nox
                 displayName: Install nox

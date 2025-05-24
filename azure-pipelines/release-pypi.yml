@@ -19,6 +19,7 @@ variables:
   ARTIFACT_NAME_WHEEL: wheel
   architecture: x64
   python.version: '3.8'
+  TeamName: lsprotocol
 
 extends:
   template: azure-pipelines/MicroBuild.1ES.Official.yml@MicroBuildTemplate

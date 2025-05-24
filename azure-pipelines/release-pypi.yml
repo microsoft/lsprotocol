@@ -63,7 +63,8 @@ extends:
                 displayName: Build package (sdist and wheels)
 
               - powershell: |
-                  $releaseVersion = & poetry version --short
+                  python -m pip install toml-cli
+                  $releaseVersion = & toml get --toml-path packages/python/pyproject.toml project.version
                   echo "releaseVersion: $releaseVersion"
                   echo "##vso[task.setvariable variable=releaseVersion;isOutput=true]$releaseVersion"
                 displayName: Get release version

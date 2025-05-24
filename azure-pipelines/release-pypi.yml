@@ -71,6 +71,8 @@ extends:
                 displayName: Get release version
                 name: getReleaseVersionStep
 
+              - script: ls -al packages/python/dist
+
               - task: CopyFiles@2
                 displayName: Copy wheel and tarball
                 inputs:

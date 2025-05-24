@@ -136,6 +136,7 @@ extends:
 
       - stage: WaitForValidation
         dependsOn: CreateRelease
+        condition: and(succeeded(), ${{ parameters.publishPackage }})
         jobs:
           - job: wait_for_validation
             displayName: Wait for manual validation
@@ -150,7 +151,6 @@ extends:
 
       - stage: Release
         dependsOn: WaitForValidation
-        condition: and(succeeded(), ${{ parameters.publishPackage }})
         jobs:
           - job: PublishToPyPi
             displayName: Release to PyPi

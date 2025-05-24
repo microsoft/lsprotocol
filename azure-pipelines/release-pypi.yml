@@ -79,8 +79,8 @@ extends:
                   sourceFolder: packages/python/dist
                   targetFolder: $(Build.StagingDirectory)/dist
                   contents: |
-                    lsprotocol-$(releaseVersion)-py3-none-any.whl
-                    lsprotocol-$(releaseVersion).tar.gz
+                    lsprotocol-$(getReleaseVersionStep.releaseVersion)-py3-none-any.whl
+                    lsprotocol-$(getReleaseVersionStep.releaseVersion).tar.gz
 
       - stage: CreateTag
         displayName: Create Tag

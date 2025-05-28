@@ -124,7 +124,7 @@ extends:
                 displayName: Create GitHub Release
                 inputs:
                   gitHubConnection: GitHub-lsprotocol
-                  repositoryName: debonte/lsprotocol
+                  repositoryName: microsoft/lsprotocol
                   action: create
                   target: $(Build.SourceBranchName)
                   title: $(releaseVersion)
@@ -169,14 +169,12 @@ extends:
                   targetPath: $(Build.StagingDirectory)/dist
 
             steps:
-              # - template: MicroBuild.Publish.yml@MicroBuildTemplate
-              #   parameters:
-              #     intent: PackageDistribution
-              #     contentType: PyPi
-              #     contentSource: Folder
-              #     folderLocation: $(Build.StagingDirectory)/dist
-              #     waitForReleaseCompletion: true
-              #     owners: erikd@microsoft.com
-              #     approvers: grwheele@microsoft.com
-
-              - script: dir $(Build.StagingDirectory)\dist
+              - template: MicroBuild.Publish.yml@MicroBuildTemplate
+                parameters:
+                  intent: PackageDistribution
+                  contentType: PyPi
+                  contentSource: Folder
+                  folderLocation: $(Build.StagingDirectory)/dist
+                  waitForReleaseCompletion: true
+                  owners: erikd@microsoft.com
+                  approvers: grwheele@microsoft.com

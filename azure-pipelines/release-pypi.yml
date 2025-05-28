@@ -179,4 +179,4 @@ extends:
               #     owners: erikd@microsoft.com
               #     approvers: grwheele@microsoft.com
 
-              - script: dir $(Build.StagingDirectory)/dist
+              - script: dir $(Build.StagingDirectory)\dist

@@ -728,6 +728,14 @@ class Notification:
         converter=partial_apply(convert_to_lsp_type),
         default=None,
     )
+    clientCapability: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    serverCapability: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
     proposed: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -813,6 +821,14 @@ class Request:
     registrationOptions: Optional[LSP_TYPE_SPEC] = attrs.field(
         validator=type_validator,
         converter=partial_apply(convert_to_lsp_type),
+        default=None,
+    )
+    clientCapability: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    serverCapability: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
     proposed: Optional[bool] = attrs.field(

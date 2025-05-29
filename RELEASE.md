@@ -1,7 +1,3 @@
-# Update LSP spec
-
-1. `nox --session update_lsp`
-
 # How to ship a release
 
 1. Ensure that the project version number in [`packages/python/pyproject.toml`](packages/python/pyproject.toml) has been updated. Historically we have sometimes done this before the release. If not, change it now. Our versioning scheme is:
@@ -17,13 +13,9 @@
     1. `git clone https://github.com/openlawlibrary/pygls`
     1. `cd pygls`
     1. `poetry install --all-extras` -- Note the path to the generated virtualenv
-    1. `poetry run poe test`
+    1. `poetry run poe test` -- Baseline. Don't run their `test-pyodide` tests.
     1. Download the `lsprotocol-*.tar.gz` file from the Github Release created by the pipeline.
     1. Remove the `lsprotocol` directory in the Poetry virtualenv and create a new one using the `lsprotocol` directory within the `tar.gz`.
     1. Rerun the tests
-    1. `poetry run poe test-pyodide`
-1. and generate the latest from spec. Then clone pygls, run their setup, then install the generated lsprotocol, run tests and see if anything breaks. If something breaks it is likely in pygls, just update and ship
-1. Once you're satisfied with the release, publish it by going to the `lsprotocol-Release` pipeline run that you started earlier and press the blue `Review` button and then the blue `Resume` button to initiate publishing.
+1. Once you're satisfied with the release, publish it by going to the `lsprotocol-Release` pipeline run that you started earlier and pressing the blue `Review` button and then pressing the blue `Resume` button to initiate publishing.
 1. Publish the GitHub release (it was created as a draft).
-
-There isn't a wiki. I just follow the guidelines on pygls, to setup the testing and run tests. Then install the local lsprotocol version on top of it, run tests again to see if anything breaks.

@@ -4,7 +4,7 @@
    | Release type | Version format | Notes |
    |--------------|----------------|-------|
    | Stable | YYYY.0.N | `N` starts at `0` and increments with each release during the year |
-   | Release candidate | YYYY.O.NrcX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each RC |
+   | Release candidate | YYYY.0.NrcX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each RC |
    | Beta | YYYY.0.NbX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each beta release |
    | Alpha | YYYY.0.NaX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each alpha release |
 

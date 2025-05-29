@@ -4,8 +4,9 @@
    | Release type | Version format | Notes |
    |--------------|----------------|-------|
    | Stable | YYYY.0.N | `N` starts at `0` and increments with each release during the year |
-   | Beta | YYYY.0.NbX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each beta release until stable is shipped |
-   | Alpha | YYYY.0.NaX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each alpha release until a beta is shipped |
+   | Release candidate | YYYY.O.NrcX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each RC |
+   | Beta | YYYY.0.NbX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each beta release |
+   | Alpha | YYYY.0.NaX | `YYYY.0.N` matches the upcoming stable release and `X` starts at `1` and increments with each alpha release |
 
 1. Run the [`lsprotocol-Release` pipeline](https://dev.azure.com/devdiv/DevDiv/_build?definitionId=26767) against the `main` branch and check the `🚀 Publish Package` checkbox.
 1. Wait for the pipeline to reach the `WaitForValidation` stage.

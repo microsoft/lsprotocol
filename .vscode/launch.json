@@ -3,7 +3,7 @@
     "configurations": [
         {
             "name": "Run Generator",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "generator",
             "console": "integratedTerminal",
@@ -12,7 +12,7 @@
         },
         {
             "name": "DON'T SELECT (test debug config)",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "console": "integratedTerminal",
             "justMyCode": false,

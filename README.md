@@ -28,21 +28,20 @@ For example: `python -m generator --plugin dotnet --output-dir ./code`
 
 ```console
 > python -m generator --help
-usage: __main__.py [-h] [--model [MODEL [MODEL ...]]] --plugin PLUGIN
-                   [--output-dir OUTPUT_DIR]
+usage: __main__.py [-h] [--model [MODEL ...]] --plugin PLUGIN [--output-dir OUTPUT_DIR] [--test-dir TEST_DIR]
 
 Generate types from LSP JSON model.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  --model [MODEL [MODEL ...]], -m [MODEL [MODEL ...]]
-                        Path to a model JSON file. By default uses packaged
-                        model file.
+  --model [MODEL ...], -m [MODEL ...]
+                        Path to a model JSON file. By default uses packaged model file.
   --plugin PLUGIN, -p PLUGIN
-                        Name of a builtin plugin module. By default uses all
-                        plugins.
+                        Name of a builtin plugin module. By default uses all plugins.
   --output-dir OUTPUT_DIR, -o OUTPUT_DIR
-                        Path to a directory where the generated content is
+                        Path to a directory where the generated content is written.
+  --test-dir TEST_DIR, -t TEST_DIR
+                        Path to a directory where the generated tests are written.
 ```
 
 ## Using Nox

@@ -4,7 +4,7 @@ This repository contains packages and tools to generate code for [Language Serve
 
 It simplifies the creation of language servers for different programming languages by providing a robust and easy-to-use type generation system.
 
-➡️ For instructions on how to use the **code generator**, refer to the [Usage](#usage) section.
+➡️ For instructions on how to use the **code generator**, refer to the [Usage](#code-generator-usage) section.
 
 ➡️ For instructions on existing **plugins and packages** for different languages, refer to the table in the [Existing packages/plugins](#existing-packagesplugins) section.
 
@@ -15,7 +15,7 @@ It simplifies the creation of language servers for different programming languag
 You will need a Python environment to run the generator. Here are the steps:
 
 1. Create a Python environment: `python -m venv .venv`
-    > **Note**: Python 3.8 is the minimum supported version
+   > **Note**: Python 3.8 is the minimum supported version
 2. Activate the environment: `.venv\Scripts\activate` (Windows) or `source .venv/bin/activate` (Linux/macOS)
 3. Install this repo's tool: `python -m pip install git+https://github.com/microsoft/lsprotocol.git`
 4. Run your plugin. You can use the [command line](#command-line) or [Nox](#using-nox) to run the generator.
@@ -27,22 +27,21 @@ Clone this repository and run `generator` as a Python module.
 For example: `python -m generator --plugin dotnet --output-dir ./code`
 
 ```console
->python -m generator --help
-usage: __main__.py [-h] [--model [MODEL [MODEL ...]]] --plugin PLUGIN
-                   [--output-dir OUTPUT_DIR]
+> python -m generator --help
+usage: __main__.py [-h] [--model [MODEL ...]] --plugin PLUGIN [--output-dir OUTPUT_DIR] [--test-dir TEST_DIR]
 
 Generate types from LSP JSON model.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
-  --model [MODEL [MODEL ...]], -m [MODEL [MODEL ...]]
-                        Path to a model JSON file. By default uses packaged
-                        model file.
+  --model [MODEL ...], -m [MODEL ...]
+                        Path to a model JSON file. By default uses packaged model file.
   --plugin PLUGIN, -p PLUGIN
-                        Name of a builtin plugin module. By default uses all
-                        plugins.
+                        Name of a builtin plugin module. By default uses all plugins.
   --output-dir OUTPUT_DIR, -o OUTPUT_DIR
-                        Path to a directory where the generated content is
+                        Path to a directory where the generated content is written.
+  --test-dir TEST_DIR, -t TEST_DIR
+                        Path to a directory where the generated tests are written.
 ```
 
 ## Using Nox
@@ -63,9 +62,9 @@ You can also use Nox to format code, run tests and run various tasks. Run `nox -
 Follow these steps to generate boilerplate code for a new plugin:
 
 1. Create a virtual environment for Python using Python >= 3.8 and activate that environment.
-    1. If you are using the Python extension for VS Code, you can just run the **Python: Create Environment** command from the Command Palette. Be sure to select all the `requirements.txt` files in the repo. This command will install all packages needed and select the newly created environment for you.
+   1. If you are using the Python extension for VS Code, you can just run the **Python: Create Environment** command from the Command Palette. Be sure to select all the `requirements.txt` files in the repo. This command will install all packages needed and select the newly created environment for you.
 1. Ensure `nox` is installed.
-    1. Run `nox --list` in the terminal. If Nox is installed, you should see a list of all available sessions. Otherwise, run `python -m pip install nox` in the activated environment you created above.
+   1. Run `nox --list` in the terminal. If Nox is installed, you should see a list of all available sessions. Otherwise, run `python -m pip install nox` in the activated environment you created above.
 1. Run `nox --session create_plugin` and follow the prompts to create a new plugin.
 
 Example:
@@ -83,10 +82,10 @@ nox > Session create_plugin was successful.
 
 Below is the list of plugins already created using this package, with their respective package links.
 
-| Language         | Plugin Module            | Package                                                                                             | Status            | Documentation                                               |
-| ---------------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- | ----------------------------------------------------------- |
-| Python           | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            | [Python package README](./packages/python/README.md)        |
-| Rust             | generator.plugins.rust   | [![Crates](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)        | Active            | [Rust package README](./packages/rust/lsprotocol/README.md) |
-| Dotnet           | generator.plugins.dotnet | <in development>                                                                                    | Under development | <in development> |
-| Crystal          |                          | [nobodywasishere/lsprotocol-crystal](https://github.com/nobodywasishere/lsprotocol-crystal)         | Active            | [CrystalDoc.info](https://crystaldoc.info/github/nobodywasishere/lsprotocol-crystal/main/index.html) |
-| Golang           |                          | [myleshyson/lsprotocol-go](https://github.com/myleshyson/lsprotocol-go)                             | Active            | [myleshyson/lsprotocol-go](https://github.com/myleshyson/lsprotocol-go) |
+| Language | Plugin Module            | Package                                                                                             | Status            | Documentation                                                                                        |
+| -------- | ------------------------ | --------------------------------------------------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------- |
+| Python   | generator.plugins.python | [![PyPI](https://img.shields.io/pypi/v/lsprotocol?label=lsprotocol)](https://pypi.org/p/lsprotocol) | Active            | [Python package README](./packages/python/README.md)                                                 |
+| Rust     | generator.plugins.rust   | [![Crates](https://img.shields.io/crates/v/lsprotocol)](https://crates.io/crates/lsprotocol)        | Active            | [Rust package README](./packages/rust/lsprotocol/README.md)                                          |
+| Dotnet   | generator.plugins.dotnet | <in development>                                                                                    | Under development | <in development>                                                                                     |
+| Crystal  |                          | [nobodywasishere/lsprotocol-crystal](https://github.com/nobodywasishere/lsprotocol-crystal)         | Active            | [CrystalDoc.info](https://crystaldoc.info/github/nobodywasishere/lsprotocol-crystal/main/index.html) |
+| Golang   |                          | [myleshyson/lsprotocol-go](https://github.com/myleshyson/lsprotocol-go)                             | Active            | [myleshyson/lsprotocol-go](https://github.com/myleshyson/lsprotocol-go)                              |

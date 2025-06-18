@@ -1,5 +1,7 @@
 # How to ship a release
 
+## Publishing to PyPI
+
 1. Ensure that the project version number in [`packages/python/pyproject.toml`](packages/python/pyproject.toml) has been updated. Historically we have sometimes done this before the release. If not, change it now. Our versioning scheme is:
    | Release type | Version format | Notes |
    |--------------|----------------|-------|
@@ -20,3 +22,15 @@
     1. Rerun the tests -- Compare against baseline.
 1. Once you're satisfied with the release, publish it by going to the `lsprotocol-Release` pipeline run that you started earlier and pressing the blue `Review` button and then pressing the blue `Resume` button to initiate publishing.
 1. Publish the GitHub release (it was created as a draft).
+
+## Publishing to crates.io
+
+1. Ensure that the project version number in [`packages/rust/lsprotocol/cargo.toml`](packages/rust/lsprotocol/Cargo.toml) has been updated. Historically we have sometimes done this before the release. If not, change it now. Our versioning scheme is shown below. Note that so far we have only shipped alpha/beta releases because the Rust version has only been tested in toy servers.:
+   | Release type | Version format | Notes |
+   |--------------|----------------|-------|
+   | Stable | Major.Minor.0 | |
+   | Beta | Major.Minor.0-beta.X | `Major.Minor.0` matches the upcoming stable release and `X` starts at `1` and increments with each beta release |
+   | Alpha | Major.Minor.0-alpha.X | `Major.Minor.0` matches the upcoming stable release and `X` starts at `1` and increments with each alpha release |
+1. `cd packages/rust/lsprotocol`
+1. `cargo login`
+1. `cargo publish`

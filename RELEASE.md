@@ -32,5 +32,6 @@
    | Beta | Major.Minor.0-beta.X | `Major.Minor.0` matches the upcoming stable release and `X` starts at `1` and increments with each beta release |
    | Alpha | Major.Minor.0-alpha.X | `Major.Minor.0` matches the upcoming stable release and `X` starts at `1` and increments with each alpha release |
 1. `cd packages/rust/lsprotocol`
+1. Optionally use `cargo publish --all-features --dry-run` to do all of the building and testing work without actually publishing to crates.io.
 1. `cargo login`
-1. `cargo publish`
+1. `cargo publish --all-features`

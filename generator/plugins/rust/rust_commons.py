@@ -682,7 +682,7 @@ def generate_extras(
 ) -> List[str]:
     extras = []
     if type_def.deprecated:
-        extras += ["#[deprecated]"]
+        extras += [f'#[deprecated(note = r#"{type_def.deprecated}"#)]']
     if type_def.proposed:
         extras += ['#[cfg(feature = "proposed")]']
     return extras

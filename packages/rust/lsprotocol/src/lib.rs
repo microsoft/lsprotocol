@@ -2260,7 +2260,7 @@ pub enum TextDocumentContentChangeEvent {
 ///
 /// Note that markdown strings will be sanitized - that means html will be escaped.
 /// @deprecated use MarkupContent instead.
-#[deprecated]
+#[deprecated(note = r#"use MarkupContent instead."#)]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(untagged)]
 pub enum MarkedString {
@@ -3737,7 +3737,7 @@ pub struct InitializeParams {
     /// if no folder is open.
     ///
     /// @deprecated in favour of rootUri.
-    #[deprecated]
+    #[deprecated(note = r#"in favour of rootUri."#)]
     pub root_path: Option<String>,
 
     /// The rootUri of the workspace. Is null if no
@@ -3745,7 +3745,7 @@ pub struct InitializeParams {
     /// `rootUri` wins.
     ///
     /// @deprecated in favour of workspaceFolders.
-    #[deprecated]
+    #[deprecated(note = r#"in favour of workspaceFolders."#)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_uri: Option<Url>,
 
@@ -4038,7 +4038,7 @@ pub struct CompletionItem {
 
     /// Indicates if this item is deprecated.
     /// @deprecated Use `tags` instead.
-    #[deprecated]
+    #[deprecated(note = r#"Use `tags` instead."#)]
     pub deprecated: Option<bool>,
 
     /// A human-readable string with additional information
@@ -4498,7 +4498,7 @@ pub struct SymbolInformation {
     /// Indicates if this symbol is deprecated.
     ///
     /// @deprecated Use tags instead
-    #[deprecated]
+    #[deprecated(note = r#"Use tags instead"#)]
     pub deprecated: Option<bool>,
 
     /// The kind of this symbol.
@@ -4537,7 +4537,7 @@ pub struct DocumentSymbol {
     /// Indicates if this symbol is deprecated.
     ///
     /// @deprecated Use tags instead
-    #[deprecated]
+    #[deprecated(note = r#"Use tags instead"#)]
     pub deprecated: Option<bool>,
 
     /// More detail for this symbol, e.g the signature of a function.
@@ -6163,7 +6163,7 @@ pub struct _InitializeParams {
     /// if no folder is open.
     ///
     /// @deprecated in favour of rootUri.
-    #[deprecated]
+    #[deprecated(note = r#"in favour of rootUri."#)]
     pub root_path: Option<String>,
 
     /// The rootUri of the workspace. Is null if no
@@ -6171,7 +6171,7 @@ pub struct _InitializeParams {
     /// `rootUri` wins.
     ///
     /// @deprecated in favour of workspaceFolders.
-    #[deprecated]
+    #[deprecated(note = r#"in favour of workspaceFolders."#)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_uri: Option<Url>,
 
@@ -7398,7 +7398,7 @@ pub struct TextDocumentContentChangePartial {
     /// The optional length of the range that got replaced.
     ///
     /// @deprecated use range instead.
-    #[deprecated]
+    #[deprecated(note = r#"use range instead."#)]
     pub range_length: Option<u32>,
 
     /// The new text for the provided range.
@@ -7461,7 +7461,7 @@ pub struct ServerCompletionItemOptions {
 
 /// @since 3.18.0
 /// @deprecated use MarkupContent instead.
-#[deprecated]
+#[deprecated(note = r#"use MarkupContent instead."#)]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MarkedStringWithLanguage {

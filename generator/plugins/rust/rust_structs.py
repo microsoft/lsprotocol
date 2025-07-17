@@ -470,6 +470,7 @@ def generate_response(
         properties=properties,
         since=request_def.since,
         deprecated=request_def.deprecated,
+        proposed=request_def.proposed,
     )
 
     inner = []

@@ -887,6 +887,7 @@ impl Serialize for MessageType {
             MessageType::Warning => serializer.serialize_i32(2),
             MessageType::Info => serializer.serialize_i32(3),
             MessageType::Log => serializer.serialize_i32(4),
+            #[cfg(feature = "proposed")]
             MessageType::Debug => serializer.serialize_i32(5),
         }
     }
@@ -902,6 +903,7 @@ impl<'de> Deserialize<'de> for MessageType {
             2 => Ok(MessageType::Warning),
             3 => Ok(MessageType::Info),
             4 => Ok(MessageType::Log),
+            #[cfg(feature = "proposed")]
             5 => Ok(MessageType::Debug),
             _ => Err(serde::de::Error::custom("Unexpected value")),
         }
@@ -1640,6 +1642,7 @@ pub enum InlineCompletionTriggerKind {
     /// Completion was triggered automatically while editing.
     Automatic = 2,
 }
+#[cfg(feature = "proposed")]
 impl Serialize for InlineCompletionTriggerKind {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
@@ -1651,6 +1654,7 @@ impl Serialize for InlineCompletionTriggerKind {
         }
     }
 }
+#[cfg(feature = "proposed")]
 impl<'de> Deserialize<'de> for InlineCompletionTriggerKind {
     fn deserialize<D>(deserializer: D) -> Result<InlineCompletionTriggerKind, D::Error>
     where
@@ -9996,6 +10000,7 @@ pub struct FoldingRangeRefreshRequest {
 }
 
 /// Response to the [FoldingRangeRefreshRequest].
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct FoldingRangeRefreshResponse {
@@ -10977,6 +10982,7 @@ pub struct InlineCompletionRequest {
 }
 
 /// Response to the [InlineCompletionRequest].
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct InlineCompletionResponse {
@@ -11015,6 +11021,7 @@ pub struct TextDocumentContentRequest {
 }
 
 /// Response to the [TextDocumentContentRequest].
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentResponse {
@@ -11052,6 +11059,7 @@ pub struct TextDocumentContentRefreshRequest {
 }
 
 /// Response to the [TextDocumentContentRefreshRequest].
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct TextDocumentContentRefreshResponse {
@@ -11957,6 +11965,7 @@ pub struct DocumentRangesFormattingRequest {
 }
 
 /// Response to the [DocumentRangesFormattingRequest].
+#[cfg(feature = "proposed")]
 #[derive(Serialize, Deserialize, PartialEq, Debug, Eq, Clone)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct DocumentRangesFormattingResponse {

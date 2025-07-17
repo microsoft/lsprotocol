@@ -15,13 +15,19 @@ def _get_enum_docs(enum: Union[model.Enum, model.EnumItem]) -> List[str]:
 
 
 def generate_serde(enum: model.Enum) -> List[str]:
-    ser = [
+    ser = []
+    de = []
+    if enum.proposed:
+        ser += ["#[cfg(feature = \"proposed\")]"]
+        de  += ["#[cfg(feature = \"proposed\")]"]
+
+    ser += [
         f"impl Serialize for {enum.name} {{",
         "fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: serde::Serializer,{",
         "match self {",
     ]
 
-    de = [
+    de += [
         f"impl<'de> Deserialize<'de> for {enum.name} {{",
         f"fn deserialize<D>(deserializer: D) -> Result<{enum.name}, D::Error> where D: serde::Deserializer<'de>,"
         "{",
@@ -30,8 +36,12 @@ def generate_serde(enum: model.Enum) -> List[str]:
     ]
     for item in enum.values:
         full_name = f"{enum.name}::{to_upper_camel_case(item.name)}"
+        if item.proposed:
+            ser += ['#[cfg(feature = "proposed")]']
+            de += ['#[cfg(feature = "proposed")]']
         ser += [f"{full_name} => serializer.serialize_i32({item.value}),"]
         de += [f"{item.value} => Ok({full_name}),"]
+
     ser += [
         "}",  # match
         "}",  # fn

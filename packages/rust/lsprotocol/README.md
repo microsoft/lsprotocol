@@ -6,6 +6,6 @@ This package contains Language Server Protocol types for Rust generated from the
 
 ```toml
 [dependencies]
-lsprotocol = { features = ["proposed"]}
+lsprotocol = {}
 
 ```

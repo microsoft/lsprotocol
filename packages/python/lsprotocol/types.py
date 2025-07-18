@@ -3349,7 +3349,7 @@ class CompletionItem:
     @since 3.17.0"""
     # Since: 3.17.0
 
-    kind: Optional[Union[CompletionItemKind, int]] = attrs.field(default=None)
+    kind: Optional[CompletionItemKind] = attrs.field(default=None)
     """The kind of this completion item. Based of the kind
     an icon is chosen by the editor."""
 
@@ -9414,9 +9414,7 @@ class ClientCompletionItemOptionsKind:
 
     # Since: 3.18.0
 
-    value_set: Optional[Sequence[Union[CompletionItemKind, int]]] = attrs.field(
-        default=None
-    )
+    value_set: Optional[Sequence[CompletionItemKind]] = attrs.field(default=None)
     """The completion item kind values the client supports. When this
     property exists the client also guarantees that it will
     handle values outside its set gracefully and falls back

@@ -23,13 +23,7 @@ SPECIAL_ENUMS = ["LanguageKind", "ErrorCodes", "LSPErrorCodes"]
 
 
 def customizations(spec: model.LSPModel) -> model.LSPModel:
-    # https://github.com/microsoft/lsprotocol/issues/344
-    # Allow CompletionItemKind to support custom values
-    for enum in spec.enumerations:
-        if enum.name == "CompletionItemKind":
-            enum.supportsCustomValues = True
-            break
-
+    # Add any required spec customizations here (ex. to work around spec bugs).
     return spec
 
 

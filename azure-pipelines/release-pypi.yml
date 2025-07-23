@@ -145,7 +145,7 @@ extends:
               - task: ManualValidation@0
                 timeoutInMinutes: 1440 # task times out in 1 day
                 inputs:
-                  notifyUsers: erikd@microsoft.com
+                  notifyUsers: plseng@microsoft.com
                   instructions: Please test the latest draft release and then publish it.
                   onTimeout: reject
 
@@ -176,5 +176,5 @@ extends:
                   contentSource: Folder
                   folderLocation: $(Build.StagingDirectory)/dist
                   waitForReleaseCompletion: true
-                  owners: erikd@microsoft.com
+                  owners: rchiodo@microsoft.com
                   approvers: grwheele@microsoft.com

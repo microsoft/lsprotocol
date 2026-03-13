@@ -392,10 +392,6 @@ class TypesCodeGenerator:
                 f"{indent}if not isinstance(o, Position):",
                 f"{indent}{indent}return NotImplemented",
                 f"{indent}return (self.line, self.character) == (o.line, o.character)",
-                "def __gt__(self, o: 'Position') -> bool:",
-                f"{indent}if not isinstance(o, Position):",
-                f"{indent}{indent}return NotImplemented",
-                f"{indent}return (self.line, self.character) > (o.line, o.character)",
                 "def __repr__(self) -> str:",
                 f"{indent}" + "return f'{self.line}:{self.character}'",
             ]
@@ -407,6 +403,16 @@ class TypesCodeGenerator:
                 f"{indent}return (self.start == o.start) and (self.end == o.end)",
                 "def __repr__(self) -> str:",
                 f"{indent}" + "return f'{self.start!r}-{self.end!r}'",
+                "def __contains__(self, position: object) -> bool:",
+                f"{indent}if not isinstance(position, Position):",
+                f"{indent}{indent}raise TypeError('Ranges can only contain Positions')",
+                f"{indent}return self.start <= position <= self.end",
+                "def includes(self, inner: 'Range') -> bool:",
+                f"{indent}'Returns whether `inner` is contained within `self`.'",
+                f"{indent}return self.start <= inner.start and inner.end <= self.end",
+                "def overlaps(self, other: 'Range') -> bool:",
+                f"{indent}'Returns whether `self` and `other` overlap.'",
+                f"{indent}return self.start <= other.end and other.start <= self.end",
             ]
         if class_name == "Location":
             return [
@@ -678,11 +684,10 @@ class TypesCodeGenerator:
         class_name = struct_def.name
 
         class_lines = [
-            "" if class_name == "LSPObject" else "@attrs.define",
-            "@functools.total_ordering" if class_name == "Position" else "",
-            f"{class_name} = object"
-            if class_name == "LSPObject"
-            else f"class {class_name}:",
+            "@attrs.define(order=True)"
+            if class_name == "Position"
+            else "@attrs.define",
+            f"class {class_name}:",
             f'{indent}"""{doc}"""' if struct_def.documentation else "",
         ]
         class_lines += _get_since(struct_def, indent)

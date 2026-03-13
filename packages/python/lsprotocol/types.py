@@ -5145,6 +5145,19 @@ class Range:
     def __repr__(self) -> str:
         return f"{self.start!r}-{self.end!r}"
 
+    def __contains__(self, position: object) -> bool:
+        if not isinstance(position, Position):
+            raise TypeError("Ranges can only contain Positions")
+        return self.start <= position <= self.end
+
+    def includes(self, inner: "Range") -> bool:
+        "Returns whether `inner` is contained within `self`."
+        return self.start <= inner.start and inner.end <= self.end
+
+    def overlaps(self, other: "Range") -> bool:
+        "Returns whether `self` and `other` overlap."
+        return self.start <= other.end and other.start <= self.end
+
 
 @attrs.define
 class WorkspaceFoldersChangeEvent:
@@ -5197,8 +5210,7 @@ class Color:
     """The alpha component of this color in the range [0-1]."""
 
 
-@attrs.define
-@functools.total_ordering
+@attrs.define(order=True)
 class Position:
     """Position in a text document expressed as zero-based line and character
     offset. Prior to 3.17 the offsets were always based on a UTF-16 string
@@ -5243,11 +5255,6 @@ class Position:
         if not isinstance(o, Position):
             return NotImplemented
         return (self.line, self.character) == (o.line, o.character)
-
-    def __gt__(self, o: "Position") -> bool:
-        if not isinstance(o, Position):
-            return NotImplemented
-        return (self.line, self.character) > (o.line, o.character)
 
     def __repr__(self) -> str:
         return f"{self.line}:{self.character}"

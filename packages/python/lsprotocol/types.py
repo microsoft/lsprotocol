@@ -13,7 +13,7 @@ from typing import Any, Dict, Mapping, Literal, Optional, Sequence, Tuple, Union
 import attrs
 from . import validators
 
-__lsp_version__ = "3.17.0"
+__lsp_version__ = "3.18.0"
 
 
 @enum.unique
@@ -255,10 +255,8 @@ class MessageType(int, enum.Enum):
     Debug = 5
     """A debug message.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @enum.unique
@@ -426,10 +424,8 @@ class CodeActionKind(str, enum.Enum):
     - Move method to base class
     - ...
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
     RefactorRewrite = "refactor.rewrite"
     """Base kind for refactoring rewrite actions: 'refactor.rewrite'
     
@@ -467,9 +463,9 @@ class CodeActionKind(str, enum.Enum):
 class CodeActionTag(int, enum.Enum):
     """Code action tags are extra annotations that tweak the behavior of a code action.
 
-    @since 3.18.0 - proposed"""
+    @since 3.18.0"""
 
-    # Since: 3.18.0 - proposed
+    # Since: 3.18.0
     LlmGenerated = 1
     """Marks the code action as LLM-generated."""
 
@@ -513,15 +509,11 @@ class LanguageKind(str, enum.Enum):
     CSharp = "csharp"
     Css = "css"
     D = "d"
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
     Delphi = "pascal"
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
     Diff = "diff"
     Dart = "dart"
     Dockerfile = "dockerfile"
@@ -529,7 +521,7 @@ class LanguageKind(str, enum.Enum):
     Erlang = "erlang"
     FSharp = "fsharp"
     GitCommit = "git-commit"
-    GitRebase = "rebase"
+    GitRebase = "git-rebase"
     Go = "go"
     Groovy = "groovy"
     Handlebars = "handlebars"
@@ -548,13 +540,12 @@ class LanguageKind(str, enum.Enum):
     ObjectiveC = "objective-c"
     ObjectiveCpp = "objective-cpp"
     Pascal = "pascal"
-    """@since 3.18.0
-    @proposed"""
+    """@since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
     Perl = "perl"
     Perl6 = "perl6"
     Php = "php"
+    Plaintext = "plaintext"
     Powershell = "powershell"
     Pug = "jade"
     Python = "python"
@@ -582,11 +573,9 @@ class LanguageKind(str, enum.Enum):
 class InlineCompletionTriggerKind(int, enum.Enum):
     """Describes how an {@link InlineCompletionItemProvider inline completion provider} was triggered.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
     Invoked = 1
     """Completion was triggered explicitly by a user gesture."""
     Automatic = 2
@@ -878,18 +867,30 @@ pull request.
 # Since: 3.17.0
 
 
+DocumentDiagnosticReportProgress = Union[
+    DocumentDiagnosticReport, "DocumentDiagnosticReportPartialResult"
+]
+"""The document diagnostic report used when reporting partial result.
+
+When using partial results, the first literal sent needs to be a
+DocumentDiagnosticReport providing the diagnostics on the document
+followed by n DocumentDiagnosticReportPartialResult literals providing
+the diagnostics for related documents.
+
+```
+DocumentDiagnosticReport
+DocumentDiagnosticReportPartialResult
+DocumentDiagnosticReportPartialResult
+...
+```
+
+@since 3.18.1"""
+# Since: 3.18.1
+
+
 PrepareRenameResult = Union[
     "Range", "PrepareRenamePlaceholder", "PrepareRenameDefaultBehavior"
 ]
-
-
-DocumentSelector = Sequence["DocumentFilter"]
-"""A document selector is the combination of one or many document filters.
-
-@sample `let sel:DocumentSelector = [{ language: 'typescript' }, { language: 'json', pattern: '**/tsconfig.json' }]`;
-
-The use of a string as a document filter is deprecated @since 3.16.0."""
-# Since: 3.16.0.
 
 
 ProgressToken = Union[int, str]
@@ -907,6 +908,15 @@ WorkspaceDocumentDiagnosticReport = Union[
 
 @since 3.17.0"""
 # Since: 3.17.0
+
+
+DocumentSelector = Sequence["DocumentFilter"]
+"""A document selector is the combination of one or many document filters.
+
+@sample `let sel:DocumentSelector = [{ language: 'typescript' }, { language: 'json', pattern: '**/tsconfig.json' }]`;
+
+The use of a string as a document filter is deprecated @since 3.16.0."""
+# Since: 3.16.0.
 
 
 TextDocumentContentChangeEvent = Union[
@@ -946,30 +956,6 @@ GlobPattern = Union["Pattern", "RelativePattern"]
 # Since: 3.17.0
 
 
-TextDocumentFilter = Union[
-    "TextDocumentFilterLanguage",
-    "TextDocumentFilterScheme",
-    "TextDocumentFilterPattern",
-]
-"""A document filter denotes a document by different properties like
-the {@link TextDocument.languageId language}, the {@link Uri.scheme scheme} of
-its resource, or a glob-pattern that is applied to the {@link TextDocument.fileName path}.
-
-Glob patterns can have the following syntax:
-- `*` to match one or more characters in a path segment
-- `?` to match on one character in a path segment
-- `**` to match any number of path segments, including none
-- `{}` to group sub patterns into an OR expression. (e.g. `**/*.{ts,js}` matches all TypeScript and JavaScript files)
-- `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
-- `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
-
-@sample A language filter that applies to typescript files on disk: `{ language: 'typescript', scheme: 'file' }`
-@sample A language filter that applies to all package.json paths: `{ language: 'json', pattern: '**package.json' }`
-
-@since 3.17.0"""
-# Since: 3.17.0
-
-
 NotebookDocumentFilter = Union[
     "NotebookDocumentFilterNotebookType",
     "NotebookDocumentFilterScheme",
@@ -983,9 +969,33 @@ against the notebook's URI (same as with documents)
 # Since: 3.17.0
 
 
+TextDocumentFilter = Union[
+    "TextDocumentFilterLanguage",
+    "TextDocumentFilterScheme",
+    "TextDocumentFilterPattern",
+]
+"""A document filter denotes a document by different properties like
+the {@link TextDocument.languageId language}, the {@link Uri.scheme scheme} of
+its resource, or a glob-pattern that is applied to the {@link TextDocument.fileName path}.
+
+Glob patterns can have the following syntax:
+- `*` to match zero or more characters in a path segment
+- `?` to match on one character in a path segment
+- `**` to match any number of path segments, including none
+- `{}` to group sub patterns into an OR expression. (e.g. `**/*.{ts,js}` matches all TypeScript and JavaScript files)
+- `[]` to declare a range of characters to match in a path segment (e.g., `example.[0-9]` to match on `example.0`, `example.1`, …)
+- `[!...]` to negate a range of characters to match in a path segment (e.g., `example.[!0-9]` to match on `example.a`, `example.b`, but not `example.0`)
+
+@sample A language filter that applies to typescript files on disk: `{ language: 'typescript', scheme: 'file' }`
+@sample A language filter that applies to all package.json paths: `{ language: 'json', pattern: '**package.json' }`
+
+@since 3.17.0"""
+# Since: 3.17.0
+
+
 Pattern = str
 """The glob pattern to watch relative to the base path. Glob patterns can have the following syntax:
-- `*` to match one or more characters in a path segment
+- `*` to match zero or more characters in a path segment
 - `?` to match on one character in a path segment
 - `**` to match any number of path segments, including none
 - `{}` to group conditions (e.g. `**/*.{ts,js}` matches all TypeScript and JavaScript files)
@@ -2230,14 +2240,18 @@ class InlineValueParams:
     """The text document."""
 
     range: "Range" = attrs.field()
-    """The document range for which inline values should be computed."""
+    """The document range for which inline values information will be returned."""
 
     context: "InlineValueContext" = attrs.field()
-    """Additional information about the context in which inline values were
+    """Additional information about the context in which inline values information was
     requested."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
+
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
+    """An optional token that a server can use to report partial results (e.g. streaming) to
+    the client."""
 
 
 @attrs.define
@@ -2297,6 +2311,10 @@ class InlayHintParams:
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
+
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
+    """An optional token that a server can use to report partial results (e.g. streaming) to
+    the client."""
 
 
 @attrs.define
@@ -2442,19 +2460,6 @@ class DocumentDiagnosticParams:
     partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report partial results (e.g. streaming) to
     the client."""
-
-
-@attrs.define
-class DocumentDiagnosticReportPartialResult:
-    """A partial result for a document diagnostic report.
-
-    @since 3.17.0"""
-
-    # Since: 3.17.0
-
-    related_documents: Mapping[
-        str, Union["FullDocumentDiagnosticReport", "UnchangedDocumentDiagnosticReport"]
-    ] = attrs.field()
 
 
 @attrs.define
@@ -2734,11 +2739,9 @@ class DidCloseNotebookDocumentParams:
 class InlineCompletionParams:
     """A parameter literal used in inline completion requests.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     context: "InlineCompletionContext" = attrs.field()
     """Additional information about the context in which inline completions were
@@ -2753,16 +2756,18 @@ class InlineCompletionParams:
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
 
+    partial_result_token: Optional[ProgressToken] = attrs.field(default=None)
+    """An optional token that a server can use to report partial results (e.g. streaming) to
+    the client."""
+
 
 @attrs.define
 class InlineCompletionList:
     """Represents a collection of {@link InlineCompletionItem inline completion items} to be presented in the editor.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     items: Sequence["InlineCompletionItem"] = attrs.field()
     """The inline completion items"""
@@ -2772,11 +2777,9 @@ class InlineCompletionList:
 class InlineCompletionItem:
     """An inline completion item represents a text snippet that is proposed inline to complete text that is being typed.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     insert_text: Union[str, "StringValue"] = attrs.field()
     """The text to replace the range with. Must be set."""
@@ -2798,11 +2801,9 @@ class InlineCompletionItem:
 class InlineCompletionOptions:
     """Inline completion options used during static registration.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2814,11 +2815,9 @@ class InlineCompletionOptions:
 class InlineCompletionRegistrationOptions:
     """Inline completion options used during static or dynamic registration.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -2843,11 +2842,9 @@ class InlineCompletionRegistrationOptions:
 class TextDocumentContentParams:
     """Parameters for the `workspace/textDocumentContent` request.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The uri of the text document."""
@@ -2857,11 +2854,9 @@ class TextDocumentContentParams:
 class TextDocumentContentResult:
     """Result of the `workspace/textDocumentContent` request.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     text: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The text content of the text document. Please note, that the content of
@@ -2874,11 +2869,9 @@ class TextDocumentContentResult:
 class TextDocumentContentOptions:
     """Text document content provider options.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     schemes: Sequence[str] = attrs.field()
     """The schemes for which the server provides content."""
@@ -2888,11 +2881,9 @@ class TextDocumentContentOptions:
 class TextDocumentContentRegistrationOptions:
     """Text document content provider registration options.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     schemes: Sequence[str] = attrs.field()
     """The schemes for which the server provides content."""
@@ -2909,11 +2900,9 @@ class TextDocumentContentRegistrationOptions:
 class TextDocumentContentRefreshParams:
     """Parameters for the `workspace/textDocumentContent/refresh` request.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The uri of the text document to refresh."""
@@ -3761,7 +3750,10 @@ class SignatureHelp:
     
     In future version of the protocol this property might become
     mandatory (but still nullable) to better express the active parameter if
-    the active signature does have any."""
+    the active signature does have any.
+    
+    Since version 3.16.0 the `SignatureInformation` itself provides a
+    `activeParameter` property and it should be used instead of this one."""
 
 
 @attrs.define
@@ -4181,10 +4173,8 @@ class Command:
     )
     """An optional tooltip.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     arguments: Optional[Sequence[LSPAny]] = attrs.field(default=None)
     """Arguments that the command handler should be
@@ -4258,8 +4248,8 @@ class CodeAction:
     tags: Optional[Sequence[CodeActionTag]] = attrs.field(default=None)
     """Tags for this code action.
     
-    @since 3.18.0 - proposed"""
-    # Since: 3.18.0 - proposed
+    @since 3.18.0"""
+    # Since: 3.18.0
 
 
 @attrs.define
@@ -4290,10 +4280,8 @@ class CodeActionOptions:
     
     At most one documentation entry should be shown per provider.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4345,10 +4333,8 @@ class CodeActionRegistrationOptions:
     
     At most one documentation entry should be shown per provider.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     resolve_provider: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4695,10 +4681,8 @@ class DocumentRangeFormattingOptions:
     )
     """Whether the server supports formatting multiple ranges at once.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4722,10 +4706,8 @@ class DocumentRangeFormattingRegistrationOptions:
     )
     """Whether the server supports formatting multiple ranges at once.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     work_done_progress: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -4737,11 +4719,9 @@ class DocumentRangeFormattingRegistrationOptions:
 class DocumentRangesFormattingParams:
     """The parameters of a {@link DocumentRangesFormattingRequest}.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     text_document: "TextDocumentIdentifier" = attrs.field()
     """The document to format."""
@@ -4814,16 +4794,16 @@ class DocumentOnTypeFormattingRegistrationOptions:
 class RenameParams:
     """The parameters of a {@link RenameRequest}."""
 
-    text_document: "TextDocumentIdentifier" = attrs.field()
-    """The document to rename."""
-
-    position: "Position" = attrs.field()
-    """The position at which this request was sent."""
-
     new_name: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The new name of the symbol. If the given name is not valid the
     request must return a {@link ResponseError} with an
     appropriate message set."""
+
+    text_document: "TextDocumentIdentifier" = attrs.field()
+    """The text document."""
+
+    position: "Position" = attrs.field()
+    """The position inside the text document."""
 
     work_done_token: Optional[ProgressToken] = attrs.field(default=None)
     """An optional token that a server can use to report work done progress."""
@@ -4943,10 +4923,8 @@ class ApplyWorkspaceEditParams:
     metadata: Optional["WorkspaceEditMetadata"] = attrs.field(default=None)
     """Additional data about the edit.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -5278,7 +5256,7 @@ class FileCreate:
     # Since: 3.16.0
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A file:// URI for the location of the file/folder being created."""
+    """A URI for the location of the file/folder being created."""
 
 
 @attrs.define
@@ -5444,10 +5422,10 @@ class FileRename:
     # Since: 3.16.0
 
     old_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A file:// URI for the original location of the file/folder being renamed."""
+    """A URI for the original location of the file/folder being renamed."""
 
     new_uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A file:// URI for the new location of the file/folder being renamed."""
+    """A URI for the new location of the file/folder being renamed."""
 
 
 @attrs.define
@@ -5459,7 +5437,7 @@ class FileDelete:
     # Since: 3.16.0
 
     uri: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A file:// URI for the location of the file/folder being deleted."""
+    """A URI for the location of the file/folder being deleted."""
 
 
 @attrs.define
@@ -5478,7 +5456,7 @@ class InlineValueContext:
 
 @attrs.define
 class InlineValueText:
-    """Provide inline value as text.
+    """Returns inline value information as the complete text to be shown.
 
     @since 3.17.0"""
 
@@ -5493,9 +5471,13 @@ class InlineValueText:
 
 @attrs.define
 class InlineValueVariableLookup:
-    """Provide inline value through a variable lookup.
-    If only a range is specified, the variable name will be extracted from the underlying document.
-    An optional variable name can be used to override the extracted name.
+    """To compute inline value through a variable lookup.
+
+    If only a range is specified, the variable name should
+    be extracted from the underlying document.
+
+    An optional variable name could be used to lookup instead
+    of the extracted name.
 
     @since 3.17.0"""
 
@@ -5503,7 +5485,9 @@ class InlineValueVariableLookup:
 
     range: Range = attrs.field()
     """The document range for which the inline value applies.
-    The range is used to extract the variable name from the underlying document."""
+    
+    The range could be used to extract the variable name
+    from the underlying document."""
 
     case_sensitive_lookup: bool = attrs.field(
         validator=attrs.validators.instance_of(bool)
@@ -5519,9 +5503,13 @@ class InlineValueVariableLookup:
 
 @attrs.define
 class InlineValueEvaluatableExpression:
-    """Provide an inline value through an expression evaluation.
-    If only a range is specified, the expression will be extracted from the underlying document.
-    An optional expression can be used to override the extracted expression.
+    """To compute an inline value through an expression evaluation.
+
+    If only a range is specified, the expression should be
+    extracted from the underlying document.
+
+    An optional expression could be evaluated instead of
+    the extracted expression.
 
     @since 3.17.0"""
 
@@ -5529,13 +5517,15 @@ class InlineValueEvaluatableExpression:
 
     range: Range = attrs.field()
     """The document range for which the inline value applies.
-    The range is used to extract the evaluatable expression from the underlying document."""
+    
+    The range could be used to extract the evaluatable expression
+    from the underlying document."""
 
     expression: Optional[str] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(str)),
         default=None,
     )
-    """If specified the expression overrides the extracted expression."""
+    """If specified the expression could be evaluated instead."""
 
 
 @attrs.define
@@ -5726,6 +5716,19 @@ class RelatedUnchangedDocumentDiagnosticReport:
 
 
 @attrs.define
+class DocumentDiagnosticReportPartialResult:
+    """A partial result for a document diagnostic report.
+
+    @since 3.17.0"""
+
+    # Since: 3.17.0
+
+    related_documents: Mapping[
+        str, Union[FullDocumentDiagnosticReport, UnchangedDocumentDiagnosticReport]
+    ] = attrs.field()
+
+
+@attrs.define
 class PreviousResultId:
     """A previous result id in a workspace pull request.
 
@@ -5836,11 +5839,9 @@ class NotebookDocumentIdentifier:
 class InlineCompletionContext:
     """Provides information about the context in which an inline completion was requested.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     trigger_kind: InlineCompletionTriggerKind = attrs.field()
     """Describes how the inline completion was triggered."""
@@ -5861,11 +5862,9 @@ class StringValue:
     the end of the snippet. Variables are defined with `$name` and
     `${name:default value}`.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     value: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The snippet string."""
@@ -6108,10 +6107,8 @@ class ServerCapabilities:
     )
     """Inline completion options used during static registration.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     workspace: Optional["WorkspaceOptions"] = attrs.field(default=None)
     """Workspace specific server capabilities."""
@@ -6185,8 +6182,12 @@ class Diagnostic:
     range: Range = attrs.field()
     """The range at which the message applies"""
 
-    message: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """The diagnostic's message. It usually appears in the user interface"""
+    message: Union[str, MarkupContent] = attrs.field()
+    """The diagnostic's message. It usually appears in the user interface.
+    
+    @since 3.18.0 - support for MarkupContent. This is guarded by the client
+    capability `textDocument.diagnostic.markupMessageSupport`."""
+    # Since: 3.18.0 - support for MarkupContent. This is guarded by the client capability `textDocument.diagnostic.markupMessageSupport`.
 
     severity: Optional[DiagnosticSeverity] = attrs.field(default=None)
     """The diagnostic's severity. To avoid interpretation mismatches when a
@@ -6593,11 +6594,9 @@ class PrepareRenameDefaultBehavior:
 class WorkspaceEditMetadata:
     """Additional data about a workspace edit.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     is_refactoring: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -6673,11 +6672,9 @@ class AnnotatedTextEdit:
 class SnippetTextEdit:
     """An interactive text edit.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     range: Range = attrs.field()
     """The range of the text document to be manipulated."""
@@ -6751,7 +6748,7 @@ class FileOperationPattern:
 
     glob: str = attrs.field(validator=attrs.validators.instance_of(str))
     """The glob pattern to match. Glob patterns can have the following syntax:
-    - `*` to match one or more characters in a path segment
+    - `*` to match zero or more characters in a path segment
     - `?` to match on one character in a path segment
     - `**` to match any number of path segments, including none
     - `{}` to group sub patterns into an OR expression. (e.g. `**/*.{ts,js}` matches all TypeScript and JavaScript files)
@@ -6912,11 +6909,9 @@ class NotebookDocumentCellChanges:
 class SelectedCompletionInfo:
     """Describes the currently selected completion item.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     range: Range = attrs.field()
     """The range that will be replaced if this completion item is accepted."""
@@ -7038,10 +7033,8 @@ class WorkspaceOptions:
     ] = attrs.field(default=None)
     """The server supports the `workspace/textDocumentContent` request.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -7170,11 +7163,9 @@ class ParameterInformation:
 class CodeActionKindDocumentation:
     """Documentation for a class of code actions.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     kind: Union[CodeActionKind, str] = attrs.field()
     """The kind of the code action being documented.
@@ -7187,31 +7178,6 @@ class CodeActionKindDocumentation:
     """Command that is ued to display the documentation to the user.
     
     The title of this documentation code action is taken from {@linkcode Command.title}"""
-
-
-@attrs.define
-class NotebookCellTextDocumentFilter:
-    """A notebook cell text document filter denotes a cell text
-    document by different properties.
-
-    @since 3.17.0"""
-
-    # Since: 3.17.0
-
-    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
-    """A filter that matches against the notebook
-    containing the notebook cell. If a string
-    value is provided it matches against the
-    notebook type. '*' matches every notebook."""
-
-    language: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A language id like `python`.
-    
-    Will be matched against the language id of the
-    notebook cell document. '*' matches every language."""
 
 
 @attrs.define
@@ -7394,20 +7360,16 @@ class WorkspaceClientCapabilities:
     )
     """Capabilities specific to the folding range requests scoped to the workspace.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     text_document_content: Optional["TextDocumentContentClientCapabilities"] = (
         attrs.field(default=None)
     )
     """Capabilities specific to the `workspace/textDocumentContent` request.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -7596,10 +7558,8 @@ class TextDocumentClientCapabilities:
     )
     """Client capabilities specific to inline completions.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -7754,6 +7714,31 @@ class FileOperationOptions:
 
 
 @attrs.define
+class NotebookCellTextDocumentFilter:
+    """A notebook cell text document filter denotes a cell text
+    document by different properties.
+
+    @since 3.17.0"""
+
+    # Since: 3.17.0
+
+    notebook: Union[str, NotebookDocumentFilter] = attrs.field()
+    """A filter that matches against the notebook
+    containing the notebook cell. If a string
+    value is provided it matches against the
+    notebook type. '*' matches every notebook."""
+
+    language: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A language id like `python`.
+    
+    Will be matched against the language id of the
+    notebook cell document. '*' matches every language."""
+
+
+@attrs.define
 class RelativePattern:
     """A relative pattern is a helper to construct glob patterns that are matched
     relatively to a base URI. The common value for a `baseUri` is a workspace
@@ -7769,87 +7754,6 @@ class RelativePattern:
 
     pattern: Pattern = attrs.field()
     """The actual glob pattern;"""
-
-
-@attrs.define
-class TextDocumentFilterLanguage:
-    """A document filter where `language` is required field.
-
-    @since 3.18.0"""
-
-    # Since: 3.18.0
-
-    language: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A language id, like `typescript`."""
-
-    scheme: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
-
-    pattern: Optional[GlobPattern] = attrs.field(default=None)
-    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples.
-    
-    @since 3.18.0 - support for relative patterns. Whether clients support
-    relative patterns depends on the client capability
-    `textDocuments.filters.relativePatternSupport`."""
-    # Since: 3.18.0 - support for relative patterns. Whether clients support relative patterns depends on the client capability `textDocuments.filters.relativePatternSupport`.
-
-
-@attrs.define
-class TextDocumentFilterScheme:
-    """A document filter where `scheme` is required field.
-
-    @since 3.18.0"""
-
-    # Since: 3.18.0
-
-    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
-    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
-
-    language: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A language id, like `typescript`."""
-
-    pattern: Optional[GlobPattern] = attrs.field(default=None)
-    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples.
-    
-    @since 3.18.0 - support for relative patterns. Whether clients support
-    relative patterns depends on the client capability
-    `textDocuments.filters.relativePatternSupport`."""
-    # Since: 3.18.0 - support for relative patterns. Whether clients support relative patterns depends on the client capability `textDocuments.filters.relativePatternSupport`.
-
-
-@attrs.define
-class TextDocumentFilterPattern:
-    """A document filter where `pattern` is required field.
-
-    @since 3.18.0"""
-
-    # Since: 3.18.0
-
-    pattern: GlobPattern = attrs.field()
-    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples.
-    
-    @since 3.18.0 - support for relative patterns. Whether clients support
-    relative patterns depends on the client capability
-    `textDocuments.filters.relativePatternSupport`."""
-    # Since: 3.18.0 - support for relative patterns. Whether clients support relative patterns depends on the client capability `textDocuments.filters.relativePatternSupport`.
-
-    language: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A language id, like `typescript`."""
-
-    scheme: Optional[str] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
-        default=None,
-    )
-    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
 
 @attrs.define
@@ -7989,10 +7893,8 @@ class WorkspaceEditClientCapabilities:
     )
     """Whether the client supports `WorkspaceEditMetadata` in `WorkspaceEdit`s.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     snippet_edit_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8000,10 +7902,8 @@ class WorkspaceEditClientCapabilities:
     )
     """Whether the client supports snippets as text edits.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -8235,11 +8135,9 @@ class DiagnosticWorkspaceClientCapabilities:
 class FoldingRangeWorkspaceClientCapabilities:
     """Client workspace capabilities specific to folding ranges
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     refresh_support: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8253,21 +8151,17 @@ class FoldingRangeWorkspaceClientCapabilities:
     useful for situation where a server for example detects a project wide
     change that requires such a calculation.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
 class TextDocumentContentClientCapabilities:
     """Client capabilities for a text document content provider.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -8334,6 +8228,7 @@ class CompletionClientCapabilities:
     completion_item_kind: Optional["ClientCompletionItemOptionsKind"] = attrs.field(
         default=None
     )
+    """The client supports the following completion item kinds."""
 
     insert_text_mode: Optional[InsertTextMode] = attrs.field(default=None)
     """Defines how the client handles whitespace and indentation
@@ -8625,17 +8520,15 @@ class CodeActionClientCapabilities:
     """Whether the client supports documentation for a class of
     code actions.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
     tag_support: Optional["CodeActionTagOptions"] = attrs.field(default=None)
     """Client supports the tag property on a code action. Clients
     supporting tags have to handle unknown tags gracefully.
     
-    @since 3.18.0 - proposed"""
-    # Since: 3.18.0 - proposed
+    @since 3.18.0"""
+    # Since: 3.18.0
 
 
 @attrs.define
@@ -8716,10 +8609,8 @@ class DocumentRangeFormattingClientCapabilities:
     )
     """Whether the client supports formatting multiple ranges at once.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -9110,6 +9001,15 @@ class DiagnosticClientCapabilities:
     )
     """Whether the clients supports related documents for document diagnostic pulls."""
 
+    markup_message_support: Optional[bool] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
+        default=None,
+    )
+    """Whether the client supports `MarkupContent` in diagnostic messages.
+    
+    @since 3.18.0"""
+    # Since: 3.18.0
+
     related_information: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
         default=None,
@@ -9148,11 +9048,9 @@ class DiagnosticClientCapabilities:
 class InlineCompletionClientCapabilities:
     """Client capabilities specific to inline completions.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     # Since: 3.18.0
-    # Proposed
 
     dynamic_registration: Optional[bool] = attrs.field(
         validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
@@ -9264,6 +9162,87 @@ class MarkdownClientCapabilities:
     
     @since 3.17.0"""
     # Since: 3.17.0
+
+
+@attrs.define
+class TextDocumentFilterLanguage:
+    """A document filter where `language` is required field.
+
+    @since 3.18.0"""
+
+    # Since: 3.18.0
+
+    language: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """A language id, like `typescript`."""
+
+    scheme: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
+
+    pattern: Optional[GlobPattern] = attrs.field(default=None)
+    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples.
+    
+    @since 3.18.0 - support for relative patterns. Whether clients support
+    relative patterns depends on the client capability
+    `textDocuments.filters.relativePatternSupport`."""
+    # Since: 3.18.0 - support for relative patterns. Whether clients support relative patterns depends on the client capability `textDocuments.filters.relativePatternSupport`.
+
+
+@attrs.define
+class TextDocumentFilterScheme:
+    """A document filter where `scheme` is required field.
+
+    @since 3.18.0"""
+
+    # Since: 3.18.0
+
+    scheme: str = attrs.field(validator=attrs.validators.instance_of(str))
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
+
+    language: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A language id, like `typescript`."""
+
+    pattern: Optional[GlobPattern] = attrs.field(default=None)
+    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples.
+    
+    @since 3.18.0 - support for relative patterns. Whether clients support
+    relative patterns depends on the client capability
+    `textDocuments.filters.relativePatternSupport`."""
+    # Since: 3.18.0 - support for relative patterns. Whether clients support relative patterns depends on the client capability `textDocuments.filters.relativePatternSupport`.
+
+
+@attrs.define
+class TextDocumentFilterPattern:
+    """A document filter where `pattern` is required field.
+
+    @since 3.18.0"""
+
+    # Since: 3.18.0
+
+    pattern: GlobPattern = attrs.field()
+    """A glob pattern, like **/*.{ts,js}. See TextDocumentFilter for examples.
+    
+    @since 3.18.0 - support for relative patterns. Whether clients support
+    relative patterns depends on the client capability
+    `textDocuments.filters.relativePatternSupport`."""
+    # Since: 3.18.0 - support for relative patterns. Whether clients support relative patterns depends on the client capability `textDocuments.filters.relativePatternSupport`.
+
+    language: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A language id, like `typescript`."""
+
+    scheme: Optional[str] = attrs.field(
+        validator=attrs.validators.optional(attrs.validators.instance_of(str)),
+        default=None,
+    )
+    """A Uri {@link Uri.scheme scheme}, like `file` or `untitled`."""
 
 
 @attrs.define
@@ -9496,10 +9475,8 @@ class ClientSignatureInformationOptions:
     `SignatureHelp`/`SignatureInformation` being set to `null` to
     indicate that no parameter should be active.
     
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
     # Since: 3.18.0
-    # Proposed
 
 
 @attrs.define
@@ -9525,9 +9502,9 @@ class ClientCodeActionResolveOptions:
 
 @attrs.define
 class CodeActionTagOptions:
-    """@since 3.18.0 - proposed"""
+    """@since 3.18.0"""
 
-    # Since: 3.18.0 - proposed
+    # Since: 3.18.0
 
     value_set: Sequence[CodeActionTag] = attrs.field()
     """The tags supported by the client."""
@@ -9701,20 +9678,6 @@ class ClientSemanticTokensRequestFullDelta:
 
 
 @attrs.define
-class ColorPresentationRequestOptions:
-    work_done_progress: Optional[bool] = attrs.field(
-        validator=attrs.validators.optional(attrs.validators.instance_of(bool)),
-        default=None,
-    )
-
-    document_selector: Optional[Union[DocumentSelector, None]] = attrs.field(
-        default=None
-    )
-    """A document selector to identify the scope of the registration. If set to null
-    the document selector provided on the client side will be used."""
-
-
-@attrs.define
 class ResponseError:
     code: int = attrs.field(validator=validators.integer_validator)
     """A number indicating the error type that occurred."""
@@ -9869,7 +9832,7 @@ ColorPresentationResult = Sequence[ColorPresentation]
 class ColorPresentationRequest:
     """A request to list all presentation for a color. The request's
     parameter is of type {@link ColorPresentationParams} the
-    response is of type {@link ColorInformation ColorInformation[]} or a Thenable
+    response is of type {@link ColorPresentation ColorPresentation[]} or a Thenable
     that resolves to such."""
 
     id: Union[int, str] = attrs.field()
@@ -9916,8 +9879,9 @@ class FoldingRangeResponse:
 
 @attrs.define
 class FoldingRangeRefreshRequest:
-    """@since 3.18.0
-    @proposed"""
+    """A request to refresh the folding ranges in a document.
+
+    @since 3.18.0"""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10542,6 +10506,7 @@ class InlayHintRefreshResponse:
 class DocumentDiagnosticRequest:
     """The document diagnostic request definition.
 
+
     @since 3.17.0"""
 
     id: Union[int, str] = attrs.field()
@@ -10615,8 +10580,7 @@ class InlineCompletionRequest:
     type {@link InlineCompletionParams}, the response is of type
     {@link InlineCompletion InlineCompletion[]} or a Thenable that resolves to such.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10639,8 +10603,7 @@ class TextDocumentContentRequest:
     """The `workspace/textDocumentContent` request is sent from the client to the
     server to request the content of a text document.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -10663,8 +10626,7 @@ class TextDocumentContentRefreshRequest:
     """The `workspace/textDocumentContent` request is sent from the server to the client to refresh
     the content of a specific text document.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -11293,8 +11255,7 @@ DocumentRangesFormattingResult = Union[Sequence[TextEdit], None]
 class DocumentRangesFormattingRequest:
     """A request to format ranges in a document.
 
-    @since 3.18.0
-    @proposed"""
+    @since 3.18.0"""
 
     id: Union[int, str] = attrs.field()
     """The request id."""
@@ -11972,7 +11933,7 @@ METHOD_TO_TYPES = {
         ColorPresentationRequest,
         ColorPresentationResponse,
         ColorPresentationParams,
-        ColorPresentationRequestOptions,
+        DocumentColorRegistrationOptions,
     ),
     TEXT_DOCUMENT_COMPLETION: (
         CompletionRequest,
@@ -12621,7 +12582,6 @@ _SPECIAL_CLASSES = [
     CodeLensResolveResponse,
     CodeLensResponse,
     ColorPresentationRequest,
-    ColorPresentationRequestOptions,
     ColorPresentationResponse,
     CompletionRegistrationOptions,
     CompletionRequest,
@@ -12867,7 +12827,6 @@ _SPECIAL_PROPERTIES = [
     "CodeLensResponse.result",
     "ColorPresentationRequest.jsonrpc",
     "ColorPresentationRequest.method",
-    "ColorPresentationRequestOptions.document_selector",
     "ColorPresentationResponse.jsonrpc",
     "ColorPresentationResponse.result",
     "CompletionRegistrationOptions.document_selector",
@@ -13321,7 +13280,6 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "ColorPresentation": ColorPresentation,
     "ColorPresentationParams": ColorPresentationParams,
     "ColorPresentationRequest": ColorPresentationRequest,
-    "ColorPresentationRequestOptions": ColorPresentationRequestOptions,
     "ColorPresentationResponse": ColorPresentationResponse,
     "ColorPresentationResult": ColorPresentationResult,
     "Command": Command,
@@ -13426,6 +13384,7 @@ ALL_TYPES_MAP: Dict[str, Union[type, object]] = {
     "DocumentDiagnosticReport": DocumentDiagnosticReport,
     "DocumentDiagnosticReportKind": DocumentDiagnosticReportKind,
     "DocumentDiagnosticReportPartialResult": DocumentDiagnosticReportPartialResult,
+    "DocumentDiagnosticReportProgress": DocumentDiagnosticReportProgress,
     "DocumentDiagnosticRequest": DocumentDiagnosticRequest,
     "DocumentDiagnosticResponse": DocumentDiagnosticResponse,
     "DocumentFilter": DocumentFilter,

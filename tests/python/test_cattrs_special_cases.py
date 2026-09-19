@@ -278,6 +278,51 @@ def test_notebook_sync_options():
     )
 
 
+@pytest.mark.parametrize(
+    "notebook",
+    [
+        "jupyter-notebook",
+        {"notebookType": "jupyter-notebook"},
+        {"scheme": "file"},
+        {"pattern": "**/*.ipynb"},
+    ],
+)
+def test_notebook_sync_options_with_cells_and_notebook(notebook):
+    data = {
+        "notebookSelector": [{"notebook": notebook, "cells": [{"language": "python"}]}]
+    }
+
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.NotebookDocumentSyncOptions)
+    hamcrest.assert_that(obj, hamcrest.instance_of(lsp.NotebookDocumentSyncOptions))
+    hamcrest.assert_that(
+        converter.unstructure(obj, lsp.NotebookDocumentSyncOptions),
+        hamcrest.is_(data),
+    )
+
+
+def test_initialize_response_with_cells_only_notebook_selector():
+    data = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+            "capabilities": {
+                "notebookDocumentSync": {
+                    "notebookSelector": [{"cells": [{"language": "python"}]}]
+                }
+            }
+        },
+    }
+
+    converter = cv.get_converter()
+    obj = converter.structure(data, lsp.InitializeResponse)
+    selector = obj.result.capabilities.notebook_document_sync.notebook_selector[0]
+    hamcrest.assert_that(
+        selector, hamcrest.instance_of(lsp.NotebookDocumentFilterWithCells)
+    )
+    hamcrest.assert_that(selector.notebook, hamcrest.is_(None))
+
+
 @attrs.define
 class _PosEncoding:
     """Defines the capabilities provided by a language

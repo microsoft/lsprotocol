@@ -1208,8 +1208,25 @@ def _register_required_structure_hooks(
         else:
             return converter.structure(object_, lsp_types.NotebookDocumentFilterPattern)
 
+    def _optional_notebook_filter_hook(
+        object_: Any, type_: type
+    ) -> Optional[
+        Union[
+            str,
+            lsp_types.NotebookDocumentFilterNotebookType,
+            lsp_types.NotebookDocumentFilterScheme,
+            lsp_types.NotebookDocumentFilterPattern,
+        ]
+    ]:
+        if object_ is None:
+            return None
+        return _notebook_filter_hook(object_, type_)
+
     NotebookSelectorItem = attrs.fields(
         lsp_types.NotebookCellTextDocumentFilter
+    ).notebook.type
+    OptionalNotebookSelectorItem = attrs.fields(
+        lsp_types.NotebookDocumentFilterWithCells
     ).notebook.type
     STRUCTURE_HOOKS = [
         (type(None), lambda object_, _type: object_),
@@ -1238,6 +1255,7 @@ def _register_required_structure_hooks(
             _notebook_filter_hook,
         ),
         (NotebookSelectorItem, _notebook_filter_hook),
+        (OptionalNotebookSelectorItem, _optional_notebook_filter_hook),
         (
             Union[lsp_types.LSPObject, Sequence["LSPAny"], str, int, float, bool, None],
             _lsp_object_hook,

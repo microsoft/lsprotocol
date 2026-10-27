@@ -81,7 +81,7 @@ jobs:
           manifest-path: packages/rust/lsprotocol/Cargo.toml
 
       - name: Dotnet Tool Chain setup
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: '6.0.x'
 
@@ -185,7 +185,7 @@ jobs:
           python-version: '3.13'
 
       - name: Dotnet Tool Chain setup
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           dotnet-version: '6.0.x'
 

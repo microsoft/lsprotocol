@@ -57,7 +57,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Pip cache
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
@@ -134,10 +134,12 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Rust Tool Chain setup
         uses: dtolnay/rust-toolchain@7e38f4b43b4db5c8dd498af069a4f6196df1d067 # v1
+        with:
+          toolchain: stable
 
       - name: Install Generator
         run: python -m pip install -r ./requirements.txt
@@ -165,7 +167,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Dotnet Tool Chain setup
         uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
@@ -197,7 +199,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Install Generator
         run: python -m pip install -r ./requirements.txt
